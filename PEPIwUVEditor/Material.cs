@@ -13,39 +13,19 @@ namespace IwUVEditor
     {
         IPXMaterial Value { get; }
 
-        public List<IPXVertex> Vertices { get; }
+        public IList<IPXVertex> Vertices { get; }
+        // インデックスバッファ用
         public int[] FaceSequence { get; }
 
         public Material(IPXMaterial material)
         {
             Value = material;
 
-            //重い
-            Vertices = Value.Faces.SelectMany(face => face.ToVertices()).Distinct().ToList();
-            FaceSequence = Value.Faces.SelectMany(face => face.ToVertices().Select(vtx => Vertices.IndexOf(vtx))).ToArray();
+            IEnumerable<IPXVertex> FaceVertices = Faces.SelectMany(face => face.ToVertices());
 
-            // 頂点リストと面構成頂点インデックス配列の構築ループ
-            // もっと重かった
-            //Vertices = new List<IPXVertex>();
-            //List<int> VertexIndices = new List<int>();
-            //for (int i = 0; i < Faces.Count; i++)
-            //{
-            //    IPXVertex[] vertices = Faces[i].ToVertices();
-            //    for (int j = 0; j < vertices.Length; j++)
-            //    {
-            //        IPXVertex vtx = vertices[j];
-
-            //        // 頂点リストに現在の頂点が存在すれば既存のインデックスを使用
-            //        if (Vertices.Contains(vtx))
-            //            VertexIndices.Add(Vertices.IndexOf(vtx));
-            //        else
-            //        {
-            //            Vertices.Add(vtx);
-            //            VertexIndices.Add(i + j);
-            //        }
-            //    }
-            //}
-            //FaceSequence = VertexIndices.ToArray();
+            Vertices = FaceVertices.Distinct().ToList();
+            // 面をVertices内インデックスで表したもの
+            FaceSequence = FaceVertices.Select(vtx => Vertices.IndexOf(vtx)).ToArray();
         }
 
         public override string ToString()

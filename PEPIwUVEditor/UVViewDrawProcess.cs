@@ -33,7 +33,7 @@ namespace IwUVEditor
             );
 
             // 頂点バッファに頂点を追加
-            using (SlimDX.DataStream vertexStream = new SlimDX.DataStream(
+            using (var vertexStream = new DataStream(
                 new[] {
                     new VertexPositionColor
                     {
@@ -69,7 +69,7 @@ namespace IwUVEditor
         public override void Draw()
         {
             // 背景を灰色に
-            Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new SlimDX.Color4(1.0f, 0.3f, 0.3f, 0.3f));
+            Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
             // 深度バッファ
             //Context.Device.ImmediateContext.ClearDepthStencilView()
 

@@ -20,15 +20,15 @@ namespace IwUVEditor
 
         public IPEPluginOption Option => new PEPluginOption(false, true);
 
+        private FormEditor Editor { get; set; }
+
         public void Run(IPERunArgs args)
         {
             try
             {
-                var pmx = args.Host.Connector.Pmx.GetCurrentState();
-
-                // TODO: プラグイン処理を記述します
-
-                Utility.Update(args.Host.Connector, pmx);
+                Editor = Editor ?? new FormEditor(args);
+                Editor.DrawStart();
+                Editor.Visible = true;
             }
             catch (Exception ex)
             {
@@ -43,6 +43,7 @@ namespace IwUVEditor
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    Editor?.Dispose();
                 }
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします

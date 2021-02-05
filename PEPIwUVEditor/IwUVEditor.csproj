@@ -70,6 +70,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RasterizerStateProvider.cs" />
+    <Compile Include="Material.cs" />
     <Compile Include="UVViewDrawProcess.cs" />
     <Compile Include="VertexPositionColor.cs" />
   </ItemGroup>

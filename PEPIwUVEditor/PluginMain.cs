@@ -27,8 +27,8 @@ namespace IwUVEditor
             try
             {
                 Editor = Editor ?? new FormEditor(args);
-                Editor.DrawStart();
                 Editor.Visible = true;
+                Editor.Initialize();
             }
             catch (Exception ex)
             {

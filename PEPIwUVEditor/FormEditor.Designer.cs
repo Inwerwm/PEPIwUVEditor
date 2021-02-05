@@ -42,7 +42,7 @@ namespace IwUVEditor
             this.splitUVMat = new System.Windows.Forms.SplitContainer();
             this.listBoxMaterial = new System.Windows.Forms.ListBox();
             this.statusStripEditor = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelState = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStripEditor = new System.Windows.Forms.MenuStrip();
             this.再読込ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.再読込ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -186,7 +186,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1031;
+            this.splitUVMat.SplitterDistance = 1029;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -198,14 +198,14 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(338, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(340, 910);
             this.listBoxMaterial.TabIndex = 0;
             // 
             // statusStripEditor
             // 
             this.statusStripEditor.Font = new System.Drawing.Font("游ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.statusStripEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabelState});
             this.statusStripEditor.Location = new System.Drawing.Point(0, 940);
             this.statusStripEditor.Name = "statusStripEditor";
             this.statusStripEditor.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
@@ -213,11 +213,11 @@ namespace IwUVEditor
             this.statusStripEditor.TabIndex = 1;
             this.statusStripEditor.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabelState
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(68, 17);
-            this.toolStripStatusLabel1.Text = "現在の状態";
+            this.toolStripStatusLabelState.Name = "toolStripStatusLabelState";
+            this.toolStripStatusLabelState.Size = new System.Drawing.Size(68, 17);
+            this.toolStripStatusLabelState.Text = "現在の状態";
             // 
             // menuStripEditor
             // 
@@ -360,7 +360,7 @@ namespace IwUVEditor
         private System.Windows.Forms.StatusStrip statusStripEditor;
         private System.Windows.Forms.MenuStrip menuStripEditor;
         private System.Windows.Forms.ToolStripMenuItem 再読込ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelState;
         private System.Windows.Forms.ToolStripMenuItem 編集ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 元に戻すToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem やり直しToolStripMenuItem;

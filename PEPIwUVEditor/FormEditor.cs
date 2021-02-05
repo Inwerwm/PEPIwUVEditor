@@ -39,17 +39,38 @@ namespace IwUVEditor
                 return;
 
             toolStripStatusLabelState.Text = "モデルの読込中";
+            toolStripProgressBarState.Visible = true;
             Refresh();
             LoadModel();
             DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
             toolStripStatusLabelState.Text = "準備完了";
+            toolStripProgressBarState.Visible = false;
         }
 
         public void LoadModel()
         {
+            // モデルを読込
             Pmx = Args.Host.Connector.Pmx.GetCurrentState();
-            Materials = Pmx.Material.Select(material => new Material(material));
+
+            // 材質を読込
+            // 時間がかかるので進捗表示をする
+            toolStripProgressBarState.Maximum = Pmx.Material.Count;
+            Materials = Pmx.Material.Select((material, i) =>
+            {
+                toolStripProgressBarState.Value = i;
+                toolStripStatusLabelState.Text = $"材質の読込中 : {material.Name}";
+                Refresh();
+                return new Material(material);
+            });
+            toolStripProgressBarState.Value = toolStripProgressBarState.Maximum;
+
+            // 材質表示リストボックスを構築
+            toolStripStatusLabelState.Text = "材質の読み込み中";
+            listBoxMaterial.Items.Clear();
             listBoxMaterial.Items.AddRange(Materials.ToArray());
+
+            // 描画プロセスオブジェクトを生成
+            toolStripStatusLabelState.Text = "描画プロセスを構成";
             DrawProcess?.Dispose();
             DrawProcess = new UVViewDrawProcess(Materials)
             {

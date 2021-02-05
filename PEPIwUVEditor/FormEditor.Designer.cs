@@ -56,6 +56,7 @@ namespace IwUVEditor
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripProgressBarState = new System.Windows.Forms.ToolStripProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -205,7 +206,8 @@ namespace IwUVEditor
             // 
             this.statusStripEditor.Font = new System.Drawing.Font("游ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.statusStripEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabelState});
+            this.toolStripStatusLabelState,
+            this.toolStripProgressBarState});
             this.statusStripEditor.Location = new System.Drawing.Point(0, 940);
             this.statusStripEditor.Name = "statusStripEditor";
             this.statusStripEditor.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
@@ -322,6 +324,12 @@ namespace IwUVEditor
             this.uV情報を合成して保存ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
             this.uV情報を合成して保存ToolStripMenuItem.Text = "UV情報を合成して保存";
             // 
+            // toolStripProgressBarState
+            // 
+            this.toolStripProgressBarState.Name = "toolStripProgressBarState";
+            this.toolStripProgressBarState.Size = new System.Drawing.Size(100, 16);
+            this.toolStripProgressBarState.Visible = false;
+            // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -379,5 +387,6 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem テクスチャToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 選択材質のテクスチャを変更ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uV情報を合成して保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarState;
     }
 }

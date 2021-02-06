@@ -45,6 +45,13 @@ namespace IwUVEditor
             }
         }
 
+        private void ReDraw()
+        {
+            DxContext.StopDrawLoop();
+            LoadModel();
+            DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
+        }
+
         public void LoadModel()
         {
             // モデルを読込
@@ -77,13 +84,6 @@ namespace IwUVEditor
                 }
             };
             EndProgress();
-        }
-
-        private void ReDraw()
-        {
-            DxContext.StopDrawLoop();
-            LoadModel();
-            DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
         }
 
         #region ProgressBar

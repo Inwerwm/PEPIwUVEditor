@@ -15,7 +15,9 @@ namespace IwUVEditor
         IPXMaterial Value { get; }
 
         public IList<IPXVertex> Vertices { get; }
-        // インデックスバッファ用
+        /// <summary>
+        /// インデックスバッファに与える面の構成頂点番号配列
+        /// </summary>
         public int[] FaceSequence { get; }
 
         string ModelPath { get; }
@@ -29,8 +31,9 @@ namespace IwUVEditor
             IEnumerable<IPXVertex> FaceVertices = Faces.SelectMany(face => face.ToVertices());
 
             Vertices = FaceVertices.Distinct().ToList();
-            // 面をVertices内インデックスで表したもの
-            FaceSequence = FaceVertices.Select(vtx => Vertices.IndexOf(vtx)).ToArray();
+
+            var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => pair.i);
+            FaceSequence = FaceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();
         }
 
         public override string ToString()

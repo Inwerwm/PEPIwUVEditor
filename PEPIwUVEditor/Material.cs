@@ -18,7 +18,7 @@ namespace IwUVEditor
         /// <summary>
         /// インデックスバッファに与える面の構成頂点番号配列
         /// </summary>
-        public int[] FaceSequence { get; }
+        public uint[] FaceSequence { get; }
 
         string ModelPath { get; }
         public string TexFullPath => Path.Combine(Path.GetDirectoryName(ModelPath), Tex);
@@ -32,7 +32,7 @@ namespace IwUVEditor
 
             Vertices = FaceVertices.Distinct().ToList();
 
-            var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => pair.i);
+            var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => (uint)pair.i);
             FaceSequence = FaceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();
         }
 

@@ -156,7 +156,7 @@ namespace IwUVEditor
         private Texture2D TextureFromBitmap(Bitmap bitmap)
         {
             using (LockedBitmap lockedBitmap = new LockedBitmap(bitmap))
-            using (DataStream dataStream = new DataStream(lockedBitmap.BitmapData.Scan0, lockedBitmap.BitmapData.Stride * lockedBitmap.BitmapData.Height, true, false))
+            using (DataStream dataStream = new DataStream(lockedBitmap.BitmapData.Scan0, Math.Abs(lockedBitmap.BitmapData.Stride) * lockedBitmap.BitmapData.Height, true, false))
                 return new Texture2D(
                     Context.Device,
                     new Texture2DDescription
@@ -176,14 +176,10 @@ namespace IwUVEditor
                 );
         }
 
-        private ShaderResourceView LoadTexture(Material material)
-        {
-            return material is null
-                 ? new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.White))
-                 : string.IsNullOrWhiteSpace(material.Tex)
+        private ShaderResourceView LoadTexture(Material material) =>
+                   (material is null) || string.IsNullOrWhiteSpace(material.Tex)
                  ? new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.White))
                  : ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
-        }
 
         protected override void Dispose(bool disposing)
         {

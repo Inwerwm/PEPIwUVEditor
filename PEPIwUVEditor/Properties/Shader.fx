@@ -1,29 +1,44 @@
 matrix ViewProjection;
+Texture2D diffuseTexture;
 
-struct VertexPositionColor
+SamplerState Sampler
 {
-    float4 Position : SV_Position;
-    float4 Color : COLOR;
 };
 
-VertexPositionColor MyVertexShader(VertexPositionColor input)
+struct VertexStruct
 {
-    VertexPositionColor output = input;
-    output.Position = mul(output.Position, ViewProjection);
-    return output;
+	float4 Position : SV_Position;
+	float4 Color	: Color;
+	float2 TexCoord : TEXCOORD;
+};
+
+VertexStruct VS(VertexStruct input)
+{
+	VertexStruct output = input;
+	output.Position = mul(output.Position, ViewProjection);
+	return output;
 }
 
-float4 MyPixelShader(VertexPositionColor input) : SV_Target
+float4 PS_Texture(VertexStruct input) : SV_Target
 {
-    return input.Color;
+	return diffuseTexture.Sample(Sampler, input.TexCoord);
 }
 
-
-technique10 MyTechnique
+float4 PS_VertexColor(VertexStruct input) : SV_Target
 {
-    pass MyPass
-    {
-        SetVertexShader(CompileShader(vs_5_0, MyVertexShader()));
-        SetPixelShader(CompileShader(ps_5_0, MyPixelShader()));
-    }
+	return input.Color;
+}
+
+technique10 MainTechnique
+{
+	pass DrawTexturePass
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS()));
+		SetPixelShader(CompileShader(ps_5_0, PS_Texture()));
+	}
+	pass DrawVertexColorPass
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS()));
+		SetPixelShader(CompileShader(ps_5_0, PS_VertexColor()));
+	}
 }

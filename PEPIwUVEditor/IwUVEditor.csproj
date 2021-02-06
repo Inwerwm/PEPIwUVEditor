@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LockedBitmap.cs" />
     <Compile Include="FormEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,7 +74,7 @@
     <Compile Include="RasterizerStateProvider.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="UVViewDrawProcess.cs" />
-    <Compile Include="VertexPositionColor.cs" />
+    <Compile Include="VertexStruct.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">
@@ -86,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Shader.fx" />
+    <Content Include="Properties\White.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

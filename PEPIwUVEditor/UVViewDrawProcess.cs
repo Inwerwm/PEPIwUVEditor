@@ -5,6 +5,7 @@ using SlimDX.Direct3D11;
 using SlimDX.DXGI;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,17 +14,28 @@ namespace IwUVEditor
 {
     class UVViewDrawProcess : DxProcess
     {
-        public IEnumerable<Material> Materials { get; set; }
+        private Material currentMaterial;
 
         InputLayout VertexLayout { get; set; }
         SlimDX.Direct3D11.Buffer VertexBuffer { get; set; }
         SlimDX.Direct3D11.Buffer IndexBuffer { get; set; }
+        ShaderResourceView Texture { get; set; }
 
         RasterizerStateProvider Rasterize { get; set; }
 
-        public UVViewDrawProcess(IEnumerable<Material> materials)
+        Dictionary<Material, ShaderResourceView> Cache { get; } = new Dictionary<Material, ShaderResourceView>();
+        public Material Material
         {
-            Materials = materials;
+            get => currentMaterial;
+            set
+            {
+                if (Context is null)
+                    return;
+                currentMaterial = value;
+                if (!Cache.Keys.Contains(value))
+                    Cache.Add(value, LoadTexture(currentMaterial));
+                Texture = Cache[value];
+            }
         }
 
         public override void Init()
@@ -31,32 +43,36 @@ namespace IwUVEditor
             // 頂点情報のフォーマットを設定
             VertexLayout = new InputLayout(
                 Context.Device,
-                Effect.GetTechniqueByIndex(0).GetPassByIndex(0).Description.Signature,
-                VertexPositionColor.VertexElements
+                Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Description.Signature,
+                VertexStruct.VertexElements
             );
 
             // 頂点バッファに頂点を追加
             using (var vertexStream = new DataStream(
                 new[] {
-                    new VertexPositionColor
+                    new VertexStruct
                     {
                         Position = new Vector3(-1, 1, 0),
-                        Color = new Vector3(1, 1, 1)
+                        Color = new Vector3(1, 1, 1),
+                        TEXCOORD = new Vector2(0, 0)
                     },
-                    new VertexPositionColor
+                    new VertexStruct
                     {
                         Position = new Vector3(1, 1, 0),
-                        Color = new Vector3(1, 1, 1)
+                        Color = new Vector3(1, 1, 1),
+                        TEXCOORD = new Vector2(1, 0)
                     },
-                    new VertexPositionColor
+                    new VertexStruct
                     {
                         Position = new Vector3(-1, -1, 0),
-                        Color = new Vector3(1, 1, 1)
+                        Color = new Vector3(1, 1, 1),
+                        TEXCOORD = new Vector2(0 ,1)
                     },
-                    new VertexPositionColor
+                    new VertexStruct
                     {
                         Position = new Vector3(1, -1, 0),
-                        Color = new Vector3(1, 1, 1)
+                        Color = new Vector3(1, 1, 1),
+                        TEXCOORD = new Vector2(1, 1)
                     }
                 },
                 true,
@@ -75,8 +91,8 @@ namespace IwUVEditor
             }
 
             // インデックスバッファを作成
-            using (SlimDX.DataStream indexStream = new SlimDX.DataStream(
-                new uint[] { 
+            using (DataStream indexStream = new DataStream(
+                new uint[] {
                     0, 1, 2,
                     1, 2, 3
                 },
@@ -96,6 +112,7 @@ namespace IwUVEditor
                 );
             }
 
+            Texture = LoadTexture(null);
 
             Rasterize = new RasterizerStateProvider(Context.Device);
         }
@@ -110,18 +127,21 @@ namespace IwUVEditor
             1,
             0
             );
+            // テクスチャを読み込み
+            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Texture);
 
             // 三角形をデバイスに入力
             Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayout;
             Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
-                new VertexBufferBinding(VertexBuffer, VertexPositionColor.SizeInBytes, 0)
+                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
             );
             Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
             Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
             // 三角形を描画
-            Effect.GetTechniqueByIndex(0).GetPassByIndex(0).Apply(Context.Device.ImmediateContext);
+            //Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass").Apply(Context.Device.ImmediateContext);
+            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
             Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
             Context.Device.ImmediateContext.DrawIndexed(6, 0, 0);
 
@@ -133,10 +153,47 @@ namespace IwUVEditor
             Context.SwapChain.Present(0, PresentFlags.None);
         }
 
+        private Texture2D TextureFromBitmap(Bitmap bitmap)
+        {
+            using (LockedBitmap lockedBitmap = new LockedBitmap(bitmap))
+            using (DataStream dataStream = new DataStream(lockedBitmap.BitmapData.Scan0, lockedBitmap.BitmapData.Stride * lockedBitmap.BitmapData.Height, true, false))
+                return new Texture2D(
+                    Context.Device,
+                    new Texture2DDescription
+                    {
+                        BindFlags = BindFlags.ShaderResource,
+                        CpuAccessFlags = CpuAccessFlags.None,
+                        Format = Format.B8G8R8A8_UNorm,
+                        OptionFlags = ResourceOptionFlags.None,
+                        MipLevels = 1,
+                        Usage = ResourceUsage.Immutable,
+                        Width = bitmap.Width,
+                        Height = bitmap.Height,
+                        ArraySize = 1,
+                        SampleDescription = new SampleDescription(1, 0)
+                    },
+                    new DataRectangle(lockedBitmap.BitmapData.Stride, dataStream)
+                );
+        }
+
+        private ShaderResourceView LoadTexture(Material material)
+        {
+            return material is null
+                 ? new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.White))
+                 : string.IsNullOrWhiteSpace(material.Tex)
+                 ? new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.White))
+                 : ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
+        }
+
         protected override void Dispose(bool disposing)
         {
             VertexLayout?.Dispose();
             VertexBuffer?.Dispose();
+            Texture = null;
+            foreach (var resource in Cache.Values)
+            {
+                resource?.Dispose();
+            }
             base.Dispose(disposing);
         }
     }

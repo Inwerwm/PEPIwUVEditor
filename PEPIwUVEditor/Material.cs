@@ -3,6 +3,7 @@ using PEPlugin.Pmx;
 using PEPlugin.SDX;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +18,13 @@ namespace IwUVEditor
         // インデックスバッファ用
         public int[] FaceSequence { get; }
 
-        public Material(IPXMaterial material)
+        string ModelPath { get; }
+        public string TexFullPath => Path.Combine(Path.GetDirectoryName(ModelPath), Tex);
+
+        public Material(IPXMaterial material, IPXPmx pmx)
         {
             Value = material;
+            ModelPath = pmx.FilePath;
 
             IEnumerable<IPXVertex> FaceVertices = Faces.SelectMany(face => face.ToVertices());
 

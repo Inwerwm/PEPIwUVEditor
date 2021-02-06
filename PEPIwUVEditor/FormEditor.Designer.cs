@@ -201,6 +201,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Name = "listBoxMaterial";
             this.listBoxMaterial.Size = new System.Drawing.Size(340, 910);
             this.listBoxMaterial.TabIndex = 0;
+            this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
             // statusStripEditor
             // 

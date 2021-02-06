@@ -123,7 +123,7 @@ namespace IwUVEditor
         {
             DxContext.StopDrawLoop();
             LoadModel();
-            DxContext.StartDrawLoop(DrawProcess);
+            DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
         }
 
         public void DrawStart()

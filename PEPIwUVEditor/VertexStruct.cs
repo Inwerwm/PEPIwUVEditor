@@ -12,7 +12,7 @@ namespace IwUVEditor
     struct VertexStruct
     {
         public Vector3 Position;
-        public Vector3 Color;
+        public Color4 Color;
         public Vector2 TEXCOORD;
 
         public static readonly InputElement[] VertexElements = new[]
@@ -25,7 +25,7 @@ namespace IwUVEditor
             new InputElement
             {
                 SemanticName = "Color",
-                Format = Format.R32G32B32_Float,
+                Format = Format.R32G32B32A32_Float,
                 AlignedByteOffset = InputElement.AppendAligned//自動的にオフセット決定
             },
             new InputElement

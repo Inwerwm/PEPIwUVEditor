@@ -53,25 +53,25 @@ namespace IwUVEditor
                     new VertexStruct
                     {
                         Position = new Vector3(-1, 1, 0),
-                        Color = new Vector3(1, 1, 1),
+                        Color = new Color4(1, 1, 1, 1),
                         TEXCOORD = new Vector2(0, 0)
                     },
                     new VertexStruct
                     {
                         Position = new Vector3(1, 1, 0),
-                        Color = new Vector3(1, 1, 1),
+                        Color = new Color4(1, 1, 1, 1),
                         TEXCOORD = new Vector2(1, 0)
                     },
                     new VertexStruct
                     {
                         Position = new Vector3(-1, -1, 0),
-                        Color = new Vector3(1, 1, 1),
+                        Color = new Color4(1, 1, 1, 1),
                         TEXCOORD = new Vector2(0 ,1)
                     },
                     new VertexStruct
                     {
                         Position = new Vector3(1, -1, 0),
-                        Color = new Vector3(1, 1, 1),
+                        Color = new Color4(1, 1, 1, 1),
                         TEXCOORD = new Vector2(1, 1)
                     }
                 },

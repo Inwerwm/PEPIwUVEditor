@@ -45,46 +45,6 @@ namespace IwUVEditor
             }
         }
 
-        private void StartProgress(int max, string stateText)
-        {
-            toolStripStatusLabelState.Text = stateText;
-            toolStripProgressBarState.Visible = true;
-            toolStripProgressBarState.Minimum = 0;
-            toolStripProgressBarState.Maximum = max;
-            toolStripProgressBarState.Value = 0;
-            Refresh();
-        }
-
-        private void SetProgress(int value, string stateText)
-        {
-            toolStripStatusLabelState.Text = stateText;
-            toolStripProgressBarState.Value = value;
-            Refresh();
-        }
-        private void SetProgress(string stateText)
-        {
-            toolStripStatusLabelState.Text = stateText;
-            Refresh();
-        }
-        private void SetProgress(int value)
-        {
-            toolStripProgressBarState.Value = value;
-            Refresh();
-        }
-
-        private void FinishProgress()
-        {
-            SetProgress(toolStripProgressBarState.Maximum);
-            Refresh();
-        }
-
-        private void EndProgress()
-        {
-            toolStripProgressBarState.Visible = false;
-            toolStripStatusLabelState.Text = "準備完了";
-            FinishProgress();
-        }
-
         public void LoadModel()
         {
             // モデルを読込
@@ -134,6 +94,50 @@ namespace IwUVEditor
                 DxContext.StartDrawLoop(DrawProcess);
             }
         }
+
+        #region ProgressBar
+
+        private void StartProgress(int max, string stateText)
+        {
+            toolStripStatusLabelState.Text = stateText;
+            toolStripProgressBarState.Visible = true;
+            toolStripProgressBarState.Minimum = 0;
+            toolStripProgressBarState.Maximum = max;
+            toolStripProgressBarState.Value = 0;
+            Refresh();
+        }
+
+        private void SetProgress(int value, string stateText)
+        {
+            toolStripStatusLabelState.Text = stateText;
+            toolStripProgressBarState.Value = value;
+            Refresh();
+        }
+        private void SetProgress(string stateText)
+        {
+            toolStripStatusLabelState.Text = stateText;
+            Refresh();
+        }
+        private void SetProgress(int value)
+        {
+            toolStripProgressBarState.Value = value;
+            Refresh();
+        }
+
+        private void FinishProgress()
+        {
+            SetProgress(toolStripProgressBarState.Maximum);
+            Refresh();
+        }
+
+        private void EndProgress()
+        {
+            toolStripProgressBarState.Visible = false;
+            toolStripStatusLabelState.Text = "準備完了";
+            FinishProgress();
+        }
+
+        #endregion
 
         private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
         {

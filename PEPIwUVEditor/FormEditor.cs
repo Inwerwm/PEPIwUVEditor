@@ -36,10 +36,13 @@ namespace IwUVEditor
         public void Initialize()
         {
             if (initialized)
-                return;
-
-            LoadModel();
-            DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
+                ReDraw();
+            else
+            {
+                LoadModel();
+                DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
+                initialized = true;
+            }
         }
 
         private void StartProgress(int max, string stateText)

@@ -86,15 +86,6 @@ namespace IwUVEditor
             DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
         }
 
-        public void DrawStart()
-        {
-            if (!Visible)
-            {
-                LoadModel();
-                DxContext.StartDrawLoop(DrawProcess);
-            }
-        }
-
         #region ProgressBar
 
         private void StartProgress(int max, string stateText)

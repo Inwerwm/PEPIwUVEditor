@@ -32,7 +32,7 @@ namespace IwUVEditor
 
         RasterizerStateProvider Rasterize { get; set; }
 
-        public Material Material
+        public Material CurrentMaterial
         {
             get => currentMaterial;
             set
@@ -104,12 +104,15 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.DrawIndexed(texPlateindexCount, 0, 0);
 
             // UVメッシュを描画
-            if (!(currentMaterial is null))
+            if (!(CurrentMaterial is null))
             {
                 Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfUVMesh;
                 Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass").Apply(Context.Device.ImmediateContext);
                 Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
-                Context.Device.ImmediateContext.DrawIndexed(UVMeshIndices.Length, texPlateindexCount, texPlateVertexCount);
+                for (int i = 0; i < CurrentMaterial.Faces.Count; i++)
+                {
+                    Context.Device.ImmediateContext.DrawIndexed(3, texPlateindexCount + i * 3, texPlateVertexCount);
+                }
             }
 
             // 描画内容を反映

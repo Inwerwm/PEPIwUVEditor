@@ -144,7 +144,7 @@ namespace IwUVEditor
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DrawProcess.Material = (sender as ListBox).SelectedItem as Material;
+            DrawProcess.CurrentMaterial = (sender as ListBox).SelectedItem as Material;
         }
     }
 }

@@ -4,12 +4,8 @@ using PEPlugin;
 using PEPlugin.Pmx;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace IwUVEditor
@@ -17,6 +13,7 @@ namespace IwUVEditor
     public partial class FormEditor : Form
     {
         bool initialized = false;
+        private float cameraScale;
 
         IPERunArgs Args { get; }
         IPXPmx Pmx { get; set; }
@@ -25,12 +22,36 @@ namespace IwUVEditor
         DxContext DxContext { get; }
         UVViewDrawProcess DrawProcess { get; set; }
 
+        /// <summary>
+        /// 表示スケール
+        /// </summary>
+        float CameraScale
+        {
+            get => cameraScale;
+            set
+            {
+                cameraScale = value < -1 ? -1 : value > 1 ? 1 : value;
+                ApplyCameraScale();
+            }
+        }
+        /// <summary>
+        /// 最大縮小倍率(大きいほど縮小できる)
+        /// </summary>
+        float CameraAmplitude { get; set; }
+        /// <summary>
+        /// ホイール1回転あたりの拡縮量
+        /// </summary>
+        float CameraStep { get; set; }
+
         public FormEditor(IPERunArgs args)
         {
             InitializeComponent();
 
             Args = args;
             DxContext = DxContext.GetInstance(splitUVMat.Panel1);
+
+            CameraAmplitude = 10;
+            CameraStep = 0.05f;
         }
 
         public void Initialize()
@@ -79,10 +100,10 @@ namespace IwUVEditor
             {
                 Camera = new DxCameraOrthographic()
                 {
-                    ViewVolumeSize = (4, 4),
                     ViewVolumeDepth = (0, 1)
                 }
             };
+            CameraScale = 0.5f;
             EndProgress();
         }
 
@@ -130,6 +151,21 @@ namespace IwUVEditor
 
         #endregion
 
+        /// <summary>
+        /// シグモイド関数
+        /// </summary>
+        /// <param name="x">推奨[0, 1]区間]</param>
+        /// <returns>(0, 1)区間</returns>
+        private double Sigmoid(double x) => 1 / (1 + Math.Pow(Math.E, -7.5 * x));
+        private void ApplyCameraScale()
+        {
+            if (DrawProcess is null)
+                return;
+            var cameraRange = (float)(Sigmoid(CameraScale) * CameraAmplitude);
+            (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize = (cameraRange, cameraRange);
+            toolStripStatusLabelState.Text = $"CameraScale:{CameraScale}, CameraRange:{cameraRange}";
+        }
+
         private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
@@ -144,10 +180,7 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)
         {
-            float delta = e.Delta / 240f * -1;
-            var preSize = (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize;
-            (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize = (preSize.Width + delta, preSize.Height + delta);
-            toolStripStatusLabelState.Text = e.Delta.ToString();
+            CameraScale += -1 * e.Delta * (CameraStep / 120);
         }
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)

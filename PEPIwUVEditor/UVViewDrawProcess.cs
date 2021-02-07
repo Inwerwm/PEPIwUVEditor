@@ -228,7 +228,7 @@ namespace IwUVEditor
         private VertexStruct[] LoadVertices(Material material) =>
             material.Vertices.Select(vtx => new VertexStruct()
             {
-                Position = new Vector3(new Vector2(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2), 0.1f),
+                Position = new Vector3(new Vector2(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2), 0),
                 Color = new Color4(1, 0, 0, 0),
                 TEXCOORD = vtx.UV
             }

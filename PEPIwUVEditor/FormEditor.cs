@@ -142,6 +142,14 @@ namespace IwUVEditor
             DxContext?.ChangeResolution();
         }
 
+        private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)
+        {
+            float delta = e.Delta / 240f * -1;
+            var preSize = (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize;
+            (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize = (preSize.Width + delta, preSize.Height + delta);
+            toolStripStatusLabelState.Text = e.Delta.ToString();
+        }
+
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
         {
             DrawProcess.CurrentMaterial = (sender as ListBox).SelectedItem as Material;

@@ -59,6 +59,7 @@ namespace IwUVEditor
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonResetCamera = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -103,6 +104,7 @@ namespace IwUVEditor
             this.flowEditTools.Controls.Add(this.radioButtonRotate);
             this.flowEditTools.Controls.Add(this.buttonReverseV);
             this.flowEditTools.Controls.Add(this.buttonReverseH);
+            this.flowEditTools.Controls.Add(this.buttonResetCamera);
             this.flowEditTools.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowEditTools.Location = new System.Drawing.Point(0, 0);
             this.flowEditTools.Name = "flowEditTools";
@@ -184,13 +186,14 @@ namespace IwUVEditor
             // splitUVMat.Panel1
             // 
             this.splitUVMat.Panel1.ClientSizeChanged += new System.EventHandler(this.splitUVMat_Panel1_ClientSizeChanged);
+            this.splitUVMat.Panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseMove);
             this.splitUVMat.Panel1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseWheel);
             // 
             // splitUVMat.Panel2
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1027;
+            this.splitUVMat.SplitterDistance = 1025;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -202,7 +205,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(342, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(344, 910);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -334,6 +337,16 @@ namespace IwUVEditor
             this.uV情報を合成して保存ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
             this.uV情報を合成して保存ToolStripMenuItem.Text = "UV情報を合成して保存";
             // 
+            // buttonResetCamera
+            // 
+            this.buttonResetCamera.Location = new System.Drawing.Point(3, 201);
+            this.buttonResetCamera.Name = "buttonResetCamera";
+            this.buttonResetCamera.Size = new System.Drawing.Size(80, 60);
+            this.buttonResetCamera.TabIndex = 3;
+            this.buttonResetCamera.Text = "カメラ\r\n初期化";
+            this.buttonResetCamera.UseVisualStyleBackColor = true;
+            this.buttonResetCamera.Click += new System.EventHandler(this.buttonResetCamera_Click);
+            // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -392,5 +405,6 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem 選択材質のテクスチャを変更ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uV情報を合成して保存ToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarState;
+        private System.Windows.Forms.Button buttonResetCamera;
     }
 }

@@ -188,5 +188,15 @@ namespace IwUVEditor
         {
             DrawProcess.CurrentMaterial = (sender as ListBox).SelectedItem as Material;
         }
+
+        private void buttonResetCamera_Click(object sender, EventArgs e)
+        {
+            DrawProcess.ResetCamera();
+        }
+
+        private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            toolStripStatusLabelState.Text = $"ShiftOffset({DrawProcess.ShiftOffset})";
+        }
     }
 }

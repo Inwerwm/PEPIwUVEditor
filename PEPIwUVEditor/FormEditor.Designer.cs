@@ -356,10 +356,15 @@ namespace IwUVEditor
             this.Controls.Add(this.menuStripEditor);
             this.Controls.Add(this.splitCtrlView);
             this.Font = new System.Drawing.Font("游ゴシック", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormEditor";
             this.Text = "UV編集";
+            this.Activated += new System.EventHandler(this.FormEditor_Activated);
+            this.Deactivate += new System.EventHandler(this.FormEditor_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormEditor_FormClosing);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormEditor_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormEditor_KeyUp);
             this.splitCtrlView.Panel1.ResumeLayout(false);
             this.splitCtrlView.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).EndInit();

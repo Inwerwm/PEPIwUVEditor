@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace IwUVEditor
 {
@@ -18,13 +19,30 @@ namespace IwUVEditor
         private Material currentMaterial;
         private int texPlateVertexCount;
         private int texPlateindexCount;
+
         private bool isViewMoving = false;
 
         InputLayout VertexLayoutOfTexPlate { get; set; }
         InputLayout VertexLayoutOfUVMesh { get; set; }
         SlimDX.Direct3D11.Buffer VertexBuffer { get; set; }
         SlimDX.Direct3D11.Buffer IndexBuffer { get; set; }
+
         public Vector3 ShiftOffset { get; set; } = Vector3.Zero; //publicなのはデバッグ用
+        public ScaleManager Scale { get; } = new ScaleManager() //publicなのはデバッグ用
+        {
+            DeltaOffset = -8000,
+            Amplitude = 1000,
+            Offset = 0,
+            Step = 0.1f,
+            Gain = 1,
+        };
+
+        public bool IsActive { get; set; } = true;
+        public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>()
+        {
+            { Keys.ShiftKey, false },
+            { Keys.ControlKey, false }
+        };
 
         Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
         Dictionary<Material, VertexStruct[]> UVMeshCache { get; } = new Dictionary<Material, VertexStruct[]>();
@@ -125,16 +143,29 @@ namespace IwUVEditor
 
         protected override void UpdateCamera()
         {
-            Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(Camera.GetMatrix() * Matrix.Translation(ShiftOffset));
+            var scale = Scale.Scale;
+            Matrix transMatrix = Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(scale, scale, 1);
+            Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(transMatrix);
+        }
+        public void ResetCamera()
+        {
+            ShiftOffset = Vector3.Zero;
+            Scale.WheelDelta = 0;
         }
 
         protected override void MouseInput(object sender, MouseInputEventArgs e)
         {
+            if (!IsActive)
+                return;
+
+            bool isViewScaling = false;
+            
             switch (e.ButtonFlags)
             {
                 case MouseButtonFlags.None:
                     break;
                 case MouseButtonFlags.MouseWheel:
+                    isViewScaling = true;
                     break;
                 case MouseButtonFlags.Button5Up:
                     break;
@@ -162,15 +193,11 @@ namespace IwUVEditor
                     break;
             }
 
+            float modifier = (IsPress[Keys.ShiftKey] ? 4f : 1f) / (IsPress[Keys.ControlKey] ? 4f : 1f);
             if (isViewMoving)
-            {
-                ShiftOffset += new Vector3(e.X, -1 * e.Y, 0) / 1000;
-            }
-        }
-
-        public void ResetCamera()
-        {
-            ShiftOffset = Vector3.Zero;
+                ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
+            if (isViewScaling)
+                Scale.WheelDelta += e.WheelDelta * modifier;
         }
 
         private void CreateVertexBuffer()

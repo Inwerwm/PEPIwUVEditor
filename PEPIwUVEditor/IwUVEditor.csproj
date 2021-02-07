@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="RasterizerStateProvider.cs" />
     <Compile Include="Material.cs" />
+    <Compile Include="ScaleManager.cs" />
     <Compile Include="UVViewDrawProcess.cs" />
     <Compile Include="VertexStruct.cs" />
   </ItemGroup>

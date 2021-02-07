@@ -22,36 +22,12 @@ namespace IwUVEditor
         DxContext DxContext { get; }
         UVViewDrawProcess DrawProcess { get; set; }
 
-        /// <summary>
-        /// 表示スケール
-        /// </summary>
-        float CameraScale
-        {
-            get => cameraScale;
-            set
-            {
-                cameraScale = value < -1 ? -1 : value > 1 ? 1 : value;
-                ApplyCameraScale();
-            }
-        }
-        /// <summary>
-        /// 最大縮小倍率(大きいほど縮小できる)
-        /// </summary>
-        float CameraAmplitude { get; set; }
-        /// <summary>
-        /// ホイール1回転あたりの拡縮量
-        /// </summary>
-        float CameraStep { get; set; }
-
         public FormEditor(IPERunArgs args)
         {
             InitializeComponent();
 
             Args = args;
             DxContext = DxContext.GetInstance(splitUVMat.Panel1);
-
-            CameraAmplitude = 10;
-            CameraStep = 0.05f;
         }
 
         public void Initialize()
@@ -100,10 +76,10 @@ namespace IwUVEditor
             {
                 Camera = new DxCameraOrthographic()
                 {
+                    ViewVolumeSize = (4, 4),
                     ViewVolumeDepth = (0, 1)
                 }
             };
-            CameraScale = 0.5f;
             EndProgress();
         }
 
@@ -151,22 +127,6 @@ namespace IwUVEditor
 
         #endregion
 
-        #region Camera
-        /// <summary>
-        /// シグモイド関数
-        /// </summary>
-        /// <param name="x">推奨[0, 1]区間]</param>
-        /// <returns>(0, 1)区間</returns>
-        private double Sigmoid(double x) => 1 / (1 + Math.Pow(Math.E, -7.5 * x));
-        private void ApplyCameraScale()
-        {
-            if (DrawProcess is null)
-                return;
-            var cameraRange = (float)(Sigmoid(CameraScale) * CameraAmplitude);
-            (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize = (cameraRange, cameraRange);
-        }
-        #endregion
-
         private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
@@ -181,7 +141,7 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)
         {
-            CameraScale += -1 * e.Delta * (CameraStep / 120);
+            toolStripStatusLabelState.Text = $"{DrawProcess.Scale.WheelDelta}";
         }
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
@@ -196,7 +156,35 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            toolStripStatusLabelState.Text = $"ShiftOffset({DrawProcess.ShiftOffset})";
+            toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
+        }
+
+        private void FormEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
+            DrawProcess.IsPress[Keys.ControlKey] = e.Control;
+            toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
+        }
+
+        private void FormEditor_KeyUp(object sender, KeyEventArgs e)
+        {
+            DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
+            DrawProcess.IsPress[Keys.ControlKey] = e.Control;
+            toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
+        }
+
+        private void FormEditor_Activated(object sender, EventArgs e)
+        {
+            if (DrawProcess is null)
+                return;
+            DrawProcess.IsActive = true;
+        }
+
+        private void FormEditor_Deactivate(object sender, EventArgs e)
+        {
+            if (DrawProcess is null)
+                return;
+            DrawProcess.IsActive = false;
         }
     }
 }

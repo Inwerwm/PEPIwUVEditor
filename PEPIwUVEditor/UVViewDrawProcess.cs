@@ -101,7 +101,8 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexPlate;
             Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
             Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
-            Context.Device.ImmediateContext.DrawIndexed(texPlateindexCount, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexed(3, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexed(3, 3, 0);
 
             // UVメッシュを描画
             if (!(CurrentMaterial is null))
@@ -156,7 +157,7 @@ namespace IwUVEditor
         {
             uint[] texturePlate = new uint[] {
                     0, 1, 2,
-                    1, 2, 3
+                    3, 2, 1 
                 };
             texPlateindexCount = texturePlate.Length;
 

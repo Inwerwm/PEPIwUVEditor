@@ -80,21 +80,40 @@ namespace IwUVEditor
             Rasterize = new RasterizerStateProvider(Context.Device);
         }
 
-        private void CreateIndexBuffer()
+        public override void Draw()
         {
-            using (DataStream indexStream = new DataStream(CreateIndices(), true, true)
-            )
+            // 背景を灰色に
+            Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
+            // 深度バッファ
+            Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
+            // テクスチャを読み込み
+            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Texture);
+
+            // 三角形をデバイスに入力
+            Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
+                0,
+                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
+            );
+            Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
+            Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
+
+            // テクスチャ板を描画
+            Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexPlate;
+            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
+            Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
+            Context.Device.ImmediateContext.DrawIndexed(texPlateindexCount, 0, 0);
+
+            // UVメッシュを描画
+            if (!(currentMaterial is null))
             {
-                IndexBuffer = new SlimDX.Direct3D11.Buffer(
-                    Context.Device,
-                    indexStream,
-                    new BufferDescription
-                    {
-                        SizeInBytes = (int)indexStream.Length,
-                        BindFlags = BindFlags.IndexBuffer,
-                    }
-                );
+                Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfUVMesh;
+                Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass").Apply(Context.Device.ImmediateContext);
+                Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
+                Context.Device.ImmediateContext.DrawIndexed(UVMeshIndices.Length, texPlateindexCount, texPlateVertexCount);
             }
+
+            // 描画内容を反映
+            Context.SwapChain.Present(0, PresentFlags.None);
         }
 
         private void CreateVertexBuffer()
@@ -108,6 +127,23 @@ namespace IwUVEditor
                     {
                         SizeInBytes = (int)vertexStream.Length,
                         BindFlags = BindFlags.VertexBuffer,
+                    }
+                );
+            }
+        }
+
+        private void CreateIndexBuffer()
+        {
+            using (DataStream indexStream = new DataStream(CreateIndices(), true, true)
+            )
+            {
+                IndexBuffer = new SlimDX.Direct3D11.Buffer(
+                    Context.Device,
+                    indexStream,
+                    new BufferDescription
+                    {
+                        SizeInBytes = (int)indexStream.Length,
+                        BindFlags = BindFlags.IndexBuffer,
                     }
                 );
             }
@@ -157,47 +193,6 @@ namespace IwUVEditor
             return UVMesh is null ? texturePlate : texturePlate.Concat(UVMesh).ToArray();
         }
 
-        public override void Draw()
-        {
-            // 背景を灰色に
-            Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
-            // 深度バッファ
-            Context.Device.ImmediateContext.ClearDepthStencilView(
-            Context.DepthStencil,
-            DepthStencilClearFlags.Depth,
-            1,
-            0
-            );
-            // テクスチャを読み込み
-            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Texture);
-
-            // 三角形をデバイスに入力
-            Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
-                0,
-                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
-            );
-            Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
-            Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
-
-            // テクスチャ板を描画
-            Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexPlate;
-            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
-            Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
-            Context.Device.ImmediateContext.DrawIndexed(texPlateindexCount, 0, 0);
-
-            // UVメッシュを描画
-            if (!(currentMaterial is null))
-            {
-                Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfUVMesh;
-                Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass").Apply(Context.Device.ImmediateContext);
-                Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
-                Context.Device.ImmediateContext.DrawIndexed(UVMeshIndices.Length, texPlateindexCount, texPlateVertexCount);
-            }
-
-            // 描画内容を反映
-            Context.SwapChain.Present(0, PresentFlags.None);
-        }
-
         private Texture2D TextureFromBitmap(Bitmap bitmap)
         {
             using (LockedBitmap lockedBitmap = new LockedBitmap(bitmap))
@@ -229,7 +224,7 @@ namespace IwUVEditor
         private VertexStruct[] LoadVertices(Material material) =>
             material.Vertices.Select(vtx => new VertexStruct()
             {
-                Position = new Vector3(new Vector2(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2), 0.5f),
+                Position = new Vector3(new Vector2(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2), 0.1f),
                 Color = new Color4(1, 0, 0, 0),
                 TEXCOORD = vtx.UV
             }

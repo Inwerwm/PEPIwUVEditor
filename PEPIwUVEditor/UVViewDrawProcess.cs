@@ -3,6 +3,7 @@ using PEPlugin.Pmx;
 using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
+using SlimDX.RawInput;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,11 +18,13 @@ namespace IwUVEditor
         private Material currentMaterial;
         private int texPlateVertexCount;
         private int texPlateindexCount;
+        private bool isViewMoving = false;
 
         InputLayout VertexLayoutOfTexPlate { get; set; }
         InputLayout VertexLayoutOfUVMesh { get; set; }
         SlimDX.Direct3D11.Buffer VertexBuffer { get; set; }
         SlimDX.Direct3D11.Buffer IndexBuffer { get; set; }
+        public Vector3 ShiftOffset { get; set; } = Vector3.Zero; //publicなのはデバッグ用
 
         Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
         Dictionary<Material, VertexStruct[]> UVMeshCache { get; } = new Dictionary<Material, VertexStruct[]>();
@@ -118,6 +121,56 @@ namespace IwUVEditor
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);
+        }
+
+        protected override void UpdateCamera()
+        {
+            Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(Camera.GetMatrix() * Matrix.Translation(ShiftOffset));
+        }
+
+        protected override void MouseInput(object sender, MouseInputEventArgs e)
+        {
+            switch (e.ButtonFlags)
+            {
+                case MouseButtonFlags.None:
+                    break;
+                case MouseButtonFlags.MouseWheel:
+                    break;
+                case MouseButtonFlags.Button5Up:
+                    break;
+                case MouseButtonFlags.Button5Down:
+                    break;
+                case MouseButtonFlags.Button4Up:
+                    break;
+                case MouseButtonFlags.Button4Down:
+                    break;
+                case MouseButtonFlags.MiddleUp:
+                    isViewMoving = false;
+                    break;
+                case MouseButtonFlags.MiddleDown:
+                    isViewMoving = true;
+                    break;
+                case MouseButtonFlags.RightUp:
+                    break;
+                case MouseButtonFlags.RightDown:
+                    break;
+                case MouseButtonFlags.LeftUp:
+                    break;
+                case MouseButtonFlags.LeftDown:
+                    break;
+                default:
+                    break;
+            }
+
+            if (isViewMoving)
+            {
+                ShiftOffset += new Vector3(e.X, -1 * e.Y, 0) / 1000;
+            }
+        }
+
+        public void ResetCamera()
+        {
+            ShiftOffset = Vector3.Zero;
         }
 
         private void CreateVertexBuffer()

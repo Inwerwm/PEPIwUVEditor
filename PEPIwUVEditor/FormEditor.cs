@@ -151,6 +151,7 @@ namespace IwUVEditor
 
         #endregion
 
+        #region Camera
         /// <summary>
         /// シグモイド関数
         /// </summary>
@@ -163,8 +164,8 @@ namespace IwUVEditor
                 return;
             var cameraRange = (float)(Sigmoid(CameraScale) * CameraAmplitude);
             (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize = (cameraRange, cameraRange);
-            toolStripStatusLabelState.Text = $"CameraScale:{CameraScale}, CameraRange:{cameraRange}";
         }
+        #endregion
 
         private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
         {

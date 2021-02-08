@@ -173,14 +173,14 @@ namespace IwUVEditor
             toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
         }
 
-        private void FormEditor_Activated(object sender, EventArgs e)
+        private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)
         {
             if (DrawProcess is null)
                 return;
             DrawProcess.IsActive = true;
         }
 
-        private void FormEditor_Deactivate(object sender, EventArgs e)
+        private void splitUVMat_Panel1_MouseLeave(object sender, EventArgs e)
         {
             if (DrawProcess is null)
                 return;

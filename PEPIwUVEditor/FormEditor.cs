@@ -13,7 +13,6 @@ namespace IwUVEditor
     public partial class FormEditor : Form
     {
         bool initialized = false;
-        private float cameraScale;
 
         IPERunArgs Args { get; }
         IPXPmx Pmx { get; set; }

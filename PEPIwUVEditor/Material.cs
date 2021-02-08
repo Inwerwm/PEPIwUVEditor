@@ -21,12 +21,15 @@ namespace IwUVEditor
         public uint[] FaceSequence { get; }
 
         string ModelPath { get; }
-        public string TexFullPath => Path.Combine(Path.GetDirectoryName(ModelPath), Tex);
+        public string TexFullPath { get; }
+
+        public string TexExt => Path.GetExtension(Tex);
 
         public Material(IPXMaterial material, IPXPmx pmx)
         {
             Value = material;
             ModelPath = pmx.FilePath;
+            TexFullPath = CreateTexFullPath();
 
             IEnumerable<IPXVertex> FaceVertices = Faces.SelectMany(face => face.ToVertices());
 
@@ -34,6 +37,24 @@ namespace IwUVEditor
 
             var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => (uint)pair.i);
             FaceSequence = FaceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();
+        }
+
+        private string CreateTexFullPath()
+        {
+            if (string.IsNullOrWhiteSpace(ModelPath))
+                return "";
+
+            // カレントディレクトリをモデルのディレクトリに変更
+            var cdTmp = Environment.CurrentDirectory;
+            Environment.CurrentDirectory = Path.GetDirectoryName(ModelPath);
+
+            // カレントディレクトリを基準にテクスチャの絶対パスを取得
+            string fullPath = Path.GetFullPath(Tex);
+
+            // カレントディレクトリをもとに戻す
+            Environment.CurrentDirectory = cdTmp;
+
+            return fullPath;
         }
 
         public override string ToString()

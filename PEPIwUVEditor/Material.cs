@@ -41,7 +41,7 @@ namespace IwUVEditor
 
         private string CreateTexFullPath()
         {
-            if (string.IsNullOrWhiteSpace(ModelPath))
+            if (string.IsNullOrWhiteSpace(ModelPath) || string.IsNullOrWhiteSpace(Tex))
                 return "";
 
             // カレントディレクトリをモデルのディレクトリに変更

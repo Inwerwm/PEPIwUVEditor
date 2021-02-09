@@ -155,21 +155,23 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
+            if (DrawProcess is null)
+                return;
+            toolStripStatusLabelState.Text = $"{DxContext.RefreshRate}:{DrawProcess.CurrentFPS}";
         }
 
         private void FormEditor_KeyDown(object sender, KeyEventArgs e)
         {
             DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
             DrawProcess.IsPress[Keys.ControlKey] = e.Control;
-            toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
+            //toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
         }
 
         private void FormEditor_KeyUp(object sender, KeyEventArgs e)
         {
             DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
             DrawProcess.IsPress[Keys.ControlKey] = e.Control;
-            toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
+            //toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
         }
 
         private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)

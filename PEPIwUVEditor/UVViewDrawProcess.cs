@@ -7,8 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Buffer = SlimDX.Direct3D11.Buffer;
 
 namespace IwUVEditor
@@ -84,17 +84,15 @@ namespace IwUVEditor
         InputLayout InstancedBasic { get; set; }
         Buffer InstanceBuffer { get; set; }
         List<InstanceOffset> InstancedDataList;
-        int NumOfPlate { get; set; }
         private void CreateInstancedBuffer()
         {
             int radius = 5;
-            int diameter = 2 * radius - 1;
-            NumOfPlate = diameter * diameter - 1;
             Color4 InstanceColor = new Color4(0.8f, 0.8f, 0.8f);
 
             InstancedDataList = new List<InstanceOffset>();
             // 半径nで四角形を放射配置するため、{0..n}と{0..n}の直積集合を作る
-            foreach ((int i, int j) in Enumerable.Range(0, radius).SelectMany(i => Enumerable.Range(0, radius).Select(j => (i, j))).Skip(1))
+            IEnumerable<(int i, int j)> crossIndex = Enumerable.Range(0, radius).SelectMany(i => Enumerable.Range(0, radius).Select(j => (i, j))).Skip(1);
+            foreach ((int i, int j) in crossIndex)
             {
                 InstancedDataList.Add(
                     new InstanceOffset()
@@ -102,31 +100,35 @@ namespace IwUVEditor
                         Offset = Matrix.Translation(i, j, 0),
                         Color = InstanceColor
                     }
-                );
-                InstancedDataList.Add(
-                    new InstanceOffset()
-                    {
-                        Offset = Matrix.Translation(i, -j, 0),
-                        Color = InstanceColor
-                    }
-                );
-                InstancedDataList.Add(
+                    );
+
+                if (j != 0)
+                    InstancedDataList.Add(
+                        new InstanceOffset()
+                        {
+                            Offset = Matrix.Translation(i, -j, 0),
+                            Color = InstanceColor
+                        }
+                        );
+                if (i != 0)
+                    InstancedDataList.Add(
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-i, j, 0),
                         Color = InstanceColor
                     }
-                );
-                InstancedDataList.Add(
+                    );
+                if (j != 0)
+                    InstancedDataList.Add(
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-i, -j, 0),
                         Color = InstanceColor
                     }
-                );
+                    );
             }
             var vbd = new BufferDescription(
-                Marshal.SizeOf(typeof(InstanceOffset)) * NumOfPlate,
+                Marshal.SizeOf(typeof(InstanceOffset)) * InstancedDataList.Count,
                 ResourceUsage.Dynamic,
                 BindFlags.VertexBuffer,
                 CpuAccessFlags.Write,
@@ -196,11 +198,6 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.DrawIndexed(3, 0, 0);
             Context.Device.ImmediateContext.DrawIndexed(3, 3, 0);
 
-            // 周囲のテクスチャ板を描画
-            Context.Device.ImmediateContext.InputAssembler.InputLayout = InstancedBasic;
-            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawInstancePass").Apply(Context.Device.ImmediateContext);
-            Context.Device.ImmediateContext.DrawIndexedInstanced(6, NumOfPlate, 0, 0, 0);
-
             // UVメッシュを描画
             if (!(CurrentMaterial is null))
             {
@@ -212,6 +209,12 @@ namespace IwUVEditor
                     Context.Device.ImmediateContext.DrawIndexed(3, texPlateindexCount + i * 3, texPlateVertexCount);
                 }
             }
+
+            // 周囲のテクスチャ板を描画
+            Context.Device.ImmediateContext.InputAssembler.InputLayout = InstancedBasic;
+            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawInstancePass").Apply(Context.Device.ImmediateContext);
+            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 0, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 3, 0, 0);
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);

@@ -74,6 +74,7 @@
     <Compile Include="RasterizerStateProvider.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="ScaleManager.cs" />
+    <Compile Include="TGASharpLib.cs" />
     <Compile Include="UVViewDrawProcess.cs" />
     <Compile Include="VertexStruct.cs" />
   </ItemGroup>
@@ -91,4 +92,8 @@
     <Content Include="Properties\White.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /y "$(SolutionDir)LICENSE" /a "Licenses\IwUVEditor" /a
+copy /y "$(SolutionDir)ThirdPartyLicenses\TGASharpLib" /a "Licenses\TGASharpLib" /a</PostBuildEvent>
+  </PropertyGroup>
 </Project>

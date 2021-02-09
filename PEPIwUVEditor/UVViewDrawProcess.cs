@@ -300,10 +300,22 @@ namespace IwUVEditor
                 );
         }
 
-        private ShaderResourceView LoadTexture(Material material) =>
-                   (material is null) || string.IsNullOrWhiteSpace(material.Tex)
-                 ? new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.White))
-                 : ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
+        private ShaderResourceView LoadTexture(Material material)
+        {
+            if ((material is null) || string.IsNullOrWhiteSpace(material.Tex))
+                return new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.White));
+
+            if (material.TexExt.ToLower() == ".tga")
+            {
+                using (var tgaMap = new TGASharpLib.TGA(material.TexFullPath).ToBitmap())
+                using (var tex = new Bitmap(tgaMap))
+                {
+                    return new ShaderResourceView(Context.Device, TextureFromBitmap(tex));
+                }
+            }
+
+            return ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
+        }
 
         private VertexStruct[] LoadVertices(Material material) =>
             material.Vertices.Select(vtx => new VertexStruct()

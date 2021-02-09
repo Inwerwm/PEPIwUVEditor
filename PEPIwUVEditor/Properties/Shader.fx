@@ -3,6 +3,7 @@ Texture2D diffuseTexture;
 
 SamplerState Sampler
 {
+	Filter = MIN_MAG_MIP_POINT;
 };
 
 struct VertexStruct

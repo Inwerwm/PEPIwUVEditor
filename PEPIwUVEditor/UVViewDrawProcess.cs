@@ -198,8 +198,8 @@ namespace IwUVEditor
             // 周囲のテクスチャ板を描画
             Context.Device.ImmediateContext.InputAssembler.InputLayout = InstanceLayout;
             Effect.GetTechniqueByName("InstanceTechnique").GetPassByName("DrawInstancePass").Apply(Context.Device.ImmediateContext);
-            Context.Device.ImmediateContext.DrawIndexedInstanced(6, InstancedDataList.Count, 0, 0, 0);
-            //Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 3, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 0, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 3, 0, 0);
 
             // UVメッシュを描画
             if (!(CurrentMaterial is null))

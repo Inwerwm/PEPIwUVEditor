@@ -27,6 +27,7 @@ namespace IwUVEditor
 
             Args = args;
             DxContext = DxContext.GetInstance(splitUVMat.Panel1);
+            DxContext.RefreshRate = 120;
         }
 
         public void Initialize()
@@ -77,7 +78,7 @@ namespace IwUVEditor
                 {
                     ViewVolumeSize = (4, 4),
                     ViewVolumeDepth = (0, 1)
-                }
+                },
             };
             EndProgress();
         }
@@ -153,13 +154,6 @@ namespace IwUVEditor
             DrawProcess.ResetCamera();
         }
 
-        private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (DrawProcess is null)
-                return;
-            toolStripStatusLabelState.Text = $"{DxContext.RefreshRate}:{DrawProcess.CurrentFPS}";
-        }
-
         private void FormEditor_KeyDown(object sender, KeyEventArgs e)
         {
             DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
@@ -186,6 +180,19 @@ namespace IwUVEditor
             if (DrawProcess is null)
                 return;
             DrawProcess.IsActive = false;
+        }
+
+        private void timerEvery_Tick(object sender, EventArgs e)
+        {
+            if (DrawProcess is null)
+                return;
+
+            toolStripStatusLabelFPS.Text = $"{DrawProcess.CurrentFPS:###.##}fps";
+        }
+
+        private void 描画リミッター解除ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DrawProcess.LimitRefresh = !(sender as ToolStripMenuItem).Checked;
         }
     }
 }

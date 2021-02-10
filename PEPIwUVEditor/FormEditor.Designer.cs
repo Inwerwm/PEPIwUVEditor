@@ -33,6 +33,7 @@ namespace IwUVEditor
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitCtrlView = new System.Windows.Forms.SplitContainer();
             this.flowEditTools = new System.Windows.Forms.FlowLayoutPanel();
             this.radioButtonSqSelect = new System.Windows.Forms.RadioButton();
@@ -45,6 +46,7 @@ namespace IwUVEditor
             this.splitUVMat = new System.Windows.Forms.SplitContainer();
             this.listBoxMaterial = new System.Windows.Forms.ListBox();
             this.statusStripEditor = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelFPS = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabelState = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBarState = new System.Windows.Forms.ToolStripProgressBar();
             this.menuStripEditor = new System.Windows.Forms.MenuStrip();
@@ -57,9 +59,12 @@ namespace IwUVEditor
             this.編集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.元に戻すToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.やり直しToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.描画リミッター解除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerEvery = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -198,14 +203,13 @@ namespace IwUVEditor
             this.splitUVMat.Panel1.ClientSizeChanged += new System.EventHandler(this.splitUVMat_Panel1_ClientSizeChanged);
             this.splitUVMat.Panel1.MouseEnter += new System.EventHandler(this.splitUVMat_Panel1_MouseEnter);
             this.splitUVMat.Panel1.MouseLeave += new System.EventHandler(this.splitUVMat_Panel1_MouseLeave);
-            this.splitUVMat.Panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseMove);
             this.splitUVMat.Panel1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseWheel);
             // 
             // splitUVMat.Panel2
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1023;
+            this.splitUVMat.SplitterDistance = 1019;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -217,7 +221,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(346, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(350, 910);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -225,6 +229,7 @@ namespace IwUVEditor
             // 
             this.statusStripEditor.Font = new System.Drawing.Font("游ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.statusStripEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelFPS,
             this.toolStripStatusLabelState,
             this.toolStripProgressBarState});
             this.statusStripEditor.Location = new System.Drawing.Point(0, 940);
@@ -233,6 +238,12 @@ namespace IwUVEditor
             this.statusStripEditor.Size = new System.Drawing.Size(1556, 22);
             this.statusStripEditor.TabIndex = 1;
             this.statusStripEditor.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelFPS
+            // 
+            this.toolStripStatusLabelFPS.Name = "toolStripStatusLabelFPS";
+            this.toolStripStatusLabelFPS.Size = new System.Drawing.Size(46, 17);
+            this.toolStripStatusLabelFPS.Text = "000fps";
             // 
             // toolStripStatusLabelState
             // 
@@ -309,7 +320,9 @@ namespace IwUVEditor
             // 
             this.編集ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.元に戻すToolStripMenuItem,
-            this.やり直しToolStripMenuItem});
+            this.やり直しToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.描画リミッター解除ToolStripMenuItem});
             this.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem";
             this.編集ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
             this.編集ToolStripMenuItem.Text = "編集";
@@ -327,6 +340,19 @@ namespace IwUVEditor
             this.やり直しToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+Z";
             this.やり直しToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
             this.やり直しToolStripMenuItem.Text = "やり直し";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(231, 6);
+            // 
+            // 描画リミッター解除ToolStripMenuItem
+            // 
+            this.描画リミッター解除ToolStripMenuItem.CheckOnClick = true;
+            this.描画リミッター解除ToolStripMenuItem.Name = "描画リミッター解除ToolStripMenuItem";
+            this.描画リミッター解除ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.描画リミッター解除ToolStripMenuItem.Text = "描画リミッター解除";
+            this.描画リミッター解除ToolStripMenuItem.Click += new System.EventHandler(this.描画リミッター解除ToolStripMenuItem_Click);
             // 
             // テクスチャToolStripMenuItem
             // 
@@ -348,6 +374,12 @@ namespace IwUVEditor
             this.uV情報を合成して保存ToolStripMenuItem.Name = "uV情報を合成して保存ToolStripMenuItem";
             this.uV情報を合成して保存ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
             this.uV情報を合成して保存ToolStripMenuItem.Text = "UV情報を合成して保存";
+            // 
+            // timerEvery
+            // 
+            this.timerEvery.Enabled = true;
+            this.timerEvery.Interval = 5;
+            this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
             // FormEditor
             // 
@@ -411,5 +443,9 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem uV情報を合成して保存ToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarState;
         private System.Windows.Forms.Button buttonResetCamera;
+        private System.Windows.Forms.Timer timerEvery;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFPS;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem 描画リミッター解除ToolStripMenuItem;
     }
 }

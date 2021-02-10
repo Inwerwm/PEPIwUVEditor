@@ -89,35 +89,37 @@ namespace IwUVEditor
             IEnumerable<(int i, int j)> crossIndex = Enumerable.Range(0, radius).SelectMany(i => Enumerable.Range(0, radius).Select(j => (i, j))).Skip(1);
             foreach ((int i, int j) in crossIndex)
             {
+                var x = i * 2;
+                var y = j * 2;
                 InstancedDataList.Add(
                     new InstanceOffset()
                     {
-                        Offset = Matrix.Translation(i, j, 0),
+                        Offset = Matrix.Translation(x, y, 0),
                         ColorRatio = InstanceColor
                     }
                     );
 
-                if (j != 0)
+                if (y != 0)
                     InstancedDataList.Add(
                         new InstanceOffset()
                         {
-                            Offset = Matrix.Translation(i, -j, 0),
+                            Offset = Matrix.Translation(x, -y, 0),
                             ColorRatio = InstanceColor
                         }
                         );
-                if (i != 0)
+                if (x != 0)
                     InstancedDataList.Add(
                     new InstanceOffset()
                     {
-                        Offset = Matrix.Translation(-i, j, 0),
+                        Offset = Matrix.Translation(-x, y, 0),
                         ColorRatio = InstanceColor
                     }
                     );
-                if (j != 0)
+                if (i != 0 && j != 0)
                     InstancedDataList.Add(
                     new InstanceOffset()
                     {
-                        Offset = Matrix.Translation(-i, -j, 0),
+                        Offset = Matrix.Translation(-x, -y, 0),
                         ColorRatio = InstanceColor
                     }
                     );
@@ -187,11 +189,11 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
             // テクスチャ板を描画
-            //Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexPlate;
-            //Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
+            Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexPlate;
+            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
             Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
-            //Context.Device.ImmediateContext.DrawIndexed(3, 0, 0);
-            //Context.Device.ImmediateContext.DrawIndexed(3, 3, 0);
+            Context.Device.ImmediateContext.DrawIndexed(3, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexed(3, 3, 0);
 
             // 周囲のテクスチャ板を描画
             Context.Device.ImmediateContext.InputAssembler.InputLayout = InstanceLayout;

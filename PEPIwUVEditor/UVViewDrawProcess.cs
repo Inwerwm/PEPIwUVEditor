@@ -23,8 +23,9 @@ namespace IwUVEditor
 
         InputLayout VertexLayoutOfTexturePlates { get; set; }
         InputLayout VertexLayoutOfUVMesh { get; set; }
-        SlimDX.Direct3D11.Buffer VertexBuffer { get; set; }
-        SlimDX.Direct3D11.Buffer IndexBuffer { get; set; }
+        Buffer VertexBuffer { get; set; }
+        Buffer IndexBuffer { get; set; }
+        Buffer TexturePlateInstancesBuffer { get; set; }
 
         EffectPass DrawTexturePlatePass { get; set; }
         EffectPass DrawMeshVertexPass { get; set; }
@@ -39,6 +40,9 @@ namespace IwUVEditor
             Gain = 1,
         };
 
+        public float PeripheryPlateAlpha { get; set; } = 0.5f;
+        public int Radius { get; set; } = 5;
+
         public bool IsActive { get; set; } = true;
         public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>()
         {
@@ -50,6 +54,7 @@ namespace IwUVEditor
         Dictionary<Material, VertexStruct[]> UVMeshCache { get; } = new Dictionary<Material, VertexStruct[]>();
 
         ShaderResourceView Texture { get; set; }
+        List<InstanceOffset> TexturePlateInstances;
         VertexStruct[] UVMesh { get; set; }
         uint[] UVMeshIndices { get; set; }
 
@@ -78,64 +83,68 @@ namespace IwUVEditor
             }
         }
 
-        #region Instancing
-        Buffer InstanceBuffer { get; set; }
-        List<InstanceOffset> InstancedDataList;
-        private void CreateInstancedBuffer()
+        private void CreateTexturePlateInstancesBuffer()
         {
-            int radius = 5;
-            float InstanceColor = 0.8f;
+            CreateTexPlateInstances();
 
-            InstancedDataList = new List<InstanceOffset>();
-            // 半径nで四角形を放射配置するため、{0..n}と{0..n}の直積集合を作る
-            foreach ((int i, int j) in Enumerable.Range(0, radius).SelectMany(i => Enumerable.Range(0, radius).Select(j => (i, j))))
+            TexturePlateInstancesBuffer = new Buffer(
+                Context.Device,
+                new DataStream(TexturePlateInstances.ToArray(), false, true),
+                new BufferDescription
+                (
+                    InstanceOffset.SizeInBytes * TexturePlateInstances.Count,
+                    ResourceUsage.Dynamic,
+                    BindFlags.VertexBuffer,
+                    CpuAccessFlags.Write,
+                    ResourceOptionFlags.None,
+                    0
+                )
+            );
+        }
+
+        private void CreateTexPlateInstances()
+        {
+            TexturePlateInstances = new List<InstanceOffset>();
+            // 半径nで四角形を放射配置するため、{0..n}と{0..n}の直積集合でループする
+            foreach ((int i, int j) in Enumerable.Range(0, Radius + 1).SelectMany(i => Enumerable.Range(0, Radius + 1).Select(j => (i, j))))
             {
                 var x = i * 2;
                 var y = j * 2;
-                InstancedDataList.Add(
+
+                TexturePlateInstances.Add(
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(x, y, 0),
-                        AlphaRatio = (i == 0 && j == 0) ? 1 : InstanceColor
+                        AlphaRatio = (i == 0 && j == 0) ? 1 : PeripheryPlateAlpha
                     }
                     );
 
                 if (y != 0)
-                    InstancedDataList.Add(
+                    TexturePlateInstances.Add(
                         new InstanceOffset()
                         {
                             Offset = Matrix.Translation(x, -y, 0),
-                            AlphaRatio = InstanceColor
+                            AlphaRatio = PeripheryPlateAlpha
                         }
                         );
                 if (x != 0)
-                    InstancedDataList.Add(
+                    TexturePlateInstances.Add(
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-x, y, 0),
-                        AlphaRatio = InstanceColor
+                        AlphaRatio = PeripheryPlateAlpha
                     }
                     );
                 if (i != 0 && j != 0)
-                    InstancedDataList.Add(
+                    TexturePlateInstances.Add(
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-x, -y, 0),
-                        AlphaRatio = InstanceColor
+                        AlphaRatio = PeripheryPlateAlpha
                     }
                     );
             }
-            var vbd = new BufferDescription(
-                InstanceOffset.SizeInBytes * InstancedDataList.Count,
-                ResourceUsage.Dynamic,
-                BindFlags.VertexBuffer,
-                CpuAccessFlags.Write,
-                ResourceOptionFlags.None,
-                0
-            );
-            InstanceBuffer = new Buffer(Context.Device, new DataStream(InstancedDataList.ToArray(), false, true), vbd);
         }
-        #endregion
 
         public override void Init()
         {
@@ -162,7 +171,7 @@ namespace IwUVEditor
             CreateIndexBuffer();
 
             // テクスチャ板のインスタンスを作成
-            CreateInstancedBuffer();
+            CreateTexturePlateInstancesBuffer();
 
             Texture = LoadTexture(null);
 
@@ -182,7 +191,7 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
                 new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0),
-                new VertexBufferBinding(InstanceBuffer, InstanceOffset.SizeInBytes, 0)
+                new VertexBufferBinding(TexturePlateInstancesBuffer, InstanceOffset.SizeInBytes, 0)
             );
             Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
             Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
@@ -191,8 +200,8 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexturePlates;
             DrawTexturePlatePass.Apply(Context.Device.ImmediateContext);
             Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
-            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 0, 0, 0);
-            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 3, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 0, 0, 0);
+            Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 3, 0, 0);
 
             // UVメッシュを描画
             if (!(CurrentMaterial is null))
@@ -400,7 +409,7 @@ namespace IwUVEditor
             VertexLayoutOfUVMesh?.Dispose();
             VertexLayoutOfTexturePlates?.Dispose();
             VertexBuffer?.Dispose();
-            InstanceBuffer?.Dispose();
+            TexturePlateInstancesBuffer?.Dispose();
             Texture = null;
             foreach (var resource in TextureCache.Values)
             {

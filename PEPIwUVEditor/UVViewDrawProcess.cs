@@ -20,11 +20,7 @@ namespace IwUVEditor
 
         private bool isViewMoving = false;
 
-        InputLayout VertexLayoutOfUVMesh { get; set; }
-        Buffer VertexBuffer { get; set; }
-        Buffer IndexBuffer { get; set; }
-
-        EffectPass DrawMeshVertexPass { get; set; }
+        RasterizerStateProvider Rasterize { get; set; }
 
         public Vector3 ShiftOffset { get; set; } = Vector3.Zero; //publicなのはデバッグ用
         public ScaleManager Scale { get; } = new ScaleManager() //publicなのはデバッグ用
@@ -36,9 +32,6 @@ namespace IwUVEditor
             Gain = 1,
         };
 
-        public float PeripheryPlateAlpha { get; set; } = 0.5f;
-        public int Radius { get; set; } = 5;
-
         public bool IsActive { get; set; } = true;
         public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>()
         {
@@ -46,18 +39,13 @@ namespace IwUVEditor
             { Keys.ControlKey, false }
         };
 
-        Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
-        Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
-        //Dictionary<Material, VertexStruct[]> UVMeshCache { get; } = new Dictionary<Material, VertexStruct[]>();
-
-        ShaderResourceView Texture { get; set; }
-        UVMesh UVMesh { get; set; }
-        //VertexStruct[] UVMesh { get; set; }
-        //uint[] UVMeshIndices { get; set; }
-
         TexturePlate TexturePlate { get; set; }
 
-        RasterizerStateProvider Rasterize { get; set; }
+        Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
+        ShaderResourceView CurrentTexture { get; set; }
+
+        Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
+        UVMesh CurrentUVMesh { get; set; }
 
         public Material CurrentMaterial
         {
@@ -73,14 +61,14 @@ namespace IwUVEditor
                     UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value));
                 }
 
-                Texture = TextureCache[value];
-                UVMesh = UVMeshCache[value];
+                CurrentTexture = TextureCache[value];
+                CurrentUVMesh = UVMeshCache[value];
             }
         }
 
         public override void Init()
         {
-            Texture = LoadTexture(null);
+            CurrentTexture = LoadTexture(null);
 
             Rasterize = new RasterizerStateProvider(Context.Device);
 
@@ -94,32 +82,13 @@ namespace IwUVEditor
             // 深度バッファ
             Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
             // テクスチャを読み込み
-            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Texture);
+            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(CurrentTexture);
 
             // テクスチャ板を描画
             TexturePlate.Prepare();
 
             // メッシュを描画
-            UVMesh?.Prepare();
-
-            // 三角形をデバイスに入力
-            //Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
-            //    0,
-            //    new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
-            //);
-            //Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
-            //Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
-            // UVメッシュを描画
-            //if (!(CurrentMaterial is null))
-            //{
-            //    Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfUVMesh;
-            //    DrawMeshVertexPass.Apply(Context.Device.ImmediateContext);
-            //    Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
-            //    for (int i = 0; i < CurrentMaterial.Faces.Count; i++)
-            //    {
-            //        Context.Device.ImmediateContext.DrawIndexed(3, i * 3, 0);
-            //    }
-            //}
+            CurrentUVMesh?.Prepare();
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);
@@ -184,49 +153,6 @@ namespace IwUVEditor
                 Scale.WheelDelta += e.WheelDelta * modifier;
         }
 
-        //private void CreateVertexBuffer()
-        //{
-        //    using (var vertexStream = new DataStream(CreateVertices(), true, true))
-        //    {
-        //        VertexBuffer = new Buffer(
-        //            Context.Device,
-        //            vertexStream,
-        //            new BufferDescription
-        //            {
-        //                SizeInBytes = (int)vertexStream.Length,
-        //                BindFlags = BindFlags.VertexBuffer,
-        //            }
-        //        );
-        //    }
-        //}
-
-        //private void CreateIndexBuffer()
-        //{
-        //    using (DataStream indexStream = new DataStream(CreateIndices(), true, true)
-        //    )
-        //    {
-        //        IndexBuffer = new Buffer(
-        //            Context.Device,
-        //            indexStream,
-        //            new BufferDescription
-        //            {
-        //                SizeInBytes = (int)indexStream.Length,
-        //                BindFlags = BindFlags.IndexBuffer,
-        //            }
-        //        );
-        //    }
-        //}
-
-        //private VertexStruct[] CreateVertices()
-        //{
-        //    return UVMesh?.ToArray();
-        //}
-
-        //private uint[] CreateIndices()
-        //{
-        //    return UVMeshIndices?.ToArray();
-        //}
-
         private Texture2D TextureFromBitmap(Bitmap bitmap)
         {
             using (LockedBitmap lockedBitmap = new LockedBitmap(bitmap))
@@ -267,24 +193,17 @@ namespace IwUVEditor
             return ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
         }
 
-        private VertexStruct[] LoadUVVertices(Material material) =>
-            material.Vertices.Select(vtx => new VertexStruct()
-            {
-                Position = new Vector3(new Vector2(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2), 0),
-                Color = new Color4(1, 0, 0, 0),
-                TEXCOORD = vtx.UV
-            }
-            ).ToArray();
-
         protected override void Dispose(bool disposing)
         {
-            VertexLayoutOfUVMesh?.Dispose();
-            VertexBuffer?.Dispose();
             TexturePlate?.Dispose();
-            Texture = null;
+            CurrentTexture = null;
             foreach (var resource in TextureCache.Values)
             {
                 resource?.Dispose();
+            }
+            foreach (var mesh in UVMeshCache.Values)
+            {
+                mesh?.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DirectX\DrawElement\IDrawElement.cs" />
+    <Compile Include="DirectX\DrawElement\PositionSquares.cs" />
     <Compile Include="DirectX\DrawElement\TexturePlate.cs" />
     <Compile Include="DirectX\DrawElement\UVMesh.cs" />
     <Compile Include="LockedBitmap.cs" />

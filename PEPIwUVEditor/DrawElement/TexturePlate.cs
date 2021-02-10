@@ -29,7 +29,6 @@ namespace IwUVEditor.DrawElement
         uint[] PlateIndices { get; }
         List<InstanceOffset> Instances { get; set; }
 
-
         /// <summary>
         /// <para>テクスチャ板の敷き詰め半径</para>
         /// <para>無駄な処理を省けるので透過率も変えるときは <c>InstanceParams</c> を使う</para>

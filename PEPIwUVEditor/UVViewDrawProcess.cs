@@ -47,11 +47,13 @@ namespace IwUVEditor
         };
 
         Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
-        Dictionary<Material, VertexStruct[]> UVMeshCache { get; } = new Dictionary<Material, VertexStruct[]>();
+        Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
+        //Dictionary<Material, VertexStruct[]> UVMeshCache { get; } = new Dictionary<Material, VertexStruct[]>();
 
         ShaderResourceView Texture { get; set; }
-        VertexStruct[] UVMesh { get; set; }
-        uint[] UVMeshIndices { get; set; }
+        UVMesh UVMesh { get; set; }
+        //VertexStruct[] UVMesh { get; set; }
+        //uint[] UVMeshIndices { get; set; }
 
         TexturePlate TexturePlate { get; set; }
 
@@ -68,35 +70,16 @@ namespace IwUVEditor
                 if (!TextureCache.Keys.Contains(value))
                 {
                     TextureCache.Add(value, LoadTexture(value));
-                    UVMeshCache.Add(value, LoadUVVertices(value));
+                    UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value));
                 }
 
                 Texture = TextureCache[value];
                 UVMesh = UVMeshCache[value];
-                UVMeshIndices = value.FaceSequence;
-
-                CreateVertexBuffer();
-                CreateIndexBuffer();
             }
         }
 
         public override void Init()
         {
-            DrawMeshVertexPass = Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass");
-
-            // 頂点情報のフォーマットを設定
-            VertexLayoutOfUVMesh = new InputLayout(
-                Context.Device,
-                DrawMeshVertexPass.Description.Signature,
-                VertexStruct.VertexElements
-            );
-
-            // 頂点バッファに頂点を追加
-            CreateVertexBuffer();
-
-            // インデックスバッファを作成
-            CreateIndexBuffer();
-
             Texture = LoadTexture(null);
 
             Rasterize = new RasterizerStateProvider(Context.Device);
@@ -113,28 +96,30 @@ namespace IwUVEditor
             // テクスチャを読み込み
             Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Texture);
 
-
             // テクスチャ板を描画
             TexturePlate.Prepare();
 
+            // メッシュを描画
+            UVMesh?.Prepare();
+
             // 三角形をデバイスに入力
-            Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
-                0,
-                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
-            );
-            Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
-            Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
+            //Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
+            //    0,
+            //    new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
+            //);
+            //Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
+            //Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
             // UVメッシュを描画
-            if (!(CurrentMaterial is null))
-            {
-                Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfUVMesh;
-                DrawMeshVertexPass.Apply(Context.Device.ImmediateContext);
-                Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
-                for (int i = 0; i < CurrentMaterial.Faces.Count; i++)
-                {
-                    Context.Device.ImmediateContext.DrawIndexed(3, i * 3, 0);
-                }
-            }
+            //if (!(CurrentMaterial is null))
+            //{
+            //    Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfUVMesh;
+            //    DrawMeshVertexPass.Apply(Context.Device.ImmediateContext);
+            //    Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
+            //    for (int i = 0; i < CurrentMaterial.Faces.Count; i++)
+            //    {
+            //        Context.Device.ImmediateContext.DrawIndexed(3, i * 3, 0);
+            //    }
+            //}
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);
@@ -199,48 +184,48 @@ namespace IwUVEditor
                 Scale.WheelDelta += e.WheelDelta * modifier;
         }
 
-        private void CreateVertexBuffer()
-        {
-            using (var vertexStream = new DataStream(CreateVertices(), true, true))
-            {
-                VertexBuffer = new Buffer(
-                    Context.Device,
-                    vertexStream,
-                    new BufferDescription
-                    {
-                        SizeInBytes = (int)vertexStream.Length,
-                        BindFlags = BindFlags.VertexBuffer,
-                    }
-                );
-            }
-        }
+        //private void CreateVertexBuffer()
+        //{
+        //    using (var vertexStream = new DataStream(CreateVertices(), true, true))
+        //    {
+        //        VertexBuffer = new Buffer(
+        //            Context.Device,
+        //            vertexStream,
+        //            new BufferDescription
+        //            {
+        //                SizeInBytes = (int)vertexStream.Length,
+        //                BindFlags = BindFlags.VertexBuffer,
+        //            }
+        //        );
+        //    }
+        //}
 
-        private void CreateIndexBuffer()
-        {
-            using (DataStream indexStream = new DataStream(CreateIndices(), true, true)
-            )
-            {
-                IndexBuffer = new Buffer(
-                    Context.Device,
-                    indexStream,
-                    new BufferDescription
-                    {
-                        SizeInBytes = (int)indexStream.Length,
-                        BindFlags = BindFlags.IndexBuffer,
-                    }
-                );
-            }
-        }
+        //private void CreateIndexBuffer()
+        //{
+        //    using (DataStream indexStream = new DataStream(CreateIndices(), true, true)
+        //    )
+        //    {
+        //        IndexBuffer = new Buffer(
+        //            Context.Device,
+        //            indexStream,
+        //            new BufferDescription
+        //            {
+        //                SizeInBytes = (int)indexStream.Length,
+        //                BindFlags = BindFlags.IndexBuffer,
+        //            }
+        //        );
+        //    }
+        //}
 
-        private VertexStruct[] CreateVertices()
-        {
-            return UVMesh?.ToArray();
-        }
+        //private VertexStruct[] CreateVertices()
+        //{
+        //    return UVMesh?.ToArray();
+        //}
 
-        private uint[] CreateIndices()
-        {
-            return UVMeshIndices?.ToArray();
-        }
+        //private uint[] CreateIndices()
+        //{
+        //    return UVMeshIndices?.ToArray();
+        //}
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)
         {

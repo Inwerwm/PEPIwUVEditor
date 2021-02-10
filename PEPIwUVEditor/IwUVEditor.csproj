@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="DrawElement\IDrawElement.cs" />
     <Compile Include="DrawElement\TexturePlate.cs" />
+    <Compile Include="DrawElement\UVMesh.cs" />
     <Compile Include="LockedBitmap.cs" />
     <Compile Include="FormEditor.cs">
       <SubType>Form</SubType>

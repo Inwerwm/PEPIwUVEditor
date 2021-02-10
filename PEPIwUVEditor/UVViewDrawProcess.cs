@@ -76,18 +76,13 @@ namespace IwUVEditor
         }
 
         #region Instancing
-        struct InstanceOffset
-        {
-            public Matrix Offset;
-            public Color4 Color;
-        }
-        InputLayout InstancedBasic { get; set; }
+        InputLayout InstanceLayout { get; set; }
         Buffer InstanceBuffer { get; set; }
         List<InstanceOffset> InstancedDataList;
         private void CreateInstancedBuffer()
         {
             int radius = 5;
-            Color4 InstanceColor = new Color4(0.8f, 0.8f, 0.8f);
+            float InstanceColor = 0.8f;
 
             InstancedDataList = new List<InstanceOffset>();
             // 半径nで四角形を放射配置するため、{0..n}と{0..n}の直積集合を作る
@@ -98,7 +93,7 @@ namespace IwUVEditor
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(i, j, 0),
-                        Color = InstanceColor
+                        ColorRatio = InstanceColor
                     }
                     );
 
@@ -107,7 +102,7 @@ namespace IwUVEditor
                         new InstanceOffset()
                         {
                             Offset = Matrix.Translation(i, -j, 0),
-                            Color = InstanceColor
+                            ColorRatio = InstanceColor
                         }
                         );
                 if (i != 0)
@@ -115,7 +110,7 @@ namespace IwUVEditor
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-i, j, 0),
-                        Color = InstanceColor
+                        ColorRatio = InstanceColor
                     }
                     );
                 if (j != 0)
@@ -123,12 +118,12 @@ namespace IwUVEditor
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-i, -j, 0),
-                        Color = InstanceColor
+                        ColorRatio = InstanceColor
                     }
                     );
             }
             var vbd = new BufferDescription(
-                Marshal.SizeOf(typeof(InstanceOffset)) * InstancedDataList.Count,
+                InstanceOffset.SizeInBytes * InstancedDataList.Count,
                 ResourceUsage.Dynamic,
                 BindFlags.VertexBuffer,
                 CpuAccessFlags.Write,
@@ -153,10 +148,10 @@ namespace IwUVEditor
                 VertexStruct.VertexElements
             );
 
-            InstancedBasic = new InputLayout(
+            InstanceLayout = new InputLayout(
                 Context.Device,
-                Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawInstancePass").Description.Signature,
-                VertexStruct.VertexElements
+                Effect.GetTechniqueByName("InstanceTechnique").GetPassByName("DrawInstancePass").Description.Signature,
+                VertexStruct.VertexElements.Concat(InstanceOffset.VertexElements).ToArray()
             );
 
             // 頂点バッファに頂点を追加
@@ -185,18 +180,24 @@ namespace IwUVEditor
             // 三角形をデバイスに入力
             Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
-                new VertexBufferBinding(InstanceBuffer, Marshal.SizeOf(typeof(VertexStruct)), 0),
-                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
+                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0),
+                new VertexBufferBinding(InstanceBuffer, InstanceOffset.SizeInBytes, 0)
             );
             Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
             Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
             // テクスチャ板を描画
-            Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexPlate;
-            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
+            //Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexPlate;
+            //Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Apply(Context.Device.ImmediateContext);
             Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
-            Context.Device.ImmediateContext.DrawIndexed(3, 0, 0);
-            Context.Device.ImmediateContext.DrawIndexed(3, 3, 0);
+            //Context.Device.ImmediateContext.DrawIndexed(3, 0, 0);
+            //Context.Device.ImmediateContext.DrawIndexed(3, 3, 0);
+
+            // 周囲のテクスチャ板を描画
+            Context.Device.ImmediateContext.InputAssembler.InputLayout = InstanceLayout;
+            Effect.GetTechniqueByName("InstanceTechnique").GetPassByName("DrawInstancePass").Apply(Context.Device.ImmediateContext);
+            Context.Device.ImmediateContext.DrawIndexedInstanced(6, InstancedDataList.Count, 0, 0, 0);
+            //Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 3, 0, 0);
 
             // UVメッシュを描画
             if (!(CurrentMaterial is null))
@@ -209,12 +210,6 @@ namespace IwUVEditor
                     Context.Device.ImmediateContext.DrawIndexed(3, texPlateindexCount + i * 3, texPlateVertexCount);
                 }
             }
-
-            // 周囲のテクスチャ板を描画
-            Context.Device.ImmediateContext.InputAssembler.InputLayout = InstancedBasic;
-            Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawInstancePass").Apply(Context.Device.ImmediateContext);
-            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 0, 0, 0);
-            Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 3, 0, 0);
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);
@@ -283,7 +278,7 @@ namespace IwUVEditor
         {
             using (var vertexStream = new DataStream(CreateVertices(), true, true))
             {
-                VertexBuffer = new SlimDX.Direct3D11.Buffer(
+                VertexBuffer = new Buffer(
                     Context.Device,
                     vertexStream,
                     new BufferDescription
@@ -300,7 +295,7 @@ namespace IwUVEditor
             using (DataStream indexStream = new DataStream(CreateIndices(), true, true)
             )
             {
-                IndexBuffer = new SlimDX.Direct3D11.Buffer(
+                IndexBuffer = new Buffer(
                     Context.Device,
                     indexStream,
                     new BufferDescription
@@ -408,8 +403,9 @@ namespace IwUVEditor
         protected override void Dispose(bool disposing)
         {
             VertexLayoutOfTexPlate?.Dispose();
+            VertexLayoutOfUVMesh?.Dispose();
+            InstanceLayout?.Dispose();
             VertexBuffer?.Dispose();
-            InstancedBasic?.Dispose();
             InstanceBuffer?.Dispose();
             Texture = null;
             foreach (var resource in TextureCache.Values)

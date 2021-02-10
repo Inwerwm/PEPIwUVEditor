@@ -76,6 +76,7 @@
     <Compile Include="ScaleManager.cs" />
     <Compile Include="TGASharpLib.cs" />
     <Compile Include="UVViewDrawProcess.cs" />
+    <Compile Include="InstanceOffset.cs" />
     <Compile Include="VertexStruct.cs" />
   </ItemGroup>
   <ItemGroup>

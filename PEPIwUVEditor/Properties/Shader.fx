@@ -13,10 +13,14 @@ struct VertexStruct
 	float2 TexCoord : TEXCOORD;
 };
 
-cbuffer InstanceOffset
+struct InstancedVertexStruct
 {
-	matrix itOffset;
-	float4 itColor;
+	float4 Position : SV_Position;
+	float4 Color	: Color;
+	float2 TexCoord : TEXCOORD;
+	row_major float4x4 Offset : Offset;
+	float ColorRatio : Ratio;
+	uint InstanceId : SV_InstanceID;
 };
 
 VertexStruct VS(VertexStruct input)
@@ -26,11 +30,11 @@ VertexStruct VS(VertexStruct input)
 	return output;
 }
 
-VertexStruct VS_Instance(VertexStruct input)
+InstancedVertexStruct VS_Instance(InstancedVertexStruct input)
 {
-	VertexStruct output = input;
-	output.Position = mul(mul(output.Position , itOffset), ViewProjection);
-	output.Color = itColor;
+	InstancedVertexStruct output = input;
+	output.Position = mul(mul(output.Position , output.Offset), ViewProjection);
+	output.Color *= output.ColorRatio;
 	return output;
 }
 
@@ -39,7 +43,7 @@ float4 PS_Texture(VertexStruct input) : SV_Target
 	return diffuseTexture.Sample(Sampler, input.TexCoord);
 }
 
-float4 PS_VertexColorInfluencedTexture(VertexStruct input) : SV_Target
+float4 PS_VertexColorInfluencedTexture(InstancedVertexStruct input) : SV_Target
 {
 	return diffuseTexture.Sample(Sampler, input.TexCoord) * input.Color;
 }
@@ -56,14 +60,18 @@ technique10 MainTechnique
 		SetVertexShader(CompileShader(vs_5_0, VS()));
 		SetPixelShader(CompileShader(ps_5_0, PS_Texture()));
 	}
-	pass DrawInstancePass
-	{
-		SetVertexShader(CompileShader(vs_5_0, VS_Instance()));
-		SetPixelShader(CompileShader(ps_5_0, PS_VertexColor()));
-	}
 	pass DrawVertexColorPass
 	{
 		SetVertexShader(CompileShader(vs_5_0, VS()));
 		SetPixelShader(CompileShader(ps_5_0, PS_VertexColor()));
+	}
+}
+
+technique10 InstanceTechnique
+{
+	pass DrawInstancePass
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS_Instance()));
+		SetPixelShader(CompileShader(ps_5_0, PS_VertexColorInfluencedTexture()));
 	}
 }

@@ -17,23 +17,9 @@ namespace IwUVEditor
 
         public static readonly InputElement[] VertexElements = new[]
         {
-            new InputElement
-            {
-                SemanticName = "SV_Position",
-                Format = Format.R32G32B32_Float
-            },
-            new InputElement
-            {
-                SemanticName = "Color",
-                Format = Format.R32G32B32A32_Float,
-                AlignedByteOffset = InputElement.AppendAligned//自動的にオフセット決定
-            },
-            new InputElement
-            {
-                SemanticName = "TEXCOORD",
-                Format = Format.R32G32_Float,
-                AlignedByteOffset = InputElement.AppendAligned//自動的にオフセット決定
-            }
+            new InputElement("SV_Position", 0, Format.R32G32B32_Float,    0,                          0, InputClassification.PerVertexData,   0),
+            new InputElement("Color",       0, Format.R32G32B32A32_Float, InputElement.AppendAligned, 0, InputClassification.PerVertexData,   0),
+            new InputElement("TEXCOORD",    0, Format.R32G32_Float,       InputElement.AppendAligned, 0, InputClassification.PerVertexData,   0),
         };
 
         public static int SizeInBytes

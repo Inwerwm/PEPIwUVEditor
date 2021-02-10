@@ -21,10 +21,13 @@ namespace IwUVEditor
 
         private bool isViewMoving = false;
 
-        InputLayout VertexLayoutOfTexPlate { get; set; }
+        InputLayout VertexLayoutOfTexturePlates { get; set; }
         InputLayout VertexLayoutOfUVMesh { get; set; }
         SlimDX.Direct3D11.Buffer VertexBuffer { get; set; }
         SlimDX.Direct3D11.Buffer IndexBuffer { get; set; }
+
+        EffectPass DrawTexturePlatePass { get; set; }
+        EffectPass DrawMeshVertexPass { get; set; }
 
         public Vector3 ShiftOffset { get; set; } = Vector3.Zero; //publicなのはデバッグ用
         public ScaleManager Scale { get; } = new ScaleManager() //publicなのはデバッグ用
@@ -76,7 +79,6 @@ namespace IwUVEditor
         }
 
         #region Instancing
-        InputLayout InstanceLayout { get; set; }
         Buffer InstanceBuffer { get; set; }
         List<InstanceOffset> InstancedDataList;
         private void CreateInstancedBuffer()
@@ -94,7 +96,7 @@ namespace IwUVEditor
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(x, y, 0),
-                        ColorRatio = (i == 0 && j == 0) ? 1 : InstanceColor
+                        AlphaRatio = (i == 0 && j == 0) ? 1 : InstanceColor
                     }
                     );
 
@@ -103,7 +105,7 @@ namespace IwUVEditor
                         new InstanceOffset()
                         {
                             Offset = Matrix.Translation(x, -y, 0),
-                            ColorRatio = InstanceColor
+                            AlphaRatio = InstanceColor
                         }
                         );
                 if (x != 0)
@@ -111,7 +113,7 @@ namespace IwUVEditor
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-x, y, 0),
-                        ColorRatio = InstanceColor
+                        AlphaRatio = InstanceColor
                     }
                     );
                 if (i != 0 && j != 0)
@@ -119,7 +121,7 @@ namespace IwUVEditor
                     new InstanceOffset()
                     {
                         Offset = Matrix.Translation(-x, -y, 0),
-                        ColorRatio = InstanceColor
+                        AlphaRatio = InstanceColor
                     }
                     );
             }
@@ -137,22 +139,20 @@ namespace IwUVEditor
 
         public override void Init()
         {
+            DrawTexturePlatePass = Effect.GetTechniqueByName("TexturePlatesTechnique").GetPassByName("DrawTexturePlatesPass");
+            DrawMeshVertexPass = Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass");
+
             // 頂点情報のフォーマットを設定
-            VertexLayoutOfTexPlate = new InputLayout(
+            VertexLayoutOfTexturePlates = new InputLayout(
                 Context.Device,
-                Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawTexturePass").Description.Signature,
-                VertexStruct.VertexElements
-            );
-            VertexLayoutOfUVMesh = new InputLayout(
-                Context.Device,
-                Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass").Description.Signature,
-                VertexStruct.VertexElements
+                DrawTexturePlatePass.Description.Signature,
+                VertexStruct.VertexElements.Concat(InstanceOffset.VertexElements).ToArray()
             );
 
-            InstanceLayout = new InputLayout(
+            VertexLayoutOfUVMesh = new InputLayout(
                 Context.Device,
-                Effect.GetTechniqueByName("InstanceTechnique").GetPassByName("DrawInstancePass").Description.Signature,
-                VertexStruct.VertexElements.Concat(InstanceOffset.VertexElements).ToArray()
+                DrawMeshVertexPass.Description.Signature,
+                VertexStruct.VertexElements
             );
 
             // 頂点バッファに頂点を追加
@@ -188,8 +188,8 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
             // テクスチャ板を描画
-            Context.Device.ImmediateContext.InputAssembler.InputLayout = InstanceLayout;
-            Effect.GetTechniqueByName("InstanceTechnique").GetPassByName("DrawInstancePass").Apply(Context.Device.ImmediateContext);
+            Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexturePlates;
+            DrawTexturePlatePass.Apply(Context.Device.ImmediateContext);
             Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
             Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 0, 0, 0);
             Context.Device.ImmediateContext.DrawIndexedInstanced(3, InstancedDataList.Count, 3, 0, 0);
@@ -198,7 +198,7 @@ namespace IwUVEditor
             if (!(CurrentMaterial is null))
             {
                 Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfUVMesh;
-                Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass").Apply(Context.Device.ImmediateContext);
+                DrawMeshVertexPass.Apply(Context.Device.ImmediateContext);
                 Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
                 for (int i = 0; i < CurrentMaterial.Faces.Count; i++)
                 {
@@ -397,9 +397,8 @@ namespace IwUVEditor
 
         protected override void Dispose(bool disposing)
         {
-            VertexLayoutOfTexPlate?.Dispose();
             VertexLayoutOfUVMesh?.Dispose();
-            InstanceLayout?.Dispose();
+            VertexLayoutOfTexturePlates?.Dispose();
             VertexBuffer?.Dispose();
             InstanceBuffer?.Dispose();
             Texture = null;

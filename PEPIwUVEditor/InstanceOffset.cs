@@ -12,7 +12,7 @@ namespace IwUVEditor
     struct InstanceOffset
     {
         public Matrix Offset;
-        public float ColorRatio;
+        public float AlphaRatio;
 
         public static readonly InputElement[] VertexElements = new[]
         {

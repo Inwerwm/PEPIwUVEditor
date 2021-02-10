@@ -1,4 +1,5 @@
-﻿using SlimDX;
+﻿using IwUVEditor.DirectX.Vertex;
+using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
 using System;

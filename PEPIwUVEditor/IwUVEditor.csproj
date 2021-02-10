@@ -61,6 +61,7 @@
     <Compile Include="DirectX\DrawElement\PositionSquares.cs" />
     <Compile Include="DirectX\DrawElement\TexturePlate.cs" />
     <Compile Include="DirectX\DrawElement\UVMesh.cs" />
+    <Compile Include="DirectX\Vertex\PositionSquareVertex.cs" />
     <Compile Include="LockedBitmap.cs" />
     <Compile Include="FormEditor.cs">
       <SubType>Form</SubType>
@@ -80,8 +81,8 @@
     <Compile Include="ScaleManager.cs" />
     <Compile Include="TGASharpLib.cs" />
     <Compile Include="DirectX\UVViewDrawProcess.cs" />
-    <Compile Include="DirectX\InstanceOffset.cs" />
-    <Compile Include="DirectX\VertexStruct.cs" />
+    <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
+    <Compile Include="DirectX\Vertex\VertexStruct.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

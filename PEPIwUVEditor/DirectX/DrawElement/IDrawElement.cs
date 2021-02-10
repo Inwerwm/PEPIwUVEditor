@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Buffer = SlimDX.Direct3D11.Buffer;
 
-namespace IwUVEditor.DrawElement
+namespace IwUVEditor.DirectX.DrawElement
 {
     interface IDrawElement : IDisposable
     {

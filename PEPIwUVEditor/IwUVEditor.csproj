@@ -57,9 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DrawElement\IDrawElement.cs" />
-    <Compile Include="DrawElement\TexturePlate.cs" />
-    <Compile Include="DrawElement\UVMesh.cs" />
+    <Compile Include="DirectX\DrawElement\IDrawElement.cs" />
+    <Compile Include="DirectX\DrawElement\TexturePlate.cs" />
+    <Compile Include="DirectX\DrawElement\UVMesh.cs" />
     <Compile Include="LockedBitmap.cs" />
     <Compile Include="FormEditor.cs">
       <SubType>Form</SubType>
@@ -74,13 +74,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RasterizerStateProvider.cs" />
+    <Compile Include="DirectX\RasterizerStateProvider.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="ScaleManager.cs" />
     <Compile Include="TGASharpLib.cs" />
-    <Compile Include="UVViewDrawProcess.cs" />
-    <Compile Include="InstanceOffset.cs" />
-    <Compile Include="VertexStruct.cs" />
+    <Compile Include="DirectX\UVViewDrawProcess.cs" />
+    <Compile Include="DirectX\InstanceOffset.cs" />
+    <Compile Include="DirectX\VertexStruct.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

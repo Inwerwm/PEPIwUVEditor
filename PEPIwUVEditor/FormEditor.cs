@@ -1,5 +1,6 @@
 ﻿using DxManager;
 using DxManager.Camera;
+using IwUVEditor.DirectX;
 using PEPlugin;
 using PEPlugin.Pmx;
 using System;

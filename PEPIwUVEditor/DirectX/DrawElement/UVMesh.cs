@@ -8,7 +8,7 @@ using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 
 
-namespace IwUVEditor.DrawElement
+namespace IwUVEditor.DirectX.DrawElement
 {
     class UVMesh : IDrawElement
     {

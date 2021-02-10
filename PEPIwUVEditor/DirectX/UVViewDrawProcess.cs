@@ -1,5 +1,5 @@
 ﻿using DxManager;
-using IwUVEditor.DrawElement;
+using IwUVEditor.DirectX.DrawElement;
 using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Buffer = SlimDX.Direct3D11.Buffer;
 
-namespace IwUVEditor
+namespace IwUVEditor.DirectX
 {
     class UVViewDrawProcess : DxProcess
     {

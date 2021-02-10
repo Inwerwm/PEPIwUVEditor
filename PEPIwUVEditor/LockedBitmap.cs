@@ -45,15 +45,12 @@ namespace IwUVEditor
         {
             if (!disposedValue)
             {
+                Bitmap.UnlockBits(BitmapData);
                 if (disposing)
                 {
-                    // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    Bitmap?.Dispose();
                 }
 
-                // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
-                // TODO: 大きなフィールドを null に設定します
-                Bitmap.UnlockBits(BitmapData);
-                Bitmap?.Dispose();
                 disposedValue = true;
             }
         }

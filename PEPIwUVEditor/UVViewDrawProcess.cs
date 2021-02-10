@@ -1,4 +1,5 @@
 ﻿using DxManager;
+using IwUVEditor.DrawElement;
 using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
@@ -58,6 +59,8 @@ namespace IwUVEditor
         VertexStruct[] UVMesh { get; set; }
         uint[] UVMeshIndices { get; set; }
 
+        TexturePlate TexturePlate { get; set; }
+
         RasterizerStateProvider Rasterize { get; set; }
 
         public Material CurrentMaterial
@@ -113,6 +116,8 @@ namespace IwUVEditor
             Texture = LoadTexture(null);
 
             Rasterize = new RasterizerStateProvider(Context.Device);
+
+            TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
         }
 
         public override void Draw()
@@ -134,11 +139,12 @@ namespace IwUVEditor
             Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
 
             // テクスチャ板を描画
-            Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexturePlates;
-            DrawTexturePlatePass.Apply(Context.Device.ImmediateContext);
-            Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
-            Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 0, 0, 0);
-            Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 3, 0, 0);
+            //Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexturePlates;
+            //DrawTexturePlatePass.Apply(Context.Device.ImmediateContext);
+            //Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
+            //Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 0, 0, 0);
+            //Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 3, 0, 0);
+            TexturePlate.Prepare();
 
             // UVメッシュを描画
             if (!(CurrentMaterial is null))

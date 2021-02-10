@@ -17,18 +17,13 @@ namespace IwUVEditor
     class UVViewDrawProcess : DxProcess
     {
         private Material currentMaterial;
-        private int texPlateVertexCount;
-        private int texPlateindexCount;
 
         private bool isViewMoving = false;
 
-        InputLayout VertexLayoutOfTexturePlates { get; set; }
         InputLayout VertexLayoutOfUVMesh { get; set; }
         Buffer VertexBuffer { get; set; }
         Buffer IndexBuffer { get; set; }
-        Buffer TexturePlateInstancesBuffer { get; set; }
 
-        EffectPass DrawTexturePlatePass { get; set; }
         EffectPass DrawMeshVertexPass { get; set; }
 
         public Vector3 ShiftOffset { get; set; } = Vector3.Zero; //publicなのはデバッグ用
@@ -55,7 +50,6 @@ namespace IwUVEditor
         Dictionary<Material, VertexStruct[]> UVMeshCache { get; } = new Dictionary<Material, VertexStruct[]>();
 
         ShaderResourceView Texture { get; set; }
-        List<InstanceOffset> TexturePlateInstances;
         VertexStruct[] UVMesh { get; set; }
         uint[] UVMeshIndices { get; set; }
 
@@ -88,16 +82,9 @@ namespace IwUVEditor
 
         public override void Init()
         {
-            DrawTexturePlatePass = Effect.GetTechniqueByName("TexturePlatesTechnique").GetPassByName("DrawTexturePlatesPass");
             DrawMeshVertexPass = Effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass");
 
             // 頂点情報のフォーマットを設定
-            VertexLayoutOfTexturePlates = new InputLayout(
-                Context.Device,
-                DrawTexturePlatePass.Description.Signature,
-                VertexStruct.VertexElements.Concat(InstanceOffset.VertexElements).ToArray()
-            );
-
             VertexLayoutOfUVMesh = new InputLayout(
                 Context.Device,
                 DrawMeshVertexPass.Description.Signature,
@@ -109,9 +96,6 @@ namespace IwUVEditor
 
             // インデックスバッファを作成
             CreateIndexBuffer();
-
-            // テクスチャ板のインスタンスを作成
-            CreateTexturePlateInstancesBuffer();
 
             Texture = LoadTexture(null);
 
@@ -129,23 +113,17 @@ namespace IwUVEditor
             // テクスチャを読み込み
             Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Texture);
 
+
+            // テクスチャ板を描画
+            TexturePlate.Prepare();
+
             // 三角形をデバイスに入力
             Context.Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
-                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0),
-                new VertexBufferBinding(TexturePlateInstancesBuffer, InstanceOffset.SizeInBytes, 0)
+                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
             );
             Context.Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
             Context.Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
-
-            // テクスチャ板を描画
-            //Context.Device.ImmediateContext.InputAssembler.InputLayout = VertexLayoutOfTexturePlates;
-            //DrawTexturePlatePass.Apply(Context.Device.ImmediateContext);
-            //Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Solid;
-            //Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 0, 0, 0);
-            //Context.Device.ImmediateContext.DrawIndexedInstanced(3, TexturePlateInstances.Count, 3, 0, 0);
-            TexturePlate.Prepare();
-
             // UVメッシュを描画
             if (!(CurrentMaterial is null))
             {
@@ -154,7 +132,7 @@ namespace IwUVEditor
                 Context.Device.ImmediateContext.Rasterizer.State = Rasterize.Wireframe;
                 for (int i = 0; i < CurrentMaterial.Faces.Count; i++)
                 {
-                    Context.Device.ImmediateContext.DrawIndexed(3, texPlateindexCount + i * 3, texPlateVertexCount);
+                    Context.Device.ImmediateContext.DrawIndexed(3, i * 3, 0);
                 }
             }
 
@@ -254,111 +232,14 @@ namespace IwUVEditor
             }
         }
 
-        private void CreateTexturePlateInstancesBuffer()
-        {
-            CreateTexPlateInstances();
-
-            TexturePlateInstancesBuffer = new Buffer(
-                Context.Device,
-                new DataStream(TexturePlateInstances.ToArray(), false, true),
-                new BufferDescription
-                (
-                    InstanceOffset.SizeInBytes * TexturePlateInstances.Count,
-                    ResourceUsage.Dynamic,
-                    BindFlags.VertexBuffer,
-                    CpuAccessFlags.Write,
-                    ResourceOptionFlags.None,
-                    0
-                )
-            );
-        }
-
         private VertexStruct[] CreateVertices()
         {
-            VertexStruct[] texturePlate = new[] {
-                    new VertexStruct
-                    {
-                        Position = new Vector3(-1, 1, 0),
-                        Color = new Color4(1, 1, 1, 1),
-                        TEXCOORD = new Vector2(0, 0)
-                    },
-                    new VertexStruct
-                    {
-                        Position = new Vector3(1, 1, 0),
-                        Color = new Color4(1, 1, 1, 1),
-                        TEXCOORD = new Vector2(1, 0)
-                    },
-                    new VertexStruct
-                    {
-                        Position = new Vector3(-1, -1, 0),
-                        Color = new Color4(1, 1, 1, 1),
-                        TEXCOORD = new Vector2(0 ,1)
-                    },
-                    new VertexStruct
-                    {
-                        Position = new Vector3(1, -1, 0),
-                        Color = new Color4(1, 1, 1, 1),
-                        TEXCOORD = new Vector2(1, 1)
-                    }
-                };
-            texPlateVertexCount = texturePlate.Length;
-
-            return UVMesh is null ? texturePlate : texturePlate.Concat(UVMesh).ToArray();
+            return UVMesh?.ToArray();
         }
 
         private uint[] CreateIndices()
         {
-            uint[] texturePlate = new uint[] {
-                    0, 1, 2,
-                    3, 2, 1
-                };
-            texPlateindexCount = texturePlate.Length;
-
-            return UVMeshIndices is null ? texturePlate : texturePlate.Concat(UVMeshIndices).ToArray();
-        }
-
-        private void CreateTexPlateInstances()
-        {
-            TexturePlateInstances = new List<InstanceOffset>();
-            // 半径nで四角形を放射配置するため、{0..n}と{0..n}の直積集合でループする
-            foreach ((int i, int j) in Enumerable.Range(0, Radius + 1).SelectMany(i => Enumerable.Range(0, Radius + 1).Select(j => (i, j))))
-            {
-                var x = i * 2;
-                var y = j * 2;
-
-                TexturePlateInstances.Add(
-                    new InstanceOffset()
-                    {
-                        Offset = Matrix.Translation(x, y, 0),
-                        AlphaRatio = (i == 0 && j == 0) ? 1 : PeripheryPlateAlpha
-                    }
-                    );
-
-                if (y != 0)
-                    TexturePlateInstances.Add(
-                        new InstanceOffset()
-                        {
-                            Offset = Matrix.Translation(x, -y, 0),
-                            AlphaRatio = PeripheryPlateAlpha
-                        }
-                        );
-                if (x != 0)
-                    TexturePlateInstances.Add(
-                    new InstanceOffset()
-                    {
-                        Offset = Matrix.Translation(-x, y, 0),
-                        AlphaRatio = PeripheryPlateAlpha
-                    }
-                    );
-                if (i != 0 && j != 0)
-                    TexturePlateInstances.Add(
-                    new InstanceOffset()
-                    {
-                        Offset = Matrix.Translation(-x, -y, 0),
-                        AlphaRatio = PeripheryPlateAlpha
-                    }
-                    );
-            }
+            return UVMeshIndices?.ToArray();
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)
@@ -413,9 +294,8 @@ namespace IwUVEditor
         protected override void Dispose(bool disposing)
         {
             VertexLayoutOfUVMesh?.Dispose();
-            VertexLayoutOfTexturePlates?.Dispose();
             VertexBuffer?.Dispose();
-            TexturePlateInstancesBuffer?.Dispose();
+            TexturePlate?.Dispose();
             Texture = null;
             foreach (var resource in TextureCache.Values)
             {

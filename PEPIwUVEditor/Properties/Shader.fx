@@ -35,10 +35,8 @@ struct TexturePlateVertex
 // 位置表示四角形用頂点構造
 struct PositionSquareVertex
 {
-	float4 Position : SV_Position
-	float4 Center : Center;
-	float Radius : Radius;
-	int Direction : Direction;
+	float4 Position : SV_Position;
+	row_major float4x4 Offset : Offset;
 	float4 Color : Color;
 	uint InstanceId : SV_InstanceID;
 };
@@ -68,25 +66,7 @@ TexturePlateVertex VS_FillTexturePlates(TexturePlateVertex input)
 PositionSquareVertex VS_PutSquareVertex(PositionSquareVertex input)
 {
 	PositionSquareVertex output = input;
-	output.Center = mul(input.Center, ViewProjection);
-
-	switch (input.Direction)
-	{
-	case 0:
-		output.Position = output.Center + float4(-1 * input.Radius, -1 * input.Radius, 0, 0);
-		break;
-	case 1:
-		output.Position = output.Center + float4(input.Radius, -1 * input.Radius, 0, 0);
-		break;
-	case 2:
-		output.Position = output.Center + float4(-1 * input.Radius, input.Radius, 0, 0);
-		break;
-	case 3:
-		output.Position = output.Center + float4(input.Radius, input.Radius, 0, 0);
-		break;
-	default:
-		break;
-	}
+	output.Position = mul(mul(output.Position, output.Offset), ViewProjection);
 
 	return output;
 }

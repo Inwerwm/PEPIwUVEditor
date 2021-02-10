@@ -47,6 +47,9 @@ namespace IwUVEditor.DirectX
         Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
         UVMesh CurrentUVMesh { get; set; }
 
+        Dictionary<Material, PositionSquares> PositionSquareCache { get; } = new Dictionary<Material, PositionSquares>();
+        PositionSquares CurrentPositionSquares;
+
         public Material CurrentMaterial
         {
             get => currentMaterial;
@@ -59,10 +62,12 @@ namespace IwUVEditor.DirectX
                 {
                     TextureCache.Add(value, LoadTexture(value));
                     UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value));
+                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value) { Radius = 0.01f });
                 }
 
                 CurrentTexture = TextureCache[value];
                 CurrentUVMesh = UVMeshCache[value];
+                CurrentPositionSquares = PositionSquareCache[value];
             }
         }
 
@@ -89,6 +94,9 @@ namespace IwUVEditor.DirectX
 
             // メッシュを描画
             CurrentUVMesh?.Prepare();
+
+            // 頂点位置に四角を描画
+            CurrentPositionSquares?.Prepare();
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);

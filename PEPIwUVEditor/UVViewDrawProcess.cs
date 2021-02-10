@@ -71,7 +71,7 @@ namespace IwUVEditor
                 if (!TextureCache.Keys.Contains(value))
                 {
                     TextureCache.Add(value, LoadTexture(value));
-                    UVMeshCache.Add(value, LoadVertices(value));
+                    UVMeshCache.Add(value, LoadUVVertices(value));
                 }
 
                 Texture = TextureCache[value];
@@ -80,69 +80,6 @@ namespace IwUVEditor
 
                 CreateVertexBuffer();
                 CreateIndexBuffer();
-            }
-        }
-
-        private void CreateTexturePlateInstancesBuffer()
-        {
-            CreateTexPlateInstances();
-
-            TexturePlateInstancesBuffer = new Buffer(
-                Context.Device,
-                new DataStream(TexturePlateInstances.ToArray(), false, true),
-                new BufferDescription
-                (
-                    InstanceOffset.SizeInBytes * TexturePlateInstances.Count,
-                    ResourceUsage.Dynamic,
-                    BindFlags.VertexBuffer,
-                    CpuAccessFlags.Write,
-                    ResourceOptionFlags.None,
-                    0
-                )
-            );
-        }
-
-        private void CreateTexPlateInstances()
-        {
-            TexturePlateInstances = new List<InstanceOffset>();
-            // 半径nで四角形を放射配置するため、{0..n}と{0..n}の直積集合でループする
-            foreach ((int i, int j) in Enumerable.Range(0, Radius + 1).SelectMany(i => Enumerable.Range(0, Radius + 1).Select(j => (i, j))))
-            {
-                var x = i * 2;
-                var y = j * 2;
-
-                TexturePlateInstances.Add(
-                    new InstanceOffset()
-                    {
-                        Offset = Matrix.Translation(x, y, 0),
-                        AlphaRatio = (i == 0 && j == 0) ? 1 : PeripheryPlateAlpha
-                    }
-                    );
-
-                if (y != 0)
-                    TexturePlateInstances.Add(
-                        new InstanceOffset()
-                        {
-                            Offset = Matrix.Translation(x, -y, 0),
-                            AlphaRatio = PeripheryPlateAlpha
-                        }
-                        );
-                if (x != 0)
-                    TexturePlateInstances.Add(
-                    new InstanceOffset()
-                    {
-                        Offset = Matrix.Translation(-x, y, 0),
-                        AlphaRatio = PeripheryPlateAlpha
-                    }
-                    );
-                if (i != 0 && j != 0)
-                    TexturePlateInstances.Add(
-                    new InstanceOffset()
-                    {
-                        Offset = Matrix.Translation(-x, -y, 0),
-                        AlphaRatio = PeripheryPlateAlpha
-                    }
-                    );
             }
         }
 
@@ -311,15 +248,23 @@ namespace IwUVEditor
             }
         }
 
-        private uint[] CreateIndices()
+        private void CreateTexturePlateInstancesBuffer()
         {
-            uint[] texturePlate = new uint[] {
-                    0, 1, 2,
-                    3, 2, 1
-                };
-            texPlateindexCount = texturePlate.Length;
+            CreateTexPlateInstances();
 
-            return UVMeshIndices is null ? texturePlate : texturePlate.Concat(UVMeshIndices).ToArray();
+            TexturePlateInstancesBuffer = new Buffer(
+                Context.Device,
+                new DataStream(TexturePlateInstances.ToArray(), false, true),
+                new BufferDescription
+                (
+                    InstanceOffset.SizeInBytes * TexturePlateInstances.Count,
+                    ResourceUsage.Dynamic,
+                    BindFlags.VertexBuffer,
+                    CpuAccessFlags.Write,
+                    ResourceOptionFlags.None,
+                    0
+                )
+            );
         }
 
         private VertexStruct[] CreateVertices()
@@ -353,6 +298,61 @@ namespace IwUVEditor
             texPlateVertexCount = texturePlate.Length;
 
             return UVMesh is null ? texturePlate : texturePlate.Concat(UVMesh).ToArray();
+        }
+
+        private uint[] CreateIndices()
+        {
+            uint[] texturePlate = new uint[] {
+                    0, 1, 2,
+                    3, 2, 1
+                };
+            texPlateindexCount = texturePlate.Length;
+
+            return UVMeshIndices is null ? texturePlate : texturePlate.Concat(UVMeshIndices).ToArray();
+        }
+
+        private void CreateTexPlateInstances()
+        {
+            TexturePlateInstances = new List<InstanceOffset>();
+            // 半径nで四角形を放射配置するため、{0..n}と{0..n}の直積集合でループする
+            foreach ((int i, int j) in Enumerable.Range(0, Radius + 1).SelectMany(i => Enumerable.Range(0, Radius + 1).Select(j => (i, j))))
+            {
+                var x = i * 2;
+                var y = j * 2;
+
+                TexturePlateInstances.Add(
+                    new InstanceOffset()
+                    {
+                        Offset = Matrix.Translation(x, y, 0),
+                        AlphaRatio = (i == 0 && j == 0) ? 1 : PeripheryPlateAlpha
+                    }
+                    );
+
+                if (y != 0)
+                    TexturePlateInstances.Add(
+                        new InstanceOffset()
+                        {
+                            Offset = Matrix.Translation(x, -y, 0),
+                            AlphaRatio = PeripheryPlateAlpha
+                        }
+                        );
+                if (x != 0)
+                    TexturePlateInstances.Add(
+                    new InstanceOffset()
+                    {
+                        Offset = Matrix.Translation(-x, y, 0),
+                        AlphaRatio = PeripheryPlateAlpha
+                    }
+                    );
+                if (i != 0 && j != 0)
+                    TexturePlateInstances.Add(
+                    new InstanceOffset()
+                    {
+                        Offset = Matrix.Translation(-x, -y, 0),
+                        AlphaRatio = PeripheryPlateAlpha
+                    }
+                    );
+            }
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)
@@ -395,7 +395,7 @@ namespace IwUVEditor
             return ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
         }
 
-        private VertexStruct[] LoadVertices(Material material) =>
+        private VertexStruct[] LoadUVVertices(Material material) =>
             material.Vertices.Select(vtx => new VertexStruct()
             {
                 Position = new Vector3(new Vector2(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2), 0),

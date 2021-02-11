@@ -18,8 +18,6 @@ namespace IwUVEditor.DirectX
     {
         private Material currentMaterial;
 
-        private bool isViewMoving = false;
-
         private float radiusOfPositionSquare;
 
         RasterizerStateProvider Rasterize { get; set; }
@@ -37,10 +35,15 @@ namespace IwUVEditor.DirectX
         };
 
         public bool IsActive { get; set; } = true;
-        public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>()
+        public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>
         {
             { Keys.ShiftKey, false },
             { Keys.ControlKey, false }
+        };
+        public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
+        {
+            { MouseButtons.Left, false },
+            { MouseButtons.Middle, false },
         };
 
         TexturePlate TexturePlate { get; set; }
@@ -168,14 +171,14 @@ namespace IwUVEditor.DirectX
             if (!IsActive)
                 return;
 
-            bool isViewScaling = false;
+            float modifier = (IsPress[Keys.ShiftKey] ? 4f : 1f) / (IsPress[Keys.ControlKey] ? 4f : 1f);
 
             switch (e.ButtonFlags)
             {
                 case MouseButtonFlags.None:
                     break;
                 case MouseButtonFlags.MouseWheel:
-                    isViewScaling = true;
+                    Scale.WheelDelta += e.WheelDelta * modifier;
                     break;
                 case MouseButtonFlags.Button5Up:
                     break;
@@ -186,10 +189,10 @@ namespace IwUVEditor.DirectX
                 case MouseButtonFlags.Button4Down:
                     break;
                 case MouseButtonFlags.MiddleUp:
-                    isViewMoving = false;
+                    IsClicking[MouseButtons.Middle] = false;
                     break;
                 case MouseButtonFlags.MiddleDown:
-                    isViewMoving = true;
+                    IsClicking[MouseButtons.Middle] = true;
                     break;
                 case MouseButtonFlags.RightUp:
                     break;
@@ -203,11 +206,8 @@ namespace IwUVEditor.DirectX
                     break;
             }
 
-            float modifier = (IsPress[Keys.ShiftKey] ? 4f : 1f) / (IsPress[Keys.ControlKey] ? 4f : 1f);
-            if (isViewMoving)
+            if (IsClicking[MouseButtons.Middle])
                 ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
-            if (isViewScaling)
-                Scale.WheelDelta += e.WheelDelta * modifier;
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)

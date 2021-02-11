@@ -26,7 +26,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         Material SourceMaterial { get; }
 
-        Color4 LineColor
+        public Color4 LineColor
         {
             get => lineColor;
             set
@@ -36,13 +36,13 @@ namespace IwUVEditor.DirectX.DrawElement
             }
         }
 
-        public UVMesh(Device device, Effect effect, RasterizerState drawMode, Material material)
+        public UVMesh(Device device, Effect effect, RasterizerState drawMode, Material material, Color4 lineColor)
         {
             Device = device;
             UsingEffectPass = effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass");
             DrawMode = drawMode;
             SourceMaterial = material;
-            lineColor = new Color4(1, 0, 0, 0);
+            this.lineColor = lineColor;
 
             if (SourceMaterial is null)
                 return;

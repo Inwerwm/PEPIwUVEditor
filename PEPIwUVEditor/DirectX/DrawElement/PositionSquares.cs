@@ -15,6 +15,7 @@ namespace IwUVEditor.DirectX.DrawElement
         private bool disposedValue;
         private float radius;
         private Color4 colorInSelected;
+        private Color4 colorInDefault;
 
         Device Device { get; }
         EffectPass UsingEffectPass { get; }
@@ -42,6 +43,18 @@ namespace IwUVEditor.DirectX.DrawElement
         }
 
         /// <summary>
+        /// 非選択状態の頂点色
+        /// </summary>
+        public Color4 ColorInDefault
+        {
+            get => colorInDefault;
+            set
+            {
+                colorInDefault = value;
+                UpdateVertices();
+            }
+        }
+        /// <summary>
         /// 選択状態の頂点色
         /// </summary>
         public Color4 ColorInSelected
@@ -53,18 +66,17 @@ namespace IwUVEditor.DirectX.DrawElement
                 UpdateVertices();
             }
         }
-        /// <summary>
-        /// 非選択状態の頂点色
-        /// </summary>
-        public Color4 ColorInNotSelected { get; set; }
 
-        public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius)
+        public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius, Color4 colorInDefault, Color4 colorInSelected)
         {
             Device = device;
             UsingEffectPass = effect.GetTechniqueByName("PositionSquaresTechnique").GetPassByName("DrawPositionSquaresPass");
             DrawMode = drawMode;
             SourceMaterial = material;
+
             this.radius = radius;
+            this.colorInDefault = colorInDefault;
+            this.colorInSelected = colorInSelected;
 
             if (SourceMaterial is null)
                 return;
@@ -199,7 +211,7 @@ namespace IwUVEditor.DirectX.DrawElement
             Instances = SourceMaterial.Vertices.Select(vtx =>
                 new PositionSquareVertex()
                 {
-                    Color = SourceMaterial.IsSelected[vtx] ? ColorInSelected : ColorInNotSelected,
+                    Color = SourceMaterial.IsSelected[vtx] ? ColorInSelected : ColorInDefault,
                     Offset = new Vector4(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0, 1),
                 }
             ).ToList();

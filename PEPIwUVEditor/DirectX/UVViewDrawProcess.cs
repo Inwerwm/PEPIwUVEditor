@@ -53,6 +53,8 @@ namespace IwUVEditor.DirectX
 
         Dictionary<Material, PositionSquares> PositionSquareCache { get; } = new Dictionary<Material, PositionSquares>();
         PositionSquares CurrentPositionSquares;
+        private Color4 colorInDefault;
+        private Color4 colorInSelected;
 
         public Material CurrentMaterial
         {
@@ -65,13 +67,43 @@ namespace IwUVEditor.DirectX
                 if (!TextureCache.Keys.Contains(value))
                 {
                     TextureCache.Add(value, LoadTexture(value));
-                    UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value));
-                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, RadiusOfPositionSquare));
+                    UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value, ColorInDefault));
+                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, RadiusOfPositionSquare, ColorInDefault, colorInSelected));
                 }
 
                 CurrentTexture = TextureCache[value];
                 CurrentUVMesh = UVMeshCache[value];
                 CurrentPositionSquares = PositionSquareCache[value];
+            }
+        }
+
+        public Color4 ColorInDefault
+        {
+            get => colorInDefault;
+            set
+            {
+                colorInDefault = value;
+                foreach (var mesh in UVMeshCache.Values)
+                {
+                    mesh.LineColor = value;
+                }
+                foreach (var sq in PositionSquareCache.Values)
+                {
+                    sq.ColorInDefault = value;
+                }
+            }
+        }
+
+        public Color4 ColorInSelected
+        {
+            get => colorInSelected;
+            set
+            {
+                colorInSelected = value;
+                foreach (var sq in PositionSquareCache.Values)
+                {
+                    sq.ColorInSelected = value;
+                }
             }
         }
 

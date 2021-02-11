@@ -65,6 +65,8 @@ namespace IwUVEditor
                     ViewVolumeDepth = (0, 1)
                 },
                 RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value,
+                ColorInDefault = new SlimDX.Color4(1, 0, 0, 0),
+                ColorInSelected = new SlimDX.Color4(1, 1, 0, 0)
             };
         }
 

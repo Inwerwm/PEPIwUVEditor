@@ -15,6 +15,9 @@ namespace IwUVEditor
         IPXMaterial Value { get; }
 
         public IList<IPXVertex> Vertices { get; }
+
+        public Dictionary<IPXVertex, bool> IsSelected { get; }
+
         /// <summary>
         /// インデックスバッファに与える面の構成頂点番号配列
         /// </summary>
@@ -34,6 +37,7 @@ namespace IwUVEditor
             IEnumerable<IPXVertex> FaceVertices = Faces.SelectMany(face => face.ToVertices());
 
             Vertices = FaceVertices.Distinct().ToList();
+            IsSelected = Vertices.ToDictionary(vtx => vtx, _ => false);
 
             var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => (uint)pair.i);
             FaceSequence = FaceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();

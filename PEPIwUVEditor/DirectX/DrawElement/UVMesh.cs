@@ -3,7 +3,6 @@ using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
@@ -14,6 +13,7 @@ namespace IwUVEditor.DirectX.DrawElement
     class UVMesh : IDrawElement
     {
         private bool disposedValue;
+        private Color4 lineColor;
 
         Device Device { get; }
         EffectPass UsingEffectPass { get; }
@@ -26,12 +26,23 @@ namespace IwUVEditor.DirectX.DrawElement
 
         Material SourceMaterial { get; }
 
+        Color4 LineColor
+        {
+            get => lineColor;
+            set
+            {
+                lineColor = value;
+                UpdateVertices();
+            }
+        }
+
         public UVMesh(Device device, Effect effect, RasterizerState drawMode, Material material)
         {
             Device = device;
             UsingEffectPass = effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass");
             DrawMode = drawMode;
             SourceMaterial = material;
+            lineColor = new Color4(1, 0, 0, 0);
 
             if (SourceMaterial is null)
                 return;
@@ -66,6 +77,11 @@ namespace IwUVEditor.DirectX.DrawElement
             {
                 Device.ImmediateContext.DrawIndexed(3, i * 3, 0);
             }
+        }
+
+        public void UpdateVertices()
+        {
+            CreateVertexBuffer();
         }
 
         void CreateVertexLayout()
@@ -109,7 +125,7 @@ namespace IwUVEditor.DirectX.DrawElement
             material.Vertices.Select(vtx => new VertexStruct()
             {
                 Position = new Vector3(new Vector2(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2), 0),
-                Color = new Color4(1, 0, 0, 0),
+                Color = LineColor,
                 TEXCOORD = vtx.UV
             }
             ).ToArray();

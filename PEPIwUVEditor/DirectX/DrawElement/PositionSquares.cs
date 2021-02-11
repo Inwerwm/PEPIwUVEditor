@@ -14,6 +14,7 @@ namespace IwUVEditor.DirectX.DrawElement
     {
         private bool disposedValue;
         private float radius;
+        private Color4 colorInSelected;
 
         Device Device { get; }
         EffectPass UsingEffectPass { get; }
@@ -39,6 +40,23 @@ namespace IwUVEditor.DirectX.DrawElement
                 CreateVertexBuffer();
             }
         }
+
+        /// <summary>
+        /// 選択状態の頂点色
+        /// </summary>
+        public Color4 ColorInSelected
+        {
+            get => colorInSelected;
+            set
+            {
+                colorInSelected = value;
+                UpdateVertices();
+            }
+        }
+        /// <summary>
+        /// 非選択状態の頂点色
+        /// </summary>
+        public Color4 ColorInNotSelected { get; set; }
 
         public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius)
         {
@@ -84,6 +102,11 @@ namespace IwUVEditor.DirectX.DrawElement
             // 描画を設定
             Device.ImmediateContext.DrawIndexedInstanced(3, Instances.Count, 0, 0, 0);
             Device.ImmediateContext.DrawIndexedInstanced(3, Instances.Count, 3, 0, 0);
+        }
+
+        public void UpdateVertices()
+        {
+            CreateInstances();
         }
 
         private void CreateVertexLayout()
@@ -176,7 +199,7 @@ namespace IwUVEditor.DirectX.DrawElement
             Instances = SourceMaterial.Vertices.Select(vtx =>
                 new PositionSquareVertex()
                 {
-                    Color = new Color4(1, 0, 0, 0),
+                    Color = SourceMaterial.IsSelected[vtx] ? ColorInSelected : ColorInNotSelected,
                     Offset = new Vector4(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0, 1),
                 }
             ).ToList();

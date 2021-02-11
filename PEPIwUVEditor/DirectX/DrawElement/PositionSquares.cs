@@ -146,22 +146,18 @@ namespace IwUVEditor.DirectX.DrawElement
                 new PositionVertex
                 {
                     Position = new Vector3(-1, 1, 0) * Radius,
-                    Color = new Color4(1, 0, 0, 0),
                 },
                 new PositionVertex
                 {
                     Position = new Vector3(1, 1, 0) * Radius,
-                    Color = new Color4(1, 0, 0, 0),
                 },
                 new PositionVertex
                 {
                     Position = new Vector3(-1, -1, 0) * Radius,
-                    Color = new Color4(1, 0, 0, 0),
                 },
                 new PositionVertex
                 {
                     Position = new Vector3(1, -1, 0) * Radius,
-                    Color = new Color4(1, 0, 0, 0),
                 },
             };
         }
@@ -171,6 +167,7 @@ namespace IwUVEditor.DirectX.DrawElement
             Instances = SourceMaterial.Vertices.Select(vtx => 
                 new PositionSquareVertex()
                 {
+                    Color = new Color4(1, 0, 0, 0),
                     Offset = new Vector4(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0, 1),
                 }
             ).ToList();

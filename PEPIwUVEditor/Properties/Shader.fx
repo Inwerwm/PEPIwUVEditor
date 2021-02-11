@@ -38,7 +38,7 @@ struct PositionSquareVertex
 {
 	float4 Position : SV_Position;
 	float4 Color	: Color;
-	float4 Offset : Offset;
+	float4 Offset   : Offset;
 	uint InstanceId : SV_InstanceID;
 };
 

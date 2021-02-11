@@ -27,7 +27,7 @@ namespace IwUVEditor.DirectX.DrawElement
         Material SourceMaterial { get; }
         VertexStruct[] SquareVertices { get; set; }
         uint[] SquareIndices { get; }
-        List<InstanceOffset> Instances { get; set; }
+        List<PositionSquareVertex> Instances { get; set; }
 
         public float Radius { get; set; }
 
@@ -68,7 +68,7 @@ namespace IwUVEditor.DirectX.DrawElement
             Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
                 new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0),
-                new VertexBufferBinding(InstanceBuffer, InstanceOffset.SizeInBytes, 0)
+                new VertexBufferBinding(InstanceBuffer, PositionSquareVertex.SizeInBytes, 0)
             );
             Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
 
@@ -82,7 +82,7 @@ namespace IwUVEditor.DirectX.DrawElement
             VertexLayout = new InputLayout(
                 Device,
                 UsingEffectPass.Description.Signature,
-                VertexStruct.VertexElements.Concat(InstanceOffset.VertexElements).ToArray()
+                VertexStruct.VertexElements.Concat(PositionSquareVertex.VertexElements).ToArray()
             );
         }
 
@@ -130,7 +130,7 @@ namespace IwUVEditor.DirectX.DrawElement
                     instanceStream,
                     new BufferDescription
                     (
-                        InstanceOffset.SizeInBytes * Instances.Count,
+                        PositionSquareVertex.SizeInBytes * Instances.Count,
                         ResourceUsage.Dynamic,
                         BindFlags.VertexBuffer,
                         CpuAccessFlags.Write,
@@ -172,28 +172,12 @@ namespace IwUVEditor.DirectX.DrawElement
 
         private void CreateInstances()
         {
-            Instances = SourceMaterial.Vertices.SelectMany(vtx => new []{
-                new InstanceOffset()
+            Instances = SourceMaterial.Vertices.Select(vtx => 
+                new PositionSquareVertex()
                 {
                     Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
                     AlphaRatio = 1,
-                }/*,
-                new InstanceOffset()
-                {
-                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
-                    AlphaRatio = 1,
-                },
-                new InstanceOffset()
-                {
-                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
-                    AlphaRatio = 1,
-                },
-                new InstanceOffset()
-                {
-                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
-                    AlphaRatio = 1,
-                },*/
-            }
+                }
             ).ToList();
         }
 

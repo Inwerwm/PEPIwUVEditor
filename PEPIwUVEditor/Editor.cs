@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PEPlugin;
+using PEPlugin.Pmx;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +13,24 @@ namespace IwUVEditor
     /// </summary>
     class Editor
     {
+        IPERunArgs Args { get; }
+        IPXPmx Pmx { get; set; }
+        public IEnumerable<Material> Materials { get; private set; }
 
+        public Editor(IPERunArgs args)
+        {
+            Args = args;
+
+            LoadModel();
+        }
+
+        private void LoadModel()
+        {
+            // モデルを読込
+            Pmx = Args.Host.Connector.Pmx.GetCurrentState();
+
+            // 材質を読込
+            Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx));
+        }
     }
 }

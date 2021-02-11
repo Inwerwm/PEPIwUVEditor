@@ -15,9 +15,7 @@ namespace IwUVEditor
     {
         bool initialized = false;
 
-        IPERunArgs Args { get; }
-        IPXPmx Pmx { get; set; }
-        IEnumerable<Material> Materials { get; set; }
+        Editor Editor { get; }
 
         DxContext DxContext { get; }
         UVViewDrawProcess DrawProcess { get; set; }
@@ -26,7 +24,7 @@ namespace IwUVEditor
         {
             InitializeComponent();
 
-            Args = args;
+            Editor = new Editor(args);
             DxContext = DxContext.GetInstance(splitUVMat.Panel1);
             DxContext.RefreshRate = 120;
         }
@@ -52,18 +50,10 @@ namespace IwUVEditor
 
         public void LoadModel()
         {
-            // モデルを読込
-            Pmx = Args.Host.Connector.Pmx.GetCurrentState();
-
-            // 材質を読込
-            Materials = Pmx.Material.Select((material, i) =>
-            {
-                return new Material(material, Pmx);
-            });
 
             // 材質表示リストボックスを構築
             listBoxMaterial.Items.Clear();
-            listBoxMaterial.Items.AddRange(Materials.ToArray());
+            listBoxMaterial.Items.AddRange(Editor.Materials.ToArray());
 
             // 描画プロセスオブジェクトを生成
             DrawProcess?.Dispose();
@@ -109,14 +99,12 @@ namespace IwUVEditor
         {
             DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
             DrawProcess.IsPress[Keys.ControlKey] = e.Control;
-            //toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
         }
 
         private void FormEditor_KeyUp(object sender, KeyEventArgs e)
         {
             DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
             DrawProcess.IsPress[Keys.ControlKey] = e.Control;
-            //toolStripStatusLabelState.Text = $"Shift:{DrawProcess.IsPress[Keys.ShiftKey]}, Ctrl:{DrawProcess.IsPress[Keys.ControlKey]}";
         }
 
         private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)

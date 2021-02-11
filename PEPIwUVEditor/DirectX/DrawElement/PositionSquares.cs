@@ -147,25 +147,21 @@ namespace IwUVEditor.DirectX.DrawElement
                 {
                     Position = new Vector3(-1, 1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),
-                    TEXCOORD = new Vector2(0, 0)
                 },
                 new PositionVertex
                 {
                     Position = new Vector3(1, 1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),
-                    TEXCOORD = new Vector2(1, 0)
                 },
                 new PositionVertex
                 {
                     Position = new Vector3(-1, -1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),
-                    TEXCOORD = new Vector2(0 ,1)
                 },
                 new PositionVertex
                 {
                     Position = new Vector3(1, -1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),
-                    TEXCOORD = new Vector2(1, 1)
                 },
             };
         }

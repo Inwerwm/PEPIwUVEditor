@@ -14,14 +14,19 @@ namespace IwUVEditor
     /// </summary>
     class Editor
     {
+        // モデル関連プロパティ
         IPERunArgs Args { get; }
         IPXPmx Pmx { get; set; }
         public IEnumerable<Material> Materials { get; private set; }
 
+        // エディタ機能関連プロパティ
+        private CommandManager Commander { get; }
 
         public Editor(IPERunArgs args)
         {
             Args = args;
+
+            Commander = new CommandManager();
 
             LoadModel();
         }

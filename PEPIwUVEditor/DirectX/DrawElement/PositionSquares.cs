@@ -13,6 +13,7 @@ namespace IwUVEditor.DirectX.DrawElement
     class PositionSquares : IDrawElement
     {
         private bool disposedValue;
+        private float radius;
 
         Device Device { get; }
         EffectPass UsingEffectPass { get; }
@@ -29,7 +30,15 @@ namespace IwUVEditor.DirectX.DrawElement
         uint[] SquareIndices { get; }
         List<PositionSquareVertex> Instances { get; set; }
 
-        public float Radius { get; set; }
+        public float Radius
+        {
+            get => radius;
+            set
+            {
+                radius = value;
+                CreateVertexBuffer();
+            }
+        }
 
         public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius)
         {
@@ -37,7 +46,7 @@ namespace IwUVEditor.DirectX.DrawElement
             UsingEffectPass = effect.GetTechniqueByName("PositionSquaresTechnique").GetPassByName("DrawPositionSquaresPass");
             DrawMode = drawMode;
             SourceMaterial = material;
-            Radius = radius;
+            this.radius = radius;
 
             if (SourceMaterial is null)
                 return;
@@ -164,7 +173,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         private void CreateInstances()
         {
-            Instances = SourceMaterial.Vertices.Select(vtx => 
+            Instances = SourceMaterial.Vertices.Select(vtx =>
                 new PositionSquareVertex()
                 {
                     Color = new Color4(1, 0, 0, 0),

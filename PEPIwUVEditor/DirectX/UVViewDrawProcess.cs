@@ -20,6 +20,8 @@ namespace IwUVEditor.DirectX
 
         private bool isViewMoving = false;
 
+        private float radiusOfPositionSquare;
+
         RasterizerStateProvider Rasterize { get; set; }
 
         public Vector3 ShiftOffset { get; set; } = Vector3.Zero; //publicなのはデバッグ用
@@ -62,12 +64,25 @@ namespace IwUVEditor.DirectX
                 {
                     TextureCache.Add(value, LoadTexture(value));
                     UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value));
-                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, 0.005f));
+                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, RadiusOfPositionSquare));
                 }
 
                 CurrentTexture = TextureCache[value];
                 CurrentUVMesh = UVMeshCache[value];
                 CurrentPositionSquares = PositionSquareCache[value];
+            }
+        }
+
+        public float RadiusOfPositionSquare
+        {
+            get => radiusOfPositionSquare;
+            set
+            {
+                radiusOfPositionSquare = value;
+                foreach (var sq in PositionSquareCache.Values)
+                {
+                    sq.Radius = radiusOfPositionSquare;
+                }
             }
         }
 
@@ -78,6 +93,8 @@ namespace IwUVEditor.DirectX
             Rasterize = new RasterizerStateProvider(Context.Device);
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
+
+            RadiusOfPositionSquare = 0.005f;
         }
 
         public override void Draw()

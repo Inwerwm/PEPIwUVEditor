@@ -65,6 +65,7 @@ namespace IwUVEditor
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
+            this.numericRadiusOfPosSq = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -75,6 +76,7 @@ namespace IwUVEditor
             this.splitUVMat.SuspendLayout();
             this.statusStripEditor.SuspendLayout();
             this.menuStripEditor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericRadiusOfPosSq)).BeginInit();
             this.SuspendLayout();
             // 
             // splitCtrlView
@@ -110,6 +112,7 @@ namespace IwUVEditor
             this.flowEditTools.Controls.Add(this.buttonReverseV);
             this.flowEditTools.Controls.Add(this.buttonReverseH);
             this.flowEditTools.Controls.Add(this.buttonResetCamera);
+            this.flowEditTools.Controls.Add(this.numericRadiusOfPosSq);
             this.flowEditTools.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowEditTools.Location = new System.Drawing.Point(0, 0);
             this.flowEditTools.Name = "flowEditTools";
@@ -209,7 +212,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1019;
+            this.splitUVMat.SplitterDistance = 1017;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -221,7 +224,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(350, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(352, 910);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -381,6 +384,30 @@ namespace IwUVEditor
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
+            // numericRadiusOfPosSq
+            // 
+            this.numericRadiusOfPosSq.DecimalPlaces = 4;
+            this.numericRadiusOfPosSq.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            262144});
+            this.numericRadiusOfPosSq.Location = new System.Drawing.Point(3, 267);
+            this.numericRadiusOfPosSq.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(120, 32);
+            this.numericRadiusOfPosSq.TabIndex = 4;
+            this.numericRadiusOfPosSq.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            196608});
+            this.numericRadiusOfPosSq.ValueChanged += new System.EventHandler(this.numericRadiusOfPosSq_ValueChanged);
+            // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -409,6 +436,7 @@ namespace IwUVEditor
             this.statusStripEditor.PerformLayout();
             this.menuStripEditor.ResumeLayout(false);
             this.menuStripEditor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericRadiusOfPosSq)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -447,5 +475,6 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelFPS;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem 描画リミッター解除ToolStripMenuItem;
+        private System.Windows.Forms.NumericUpDown numericRadiusOfPosSq;
     }
 }

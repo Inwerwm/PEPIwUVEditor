@@ -195,5 +195,10 @@ namespace IwUVEditor
         {
             DrawProcess.LimitRefresh = !(sender as ToolStripMenuItem).Checked;
         }
+
+        private void numericRadiusOfPosSq_ValueChanged(object sender, EventArgs e)
+        {
+            DrawProcess.RadiusOfPositionSquare = (float)(sender as NumericUpDown).Value;
+        }
     }
 }

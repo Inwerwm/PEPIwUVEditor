@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor
 {
     class ScaleManager
     {
+        private float wheelDelta;
+
         /// <summary>
         /// 計算された拡大率
         /// </summary>
@@ -15,7 +13,11 @@ namespace IwUVEditor
         /// <summary>
         /// 現在のスクロール量
         /// </summary>
-        public float WheelDelta { get; set; }
+        public float WheelDelta
+        {
+            get => wheelDelta;
+            set => wheelDelta = value > UpperLimit ? UpperLimit : value < LowerLimit ? LowerLimit : value;
+        }
         /// <summary>
         /// スクロール量加算値
         /// </summary>
@@ -36,6 +38,14 @@ namespace IwUVEditor
         /// シグモイド関数のゲイン
         /// </summary>
         public float Gain { get; set; }
+        /// <summary>
+        /// スクロール量の下限
+        /// </summary>
+        public int LowerLimit { get; set; } = int.MinValue;
+        /// <summary>
+        /// スクロール量の上限
+        /// </summary>
+        public int UpperLimit { get; set; } = int.MaxValue;
 
         private float Sigmoid(float x) => 1 / (1 + (float)Math.Pow(Math.E, -1 * Gain * x));
     }

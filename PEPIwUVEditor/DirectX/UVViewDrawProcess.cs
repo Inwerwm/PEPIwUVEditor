@@ -29,9 +29,11 @@ namespace IwUVEditor.DirectX
         {
             DeltaOffset = -8000,
             Amplitude = 1000,
-            Offset = 0,
+            Offset = 0.1f,
             Step = 0.1f,
             Gain = 1,
+            LowerLimit = -10000,
+            UpperLimit = 12000,
         };
 
         public bool IsActive { get; set; } = true;

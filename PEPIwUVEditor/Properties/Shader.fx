@@ -3,6 +3,7 @@
 
 // ViewProjection変形行列
 matrix ViewProjection;
+
 // テクスチャ画像
 Texture2D diffuseTexture;
 
@@ -38,7 +39,7 @@ struct PositionSquareVertex
 	float4 Position : SV_Position;
 	float4 Color	: Color;
 	float2 TexCoord : TEXCOORD;
-	row_major float4x4 Offset : Offset;
+	float4 Offset : Offset;
 	float AlphaRatio : Ratio;
 	uint InstanceId : SV_InstanceID;
 };
@@ -59,7 +60,7 @@ VertexStruct VS_ApplyViewProjectionOnly(VertexStruct input)
 TexturePlateVertex VS_FillTexturePlates(TexturePlateVertex input)
 {
 	TexturePlateVertex output = input;
-	output.Position = mul(mul(output.Position, output.Offset), ViewProjection);
+	output.Position = mul(mul(input.Position, input.Offset), ViewProjection);
 	output.Color.a *= output.AlphaRatio;
 	return output;
 }
@@ -67,9 +68,8 @@ TexturePlateVertex VS_FillTexturePlates(TexturePlateVertex input)
 // 頂点位置四角形用
 PositionSquareVertex VS_PutPositionSquare(PositionSquareVertex input)
 {
-	TexturePlateVertex output = input;
-	output.Position = mul(output.Position, mul(output.Offset, ViewProjection));
-	output.Color.a *= output.AlphaRatio;
+	PositionSquareVertex output = input;
+	output.Position = float4(input.Position.xyz, 0) + mul(input.Offset, ViewProjection);
 	return output;
 }
 

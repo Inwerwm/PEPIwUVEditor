@@ -175,7 +175,7 @@ namespace IwUVEditor.DirectX.DrawElement
             Instances = SourceMaterial.Vertices.Select(vtx => 
                 new PositionSquareVertex()
                 {
-                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
+                    Offset = new Vector4(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0, 1),
                     AlphaRatio = 1,
                 }
             ).ToList();

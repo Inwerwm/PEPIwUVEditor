@@ -62,7 +62,7 @@ namespace IwUVEditor.DirectX
                 {
                     TextureCache.Add(value, LoadTexture(value));
                     UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value));
-                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, 0.01f));
+                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, 0.005f));
                 }
 
                 CurrentTexture = TextureCache[value];

@@ -54,24 +54,18 @@ namespace IwUVEditor
         {
             // モデルを読込
             Pmx = Args.Host.Connector.Pmx.GetCurrentState();
-            StartProgress(Pmx.Material.Count, "モデルの読込中");
 
             // 材質を読込
-            // 時間がかかるので進捗表示をする
             Materials = Pmx.Material.Select((material, i) =>
             {
-                SetProgress(i, $"材質の読込中 : {material.Name}");
                 return new Material(material, Pmx);
             });
-            FinishProgress();
 
             // 材質表示リストボックスを構築
-            SetProgress("材質の読み込み中");
             listBoxMaterial.Items.Clear();
             listBoxMaterial.Items.AddRange(Materials.ToArray());
 
             // 描画プロセスオブジェクトを生成
-            SetProgress("描画プロセスを構成");
             DrawProcess?.Dispose();
             DrawProcess = new UVViewDrawProcess()
             {
@@ -82,52 +76,7 @@ namespace IwUVEditor
                 },
                 RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value,
             };
-            EndProgress();
         }
-
-        #region ProgressBar
-
-        private void StartProgress(int max, string stateText)
-        {
-            toolStripStatusLabelState.Text = stateText;
-            toolStripProgressBarState.Visible = true;
-            toolStripProgressBarState.Minimum = 0;
-            toolStripProgressBarState.Maximum = max;
-            toolStripProgressBarState.Value = 0;
-            Refresh();
-        }
-
-        private void SetProgress(int value, string stateText)
-        {
-            toolStripStatusLabelState.Text = stateText;
-            toolStripProgressBarState.Value = value;
-            Refresh();
-        }
-        private void SetProgress(string stateText)
-        {
-            toolStripStatusLabelState.Text = stateText;
-            Refresh();
-        }
-        private void SetProgress(int value)
-        {
-            toolStripProgressBarState.Value = value;
-            Refresh();
-        }
-
-        private void FinishProgress()
-        {
-            SetProgress(toolStripProgressBarState.Maximum);
-            Refresh();
-        }
-
-        private void EndProgress()
-        {
-            toolStripProgressBarState.Visible = false;
-            toolStripStatusLabelState.Text = "準備完了";
-            FinishProgress();
-        }
-
-        #endregion
 
         private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
         {

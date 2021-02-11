@@ -34,7 +34,7 @@ namespace IwUVEditor.DirectX.DrawElement
         public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius)
         {
             Device = device;
-            UsingEffectPass = effect.GetTechniqueByName("TexturePlatesTechnique").GetPassByName("DrawPositionSquaresPass");
+            UsingEffectPass = effect.GetTechniqueByName("PositionSquaresTechnique").GetPassByName("DrawPositionSquaresPass");
             DrawMode = drawMode;
             SourceMaterial = material;
             Radius = radius;

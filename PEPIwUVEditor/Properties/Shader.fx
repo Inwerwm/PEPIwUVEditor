@@ -103,6 +103,10 @@ technique10 TexturePlatesTechnique
 		SetVertexShader(CompileShader(vs_5_0, VS_FillTexturePlates()));
 		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColorInfluencedTexture()));
 	}
+}
+
+technique10 PositionSquaresTechnique
+{
 	pass DrawPositionSquaresPass
 	{
 		SetVertexShader(CompileShader(vs_5_0, VS_PutPositionSquare()));

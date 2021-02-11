@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\CommandManager.cs" />
     <Compile Include="Command\IEditorCommand.cs" />
     <Compile Include="DirectX\DrawElement\IDrawElement.cs" />
     <Compile Include="DirectX\DrawElement\PositionSquares.cs" />

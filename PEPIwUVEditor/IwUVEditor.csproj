@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\IEditorCommand.cs" />
     <Compile Include="DirectX\DrawElement\IDrawElement.cs" />
     <Compile Include="DirectX\DrawElement\PositionSquares.cs" />
     <Compile Include="DirectX\DrawElement\TexturePlate.cs" />
@@ -99,6 +100,7 @@
     <Content Include="Properties\Shader.fx" />
     <Content Include="Properties\White.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /y "$(SolutionDir)LICENSE" /a "Licenses\IwUVEditor" /a

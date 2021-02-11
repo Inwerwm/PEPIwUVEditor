@@ -25,7 +25,7 @@ namespace IwUVEditor.DirectX.DrawElement
         Buffer InstanceBuffer { get; set; }
 
         Material SourceMaterial { get; }
-        VertexStruct[] SquareVertices { get; set; }
+        PositionVertex[] SquareVertices { get; set; }
         uint[] SquareIndices { get; }
         List<PositionSquareVertex> Instances { get; set; }
 
@@ -67,7 +67,7 @@ namespace IwUVEditor.DirectX.DrawElement
             // バッファを設定
             Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
-                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0),
+                new VertexBufferBinding(VertexBuffer, PositionVertex.SizeInBytes, 0),
                 new VertexBufferBinding(InstanceBuffer, PositionSquareVertex.SizeInBytes, 0)
             );
             Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
@@ -82,7 +82,7 @@ namespace IwUVEditor.DirectX.DrawElement
             VertexLayout = new InputLayout(
                 Device,
                 UsingEffectPass.Description.Signature,
-                VertexStruct.VertexElements.Concat(PositionSquareVertex.VertexElements).ToArray()
+                PositionVertex.VertexElements.Concat(PositionSquareVertex.VertexElements).ToArray()
             );
         }
 
@@ -143,25 +143,25 @@ namespace IwUVEditor.DirectX.DrawElement
         private void CreateSquareVertices()
         {
             SquareVertices = new[] {
-                new VertexStruct
+                new PositionVertex
                 {
                     Position = new Vector3(-1, 1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),
                     TEXCOORD = new Vector2(0, 0)
                 },
-                new VertexStruct
+                new PositionVertex
                 {
                     Position = new Vector3(1, 1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),
                     TEXCOORD = new Vector2(1, 0)
                 },
-                new VertexStruct
+                new PositionVertex
                 {
                     Position = new Vector3(-1, -1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),
                     TEXCOORD = new Vector2(0 ,1)
                 },
-                new VertexStruct
+                new PositionVertex
                 {
                     Position = new Vector3(1, -1, 0) * Radius,
                     Color = new Color4(1, 0, 0, 0),

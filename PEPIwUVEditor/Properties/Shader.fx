@@ -32,15 +32,6 @@ struct TexturePlateVertex
 	uint InstanceId : SV_InstanceID;
 };
 
-// 位置表示四角形用頂点構造
-struct PositionSquareVertex
-{
-	float4 Position : SV_Position;
-	row_major float4x4 Offset : Offset;
-	float4 Color : Color;
-	uint InstanceId : SV_InstanceID;
-};
-
 //////////////////////
 //    頂点シェーダ
 
@@ -62,12 +53,12 @@ TexturePlateVertex VS_FillTexturePlates(TexturePlateVertex input)
 	return output;
 }
 
-// 位置表示四角形用
-PositionSquareVertex VS_PutSquareVertex(PositionSquareVertex input)
+// 頂点位置四角形用
+TexturePlateVertex VS_PutPositionSquare(TexturePlateVertex input)
 {
-	PositionSquareVertex output = input;
-	output.Position = mul(mul(output.Position, output.Offset), ViewProjection);
-
+	TexturePlateVertex output = input;
+	output.Position = mul(output.Position, mul(output.Offset, ViewProjection));
+	output.Color.a *= output.AlphaRatio;
 	return output;
 }
 
@@ -86,8 +77,7 @@ float4 PS_FromVertexColorInfluencedTexture(TexturePlateVertex input) : SV_Target
 	return diffuseTexture.Sample(Sampler, input.TexCoord) * input.Color;
 }
 
-// 頂点色を色として使用
-float4 PS_PositionSquare(PositionSquareVertex input) : SV_Target
+float4 PS_FromVertexColorTPV(TexturePlateVertex input) : SV_Target
 {
 	return input.Color;
 }
@@ -113,14 +103,9 @@ technique10 TexturePlatesTechnique
 		SetVertexShader(CompileShader(vs_5_0, VS_FillTexturePlates()));
 		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColorInfluencedTexture()));
 	}
-}
-
-// PositionSquareVertex用
-technique10 PositionSquareTechnique
-{
-	pass DrawPositionSquarePass
+	pass DrawPositionSquaresPass
 	{
-		SetVertexShader(CompileShader(vs_5_0, VS_PutSquareVertex()));
-		SetPixelShader(CompileShader(ps_5_0, PS_PositionSquare()));
+		SetVertexShader(CompileShader(vs_5_0, VS_PutPositionSquare()));
+		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColorTPV()));
 	}
 }

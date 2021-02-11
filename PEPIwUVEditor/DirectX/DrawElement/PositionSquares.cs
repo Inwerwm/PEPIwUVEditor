@@ -25,18 +25,19 @@ namespace IwUVEditor.DirectX.DrawElement
         Buffer InstanceBuffer { get; set; }
 
         Material SourceMaterial { get; }
-        Vector3[] SquareVertices { get; set; }
+        VertexStruct[] SquareVertices { get; set; }
         uint[] SquareIndices { get; }
-        List<PositionSquareVertex> Instances { get; set; }
+        List<InstanceOffset> Instances { get; set; }
 
         public float Radius { get; set; }
 
-        public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material)
+        public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius)
         {
             Device = device;
-            UsingEffectPass = effect.GetTechniqueByName("PositionSquareTechnique").GetPassByName("DrawPositionSquarePass");
+            UsingEffectPass = effect.GetTechniqueByName("TexturePlatesTechnique").GetPassByName("DrawPositionSquaresPass");
             DrawMode = drawMode;
             SourceMaterial = material;
+            Radius = radius;
 
             if (SourceMaterial is null)
                 return;
@@ -66,14 +67,14 @@ namespace IwUVEditor.DirectX.DrawElement
             // バッファを設定
             Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
-                new VertexBufferBinding(VertexBuffer, PositionSquareVertex.SizeInBytes, 0)
+                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0),
+                new VertexBufferBinding(InstanceBuffer, InstanceOffset.SizeInBytes, 0)
             );
             Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
 
-            for (int i = 0; i < SourceMaterial.Vertices.Count * 2; i++)
-            {
-                Device.ImmediateContext.DrawIndexed(3, i * 3, 0);
-            }
+            // 描画を設定
+            Device.ImmediateContext.DrawIndexedInstanced(3, Instances.Count, 0, 0, 0);
+            Device.ImmediateContext.DrawIndexedInstanced(3, Instances.Count, 3, 0, 0);
         }
 
         private void CreateVertexLayout()
@@ -81,7 +82,7 @@ namespace IwUVEditor.DirectX.DrawElement
             VertexLayout = new InputLayout(
                 Device,
                 UsingEffectPass.Description.Signature,
-                PositionSquareVertex.VertexElements
+                VertexStruct.VertexElements.Concat(InstanceOffset.VertexElements).ToArray()
             );
         }
 
@@ -129,7 +130,7 @@ namespace IwUVEditor.DirectX.DrawElement
                     instanceStream,
                     new BufferDescription
                     (
-                        PositionSquareVertex.SizeInBytes * Instances.Count,
+                        InstanceOffset.SizeInBytes * Instances.Count,
                         ResourceUsage.Dynamic,
                         BindFlags.VertexBuffer,
                         CpuAccessFlags.Write,
@@ -142,19 +143,56 @@ namespace IwUVEditor.DirectX.DrawElement
         private void CreateSquareVertices()
         {
             SquareVertices = new[] {
-                    new Vector3(-1,  1, 0) * Radius,
-                    new Vector3( 1,  1, 0) * Radius,
-                    new Vector3(-1, -1, 0) * Radius,
-                    new Vector3( 1, -1, 0) * Radius,
+                new VertexStruct
+                {
+                    Position = new Vector3(-1, 1, 0) * Radius,
+                    Color = new Color4(1, 0, 0, 0),
+                    TEXCOORD = new Vector2(0, 0)
+                },
+                new VertexStruct
+                {
+                    Position = new Vector3(1, 1, 0) * Radius,
+                    Color = new Color4(1, 0, 0, 0),
+                    TEXCOORD = new Vector2(1, 0)
+                },
+                new VertexStruct
+                {
+                    Position = new Vector3(-1, -1, 0) * Radius,
+                    Color = new Color4(1, 0, 0, 0),
+                    TEXCOORD = new Vector2(0 ,1)
+                },
+                new VertexStruct
+                {
+                    Position = new Vector3(1, -1, 0) * Radius,
+                    Color = new Color4(1, 0, 0, 0),
+                    TEXCOORD = new Vector2(1, 1)
+                },
             };
         }
 
         private void CreateInstances()
         {
-            Instances = SourceMaterial.Vertices.Select(vtx => new PositionSquareVertex()
-            {
-                Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
-                Color = new Color4(1, 0, 0, 0),
+            Instances = SourceMaterial.Vertices.SelectMany(vtx => new []{
+                new InstanceOffset()
+                {
+                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
+                    AlphaRatio = 1,
+                }/*,
+                new InstanceOffset()
+                {
+                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
+                    AlphaRatio = 1,
+                },
+                new InstanceOffset()
+                {
+                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
+                    AlphaRatio = 1,
+                },
+                new InstanceOffset()
+                {
+                    Offset = Matrix.Translation(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0),
+                    AlphaRatio = 1,
+                },*/
             }
             ).ToList();
         }

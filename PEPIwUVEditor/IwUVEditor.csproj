@@ -62,6 +62,7 @@
     <Compile Include="DirectX\DrawElement\TexturePlate.cs" />
     <Compile Include="DirectX\DrawElement\UVMesh.cs" />
     <Compile Include="DirectX\Vertex\PositionSquareVertex.cs" />
+    <Compile Include="DirectX\Vertex\PositionVertex.cs" />
     <Compile Include="LockedBitmap.cs" />
     <Compile Include="FormEditor.cs">
       <SubType>Form</SubType>

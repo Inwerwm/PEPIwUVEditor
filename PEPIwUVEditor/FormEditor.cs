@@ -80,6 +80,7 @@ namespace IwUVEditor
                     ViewVolumeSize = (4, 4),
                     ViewVolumeDepth = (0, 1)
                 },
+                RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value,
             };
             EndProgress();
         }

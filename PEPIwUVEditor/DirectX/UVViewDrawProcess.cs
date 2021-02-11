@@ -93,8 +93,6 @@ namespace IwUVEditor.DirectX
             Rasterize = new RasterizerStateProvider(Context.Device);
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
-
-            RadiusOfPositionSquare = 0.005f;
         }
 
         public override void Draw()

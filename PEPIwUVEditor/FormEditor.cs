@@ -50,6 +50,7 @@ namespace IwUVEditor
 
         public void LoadModel()
         {
+            Editor.LoadModel();
 
             // 材質表示リストボックスを構築
             listBoxMaterial.Items.Clear();

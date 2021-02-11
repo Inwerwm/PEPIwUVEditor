@@ -24,7 +24,7 @@ namespace IwUVEditor
             LoadModel();
         }
 
-        private void LoadModel()
+        public void LoadModel()
         {
             // モデルを読込
             Pmx = Args.Host.Connector.Pmx.GetCurrentState();

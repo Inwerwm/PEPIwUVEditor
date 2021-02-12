@@ -232,6 +232,10 @@ namespace IwUVEditor.DirectX.DrawElement
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    VertexLayout?.Dispose();
+                    VertexBuffer?.Dispose();
+                    IndexBuffer?.Dispose();
+                    InstanceBuffer?.Dispose();
                 }
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします

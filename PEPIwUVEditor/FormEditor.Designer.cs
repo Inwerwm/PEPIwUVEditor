@@ -36,8 +36,8 @@ namespace IwUVEditor
             this.components = new System.ComponentModel.Container();
             this.splitCtrlView = new System.Windows.Forms.SplitContainer();
             this.flowEditTools = new System.Windows.Forms.FlowLayoutPanel();
-            this.radioButtonSqSelect = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButtonRectangleSelection = new System.Windows.Forms.RadioButton();
+            this.radioButtonLassoSelection = new System.Windows.Forms.RadioButton();
             this.radioButtonMove = new System.Windows.Forms.RadioButton();
             this.radioButtonRotate = new System.Windows.Forms.RadioButton();
             this.buttonReverseV = new System.Windows.Forms.Button();
@@ -105,8 +105,8 @@ namespace IwUVEditor
             // 
             // flowEditTools
             // 
-            this.flowEditTools.Controls.Add(this.radioButtonSqSelect);
-            this.flowEditTools.Controls.Add(this.radioButton1);
+            this.flowEditTools.Controls.Add(this.radioButtonRectangleSelection);
+            this.flowEditTools.Controls.Add(this.radioButtonLassoSelection);
             this.flowEditTools.Controls.Add(this.radioButtonMove);
             this.flowEditTools.Controls.Add(this.radioButtonRotate);
             this.flowEditTools.Controls.Add(this.buttonReverseV);
@@ -119,29 +119,30 @@ namespace IwUVEditor
             this.flowEditTools.Size = new System.Drawing.Size(175, 910);
             this.flowEditTools.TabIndex = 0;
             // 
-            // radioButtonSqSelect
+            // radioButtonRectangleSelection
             // 
-            this.radioButtonSqSelect.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonSqSelect.Checked = true;
-            this.radioButtonSqSelect.Location = new System.Drawing.Point(3, 3);
-            this.radioButtonSqSelect.Name = "radioButtonSqSelect";
-            this.radioButtonSqSelect.Size = new System.Drawing.Size(80, 60);
-            this.radioButtonSqSelect.TabIndex = 0;
-            this.radioButtonSqSelect.TabStop = true;
-            this.radioButtonSqSelect.Text = "範囲選択";
-            this.radioButtonSqSelect.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButtonSqSelect.UseVisualStyleBackColor = true;
+            this.radioButtonRectangleSelection.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioButtonRectangleSelection.Checked = true;
+            this.radioButtonRectangleSelection.Location = new System.Drawing.Point(3, 3);
+            this.radioButtonRectangleSelection.Name = "radioButtonRectangleSelection";
+            this.radioButtonRectangleSelection.Size = new System.Drawing.Size(80, 60);
+            this.radioButtonRectangleSelection.TabIndex = 0;
+            this.radioButtonRectangleSelection.TabStop = true;
+            this.radioButtonRectangleSelection.Text = "範囲選択";
+            this.radioButtonRectangleSelection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioButtonRectangleSelection.UseVisualStyleBackColor = true;
+            this.radioButtonRectangleSelection.CheckedChanged += new System.EventHandler(this.radioButtonRectangleSelection_CheckedChanged);
             // 
-            // radioButton1
+            // radioButtonLassoSelection
             // 
-            this.radioButton1.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButton1.Location = new System.Drawing.Point(89, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(80, 60);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.Text = "投縄選択";
-            this.radioButton1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.radioButtonLassoSelection.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioButtonLassoSelection.Location = new System.Drawing.Point(89, 3);
+            this.radioButtonLassoSelection.Name = "radioButtonLassoSelection";
+            this.radioButtonLassoSelection.Size = new System.Drawing.Size(80, 60);
+            this.radioButtonLassoSelection.TabIndex = 0;
+            this.radioButtonLassoSelection.Text = "投縄選択";
+            this.radioButtonLassoSelection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioButtonLassoSelection.UseVisualStyleBackColor = true;
             // 
             // radioButtonMove
             // 
@@ -237,7 +238,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1015;
+            this.splitUVMat.SplitterDistance = 1013;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -249,7 +250,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(354, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(356, 910);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -456,8 +457,8 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem 元に戻すToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem やり直しToolStripMenuItem;
         private System.Windows.Forms.FlowLayoutPanel flowEditTools;
-        private System.Windows.Forms.RadioButton radioButtonSqSelect;
-        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButtonRectangleSelection;
+        private System.Windows.Forms.RadioButton radioButtonLassoSelection;
         private System.Windows.Forms.RadioButton radioButtonMove;
         private System.Windows.Forms.RadioButton radioButtonRotate;
         private System.Windows.Forms.Button buttonReverseV;

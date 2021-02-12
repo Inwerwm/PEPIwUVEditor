@@ -145,5 +145,11 @@ namespace IwUVEditor
         private void buttonReverseV_Click(object sender, EventArgs e)
         {
         }
+
+        private void radioButtonRectangleSelection_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+                Editor.CurrentTool = Tool.RectangleSelection;
+        }
     }
 }

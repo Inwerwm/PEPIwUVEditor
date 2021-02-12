@@ -18,6 +18,7 @@ namespace IwUVEditor
         IPERunArgs Args { get; }
         IPXPmx Pmx { get; set; }
         public IEnumerable<Material> Materials { get; private set; }
+        public Tool CurrentTool { get; set; }
 
         // エディタ機能関連プロパティ
         private CommandManager Commander { get; }

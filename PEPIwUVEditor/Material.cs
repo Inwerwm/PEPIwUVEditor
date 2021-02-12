@@ -15,7 +15,6 @@ namespace IwUVEditor
         IPXMaterial Value { get; }
 
         public IList<IPXVertex> Vertices { get; }
-
         public Dictionary<IPXVertex, bool> IsSelected { get; }
 
         /// <summary>
@@ -34,13 +33,13 @@ namespace IwUVEditor
             ModelPath = pmx.FilePath;
             TexFullPath = CreateTexFullPath();
 
-            IEnumerable<IPXVertex> FaceVertices = Faces.SelectMany(face => face.ToVertices());
+            IEnumerable<IPXVertex> faceVertices = Faces.SelectMany(face => face.ToVertices());
 
-            Vertices = FaceVertices.Distinct().ToList();
+            Vertices = faceVertices.Distinct().ToList();
             IsSelected = Vertices.ToDictionary(vtx => vtx, _ => false);
 
             var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => (uint)pair.i);
-            FaceSequence = FaceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();
+            FaceSequence = faceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();
         }
 
         private string CreateTexFullPath()

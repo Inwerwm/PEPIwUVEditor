@@ -43,6 +43,7 @@ namespace IwUVEditor
             this.buttonReverseV = new System.Windows.Forms.Button();
             this.buttonReverseH = new System.Windows.Forms.Button();
             this.buttonResetCamera = new System.Windows.Forms.Button();
+            this.numericRadiusOfPosSq = new System.Windows.Forms.NumericUpDown();
             this.splitUVMat = new System.Windows.Forms.SplitContainer();
             this.listBoxMaterial = new System.Windows.Forms.ListBox();
             this.statusStripEditor = new System.Windows.Forms.StatusStrip();
@@ -65,18 +66,17 @@ namespace IwUVEditor
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
-            this.numericRadiusOfPosSq = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
             this.splitCtrlView.SuspendLayout();
             this.flowEditTools.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericRadiusOfPosSq)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitUVMat)).BeginInit();
             this.splitUVMat.Panel2.SuspendLayout();
             this.splitUVMat.SuspendLayout();
             this.statusStripEditor.SuspendLayout();
             this.menuStripEditor.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericRadiusOfPosSq)).BeginInit();
             this.SuspendLayout();
             // 
             // splitCtrlView
@@ -173,6 +173,7 @@ namespace IwUVEditor
             this.buttonReverseV.TabIndex = 3;
             this.buttonReverseV.Text = "垂直反転";
             this.buttonReverseV.UseVisualStyleBackColor = true;
+            this.buttonReverseV.Click += new System.EventHandler(this.buttonReverseV_Click);
             // 
             // buttonReverseH
             // 
@@ -193,6 +194,30 @@ namespace IwUVEditor
             this.buttonResetCamera.UseVisualStyleBackColor = true;
             this.buttonResetCamera.Click += new System.EventHandler(this.buttonResetCamera_Click);
             // 
+            // numericRadiusOfPosSq
+            // 
+            this.numericRadiusOfPosSq.DecimalPlaces = 4;
+            this.numericRadiusOfPosSq.Increment = new decimal(new int[] {
+            5,
+            0,
+            0,
+            262144});
+            this.numericRadiusOfPosSq.Location = new System.Drawing.Point(3, 267);
+            this.numericRadiusOfPosSq.Maximum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(120, 32);
+            this.numericRadiusOfPosSq.TabIndex = 4;
+            this.numericRadiusOfPosSq.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            196608});
+            this.numericRadiusOfPosSq.ValueChanged += new System.EventHandler(this.numericRadiusOfPosSq_ValueChanged);
+            // 
             // splitUVMat
             // 
             this.splitUVMat.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -212,7 +237,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1017;
+            this.splitUVMat.SplitterDistance = 1015;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -224,7 +249,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(352, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(354, 910);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -384,30 +409,6 @@ namespace IwUVEditor
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
-            // numericRadiusOfPosSq
-            // 
-            this.numericRadiusOfPosSq.DecimalPlaces = 4;
-            this.numericRadiusOfPosSq.Increment = new decimal(new int[] {
-            5,
-            0,
-            0,
-            262144});
-            this.numericRadiusOfPosSq.Location = new System.Drawing.Point(3, 267);
-            this.numericRadiusOfPosSq.Maximum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
-            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(120, 32);
-            this.numericRadiusOfPosSq.TabIndex = 4;
-            this.numericRadiusOfPosSq.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            196608});
-            this.numericRadiusOfPosSq.ValueChanged += new System.EventHandler(this.numericRadiusOfPosSq_ValueChanged);
-            // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -429,6 +430,7 @@ namespace IwUVEditor
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).EndInit();
             this.splitCtrlView.ResumeLayout(false);
             this.flowEditTools.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericRadiusOfPosSq)).EndInit();
             this.splitUVMat.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitUVMat)).EndInit();
             this.splitUVMat.ResumeLayout(false);
@@ -436,7 +438,6 @@ namespace IwUVEditor
             this.statusStripEditor.PerformLayout();
             this.menuStripEditor.ResumeLayout(false);
             this.menuStripEditor.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericRadiusOfPosSq)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

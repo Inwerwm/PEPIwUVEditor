@@ -141,5 +141,9 @@ namespace IwUVEditor
         {
             DrawProcess.RadiusOfPositionSquare = (float)(sender as NumericUpDown).Value;
         }
+
+        private void buttonReverseV_Click(object sender, EventArgs e)
+        {
+        }
     }
 }

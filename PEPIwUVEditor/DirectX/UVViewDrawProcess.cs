@@ -48,6 +48,8 @@ namespace IwUVEditor.DirectX
             { MouseButtons.Right, false },
         };
 
+        public DragManager LeftDrag { get; set; } = new DragManager();
+
         TexturePlate TexturePlate { get; set; }
 
         Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
@@ -214,6 +216,8 @@ namespace IwUVEditor.DirectX
 
             if (IsClicking[MouseButtons.Middle])
                 ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
+
+            LeftDrag.ReadState(e, IsClicking[MouseButtons.Left]);
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)

@@ -57,9 +57,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\CmdSelectSquare.cs" />
+    <Compile Include="Command\CommandSelectSquare.cs" />
     <Compile Include="Command\CommandManager.cs" />
     <Compile Include="Command\IEditorCommand.cs" />
+    <Compile Include="Command\SelectionMode.cs" />
     <Compile Include="DirectX\DrawElement\IDrawElement.cs" />
     <Compile Include="DirectX\DrawElement\PositionSquares.cs" />
     <Compile Include="DirectX\DrawElement\TexturePlate.cs" />

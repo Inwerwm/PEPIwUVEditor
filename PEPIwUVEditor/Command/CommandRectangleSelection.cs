@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace IwUVEditor.Command
 {
-    class CommandSelectSquare : IEditorCommand
+    class CommandRectangleSelection : IEditorCommand
     {
         private Vector2 startPosition;
         private Vector2 endPosition;
@@ -43,7 +43,7 @@ namespace IwUVEditor.Command
 
         public SelectionMode Mode { get; set; }
 
-        public CommandSelectSquare(Material targetMaterial)
+        public CommandRectangleSelection(Material targetMaterial)
         {
             TargetMaterial = targetMaterial;
         }

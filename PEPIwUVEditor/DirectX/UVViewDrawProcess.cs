@@ -1,5 +1,6 @@
 ﻿using DxManager;
 using IwUVEditor.DirectX.DrawElement;
+using IwUVEditor.Manager;
 using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
@@ -44,6 +45,7 @@ namespace IwUVEditor.DirectX
         {
             { MouseButtons.Left, false },
             { MouseButtons.Middle, false },
+            { MouseButtons.Right, false },
         };
 
         TexturePlate TexturePlate { get; set; }
@@ -195,12 +197,16 @@ namespace IwUVEditor.DirectX
                     IsClicking[MouseButtons.Middle] = true;
                     break;
                 case MouseButtonFlags.RightUp:
+                    IsClicking[MouseButtons.Right] = false;
                     break;
                 case MouseButtonFlags.RightDown:
+                    IsClicking[MouseButtons.Right] = true;
                     break;
                 case MouseButtonFlags.LeftUp:
+                    IsClicking[MouseButtons.Left] = false;
                     break;
                 case MouseButtonFlags.LeftDown:
+                    IsClicking[MouseButtons.Left] = true;
                     break;
                 default:
                     break;

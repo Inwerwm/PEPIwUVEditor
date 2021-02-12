@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IwUVEditor
+namespace IwUVEditor.Manager
 {
     class ScaleManager
     {

@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\CommandSelectSquare.cs" />
+    <Compile Include="Command\CommandRectangleSelection.cs" />
     <Compile Include="Command\CommandManager.cs" />
     <Compile Include="Command\IEditorCommand.cs" />
     <Compile Include="Command\SelectionMode.cs" />
@@ -84,11 +84,12 @@
     </Compile>
     <Compile Include="DirectX\RasterizerStateProvider.cs" />
     <Compile Include="Material.cs" />
-    <Compile Include="ScaleManager.cs" />
+    <Compile Include="Manager\ScaleManager.cs" />
     <Compile Include="TGASharpLib.cs" />
     <Compile Include="DirectX\UVViewDrawProcess.cs" />
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
     <Compile Include="DirectX\Vertex\VertexStruct.cs" />
+    <Compile Include="Tool.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

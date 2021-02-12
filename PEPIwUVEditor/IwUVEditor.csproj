@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command\CmdSelectSquare.cs" />
     <Compile Include="Command\CommandManager.cs" />
     <Compile Include="Command\IEditorCommand.cs" />
     <Compile Include="DirectX\DrawElement\IDrawElement.cs" />
@@ -66,6 +67,19 @@
     <Compile Include="DirectX\Vertex\PositionSquareVertex.cs" />
     <Compile Include="DirectX\Vertex\PositionVertex.cs" />
     <Compile Include="Editor.cs" />
+    <Compile Include="KdTreeLib\HyperRect.cs" />
+    <Compile Include="KdTreeLib\IKdTree.cs" />
+    <Compile Include="KdTreeLib\IPriorityQueue.cs" />
+    <Compile Include="KdTreeLib\KdTree.cs" />
+    <Compile Include="KdTreeLib\KdTreeNode.cs" />
+    <Compile Include="KdTreeLib\Math\DoubleMath.cs" />
+    <Compile Include="KdTreeLib\Math\FloatMath.cs" />
+    <Compile Include="KdTreeLib\Math\GeoMath.cs" />
+    <Compile Include="KdTreeLib\Math\GeoUtils.cs" />
+    <Compile Include="KdTreeLib\Math\ITypeMath.cs" />
+    <Compile Include="KdTreeLib\Math\TypeMath.cs" />
+    <Compile Include="KdTreeLib\NearestNeighbourList.cs" />
+    <Compile Include="KdTreeLib\PriorityQueue.cs" />
     <Compile Include="LockedBitmap.cs" />
     <Compile Include="FormEditor.cs">
       <SubType>Form</SubType>
@@ -104,7 +118,6 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(SolutionDir)LICENSE" /a "Licenses\IwUVEditor" /a
-copy /y "$(SolutionDir)ThirdPartyLicenses\TGASharpLib" /a "Licenses\TGASharpLib" /a</PostBuildEvent>
+    <PostBuildEvent>powershell -ExecutionPolicy RemoteSigned -File "$(SolutionDir)batWhenBuild.ps1"</PostBuildEvent>
   </PropertyGroup>
 </Project>

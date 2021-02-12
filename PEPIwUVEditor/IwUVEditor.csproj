@@ -63,6 +63,7 @@
     <Compile Include="Command\SelectionMode.cs" />
     <Compile Include="DirectX\DrawElement\IDrawElement.cs" />
     <Compile Include="DirectX\DrawElement\PositionSquares.cs" />
+    <Compile Include="DirectX\DrawElement\SelectionRectangle.cs" />
     <Compile Include="DirectX\DrawElement\TexturePlate.cs" />
     <Compile Include="DirectX\DrawElement\UVMesh.cs" />
     <Compile Include="DirectX\Vertex\PositionSquareVertex.cs" />

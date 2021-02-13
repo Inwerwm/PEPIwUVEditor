@@ -212,7 +212,7 @@ namespace IwUVEditor.DirectX.DrawElement
                 new PositionSquareVertex()
                 {
                     Color = SourceMaterial.IsSelected[vtx] ? ColorInSelected : ColorInDefault,
-                    Offset = new Vector4(vtx.UV.X * 2 - 1, 1 - vtx.UV.Y * 2, 0, 1),
+                    Offset = new Vector4(vtx.UV.X - 1, 1 - vtx.UV.Y, 0, 1),
                 }
             ).ToList();
         }

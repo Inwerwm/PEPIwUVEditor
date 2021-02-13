@@ -22,7 +22,7 @@ namespace IwUVEditor.DirectX
         private float radiusOfPositionSquare;
 
         Editor Editor { get; set; }
-        
+
         RasterizerStateProvider Rasterize { get; set; }
 
         Vector3 ShiftOffset { get; set; }
@@ -52,7 +52,20 @@ namespace IwUVEditor.DirectX
 
         public DragManager LeftDrag { get; set; } = new DragManager();
 
-        public Vector2 CurrentMousePos { get; set; }
+        /// <summary>
+        /// <para>現在のマウスポインタの座標</para>
+        /// <para>set : form側での描画位置</para>
+        /// <para>get : 描画されている空間におけるXY座標</para>
+        /// </summary>
+        public Vector2 CurrentMousePos
+        {
+            get => currentMousePos;
+            set
+            {
+                var rawPos = value;
+                currentMousePos = value;
+            }
+        }
 
         TexturePlate TexturePlate { get; set; }
         SelectionRectangle SelectionRectangle { get; set; }
@@ -67,6 +80,7 @@ namespace IwUVEditor.DirectX
         PositionSquares CurrentPositionSquares;
         private Color4 colorInDefault;
         private Color4 colorInSelected;
+        private Vector2 currentMousePos;
 
         public Material CurrentMaterial
         {
@@ -252,7 +266,7 @@ namespace IwUVEditor.DirectX
 
             if (IsClicking[MouseButtons.Middle])
                 ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
-            
+
             LeftDrag.ReadState(CurrentMousePos, IsClicking[MouseButtons.Left]);
         }
 

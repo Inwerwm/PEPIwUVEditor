@@ -53,6 +53,11 @@ VertexStruct VS_ApplyViewProjectionOnly(VertexStruct input)
 	return output;
 }
 
+VertexStruct VS_Throw(VertexStruct input)
+{
+	return input;
+}
+
 // テクスチャ板用
 // インスタンス固有の位置変換と色変換を適用した後にViewProjection行列を掛ける
 TexturePlateVertex VS_FillTexturePlates(TexturePlateVertex input)
@@ -101,6 +106,11 @@ technique10 MainTechnique
 	pass DrawVertexColorPass
 	{
 		SetVertexShader(CompileShader(vs_5_0, VS_ApplyViewProjectionOnly()));
+		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColor()));
+	}
+	pass DrawSelectionRange
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS_Throw()));
 		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColor()));
 	}
 }

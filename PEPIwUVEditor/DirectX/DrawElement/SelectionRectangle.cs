@@ -3,7 +3,6 @@ using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
 using System;
-using System.Linq;
 using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 
@@ -24,11 +23,118 @@ namespace IwUVEditor.DirectX.DrawElement
 
         public Color4 Color { get; set; }
 
+        public Vector2 StartPos { get; set; }
+        public Vector2 EndPos { get; set; }
+
+        public SelectionRectangle(Device device, Effect effect, RasterizerState drawMode, Color4 color)
+        {
+            Device = device;
+            UsingEffectPass = effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawSelectionRange");
+            DrawMode = drawMode;
+            Color = color;
+
+            CreateVertexLayout();
+            CreateIndexBuffer();
+        }
 
         public void Prepare()
         {
-            throw new NotImplementedException();
+            // 描画方式を設定
+            UsingEffectPass.Apply(Device.ImmediateContext);
+            Device.ImmediateContext.Rasterizer.State = DrawMode;
+            Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
+
+            // レイアウトを設定
+            Device.ImmediateContext.InputAssembler.InputLayout = VertexLayout;
+
+            // バッファを設定
+            CreateVertexBuffer();
+            Device.ImmediateContext.InputAssembler.SetVertexBuffers(
+                0,
+                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0)
+            );
+            Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
+
+            Device.ImmediateContext.DrawIndexed(3, 0, 0);
+            Device.ImmediateContext.DrawIndexed(3, 3, 0);
         }
+
+        void CreateVertexLayout()
+        {
+            VertexLayout = new InputLayout(
+                Device,
+                UsingEffectPass.Description.Signature,
+                VertexStruct.VertexElements
+            );
+        }
+
+        void CreateVertexBuffer()
+        {
+            using (var vertexStream = new DataStream(CreateVertices(), true, true))
+                VertexBuffer = new Buffer(
+                    Device,
+                    vertexStream,
+                    new BufferDescription
+                    {
+                        SizeInBytes = (int)vertexStream.Length,
+                        BindFlags = BindFlags.VertexBuffer,
+                    }
+                );
+        }
+
+        void CreateIndexBuffer()
+        {
+            using (DataStream indexStream = new DataStream(CreateIndices(), true, true))
+                IndexBuffer = new Buffer(
+                    Device,
+                    indexStream,
+                    new BufferDescription
+                    {
+                        SizeInBytes = (int)indexStream.Length,
+                        BindFlags = BindFlags.IndexBuffer,
+                    }
+                );
+        }
+
+        private VertexStruct[] CreateVertices()
+        {
+            Vector2 min = new Vector2(Math.Min(StartPos.X, EndPos.X), Math.Min(StartPos.Y, EndPos.Y));
+            Vector2 max = new Vector2(Math.Max(StartPos.X, EndPos.X), Math.Max(StartPos.Y, EndPos.Y));
+
+            return new[]
+            {
+                new VertexStruct
+                {
+                    Position = new Vector3(min.X, max.Y, 0),
+                    Color = Color,
+                    TEXCOORD = new Vector2(0, 0)
+                },
+                new VertexStruct
+                {
+                    Position = new Vector3(max.X, max.Y, 0),
+                    Color = Color,
+                    TEXCOORD = new Vector2(1, 0)
+                },
+                new VertexStruct
+                {
+                    Position = new Vector3(min.X, min.Y, 0),
+                    Color = Color,
+                    TEXCOORD = new Vector2(0 ,1)
+                },
+                new VertexStruct
+                {
+                    Position = new Vector3(max.X, min.Y, 0),
+                    Color = Color,
+                    TEXCOORD = new Vector2(1, 1)
+                },
+            };
+        }
+
+        private uint[] CreateIndices() => new uint[] {
+            0, 1, 2,
+            3, 2, 1
+        };
+
 
         protected virtual void Dispose(bool disposing)
         {

@@ -62,6 +62,9 @@ namespace IwUVEditor
             {
                 Camera = new DxCameraOrthographic()
                 {
+                    Position = new SlimDX.Vector3(0.5f, 0.5f, -1),
+                    Target = new SlimDX.Vector3(0.5f, 0.5f, 0),
+                    Up = new SlimDX.Vector3(0, -1, 0),
                     ViewVolumeSize = (DxContext.TargetControl.ClientSize.Width, DxContext.TargetControl.ClientSize.Height),
                     ViewVolumeDepth = (0, 1)
                 },

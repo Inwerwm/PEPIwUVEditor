@@ -33,7 +33,7 @@ namespace IwUVEditor
             ModelPath = pmx.FilePath;
             TexFullPath = CreateTexFullPath();
 
-            IEnumerable<IPXVertex> faceVertices = Faces.SelectMany(face => face.ToVertices().Reverse());
+            IEnumerable<IPXVertex> faceVertices = Faces.SelectMany(face => face.ToVertices());
 
             Vertices = faceVertices.Distinct().ToList();
             IsSelected = Vertices.ToDictionary(vtx => vtx, _ => false);

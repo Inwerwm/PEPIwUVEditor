@@ -260,8 +260,8 @@ namespace IwUVEditor.DirectX.DrawElement
             };
 
             var plateIndices = new uint[] {
-                0, 1, 2,
-                3, 2, 1
+                2, 1, 0,
+                1, 2, 3
             };
 
             return (plateVertices, plateIndices);

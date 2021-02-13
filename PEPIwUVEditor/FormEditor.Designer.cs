@@ -232,13 +232,14 @@ namespace IwUVEditor
             this.splitUVMat.Panel1.ClientSizeChanged += new System.EventHandler(this.splitUVMat_Panel1_ClientSizeChanged);
             this.splitUVMat.Panel1.MouseEnter += new System.EventHandler(this.splitUVMat_Panel1_MouseEnter);
             this.splitUVMat.Panel1.MouseLeave += new System.EventHandler(this.splitUVMat_Panel1_MouseLeave);
+            this.splitUVMat.Panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseMove);
             this.splitUVMat.Panel1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseWheel);
             // 
             // splitUVMat.Panel2
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1013;
+            this.splitUVMat.SplitterDistance = 1011;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -250,7 +251,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(356, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(358, 910);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 

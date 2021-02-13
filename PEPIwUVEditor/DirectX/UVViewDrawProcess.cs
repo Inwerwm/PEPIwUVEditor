@@ -21,10 +21,12 @@ namespace IwUVEditor.DirectX
 
         private float radiusOfPositionSquare;
 
+        Editor Editor { get; set; }
+        
         RasterizerStateProvider Rasterize { get; set; }
 
-        public Vector3 ShiftOffset { get; set; } = Vector3.Zero; //publicなのはデバッグ用
-        public ScaleManager Scale { get; } = new ScaleManager() //publicなのはデバッグ用
+        Vector3 ShiftOffset { get; set; }
+        ScaleManager Scale { get; } = new ScaleManager()
         {
             DeltaOffset = -8000,
             Amplitude = 1000,
@@ -50,7 +52,10 @@ namespace IwUVEditor.DirectX
 
         public DragManager LeftDrag { get; set; } = new DragManager();
 
+        public Vector2 CurrentMousePos { get; set; }
+
         TexturePlate TexturePlate { get; set; }
+        SelectionRectangle SelectionRectangle { get; set; }
 
         Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
         ShaderResourceView CurrentTexture { get; set; }
@@ -127,6 +132,11 @@ namespace IwUVEditor.DirectX
             }
         }
 
+        public UVViewDrawProcess(Editor editor)
+        {
+            Editor = editor;
+        }
+
         public override void Init()
         {
             CurrentTexture = LoadTexture(null);
@@ -134,6 +144,7 @@ namespace IwUVEditor.DirectX
             Rasterize = new RasterizerStateProvider(Context.Device);
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
+            SelectionRectangle = new SelectionRectangle(Context.Device, Effect, Rasterize.Solid, new Color4(0.5f, 1, 1, 1));
         }
 
         public override void Draw()
@@ -153,6 +164,31 @@ namespace IwUVEditor.DirectX
 
             // 頂点位置に四角を描画
             CurrentPositionSquares?.Prepare();
+
+            // ツール固有の描画処理を実行
+            switch (Editor.CurrentTool)
+            {
+                case Tool.RectangleSelection:
+                    if (LeftDrag.IsStartingJust)
+                    {
+                        SelectionRectangle.StartPos = LeftDrag.Start;
+                    }
+
+                    if (LeftDrag.IsDragging)
+                    {
+                        SelectionRectangle.EndPos = LeftDrag.Current;
+                        SelectionRectangle.Prepare();
+                    }
+
+                    if (LeftDrag.IsEndDrag)
+                    {
+                        SelectionRectangle.EndPos = LeftDrag.End;
+                        LeftDrag.Reset();
+                    }
+                    break;
+                default:
+                    break;
+            }
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);
@@ -216,8 +252,8 @@ namespace IwUVEditor.DirectX
 
             if (IsClicking[MouseButtons.Middle])
                 ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
-
-            LeftDrag.ReadState(e, IsClicking[MouseButtons.Left]);
+            
+            LeftDrag.ReadState(CurrentMousePos, IsClicking[MouseButtons.Left]);
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)

@@ -58,7 +58,7 @@ namespace IwUVEditor
 
             // 描画プロセスオブジェクトを生成
             DrawProcess?.Dispose();
-            DrawProcess = new UVViewDrawProcess()
+            DrawProcess = new UVViewDrawProcess(Editor)
             {
                 Camera = new DxCameraOrthographic()
                 {
@@ -85,7 +85,6 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)
         {
-            toolStripStatusLabelState.Text = $"{DrawProcess.Scale.WheelDelta}";
         }
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
@@ -150,6 +149,12 @@ namespace IwUVEditor
         {
             if ((sender as RadioButton).Checked)
                 Editor.CurrentTool = Tool.RectangleSelection;
+        }
+
+        private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
+        {
+            DrawProcess.CurrentMousePos = new SlimDX.Vector2(e.X, e.Y);
+            toolStripStatusLabelState.Text = DrawProcess.CurrentMousePos.ToString();
         }
     }
 }

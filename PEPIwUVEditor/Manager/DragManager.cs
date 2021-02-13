@@ -1,7 +1,7 @@
-﻿using SlimDX.RawInput;
+﻿using SlimDX;
+using SlimDX.RawInput;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,17 +12,19 @@ namespace IwUVEditor.Manager
     {
         bool state;
 
+        public bool IsStartingJust { get; private set; }
         /// <summary>
         /// ドラッグ中か
         /// </summary>
         public bool IsDragging { get; private set; }
         /// <summary>
-        /// ドラッグの始端-終端情報を持っているか
+        /// ドラッグが終了したか
         /// </summary>
-        public bool HasValue { get; private set; }
+        public bool IsEndDrag { get; private set; }
 
-        public Point Start { get; private set; }
-        public Point End { get; private set; }
+        public Vector2 Start { get; private set; }
+        public Vector2 Current { get; private set; }
+        public Vector2 End { get; private set; }
 
         /// <summary>
         /// <para>ドラッグ情報の監視メソッド</para>
@@ -30,33 +32,37 @@ namespace IwUVEditor.Manager
         /// </summary>
         /// <param name="e"></param>
         /// <param name="clickState"></param>
-        public void ReadState(MouseInputEventArgs e, bool clickState)
+        public void ReadState(Vector2 currentMousePosition, bool clickState)
         {
             // false => true : ドラッグ開始
-            if(!this.state && clickState)
+            if (!this.state && clickState)
             {
-                Start = new Point(e.X, e.Y);
+                Start = currentMousePosition;
+                IsStartingJust = true;
                 IsDragging = true;
-                HasValue = false;
+                IsEndDrag = false;
             }
+            else
+                IsStartingJust = false;
 
             // true => false : ドラッグ終了
             if(this.state && !clickState)
             {
-                End = new Point(e.X, e.Y);
+                End = currentMousePosition;
                 IsDragging = false;
-                HasValue = true;
+                IsEndDrag = true;
             }
 
+            Current = currentMousePosition;
             state = clickState;
         }
 
         /// <summary>
-        /// 値未所持状態に変更
+        /// 未ドラッグ状態に変更
         /// </summary>
         public void Reset()
         {
-            HasValue = false;
+            IsEndDrag = false;
         }
     }
 }

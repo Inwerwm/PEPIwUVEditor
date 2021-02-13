@@ -188,34 +188,32 @@ namespace IwUVEditor.DirectX.DrawElement
             // 周辺に四角形を放射配置するため、{0..n}と{0..n}の直積集合でループする
             foreach ((int i, int j) in Enumerable.Range(0, Radius + 1).SelectMany(i => Enumerable.Range(0, Radius + 1).Select(j => (i, j))).Skip(1))
             {
-                var x = i;
-                var y = j;
 
                 Instances.Add
                 (
                     new InstanceOffset()
                     {
-                        Offset = Matrix.Translation(x, y, 0),
+                        Offset = Matrix.Translation(i, j, 0),
                         AlphaRatio = PeripheryPlateAlpha
                     }
                 );
 
-                if (y != 0)
+                if (j != 0)
                     Instances.Add
                     (
                         new InstanceOffset
                         {
-                            Offset = Matrix.Translation(x, -y, 0),
+                            Offset = Matrix.Translation(i, -j, 0),
                             AlphaRatio = PeripheryPlateAlpha
                         }
                     );
 
-                if (x != 0)
+                if (i != 0)
                     Instances.Add
                     (
                         new InstanceOffset
                         {
-                            Offset = Matrix.Translation(-x, y, 0),
+                            Offset = Matrix.Translation(-i, j, 0),
                             AlphaRatio = PeripheryPlateAlpha
                         }
                     );
@@ -225,7 +223,7 @@ namespace IwUVEditor.DirectX.DrawElement
                     (
                         new InstanceOffset
                         {
-                            Offset = Matrix.Translation(-x, -y, 0),
+                            Offset = Matrix.Translation(-i, -j, 0),
                             AlphaRatio = PeripheryPlateAlpha
                         }
                     );

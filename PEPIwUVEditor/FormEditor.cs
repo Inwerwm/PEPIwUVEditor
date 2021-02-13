@@ -62,7 +62,7 @@ namespace IwUVEditor
             {
                 Camera = new DxCameraOrthographic()
                 {
-                    ViewVolumeSize = (4, 4),
+                    ViewVolumeSize = (DxContext.TargetControl.ClientSize.Width, DxContext.TargetControl.ClientSize.Height),
                     ViewVolumeDepth = (0, 1)
                 },
                 RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value,
@@ -81,6 +81,8 @@ namespace IwUVEditor
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)
         {
             DxContext?.ChangeResolution();
+            if (DrawProcess != null)
+                (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize = (DxContext.TargetControl.Width, DxContext.TargetControl.Height);
         }
 
         private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)
@@ -128,6 +130,9 @@ namespace IwUVEditor
             if (DrawProcess is null)
                 return;
 
+            var mousePos = PointToClient(Cursor.Position);
+            DrawProcess.CurrentMousePos = new SlimDX.Vector2(mousePos.X, mousePos.Y);
+            toolStripStatusLabelState.Text = DrawProcess.CurrentMousePos.ToString();
             toolStripStatusLabelFPS.Text = $"{DrawProcess.CurrentFPS:###.##}fps";
         }
 
@@ -153,8 +158,6 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
         {
-            DrawProcess.CurrentMousePos = new SlimDX.Vector2(e.X, e.Y);
-            toolStripStatusLabelState.Text = DrawProcess.CurrentMousePos.ToString();
         }
     }
 }

@@ -28,9 +28,9 @@ namespace IwUVEditor.DirectX
         Vector3 ShiftOffset { get; set; }
         ScaleManager Scale { get; } = new ScaleManager()
         {
-            DeltaOffset = -8000,
-            Amplitude = 1000,
-            Offset = 0.1f,
+            DeltaOffset = -10000,
+            Amplitude = 200000,
+            Offset = 50f,
             Step = 0.1f,
             Gain = 1,
             LowerLimit = -10000,

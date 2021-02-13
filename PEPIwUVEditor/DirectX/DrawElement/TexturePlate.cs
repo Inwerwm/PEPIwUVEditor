@@ -188,8 +188,8 @@ namespace IwUVEditor.DirectX.DrawElement
             // 周辺に四角形を放射配置するため、{0..n}と{0..n}の直積集合でループする
             foreach ((int i, int j) in Enumerable.Range(0, Radius + 1).SelectMany(i => Enumerable.Range(0, Radius + 1).Select(j => (i, j))).Skip(1))
             {
-                var x = i * 2;
-                var y = j * 2;
+                var x = i;
+                var y = j;
 
                 Instances.Add
                 (

@@ -239,25 +239,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 {
                     Position = new Vector3(0, 1, 0),
                     Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(0, 0)
+                    TEXCOORD = new Vector2(0, 1)
                 },
                 new VertexStruct
                 {
                     Position = new Vector3(1, 1, 0),
                     Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(1, 0)
+                    TEXCOORD = new Vector2(1, 1)
                 },
                 new VertexStruct
                 {
                     Position = new Vector3(0, 0, 0),
                     Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(0 ,1)
+                    TEXCOORD = new Vector2(0 ,0)
                 },
                 new VertexStruct
                 {
                     Position = new Vector3(1, 0, 0),
                     Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(1, 1)
+                    TEXCOORD = new Vector2(1, 0)
                 }
             };
 

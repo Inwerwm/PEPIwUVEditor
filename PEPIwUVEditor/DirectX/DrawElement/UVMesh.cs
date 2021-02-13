@@ -124,7 +124,7 @@ namespace IwUVEditor.DirectX.DrawElement
         private VertexStruct[] LoadUVVertices(Material material) =>
             material.Vertices.Select(vtx => new VertexStruct()
             {
-                Position = new Vector3(new Vector2(vtx.UV.X, 1 - vtx.UV.Y), 0),
+                Position = new Vector3(new Vector2(vtx.UV.X, vtx.UV.Y), 0),
                 Color = LineColor,
                 TEXCOORD = vtx.UV
             }

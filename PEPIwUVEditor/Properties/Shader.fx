@@ -73,6 +73,7 @@ PositionSquareVertex VS_PutPositionSquare(PositionSquareVertex input)
 {
 	PositionSquareVertex output = input;
 	output.Position = float4(input.Position.xyz, 0) + mul(input.Offset, ViewProjection);
+	output.Color = input.Color;
 	return output;
 }
 

@@ -87,7 +87,9 @@ namespace IwUVEditor
         {
             DxContext?.ChangeResolution();
             if (DrawProcess != null)
-                (DrawProcess.Camera as DxCameraOrthographic).ViewVolumeSize = (DxContext.TargetControl.Width, DxContext.TargetControl.Height);
+            {
+                DrawProcess.ChangeResolution();
+            }
         }
 
         private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)

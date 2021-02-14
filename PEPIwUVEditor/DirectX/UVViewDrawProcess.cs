@@ -1,4 +1,5 @@
 ﻿using DxManager;
+using DxManager.Camera;
 using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.Manager;
 using SlimDX;
@@ -11,7 +12,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Buffer = SlimDX.Direct3D11.Buffer;
+using SelectionMode = IwUVEditor.Command.SelectionMode;
 
 namespace IwUVEditor.DirectX
 {
@@ -37,7 +38,17 @@ namespace IwUVEditor.DirectX
             UpperLimit = 12000,
         };
         private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
-
+        private Matrix InvertTransMatrix
+        {
+            get
+            {
+                Matrix iViewMat = Matrix.Invert(Camera.CreateViewMatrix());
+                Matrix iPrjMat = Matrix.Invert((Camera as DxManager.Camera.DxCameraOrthographic).CreateProjectionMatrix());
+                Matrix iOfstMat = Matrix.Invert(Matrix.Translation(ShiftOffset));
+                Matrix iSclMat = Matrix.Invert(Matrix.Scaling(Scale.Scale, Scale.Scale, 1));
+                return iSclMat * iOfstMat * iPrjMat * iViewMat;
+            }
+        }
 
         public bool IsActive { get; set; } = true;
         public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>
@@ -65,23 +76,11 @@ namespace IwUVEditor.DirectX
             set
             {
                 Vector2 normalizedPos = new Vector2(2 * value.X / Context.TargetControl.Width - 1, 1 - 2 * value.Y / Context.TargetControl.Height);
-
-                Matrix vprtMat = Matrix.Identity;
-                vprtMat.M11 = Context.TargetControl.ClientSize.Width / 2;
-                vprtMat.M14 = Context.TargetControl.ClientSize.Width / 2;
-                vprtMat.M22 = -Context.TargetControl.ClientSize.Height / 2;
-                vprtMat.M24 = Context.TargetControl.ClientSize.Height / 2;
-
-
-                Matrix iViewMat = Matrix.Invert(Camera.CreateViewMatrix());
-                Matrix iPrjMat = Matrix.Invert((Camera as DxManager.Camera.DxCameraOrthographic).CreateProjectionMatrix());
-                Matrix iVprtMat = Matrix.Invert(vprtMat);
-                Matrix iOfstMat = Matrix.Invert(Matrix.Translation(ShiftOffset));
-                Matrix iSclMat = Matrix.Invert(Matrix.Scaling(Scale.Scale, Scale.Scale, 1));
-                Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), iSclMat * iOfstMat * iPrjMat * iViewMat);
+                Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), InvertTransMatrix);
                 currentMousePos = new Vector2(worldPos.X, worldPos.Y);
             }
         }
+
 
         TexturePlate TexturePlate { get; set; }
         SelectionRectangle SelectionRectangle { get; set; }
@@ -230,18 +229,8 @@ namespace IwUVEditor.DirectX
 
             switch (e.ButtonFlags)
             {
-                case MouseButtonFlags.None:
-                    break;
                 case MouseButtonFlags.MouseWheel:
                     Scale.WheelDelta += e.WheelDelta * modifier;
-                    break;
-                case MouseButtonFlags.Button5Up:
-                    break;
-                case MouseButtonFlags.Button5Down:
-                    break;
-                case MouseButtonFlags.Button4Up:
-                    break;
-                case MouseButtonFlags.Button4Down:
                     break;
                 case MouseButtonFlags.MiddleUp:
                     IsClicking[MouseButtons.Middle] = false;
@@ -281,7 +270,22 @@ namespace IwUVEditor.DirectX
 
             if (LeftDrag.IsEndDrag)
             {
+                SelectionMode selectionMode = IsPress[Keys.ShiftKey] ? SelectionMode.Union : IsPress[Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
+                Editor.Tools.RectangleSelect(CurrentMaterial, LeftDrag.Start, LeftDrag.End, selectionMode);
+                CurrentPositionSquares.UpdateVertices();
                 LeftDrag.Reset();
+            }
+        }
+
+        public void ChangeResolution()
+        {
+            Vector2 screenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
+
+            (Camera as DxCameraOrthographic).ViewVolumeSize = (screenSize.X, screenSize.Y);
+
+            foreach (var ps in PositionSquareCache.Values)
+            {
+                ps.ScreenSize = screenSize;
             }
         }
 

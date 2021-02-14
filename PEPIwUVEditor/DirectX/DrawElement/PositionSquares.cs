@@ -16,6 +16,7 @@ namespace IwUVEditor.DirectX.DrawElement
         private float radius;
         private Color4 colorInSelected;
         private Color4 colorInDefault;
+        private Vector2 screenSize;
 
         Device Device { get; }
         EffectPass UsingEffectPass { get; }
@@ -38,6 +39,16 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 radius = value;
+                CreateVertexBuffer();
+            }
+        }
+
+        public Vector2 ScreenSize
+        {
+            get => screenSize;
+            set
+            {
+                screenSize = value;
                 CreateVertexBuffer();
             }
         }
@@ -118,7 +129,8 @@ namespace IwUVEditor.DirectX.DrawElement
 
         public void UpdateVertices()
         {
-            CreateInstances();
+            CreateVertexBuffer();
+            CreateInstanceBuffer();
         }
 
         private void CreateVertexLayout()
@@ -186,22 +198,27 @@ namespace IwUVEditor.DirectX.DrawElement
 
         private void CreateSquareVertices()
         {
+            Vector2 aspectCorrection = new Vector2(
+                ScreenSize.X > ScreenSize.Y ? ScreenSize.Y / ScreenSize.X : 1,
+                ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1
+            );
+
             SquareVertices = new[] {
                 new PositionVertex
                 {
-                    Position = new Vector3(-1, 1, 0) * Radius,
+                    Position = new Vector3(-1 * aspectCorrection.X, 1 * aspectCorrection.Y, 0) * Radius,
                 },
                 new PositionVertex
                 {
-                    Position = new Vector3(1, 1, 0) * Radius,
+                    Position = new Vector3(1 * aspectCorrection.X, 1 * aspectCorrection.Y, 0) * Radius,
                 },
                 new PositionVertex
                 {
-                    Position = new Vector3(-1, -1, 0) * Radius,
+                    Position = new Vector3(-1 * aspectCorrection.X, -1 * aspectCorrection.Y, 0) * Radius,
                 },
                 new PositionVertex
                 {
-                    Position = new Vector3(1, -1, 0) * Radius,
+                    Position = new Vector3(1 * aspectCorrection.X, -1 * aspectCorrection.Y, 0) * Radius,
                 },
             };
         }

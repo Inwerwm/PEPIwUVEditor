@@ -11,6 +11,12 @@ namespace IwUVEditor.Command
         private Stack<IEditorCommand> UndoStack { get; }
         private Stack<IEditorCommand> RedoStack { get; }
 
+        public CommandManager()
+        {
+            UndoStack = new Stack<IEditorCommand>();
+            RedoStack = new Stack<IEditorCommand>();
+        }
+
         public void Do(IEditorCommand cmd)
         {
             cmd.Do();

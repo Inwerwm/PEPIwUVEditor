@@ -1,6 +1,7 @@
 ﻿using IwUVEditor.Command;
 using PEPlugin;
 using PEPlugin.Pmx;
+using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,12 +23,14 @@ namespace IwUVEditor
 
         // エディタ機能関連プロパティ
         private CommandManager Commander { get; }
+        public Tools Tools { get; }
 
         public Editor(IPERunArgs args)
         {
             Args = args;
 
             Commander = new CommandManager();
+            Tools = new Tools(Commander);
 
             LoadModel();
         }

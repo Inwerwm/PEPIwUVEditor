@@ -11,6 +11,7 @@ namespace IwUVEditor
     public class IwUVEditor : IPEPlugin
     {
         private bool disposedValue;
+        private bool disposedValue1;
 
         public string Name => "IwUVEditor";
 
@@ -20,15 +21,14 @@ namespace IwUVEditor
 
         public IPEPluginOption Option => new PEPluginOption(false, true);
 
-        private FormEditor Editor { get; set; }
+        private Editor Editor { get; set; }
 
         public void Run(IPERunArgs args)
         {
             try
             {
-                Editor = Editor ?? new FormEditor(args);
-                Editor.Visible = true;
-                Editor.Initialize();
+                Editor = Editor ?? new Editor(args);
+                Editor.Run();
             }
             catch (Exception ex)
             {
@@ -38,22 +38,21 @@ namespace IwUVEditor
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue)
+            if (!disposedValue1)
             {
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
-                    Editor?.Dispose();
                 }
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
                 // TODO: 大きなフィールドを null に設定します
-                disposedValue = true;
+                disposedValue1 = true;
             }
         }
 
         // // TODO: 'Dispose(bool disposing)' にアンマネージド リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします
-        // ~Class1()
+        // ~IwUVEditor()
         // {
         //     // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
         //     Dispose(disposing: false);

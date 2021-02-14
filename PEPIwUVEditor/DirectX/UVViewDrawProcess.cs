@@ -22,7 +22,7 @@ namespace IwUVEditor.DirectX
 
         private float radiusOfPositionSquare;
 
-        Editor Editor { get; set; }
+        public InputManager Current { get; }
 
         RasterizerStateProvider Rasterize { get; set; }
 
@@ -102,7 +102,7 @@ namespace IwUVEditor.DirectX
             get => currentMaterial;
             set
             {
-                Editor.CurrentMaterial = value;
+                Current.Material = value;
 
                 if (Context is null)
                     return;
@@ -163,9 +163,9 @@ namespace IwUVEditor.DirectX
             }
         }
 
-        public UVViewDrawProcess(Editor editor)
+        public UVViewDrawProcess(InputManager inputManager)
         {
-            Editor = editor;
+            Current = inputManager;
         }
 
         public override void Init()
@@ -197,7 +197,7 @@ namespace IwUVEditor.DirectX
             CurrentPositionSquares?.Prepare();
 
             // ツール固有の描画処理を実行
-            switch (Editor.CurrentTool)
+            switch (Current.Tool)
             {
                 case Tool.RectangleSelection:
                     if(LeftDrag.IsDragging)

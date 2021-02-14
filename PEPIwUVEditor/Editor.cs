@@ -1,5 +1,8 @@
 ﻿using DxManager;
+using DxManager.Camera;
 using IwUVEditor.Command;
+using IwUVEditor.DirectX;
+using IwUVEditor.Manager;
 using PEPlugin;
 using PEPlugin.Pmx;
 using SlimDX;
@@ -22,13 +25,10 @@ namespace IwUVEditor
         public List<Material> Materials { get; private set; }
 
         // 描画
-        DxContext Viewer { get; }
-        DxProcess DrawProcess { get; }
-        FormEditor Form { get; }
+        ViewControl ViewControl { get; }
 
         // 現在の状態
-        public Material CurrentMaterial { get; set; }
-        public Tool CurrentTool { get; set; }
+        public InputManager Current { get; }
 
         // エディタ機能関連プロパティ
         public Tools Tools { get; private set; }
@@ -36,22 +36,15 @@ namespace IwUVEditor
         public Editor(IPERunArgs args)
         {
             Args = args;
+            ViewControl = new ViewControl(Current);
+            Current = new InputManager();
         }
 
-        public void Undo()
+        public void Run()
         {
-            if (CurrentMaterial is null)
-                return;
-
-            Tools.Undo(CurrentMaterial);
-        }
-
-        public void Redo()
-        {
-            if (CurrentMaterial is null)
-                return;
-
-            Tools.Redo(CurrentMaterial);
+            ViewControl.StopDraw();
+            LoadModel();
+            ViewControl.StartDraw();
         }
 
         public void LoadModel()
@@ -61,8 +54,23 @@ namespace IwUVEditor
 
             // 材質を読込
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
-
             Tools = new Tools(Materials);
+        }
+
+        public void Undo()
+        {
+            if (Current.Material is null)
+                return;
+
+            Tools.Undo(Current.Material);
+        }
+
+        public void Redo()
+        {
+            if (Current.Material is null)
+                return;
+
+            Tools.Redo(Current.Material);
         }
     }
 }

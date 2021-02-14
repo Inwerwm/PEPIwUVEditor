@@ -1,6 +1,7 @@
 ﻿using DxManager;
 using DxManager.Camera;
 using IwUVEditor.DirectX;
+using IwUVEditor.Manager;
 using PEPlugin;
 using PEPlugin.Pmx;
 using System;
@@ -11,69 +12,22 @@ using System.Windows.Forms;
 
 namespace IwUVEditor
 {
-    public partial class FormEditor : Form
+    internal partial class FormEditor : Form
     {
-        bool initialized = false;
+        public InputManager Current { get; }
 
-        Editor Editor { get; }
-
-        DxContext DxContext { get; }
-        UVViewDrawProcess DrawProcess { get; set; }
-
-        public FormEditor(IPERunArgs args)
+        public FormEditor(InputManager inputManager)
         {
             InitializeComponent();
-
-            Editor = new Editor(args);
-            DxContext = new DxContext(splitUVMat.Panel1);
-            DxContext.RefreshRate = 120;
+            Current = inputManager;
         }
 
-        public void Initialize()
+        internal Control DrawTargetControl => splitUVMat.Panel1;
+        internal float RadiusOfPositionSquare => (float)numericRadiusOfPosSq.Value;
+        internal void LoadMaterials(Material[] materials)
         {
-            if (initialized)
-                ReDraw();
-            else
-            {
-                LoadModel();
-                DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
-                initialized = true;
-            }
-        }
-
-        private void ReDraw()
-        {
-            DxContext.StopDrawLoop();
-            LoadModel();
-            DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
-        }
-
-        public void LoadModel()
-        {
-            Editor.LoadModel();
-
-            // 材質表示リストボックスを構築
             listBoxMaterial.Items.Clear();
-            listBoxMaterial.Items.AddRange(Editor.Materials.ToArray());
-
-            // 描画プロセスオブジェクトを生成
-            DrawProcess?.Dispose();
-            float cPos = 0;
-            float zoom = 1;
-            DrawProcess = new UVViewDrawProcess(Editor)
-            {
-                Camera = new DxCameraOrthographic()
-                {
-                    Position = new SlimDX.Vector3(cPos, cPos, -1),
-                    Target = new SlimDX.Vector3(cPos, cPos, 0),
-                    Up = new SlimDX.Vector3(0, -1, 0),
-                    ViewVolumeSize = (DxContext.TargetControl.ClientSize.Width / zoom, DxContext.TargetControl.ClientSize.Height / zoom),
-                    ViewVolumeDepth = (0, 1)
-                },
-                RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value,
-                ColorInDefault = new SlimDX.Color4(1, 0, 0, 0),
-                ColorInSelected = new SlimDX.Color4(1, 1, 0, 0)
-            };
+            listBoxMaterial.Items.AddRange(materials);
         }
 
         private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)

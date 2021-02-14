@@ -12,9 +12,6 @@ namespace IwUVEditor.Command
         private Vector2 startPosition;
         private Vector2 endPosition;
 
-        private bool ExistsStartPos { get; set; }
-        private bool ExistsEndPos { get; set; }
-
         Material TargetMaterial { get; }
 
         RectangleF SelectionRange { get; set; }
@@ -27,7 +24,6 @@ namespace IwUVEditor.Command
             set
             {
                 startPosition = value;
-                ExistsStartPos = true;
             }
         }
         public Vector2 EndPosition
@@ -36,7 +32,6 @@ namespace IwUVEditor.Command
             set
             {
                 endPosition = value;
-                ExistsEndPos = true;
             }
         }
 

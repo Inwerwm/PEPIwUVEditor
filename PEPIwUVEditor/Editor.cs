@@ -1,4 +1,5 @@
-﻿using IwUVEditor.Command;
+﻿using DxManager;
+using IwUVEditor.Command;
 using PEPlugin;
 using PEPlugin.Pmx;
 using SlimDX;
@@ -15,10 +16,17 @@ namespace IwUVEditor
     /// </summary>
     class Editor
     {
-        // モデル関連プロパティ
+        // モデル
         IPERunArgs Args { get; }
         IPXPmx Pmx { get; set; }
         public List<Material> Materials { get; private set; }
+
+        // 描画
+        DxContext Viewer { get; }
+        DxProcess DrawProcess { get; }
+        FormEditor Form { get; }
+
+        // 現在の状態
         public Material CurrentMaterial { get; set; }
         public Tool CurrentTool { get; set; }
 

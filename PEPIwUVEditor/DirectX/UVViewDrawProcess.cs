@@ -19,21 +19,13 @@ namespace IwUVEditor.DirectX
 {
     class UVViewDrawProcess : DxProcess
     {
+        private Color4 colorInDefault;
+        private Color4 colorInSelected;
+
         public InputManager Current { get; }
 
         RasterizerStateProvider Rasterize { get; set; }
 
-        Vector3 ShiftOffset { get; set; }
-        ScaleManager Scale { get; } = new ScaleManager()
-        {
-            DeltaOffset = -10000,
-            Amplitude = 200000,
-            Offset = 50f,
-            Step = 0.1f,
-            Gain = 1,
-            LowerLimit = -10000,
-            UpperLimit = 12000,
-        };
         private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
         private Matrix InvertTransMatrix
         {
@@ -47,6 +39,17 @@ namespace IwUVEditor.DirectX
             }
         }
 
+        Vector3 ShiftOffset { get; set; }
+        ScaleManager Scale { get; } = new ScaleManager()
+        {
+            DeltaOffset = -10000,
+            Amplitude = 200000,
+            Offset = 50f,
+            Step = 0.1f,
+            Gain = 1,
+            LowerLimit = -10000,
+            UpperLimit = 12000,
+        };
         public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
         {
             { MouseButtons.Left, false },
@@ -65,8 +68,6 @@ namespace IwUVEditor.DirectX
 
         Dictionary<Material, PositionSquares> PositionSquareCache { get; } = new Dictionary<Material, PositionSquares>();
         PositionSquares CurrentPositionSquares;
-        private Color4 colorInDefault;
-        private Color4 colorInSelected;
 
         public Color4 ColorInDefault
         {

@@ -58,14 +58,16 @@ namespace IwUVEditor
 
             // 描画プロセスオブジェクトを生成
             DrawProcess?.Dispose();
+            float cPos = 0;
+            float zoom = 100;
             DrawProcess = new UVViewDrawProcess(Editor)
             {
                 Camera = new DxCameraOrthographic()
                 {
-                    Position = new SlimDX.Vector3(0.5f, 0.5f, -1),
-                    Target = new SlimDX.Vector3(0.5f, 0.5f, 0),
+                    Position = new SlimDX.Vector3(cPos, cPos, -1),
+                    Target = new SlimDX.Vector3(cPos, cPos, 0),
                     Up = new SlimDX.Vector3(0, -1, 0),
-                    ViewVolumeSize = (DxContext.TargetControl.ClientSize.Width, DxContext.TargetControl.ClientSize.Height),
+                    ViewVolumeSize = (DxContext.TargetControl.ClientSize.Width / zoom, DxContext.TargetControl.ClientSize.Height / zoom),
                     ViewVolumeDepth = (0, 1)
                 },
                 RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value,
@@ -133,9 +135,9 @@ namespace IwUVEditor
             if (DrawProcess is null)
                 return;
 
-            var mousePos = PointToClient(Cursor.Position);
+            var mousePos = DxContext.TargetControl.PointToClient(Cursor.Position);
             DrawProcess.CurrentMousePos = new SlimDX.Vector2(mousePos.X, mousePos.Y);
-            toolStripStatusLabelState.Text = DrawProcess.CurrentMousePos.ToString();
+            toolStripStatusLabelState.Text = $"{mousePos} => {DrawProcess.CurrentMousePos}, Drag State : {DrawProcess.LeftDrag.Start} - {DrawProcess.LeftDrag.Current} - {DrawProcess.LeftDrag.End}";
             toolStripStatusLabelFPS.Text = $"{DrawProcess.CurrentFPS:###.##}fps";
         }
 

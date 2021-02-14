@@ -98,7 +98,7 @@ namespace IwUVEditor
             // 
             this.splitCtrlView.Panel2.Controls.Add(this.splitUVMat);
             this.splitCtrlView.Panel2MinSize = 500;
-            this.splitCtrlView.Size = new System.Drawing.Size(1556, 910);
+            this.splitCtrlView.Size = new System.Drawing.Size(1556, 911);
             this.splitCtrlView.SplitterDistance = 175;
             this.splitCtrlView.SplitterWidth = 6;
             this.splitCtrlView.TabIndex = 0;
@@ -116,7 +116,7 @@ namespace IwUVEditor
             this.flowEditTools.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowEditTools.Location = new System.Drawing.Point(0, 0);
             this.flowEditTools.Name = "flowEditTools";
-            this.flowEditTools.Size = new System.Drawing.Size(175, 910);
+            this.flowEditTools.Size = new System.Drawing.Size(175, 911);
             this.flowEditTools.TabIndex = 0;
             // 
             // radioButtonRectangleSelection
@@ -238,8 +238,8 @@ namespace IwUVEditor
             // splitUVMat.Panel2
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
-            this.splitUVMat.Size = new System.Drawing.Size(1375, 910);
-            this.splitUVMat.SplitterDistance = 1011;
+            this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
+            this.splitUVMat.SplitterDistance = 1009;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -251,7 +251,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(358, 910);
+            this.listBoxMaterial.Size = new System.Drawing.Size(360, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -262,7 +262,7 @@ namespace IwUVEditor
             this.toolStripStatusLabelFPS,
             this.toolStripStatusLabelState,
             this.toolStripProgressBarState});
-            this.statusStripEditor.Location = new System.Drawing.Point(0, 940);
+            this.statusStripEditor.Location = new System.Drawing.Point(0, 941);
             this.statusStripEditor.Name = "statusStripEditor";
             this.statusStripEditor.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
             this.statusStripEditor.Size = new System.Drawing.Size(1556, 22);
@@ -415,7 +415,7 @@ namespace IwUVEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1556, 962);
+            this.ClientSize = new System.Drawing.Size(1556, 963);
             this.Controls.Add(this.statusStripEditor);
             this.Controls.Add(this.menuStripEditor);
             this.Controls.Add(this.splitCtrlView);

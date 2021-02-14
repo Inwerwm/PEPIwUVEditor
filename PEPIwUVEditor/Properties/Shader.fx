@@ -108,7 +108,7 @@ technique10 MainTechnique
 		SetVertexShader(CompileShader(vs_5_0, VS_ApplyViewProjectionOnly()));
 		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColor()));
 	}
-	pass DrawSelectionRange
+	pass DrawByWorldLocate
 	{
 		SetVertexShader(CompileShader(vs_5_0, VS_Throw()));
 		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColor()));

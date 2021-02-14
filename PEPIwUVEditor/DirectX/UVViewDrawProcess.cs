@@ -36,6 +36,8 @@ namespace IwUVEditor.DirectX
             LowerLimit = -10000,
             UpperLimit = 12000,
         };
+        private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
+
 
         public bool IsActive { get; set; } = true;
         public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>
@@ -62,8 +64,22 @@ namespace IwUVEditor.DirectX
             get => currentMousePos;
             set
             {
-                var rawPos = value;
-                currentMousePos = value;
+                Vector2 normalizedPos = new Vector2(2 * value.X / Context.TargetControl.Width - 1, 1 - 2 * value.Y / Context.TargetControl.Height);
+
+                Matrix vprtMat = Matrix.Identity;
+                vprtMat.M11 = Context.TargetControl.ClientSize.Width / 2;
+                vprtMat.M14 = Context.TargetControl.ClientSize.Width / 2;
+                vprtMat.M22 = -Context.TargetControl.ClientSize.Height / 2;
+                vprtMat.M24 = Context.TargetControl.ClientSize.Height / 2;
+
+
+                Matrix iViewMat = Matrix.Invert(Camera.CreateViewMatrix());
+                Matrix iPrjMat = Matrix.Invert((Camera as DxManager.Camera.DxCameraOrthographic).CreateProjectionMatrix());
+                Matrix iVprtMat = Matrix.Invert(vprtMat);
+                Matrix iOfstMat = Matrix.Invert(Matrix.Translation(ShiftOffset));
+                Matrix iSclMat = Matrix.Invert(Matrix.Scaling(Scale.Scale, Scale.Scale, 1));
+                Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), iSclMat * iOfstMat * iPrjMat * iViewMat);
+                currentMousePos = new Vector2(worldPos.X, worldPos.Y);
             }
         }
 
@@ -155,7 +171,7 @@ namespace IwUVEditor.DirectX
         {
             CurrentTexture = LoadTexture(null);
 
-            Rasterize = new RasterizerStateProvider(Context.Device);
+            Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
             SelectionRectangle = new SelectionRectangle(Context.Device, Effect, Rasterize.Solid, new Color4(0.5f, 1, 1, 1));
@@ -183,22 +199,8 @@ namespace IwUVEditor.DirectX
             switch (Editor.CurrentTool)
             {
                 case Tool.RectangleSelection:
-                    if (LeftDrag.IsStartingJust)
-                    {
-                        SelectionRectangle.StartPos = LeftDrag.Start;
-                    }
-
-                    if (LeftDrag.IsDragging)
-                    {
-                        SelectionRectangle.EndPos = LeftDrag.Current;
+                    if(LeftDrag.IsDragging)
                         SelectionRectangle.Prepare();
-                    }
-
-                    if (LeftDrag.IsEndDrag)
-                    {
-                        SelectionRectangle.EndPos = LeftDrag.End;
-                        LeftDrag.Reset();
-                    }
                     break;
                 default:
                     break;
@@ -210,10 +212,9 @@ namespace IwUVEditor.DirectX
 
         protected override void UpdateCamera()
         {
-            var scale = Scale.Scale;
-            Matrix transMatrix = Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(scale, scale, 1);
-            Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(transMatrix);
+            Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(TransMatrix);
         }
+
         public void ResetCamera()
         {
             ShiftOffset = Vector3.Zero;
@@ -268,6 +269,20 @@ namespace IwUVEditor.DirectX
                 ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
 
             LeftDrag.ReadState(CurrentMousePos, IsClicking[MouseButtons.Left]);
+            if (LeftDrag.IsStartingJust)
+            {
+                SelectionRectangle.StartPos = LeftDrag.Start;
+            }
+
+            if (LeftDrag.IsDragging)
+            {
+                SelectionRectangle.EndPos = LeftDrag.Current;
+            }
+
+            if (LeftDrag.IsEndDrag)
+            {
+                LeftDrag.Reset();
+            }
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)

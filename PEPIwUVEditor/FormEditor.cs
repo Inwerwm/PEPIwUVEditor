@@ -59,7 +59,7 @@ namespace IwUVEditor
             // 描画プロセスオブジェクトを生成
             DrawProcess?.Dispose();
             float cPos = 0;
-            float zoom = 100;
+            float zoom = 1;
             DrawProcess = new UVViewDrawProcess(Editor)
             {
                 Camera = new DxCameraOrthographic()

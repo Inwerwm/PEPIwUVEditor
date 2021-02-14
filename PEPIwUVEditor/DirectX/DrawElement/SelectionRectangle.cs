@@ -29,7 +29,7 @@ namespace IwUVEditor.DirectX.DrawElement
         public SelectionRectangle(Device device, Effect effect, RasterizerState drawMode, Color4 color)
         {
             Device = device;
-            UsingEffectPass = effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawSelectionRange");
+            UsingEffectPass = effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass");
             DrawMode = drawMode;
             Color = color;
 

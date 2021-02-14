@@ -1,5 +1,6 @@
 ﻿using DxManager;
 using DxManager.Camera;
+using IwUVEditor.Command;
 using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.Manager;
 using SlimDX;
@@ -18,10 +19,6 @@ namespace IwUVEditor.DirectX
 {
     class UVViewDrawProcess : DxProcess
     {
-        private Material currentMaterial;
-
-        private float radiusOfPositionSquare;
-
         public InputManager Current { get; }
 
         RasterizerStateProvider Rasterize { get; set; }
@@ -50,37 +47,12 @@ namespace IwUVEditor.DirectX
             }
         }
 
-        public bool IsActive { get; set; } = true;
-        public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>
-        {
-            { Keys.ShiftKey, false },
-            { Keys.ControlKey, false }
-        };
         public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
         {
             { MouseButtons.Left, false },
             { MouseButtons.Middle, false },
             { MouseButtons.Right, false },
         };
-
-        public DragManager LeftDrag { get; set; } = new DragManager();
-
-        /// <summary>
-        /// <para>現在のマウスポインタの座標</para>
-        /// <para>set : form側での描画位置</para>
-        /// <para>get : 描画されている空間におけるXY座標</para>
-        /// </summary>
-        public Vector2 CurrentMousePos
-        {
-            get => currentMousePos;
-            set
-            {
-                Vector2 normalizedPos = new Vector2(2 * value.X / Context.TargetControl.Width - 1, 1 - 2 * value.Y / Context.TargetControl.Height);
-                Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), InvertTransMatrix);
-                currentMousePos = new Vector2(worldPos.X, worldPos.Y);
-            }
-        }
-
 
         TexturePlate TexturePlate { get; set; }
         SelectionRectangle SelectionRectangle { get; set; }
@@ -95,30 +67,6 @@ namespace IwUVEditor.DirectX
         PositionSquares CurrentPositionSquares;
         private Color4 colorInDefault;
         private Color4 colorInSelected;
-        private Vector2 currentMousePos;
-
-        public Material CurrentMaterial
-        {
-            get => currentMaterial;
-            set
-            {
-                Current.Material = value;
-
-                if (Context is null)
-                    return;
-                currentMaterial = value;
-                if (!TextureCache.Keys.Contains(value))
-                {
-                    TextureCache.Add(value, LoadTexture(value));
-                    UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value, ColorInDefault));
-                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, RadiusOfPositionSquare, ColorInDefault, colorInSelected));
-                }
-
-                CurrentTexture = TextureCache[value];
-                CurrentUVMesh = UVMeshCache[value];
-                CurrentPositionSquares = PositionSquareCache[value];
-            }
-        }
 
         public Color4 ColorInDefault
         {
@@ -150,22 +98,36 @@ namespace IwUVEditor.DirectX
             }
         }
 
-        public float RadiusOfPositionSquare
-        {
-            get => radiusOfPositionSquare;
-            set
-            {
-                radiusOfPositionSquare = value;
-                foreach (var sq in PositionSquareCache.Values)
-                {
-                    sq.Radius = radiusOfPositionSquare;
-                }
-            }
-        }
-
         public UVViewDrawProcess(InputManager inputManager)
         {
             Current = inputManager;
+
+            Current.MaterialIsChanged += (value) =>
+            {
+                Material material = value as Material;
+
+                if (Context is null)
+                    return;
+                if (!TextureCache.Keys.Contains(material))
+                {
+                    TextureCache.Add(material, LoadTexture(material));
+                    UVMeshCache.Add(material, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
+                    PositionSquareCache.Add(material, new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, Current.RadiusOfPositionSquare, ColorInDefault, colorInSelected));
+                }
+
+                CurrentTexture = TextureCache[material];
+                CurrentUVMesh = UVMeshCache[material];
+                CurrentPositionSquares = PositionSquareCache[material];
+            };
+
+            Current.RadiusOfPosSqIsChanged += (value) =>
+            {
+                float radius = (float)value;
+                foreach (var sq in PositionSquareCache.Values)
+                {
+                    sq.Radius = radius;
+                }
+            };
         }
 
         public override void Init()
@@ -180,6 +142,8 @@ namespace IwUVEditor.DirectX
 
         public override void Draw()
         {
+            Current.FPS = CurrentFPS;
+
             // 背景を灰色に
             Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
             // 深度バッファ
@@ -200,7 +164,7 @@ namespace IwUVEditor.DirectX
             switch (Current.Tool)
             {
                 case Tool.RectangleSelection:
-                    if(LeftDrag.IsDragging)
+                    if(Current.MouseLeft.IsDragging)
                         SelectionRectangle.Prepare();
                     break;
                 default:
@@ -224,10 +188,10 @@ namespace IwUVEditor.DirectX
 
         protected override void MouseInput(object sender, MouseInputEventArgs e)
         {
-            if (!IsActive)
+            if (!Current.IsActive)
                 return;
 
-            float modifier = (IsPress[Keys.ShiftKey] ? 4f : 1f) / (IsPress[Keys.ControlKey] ? 4f : 1f);
+            float modifier = (Current.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Current.IsPress[Keys.ControlKey] ? 4f : 1f);
 
             switch (e.ButtonFlags)
             {
@@ -259,35 +223,43 @@ namespace IwUVEditor.DirectX
             if (IsClicking[MouseButtons.Middle])
                 ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
 
-            LeftDrag.ReadState(CurrentMousePos, IsClicking[MouseButtons.Left]);
-            if (LeftDrag.IsStartingJust)
+            Current.MouseLeft.ReadState(ScreenPosToWorldPos(Current.MousePos), IsClicking[MouseButtons.Left]);
+            if (Current.MouseLeft.IsStartingJust)
             {
-                SelectionRectangle.StartPos = LeftDrag.Start;
+                SelectionRectangle.StartPos = Current.MouseLeft.Start;
             }
 
-            if (LeftDrag.IsDragging)
+            if (Current.MouseLeft.IsDragging)
             {
-                SelectionRectangle.EndPos = LeftDrag.Current;
+                SelectionRectangle.EndPos = Current.MouseLeft.Current;
             }
 
-            if (LeftDrag.IsEndDrag)
+            if (Current.MouseLeft.IsEndDrag)
             {
-                SelectionMode selectionMode = IsPress[Keys.ShiftKey] ? SelectionMode.Union : IsPress[Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
-                Editor.Tools.RectangleSelect(CurrentMaterial, LeftDrag.Start, LeftDrag.End, selectionMode, CurrentPositionSquares.UpdateVertices);
-                LeftDrag.Reset();
+                SelectionMode selectionMode = Current.IsPress[Keys.ShiftKey] ? SelectionMode.Union : Current.IsPress[Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
+                if (!(CurrentPositionSquares is null))
+                    Current.Command = new CommandRectangleSelection(Current.Material, Current.MouseLeft.Start, Current.MouseLeft.End, selectionMode, CurrentPositionSquares.UpdateVertices);
+                Current.MouseLeft.Reset();
             }
         }
 
         public void ChangeResolution()
         {
-            Vector2 screenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
+            Current.ScreenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
 
-            (Camera as DxCameraOrthographic).ViewVolumeSize = (screenSize.X, screenSize.Y);
+            (Camera as DxCameraOrthographic).ViewVolumeSize = (Current.ScreenSize.X, Current.ScreenSize.Y);
 
             foreach (var ps in PositionSquareCache.Values)
             {
-                ps.ScreenSize = screenSize;
+                ps.ScreenSize = Current.ScreenSize;
             }
+        }
+
+        public Vector2 ScreenPosToWorldPos(Vector2 screenPos)
+        {
+            Vector2 normalizedPos = new Vector2(2 * screenPos.X / Context.TargetControl.Width - 1, 1 - 2 * screenPos.Y / Context.TargetControl.Height);
+            Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), InvertTransMatrix);
+            return new Vector2(worldPos.X, worldPos.Y);
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)

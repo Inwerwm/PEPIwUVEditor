@@ -20,8 +20,6 @@ namespace IwUVEditor
             {
                 components.Dispose();
             }
-            DrawProcess?.Dispose();
-            DxContext?.Dispose();
             base.Dispose(disposing);
         }
 
@@ -208,7 +206,7 @@ namespace IwUVEditor
             1,
             0,
             0,
-            0});
+            65536});
             this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
             this.numericRadiusOfPosSq.Size = new System.Drawing.Size(120, 32);
             this.numericRadiusOfPosSq.TabIndex = 4;
@@ -239,7 +237,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 1007;
+            this.splitUVMat.SplitterDistance = 1005;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -251,7 +249,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(362, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(364, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -412,7 +410,6 @@ namespace IwUVEditor
             // 
             // timerEvery
             // 
-            this.timerEvery.Enabled = true;
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 

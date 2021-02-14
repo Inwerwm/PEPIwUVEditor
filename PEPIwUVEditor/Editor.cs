@@ -30,14 +30,19 @@ namespace IwUVEditor
         // 現在の状態
         public InputManager Current { get; }
 
-        // エディタ機能関連プロパティ
-        public Tools Tools { get; private set; }
+        // エディタ機能
+        Dictionary<Material, CommandManager> Commanders { get; set; }
 
         public Editor(IPERunArgs args)
         {
             Args = args;
-            ViewControl = new ViewControl(Current);
             Current = new InputManager();
+            ViewControl = new ViewControl(this, Current);
+
+            Current.InvokeCommand += (command) =>
+            {
+                Commanders[Current.Material].Do(command);
+            };
         }
 
         public void Run()
@@ -54,7 +59,8 @@ namespace IwUVEditor
 
             // 材質を読込
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
-            Tools = new Tools(Materials);
+            Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
+            ViewControl.LoadMaterials(Materials);
         }
 
         public void Undo()
@@ -62,7 +68,7 @@ namespace IwUVEditor
             if (Current.Material is null)
                 return;
 
-            Tools.Undo(Current.Material);
+            Commanders[Current.Material].Undo();
         }
 
         public void Redo()
@@ -70,7 +76,7 @@ namespace IwUVEditor
             if (Current.Material is null)
                 return;
 
-            Tools.Redo(Current.Material);
+            Commanders[Current.Material].Redo();
         }
     }
 }

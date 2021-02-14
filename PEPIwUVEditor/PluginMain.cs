@@ -11,7 +11,6 @@ namespace IwUVEditor
     public class IwUVEditor : IPEPlugin
     {
         private bool disposedValue;
-        private bool disposedValue1;
 
         public string Name => "IwUVEditor";
 
@@ -38,7 +37,7 @@ namespace IwUVEditor
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!disposedValue1)
+            if (!disposedValue)
             {
                 if (disposing)
                 {
@@ -47,7 +46,7 @@ namespace IwUVEditor
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
                 // TODO: 大きなフィールドを null に設定します
-                disposedValue1 = true;
+                disposedValue = true;
             }
         }
 

@@ -37,7 +37,6 @@ namespace IwUVEditor.Command
             {
                 endPosition = value;
                 ExistsEndPos = true;
-                CreateSelectionRange();
             }
         }
 
@@ -59,8 +58,7 @@ namespace IwUVEditor.Command
 
         public void Do()
         {
-            if (!(ExistsStartPos && ExistsEndPos))
-                throw new InvalidOperationException($"{(!ExistsStartPos && !ExistsEndPos ? "StartPoint and EndPoint are" : ExistsEndPos ? "StartPoint is" : "EndPoint is")} not set.");
+            CreateSelectionRange();
 
             // 頂点の選択状態を調査
             SelectionResult = TargetMaterial.Vertices.ToDictionary(vtx => vtx, vtx => SelectionRange.Contains(vtx.UV.X, vtx.UV.Y));

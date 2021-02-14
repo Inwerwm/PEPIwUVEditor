@@ -102,6 +102,8 @@ namespace IwUVEditor.DirectX
             get => currentMaterial;
             set
             {
+                Editor.CurrentMaterial = value;
+
                 if (Context is null)
                     return;
                 currentMaterial = value;
@@ -271,8 +273,7 @@ namespace IwUVEditor.DirectX
             if (LeftDrag.IsEndDrag)
             {
                 SelectionMode selectionMode = IsPress[Keys.ShiftKey] ? SelectionMode.Union : IsPress[Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
-                Editor.Tools.RectangleSelect(CurrentMaterial, LeftDrag.Start, LeftDrag.End, selectionMode);
-                CurrentPositionSquares.UpdateVertices();
+                Editor.Tools.RectangleSelect(CurrentMaterial, LeftDrag.Start, LeftDrag.End, selectionMode, CurrentPositionSquares.UpdateVertices);
                 LeftDrag.Reset();
             }
         }

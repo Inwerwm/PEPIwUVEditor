@@ -10,23 +10,27 @@ namespace IwUVEditor
 {
     class Tools
     {
-        CommandManager Commander { get;}
+        Dictionary<Material, CommandManager> Commanders { get; set; }
 
-        public Tools(CommandManager commander)
+        public Tools(IEnumerable<Material> materials)
         {
-            Commander = commander;
+            Commanders = materials.ToDictionary(m => m, _ => new CommandManager());
         }
 
-        public void RectangleSelect(Material target, Vector2 start, Vector2 end, SelectionMode mode)
+        public void RectangleSelect(Material target, Vector2 start, Vector2 end, SelectionMode mode, Action updateAction)
         {
-            var cmd = new CommandRectangleSelection(target)
-            {
-                StartPosition = start,
-                EndPosition = end,
-                Mode = mode,
-            };
+            var cmd = new CommandRectangleSelection(target, start, end, mode, updateAction);
 
-            Commander.Do(cmd);
+            Commanders[target].Do(cmd);
+        }
+
+        public void Undo(Material target)
+        {
+            Commanders[target].Undo();
+        }
+        public void Redo(Material target)
+        {
+            Commanders[target].Redo();
         }
     }
 

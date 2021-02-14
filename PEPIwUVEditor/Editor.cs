@@ -18,21 +18,32 @@ namespace IwUVEditor
         // モデル関連プロパティ
         IPERunArgs Args { get; }
         IPXPmx Pmx { get; set; }
-        public IEnumerable<Material> Materials { get; private set; }
+        public List<Material> Materials { get; private set; }
+        public Material CurrentMaterial { get; set; }
         public Tool CurrentTool { get; set; }
 
         // エディタ機能関連プロパティ
-        private CommandManager Commander { get; }
-        public Tools Tools { get; }
+        public Tools Tools { get; private set; }
 
         public Editor(IPERunArgs args)
         {
             Args = args;
+        }
 
-            Commander = new CommandManager();
-            Tools = new Tools(Commander);
+        public void Undo()
+        {
+            if (CurrentMaterial is null)
+                return;
 
-            LoadModel();
+            Tools.Undo(CurrentMaterial);
+        }
+
+        public void Redo()
+        {
+            if (CurrentMaterial is null)
+                return;
+
+            Tools.Redo(CurrentMaterial);
         }
 
         public void LoadModel()
@@ -41,7 +52,9 @@ namespace IwUVEditor
             Pmx = Args.Host.Connector.Pmx.GetCurrentState();
 
             // 材質を読込
-            Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx));
+            Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
+
+            Tools = new Tools(Materials);
         }
     }
 }

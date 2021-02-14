@@ -12,6 +12,10 @@ namespace IwUVEditor
 {
     class Material : IPXMaterial
     {
+        // デバッグ用
+        static int count;
+        int id;
+
         IPXMaterial Value { get; }
 
         public IList<IPXVertex> Vertices { get; }
@@ -29,6 +33,11 @@ namespace IwUVEditor
 
         public Material(IPXMaterial material, IPXPmx pmx)
         {
+            //デバッグ用
+            id = count;
+            count++;
+            //
+
             Value = material;
             ModelPath = pmx.FilePath;
             TexFullPath = CreateTexFullPath();

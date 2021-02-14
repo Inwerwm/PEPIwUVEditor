@@ -166,5 +166,15 @@ namespace IwUVEditor
         private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
         {
         }
+
+        private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.Undo();
+        }
+
+        private void やり直しToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.Redo();
+        }
     }
 }

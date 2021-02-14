@@ -239,7 +239,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 1009;
+            this.splitUVMat.SplitterDistance = 1007;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -251,7 +251,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(360, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(362, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -361,15 +361,20 @@ namespace IwUVEditor
             // 
             this.元に戻すToolStripMenuItem.Name = "元に戻すToolStripMenuItem";
             this.元に戻すToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Z";
+            this.元に戻すToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.元に戻すToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
             this.元に戻すToolStripMenuItem.Text = "元に戻す";
+            this.元に戻すToolStripMenuItem.Click += new System.EventHandler(this.元に戻すToolStripMenuItem_Click);
             // 
             // やり直しToolStripMenuItem
             // 
             this.やり直しToolStripMenuItem.Name = "やり直しToolStripMenuItem";
             this.やり直しToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+Z";
+            this.やり直しToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.Z)));
             this.やり直しToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
             this.やり直しToolStripMenuItem.Text = "やり直し";
+            this.やり直しToolStripMenuItem.Click += new System.EventHandler(this.やり直しToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 

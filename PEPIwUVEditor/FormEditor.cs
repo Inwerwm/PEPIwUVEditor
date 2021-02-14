@@ -25,7 +25,7 @@ namespace IwUVEditor
             InitializeComponent();
 
             Editor = new Editor(args);
-            DxContext = DxContext.GetInstance(splitUVMat.Panel1);
+            DxContext = new DxContext(splitUVMat.Panel1);
             DxContext.RefreshRate = 120;
         }
 

@@ -93,7 +93,7 @@
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
     <Compile Include="DirectX\Vertex\VertexStruct.cs" />
     <Compile Include="Tool.cs" />
-    <Compile Include="ViewControl.cs" />
+    <Compile Include="EditorLauncher.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor
 {
-    class ViewControl
+    class EditorLauncher
     {
         private bool isDrawing;
 
@@ -27,7 +27,7 @@ namespace IwUVEditor
         float Zoom => 1;
 
 
-        public ViewControl(Editor editor, InputManager inputManager)
+        public EditorLauncher(Editor editor, InputManager inputManager)
         {
             Editor = editor;
             Current = inputManager;

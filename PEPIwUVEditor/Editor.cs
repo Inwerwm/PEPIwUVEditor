@@ -25,7 +25,7 @@ namespace IwUVEditor
         public List<Material> Materials { get; private set; }
 
         // 描画
-        ViewControl ViewControl { get; }
+        EditorLauncher ViewControl { get; }
 
         // 現在の状態
         public InputManager Current { get; }
@@ -37,7 +37,7 @@ namespace IwUVEditor
         {
             Args = args;
             Current = new InputManager();
-            ViewControl = new ViewControl(this, Current);
+            ViewControl = new EditorLauncher(this, Current);
 
             Current.InvokeCommand += (command) =>
             {

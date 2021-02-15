@@ -424,7 +424,6 @@ namespace IwUVEditor
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormEditor";
             this.Text = "UV編集";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormEditor_FormClosing);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormEditor_KeyDown);
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormEditor_KeyUp);
             this.splitCtrlView.Panel1.ResumeLayout(false);

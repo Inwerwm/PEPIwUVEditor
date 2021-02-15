@@ -35,7 +35,13 @@ namespace IwUVEditor
             {
                 RefreshRate = 120
             };
+
             Form.DrawContext = DrawContext;
+            Form.AddProcessWhenClosing((sender, e) =>
+            {
+                e.Cancel = true;
+                StopDraw();
+            });
 
             isDrawing = false;
         }

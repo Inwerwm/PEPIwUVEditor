@@ -43,10 +43,9 @@ namespace IwUVEditor
             listBoxMaterial.Items.AddRange(materials);
         }
 
-        private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
+        internal void AddProcessWhenClosing(FormClosingEventHandler handler)
         {
-            e.Cancel = true;
-            ViewControl.StopDraw();
+            FormClosing += handler;
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)

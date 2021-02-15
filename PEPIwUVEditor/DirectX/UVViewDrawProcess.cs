@@ -139,6 +139,8 @@ namespace IwUVEditor.DirectX
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
             SelectionRectangle = new SelectionRectangle(Context.Device, Effect, Rasterize.Solid, new Color4(0.5f, 1, 1, 1));
+
+            AddMouseInputProcess(MouseInput);
         }
 
         public override void Draw()
@@ -187,7 +189,7 @@ namespace IwUVEditor.DirectX
             Scale.WheelDelta = 0;
         }
 
-        protected override void MouseInput(object sender, MouseInputEventArgs e)
+        protected void MouseInput(object sender, MouseInputEventArgs e)
         {
             if (!Current.IsActive)
                 return;

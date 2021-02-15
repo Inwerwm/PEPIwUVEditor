@@ -31,12 +31,12 @@ namespace IwUVEditor
         {
             Current = new InputManager();
             Editor = new Editor(args, Current);
-
             Form = Form ?? new FormEditor(Editor, Current);
             DrawContext = DrawContext ?? new DxContext(Form.DrawTargetControl)
             {
                 RefreshRate = 120
             };
+
             isDrawing = false;
         }
 

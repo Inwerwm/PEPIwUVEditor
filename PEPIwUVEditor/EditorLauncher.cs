@@ -28,6 +28,7 @@ namespace IwUVEditor
 
         public EditorLauncher(IPERunArgs args)
         {
+            // インスタンスの作成
             Current = new InputManager();
             Editor = new Editor(args, Current);
             Form = Form ?? new FormEditor(Editor, Current);
@@ -36,6 +37,7 @@ namespace IwUVEditor
                 RefreshRate = 120
             };
 
+            // Formへの入力
             Form.DrawContext = DrawContext;
             Form.AddProcessWhenClosing((sender, e) =>
             {
@@ -43,6 +45,7 @@ namespace IwUVEditor
                 StopDraw();
             });
 
+            // フィールドの初期値を明示
             isDrawing = false;
         }
 

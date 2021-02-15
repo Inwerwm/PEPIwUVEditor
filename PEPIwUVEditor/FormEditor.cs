@@ -19,6 +19,8 @@ namespace IwUVEditor
         internal UVViewDrawProcess DrawProcess { get; set; }
         InputManager Current { get; }
 
+        internal Control DrawTargetControl => splitUVMat.Panel1;
+
         public FormEditor(Editor editor, InputManager inputManager)
         {
             Editor = editor;
@@ -34,8 +36,6 @@ namespace IwUVEditor
         {
             Current.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
         }
-
-        internal Control DrawTargetControl => splitUVMat.Panel1;
 
         internal void LoadMaterials(Material[] materials)
         {

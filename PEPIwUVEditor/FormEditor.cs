@@ -15,6 +15,8 @@ namespace IwUVEditor
     internal partial class FormEditor : Form
     {
         Editor Editor { get; }
+        internal DxContext DrawContext { get; set; }
+        internal UVViewDrawProcess DrawProcess { get; set; }
         InputManager Current { get; }
 
         public FormEditor(Editor editor, InputManager inputManager)

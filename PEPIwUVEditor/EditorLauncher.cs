@@ -17,12 +17,11 @@ namespace IwUVEditor
         private bool isDrawing;
 
         Editor Editor { get; }
-        public InputManager Current { get; }
-
         FormEditor Form { get; }
-
         DxContext DrawContext { get; }
         UVViewDrawProcess DrawProcess { get; set; }
+
+        public InputManager Current { get; }
 
         float CenterPosition => 0;
         float Zoom => 1;
@@ -36,6 +35,7 @@ namespace IwUVEditor
             {
                 RefreshRate = 120
             };
+            Form.DrawContext = DrawContext;
 
             isDrawing = false;
         }
@@ -84,6 +84,7 @@ namespace IwUVEditor
                 ColorInDefault = new Color4(1, 0, 0, 0),
                 ColorInSelected = new Color4(1, 1, 0, 0)
             };
+            Form.DrawProcess = DrawProcess;
         }
 
         internal void LoadMaterials(List<Material> materials)

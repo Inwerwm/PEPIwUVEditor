@@ -30,8 +30,8 @@ namespace IwUVEditor
 
         public EditorLauncher(IPERunArgs args)
         {
-            Editor = editor;
             Current = new InputManager();
+            Editor = new Editor(args, Current);
 
             Form = Form ?? new FormEditor(this, Current);
             DrawContext = DrawContext ?? new DxContext(Form.DrawTargetControl)
@@ -52,10 +52,10 @@ namespace IwUVEditor
         {
             if (isDrawing)
                 StopDraw();
+            isDrawing = true;
             CreateDrawProcess();
             DrawContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
             Form.Visible = true;
-            isDrawing = true;
         }
 
         public void StopDraw()
@@ -63,9 +63,9 @@ namespace IwUVEditor
             if (!isDrawing)
                 return;
 
-            isDrawing = false;
             Form.Visible = false;
             DrawContext.StopDrawLoop();
+            isDrawing = false;
         }
 
         void CreateDrawProcess()

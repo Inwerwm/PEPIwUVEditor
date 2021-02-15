@@ -20,14 +20,14 @@ namespace IwUVEditor
 
         public IPEPluginOption Option => new PEPluginOption(false, true);
 
-        private Editor Editor { get; set; }
+        private EditorLauncher EditorLauncher { get; set; }
 
         public void Run(IPERunArgs args)
         {
             try
             {
-                Editor = Editor ?? new Editor(args);
-                Editor.Run();
+                EditorLauncher = EditorLauncher ?? new EditorLauncher(args);
+                EditorLauncher.Run();
             }
             catch (Exception ex)
             {

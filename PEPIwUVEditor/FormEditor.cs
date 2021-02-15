@@ -51,7 +51,8 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)
         {
-            ViewControl.ChangeScreenSize();
+            DrawContext?.ChangeResolution();
+            DrawProcess?.ChangeResolution();
         }
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
@@ -61,7 +62,7 @@ namespace IwUVEditor
 
         private void buttonResetCamera_Click(object sender, EventArgs e)
         {
-            ViewControl.ResetCamera();
+            DrawProcess.ResetCamera();
         }
 
         private void FormEditor_KeyDown(object sender, KeyEventArgs e)
@@ -95,7 +96,7 @@ namespace IwUVEditor
 
         private void 描画リミッター解除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ViewControl.ChangeRefreshLimitTo(!(sender as ToolStripMenuItem).Checked);
+            DrawProcess.LimitRefresh = !(sender as ToolStripMenuItem).Checked;
         }
 
         private void numericRadiusOfPosSq_ValueChanged(object sender, EventArgs e)
@@ -115,12 +116,12 @@ namespace IwUVEditor
 
         private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ViewControl.OrderUndo();
+            Editor.Undo();
         }
 
         private void やり直しToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ViewControl.OrderRedo();
+            Editor.Redo();
         }
     }
 }

@@ -91,31 +91,5 @@ namespace IwUVEditor
         {
             Form.LoadMaterials(materials.ToArray());
         }
-
-        internal void ChangeScreenSize()
-        {
-            DrawContext?.ChangeResolution();
-            DrawProcess?.ChangeResolution();
-        }
-
-        internal void ResetCamera()
-        {
-            DrawProcess.ResetCamera();
-        }
-
-        internal void ChangeRefreshLimitTo(bool value)
-        {
-            DrawProcess.LimitRefresh = value;
-        }
-
-        internal void OrderUndo()
-        {
-            Editor.Undo();
-        }
-
-        internal void OrderRedo()
-        {
-            Editor.Redo();
-        }
     }
 }

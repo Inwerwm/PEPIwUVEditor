@@ -44,7 +44,7 @@ namespace IwUVEditor
         {
             StopDraw();
             Editor.LoadModel();
-            LoadMaterials(Editor.Materials);
+            Form.LoadMaterials(Editor.Materials.ToArray());
             StartDraw();
         }
 
@@ -85,11 +85,6 @@ namespace IwUVEditor
                 ColorInSelected = new Color4(1, 1, 0, 0)
             };
             Form.DrawProcess = DrawProcess;
-        }
-
-        internal void LoadMaterials(List<Material> materials)
-        {
-            Form.LoadMaterials(materials.ToArray());
         }
     }
 }

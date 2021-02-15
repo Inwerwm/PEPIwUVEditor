@@ -230,8 +230,6 @@ namespace IwUVEditor
             this.splitUVMat.Panel1.ClientSizeChanged += new System.EventHandler(this.splitUVMat_Panel1_ClientSizeChanged);
             this.splitUVMat.Panel1.MouseEnter += new System.EventHandler(this.splitUVMat_Panel1_MouseEnter);
             this.splitUVMat.Panel1.MouseLeave += new System.EventHandler(this.splitUVMat_Panel1_MouseLeave);
-            this.splitUVMat.Panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseMove);
-            this.splitUVMat.Panel1.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.splitUVMat_Panel1_MouseWheel);
             // 
             // splitUVMat.Panel2
             // 

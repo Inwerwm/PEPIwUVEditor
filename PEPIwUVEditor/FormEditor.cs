@@ -52,10 +52,6 @@ namespace IwUVEditor
             ViewControl.ChangeScreenSize();
         }
 
-        private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)
-        {
-        }
-
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
         {
             Current.Material = (sender as ListBox).SelectedItem as Material;
@@ -113,10 +109,6 @@ namespace IwUVEditor
         {
             if ((sender as RadioButton).Checked)
                 Current.Tool = Tool.RectangleSelection;
-        }
-
-        private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
-        {
         }
 
         private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)

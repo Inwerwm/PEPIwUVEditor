@@ -24,9 +24,6 @@ namespace IwUVEditor
         IPXPmx Pmx { get; set; }
         public List<Material> Materials { get; private set; }
 
-        // 描画
-        EditorLauncher ViewControl { get; }
-
         // 現在の状態
         public InputManager Current { get; }
 
@@ -37,7 +34,6 @@ namespace IwUVEditor
         {
             Args = args;
             Current = new InputManager();
-            ViewControl = new EditorLauncher(this, Current);
 
             Current.InvokeCommand += (command) =>
             {

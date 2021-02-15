@@ -30,10 +30,10 @@ namespace IwUVEditor
         // エディタ機能
         Dictionary<Material, CommandManager> Commanders { get; set; }
 
-        public Editor(IPERunArgs args)
+        public Editor(IPERunArgs args, InputManager inputManager)
         {
             Args = args;
-            Current = new InputManager();
+            Current = inputManager;
 
             Current.InvokeCommand += (command) =>
             {

@@ -31,7 +31,7 @@ namespace IwUVEditor
         public EditorLauncher(IPERunArgs args)
         {
             Editor = editor;
-            Current = inputManager;
+            Current = new InputManager();
 
             Form = Form ?? new FormEditor(this, Current);
             DrawContext = DrawContext ?? new DxContext(Form.DrawTargetControl)

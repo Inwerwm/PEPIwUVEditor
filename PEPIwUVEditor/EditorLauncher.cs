@@ -27,7 +27,6 @@ namespace IwUVEditor
         float CenterPosition => 0;
         float Zoom => 1;
 
-
         public EditorLauncher(IPERunArgs args)
         {
             Current = new InputManager();
@@ -40,6 +39,7 @@ namespace IwUVEditor
             };
             isDrawing = false;
         }
+
         public void Run()
         {
             StopDraw();

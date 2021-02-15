@@ -14,12 +14,12 @@ namespace IwUVEditor
 {
     internal partial class FormEditor : Form
     {
-        EditorLauncher ViewControl { get; }
+        Editor Editor { get; }
         InputManager Current { get; }
 
-        public FormEditor(EditorLauncher viewControl, InputManager inputManager)
+        public FormEditor(Editor editor, InputManager inputManager)
         {
-            ViewControl = viewControl;
+            Editor = editor;
             Current = inputManager;
 
             InitializeComponent();

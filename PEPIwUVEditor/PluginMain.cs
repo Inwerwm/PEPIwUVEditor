@@ -42,6 +42,7 @@ namespace IwUVEditor
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    EditorLauncher?.Dispose();
                 }
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします

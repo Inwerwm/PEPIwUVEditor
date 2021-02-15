@@ -2,6 +2,7 @@
 using DxManager.Camera;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
+using PEPlugin;
 using SlimDX;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace IwUVEditor
         float Zoom => 1;
 
 
-        public EditorLauncher(Editor editor, InputManager inputManager)
+        public EditorLauncher(IPERunArgs args)
         {
             Editor = editor;
             Current = inputManager;
@@ -38,6 +39,13 @@ namespace IwUVEditor
                 RefreshRate = 120
             };
             isDrawing = false;
+        }
+        public void Run()
+        {
+            StopDraw();
+            Editor.LoadModel();
+            LoadMaterials(Editor.Materials);
+            StartDraw();
         }
 
         public void StartDraw()

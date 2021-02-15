@@ -45,13 +45,6 @@ namespace IwUVEditor
             };
         }
 
-        public void Run()
-        {
-            ViewControl.StopDraw();
-            LoadModel();
-            ViewControl.StartDraw();
-        }
-
         public void LoadModel()
         {
             // モデルを読込
@@ -60,7 +53,6 @@ namespace IwUVEditor
             // 材質を読込
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
             Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
-            ViewControl.LoadMaterials(Materials);
         }
 
         public void Undo()

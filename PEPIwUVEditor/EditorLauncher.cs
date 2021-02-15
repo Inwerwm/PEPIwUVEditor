@@ -57,6 +57,9 @@ namespace IwUVEditor
             StartDraw();
         }
 
+        /// <summary>
+        /// DrawProcessを新規に作り描画ループに追加する
+        /// </summary>
         public void StartDraw()
         {
             if (isDrawing)
@@ -67,6 +70,9 @@ namespace IwUVEditor
             Form.Visible = true;
         }
 
+        /// <summary>
+        /// 描画プロセスをループから除去しフォームを非表示にする
+        /// </summary>
         public void StopDraw()
         {
             if (!isDrawing)

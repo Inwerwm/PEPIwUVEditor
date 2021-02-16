@@ -96,24 +96,6 @@ namespace IwUVEditor.DirectX
         {
             Current = inputManager;
 
-            //Current.MaterialIsChanged += (value) =>
-            //{
-            //    Material material = value as Material;
-
-            //    if (Context is null)
-            //        return;
-            //    if (!TextureCache.Keys.Contains(material))
-            //    {
-            //        TextureCache.Add(material, LoadTexture(material));
-            //        UVMeshCache.Add(material, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
-            //        PositionSquareCache.Add(material, new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, Current.RadiusOfPositionSquare, ColorInDefault, colorInSelected));
-            //    }
-
-            //    CurrentTexture = TextureCache[material];
-            //    CurrentUVMesh = UVMeshCache[material];
-            //    CurrentPositionSquares = PositionSquareCache[material];
-            //};
-
             Current.RadiusOfPosSqIsChanged += (value) =>
             {
                 float radius = (float)value;

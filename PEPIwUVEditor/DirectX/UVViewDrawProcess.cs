@@ -192,7 +192,9 @@ namespace IwUVEditor.DirectX
 
             (Camera as DxCameraOrthographic).ViewVolumeSize = (Current.ScreenSize.X, Current.ScreenSize.Y);
 
-            foreach (var ps in PositionSquareCache.Values)
+            if (PositionSquares is null)
+                return;
+            foreach (var ps in PositionSquares.Values)
             {
                 ps.ScreenSize = Current.ScreenSize;
             }

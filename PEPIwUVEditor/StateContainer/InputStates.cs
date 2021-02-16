@@ -19,5 +19,11 @@ namespace IwUVEditor.StateContainer
             { Keys.ShiftKey, false },
             { Keys.ControlKey, false }
         };
+        public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
+        {
+            { MouseButtons.Left, false },
+            { MouseButtons.Middle, false },
+            { MouseButtons.Right, false },
+        };
     }
 }

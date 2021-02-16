@@ -30,13 +30,6 @@ namespace IwUVEditor
         EditorStates Current { get; }
         InputStates Input { get; }
 
-        public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
-        {
-            { MouseButtons.Left, false },
-            { MouseButtons.Middle, false },
-            { MouseButtons.Right, false },
-        };
-
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
         public FormEditor(Editor editor, EditorStates inputManager)
@@ -79,31 +72,31 @@ namespace IwUVEditor
                     DrawProcess.Scale.WheelDelta += e.WheelDelta * modifier;
                     break;
                 case MouseButtonFlags.MiddleUp:
-                    IsClicking[MouseButtons.Middle] = false;
+                    Input.IsClicking[MouseButtons.Middle] = false;
                     break;
                 case MouseButtonFlags.MiddleDown:
-                    IsClicking[MouseButtons.Middle] = true;
+                    Input.IsClicking[MouseButtons.Middle] = true;
                     break;
                 case MouseButtonFlags.RightUp:
-                    IsClicking[MouseButtons.Right] = false;
+                    Input.IsClicking[MouseButtons.Right] = false;
                     break;
                 case MouseButtonFlags.RightDown:
-                    IsClicking[MouseButtons.Right] = true;
+                    Input.IsClicking[MouseButtons.Right] = true;
                     break;
                 case MouseButtonFlags.LeftUp:
-                    IsClicking[MouseButtons.Left] = false;
+                    Input.IsClicking[MouseButtons.Left] = false;
                     break;
                 case MouseButtonFlags.LeftDown:
-                    IsClicking[MouseButtons.Left] = true;
+                    Input.IsClicking[MouseButtons.Left] = true;
                     break;
                 default:
                     break;
             }
 
-            if (IsClicking[MouseButtons.Middle])
+            if (Input.IsClicking[MouseButtons.Middle])
                 DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
-            Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), IsClicking[MouseButtons.Left]);
+            Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), Input.IsClicking[MouseButtons.Left]);
             Editor.DriveTool(Input.MouseLeft, Input.IsPress);
         }
 

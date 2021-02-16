@@ -23,7 +23,7 @@ namespace IwUVEditor.Tool
 
         public RectangleSelection(SlimDX.Direct3D11.Device device, SlimDX.Direct3D11.Effect effect, SlimDX.Direct3D11.RasterizerState drawMode, GenerableMap<Material, PositionSquares> posSquares)
         {
-            SelectionRectangle = new SelectionRectangle(device, effect, drawMode, new SlimDX.Color4(1, 1, 1));
+            SelectionRectangle = new SelectionRectangle(device, effect, drawMode, new SlimDX.Color4(0.5f, 1, 1, 1));
             PosSquares = posSquares;
         }
 

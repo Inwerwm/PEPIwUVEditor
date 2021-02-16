@@ -28,6 +28,7 @@ namespace IwUVEditor
             }
         }
         EditorStates Current { get; }
+        InputStates Input { get; }
 
         public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
         {
@@ -42,6 +43,7 @@ namespace IwUVEditor
         {
             Editor = editor;
             Current = inputManager;
+            Input = new InputStates();
 
             InitializeComponent();
             InitializeCurrent();
@@ -67,10 +69,10 @@ namespace IwUVEditor
 
         void MouseInput(object sender, MouseInputEventArgs e)
         {
-            if (!IsActive)
+            if (!Input.IsActive)
                 return;
 
-            float modifier = (Current.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Current.IsPress[Keys.ControlKey] ? 4f : 1f);
+            float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
 
             switch (e.ButtonFlags)
             {
@@ -102,8 +104,8 @@ namespace IwUVEditor
             if (IsClicking[MouseButtons.Middle])
                 DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
-            Current.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(MousePos), IsClicking[MouseButtons.Left]);
-            Editor.DriveTool(Current.MouseLeft, Current.IsPress);
+            Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), IsClicking[MouseButtons.Left]);
+            Editor.DriveTool(Input.MouseLeft, Input.IsPress);
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)
@@ -124,30 +126,30 @@ namespace IwUVEditor
 
         private void FormEditor_KeyDown(object sender, KeyEventArgs e)
         {
-            Current.IsPress[Keys.ShiftKey] = e.Shift;
-            Current.IsPress[Keys.ControlKey] = e.Control;
+            Input.IsPress[Keys.ShiftKey] = e.Shift;
+            Input.IsPress[Keys.ControlKey] = e.Control;
         }
 
         private void FormEditor_KeyUp(object sender, KeyEventArgs e)
         {
-            Current.IsPress[Keys.ShiftKey] = e.Shift;
-            Current.IsPress[Keys.ControlKey] = e.Control;
+            Input.IsPress[Keys.ShiftKey] = e.Shift;
+            Input.IsPress[Keys.ControlKey] = e.Control;
         }
 
         private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)
         {
-            IsActive = true;
+            Input.IsActive = true;
         }
 
         private void splitUVMat_Panel1_MouseLeave(object sender, EventArgs e)
         {
-            IsActive = false;
+            Input.IsActive = false;
         }
 
         private void timerEvery_Tick(object sender, EventArgs e)
         {
             var mousePos = DrawTargetControl.PointToClient(Cursor.Position);
-            MousePos = new SlimDX.Vector2(mousePos.X, mousePos.Y);
+            Input.MousePos = new Vector2(mousePos.X, mousePos.Y);
             toolStripStatusLabelFPS.Text = $"{Current.FPS:###.##}fps";
         }
 

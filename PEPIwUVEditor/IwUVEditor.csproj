@@ -95,7 +95,6 @@
     <Compile Include="DirectX\Vertex\VertexStruct.cs" />
     <Compile Include="Tool\IEditTool.cs" />
     <Compile Include="Tool\RectangleSelection.cs" />
-    <Compile Include="Tool\ToolType.cs" />
     <Compile Include="EditorLauncher.cs" />
   </ItemGroup>
   <ItemGroup>

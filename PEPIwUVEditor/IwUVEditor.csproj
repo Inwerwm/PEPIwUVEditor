@@ -96,6 +96,7 @@
     <Compile Include="Tool\IEditTool.cs" />
     <Compile Include="Tool\RectangleSelection.cs" />
     <Compile Include="EditorLauncher.cs" />
+    <Compile Include="Manager\ToolBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

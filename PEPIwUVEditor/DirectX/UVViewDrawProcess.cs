@@ -26,11 +26,11 @@ namespace IwUVEditor.DirectX
         private Color4 colorInSelected;
         #endregion
 
-        #region プロパティ
+        #region プロパティ - EditorStates
         public EditorStates Current { get; }
+        #endregion
 
-        public RasterizerStateProvider Rasterize { get; private set; }
-
+        #region プロパティ - 変換行列
         private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
         private Matrix InvertTransMatrix
         {
@@ -55,12 +55,18 @@ namespace IwUVEditor.DirectX
             LowerLimit = -10000,
             UpperLimit = 12000,
         };
+        #endregion
 
+        #region プロパティ - 描画要素
         TexturePlate TexturePlate { get; set; }
 
         internal GenerableMap<Material, ShaderResourceView> Textures { get; set; }
         internal GenerableMap<Material, UVMesh> UVMeshes { get; set; }
         internal GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
+        #endregion
+
+        #region プロパティ - 描画設定
+        public RasterizerStateProvider Rasterize { get; private set; }
 
         public float RadiusOfPositionSquare
         {

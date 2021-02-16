@@ -2,6 +2,7 @@
 using IwUVEditor.Command;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
+using IwUVEditor.Tool;
 using SlimDX;
 using SlimDX.RawInput;
 using System;
@@ -101,7 +102,7 @@ namespace IwUVEditor
                 DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
             Current.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Current.MousePos), IsClicking[MouseButtons.Left]);
-            // EditTool.ReadMouse(Current.MouseLeft);
+            Editor.DriveTool(Current.MouseLeft, Current.IsPress);
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)
@@ -166,7 +167,7 @@ namespace IwUVEditor
         private void radioButtonRectangleSelection_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as RadioButton).Checked)
-                Current.Tool = Tool.ToolType.RectangleSelection;
+                Current.Tool = new RectangleSelection(DrawProcess.SelectionRectangle, DrawProcess.CurrentPositionSquares);
         }
 
         private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)

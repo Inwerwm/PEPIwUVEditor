@@ -1,4 +1,5 @@
 ﻿using IwUVEditor.Command;
+using IwUVEditor.Tool;
 using SlimDX;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -32,7 +33,7 @@ namespace IwUVEditor.Manager
                     MaterialIsChanged(material);
             }
         }
-        public Tool.ToolType Tool { get; set; }
+        public IEditTool Tool { get; set; }
 
         public float RadiusOfPositionSquare
         {

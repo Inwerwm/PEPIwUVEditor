@@ -51,6 +51,13 @@ namespace IwUVEditor
             Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
         }
 
+        public void DriveTool(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)
+        {
+            Current.Tool.ReadInput(mouse, pressKey);
+            if (Current.Tool.IsReady)
+                Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));
+        }
+
         public void Undo()
         {
             if (Current.Material is null)

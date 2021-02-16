@@ -14,5 +14,6 @@ namespace IwUVEditor.Tool
 
         void ReadInput(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey);
         IEditorCommand CreateCommand(Material target);
+        void PrepareDrawing();
     }
 }

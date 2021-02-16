@@ -89,6 +89,7 @@
     <Compile Include="DirectX\RasterizerStateProvider.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Manager\ScaleManager.cs" />
+    <Compile Include="StateContainer\InputStates.cs" />
     <Compile Include="TGASharpLib.cs" />
     <Compile Include="DirectX\UVViewDrawProcess.cs" />
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />

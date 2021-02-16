@@ -12,6 +12,7 @@ namespace IwUVEditor.Tool
     class RectangleSelection : IEditTool
     {
         public bool IsReady { get; private set; }
+        private bool NeedsDrawing { get; set; }
 
         SelectionRectangle ToDrawRectangle { get; }
         PositionSquares ToUpdateElement { get; }
@@ -34,11 +35,13 @@ namespace IwUVEditor.Tool
             if (mouse.IsDragging)
             {
                 ToDrawRectangle.EndPos = mouse.Current;
+                NeedsDrawing = true;
             }
 
             if (mouse.IsEndDrag)
             {
                 SelectionMode = pressKey[System.Windows.Forms.Keys.ShiftKey] ? SelectionMode.Union : pressKey[System.Windows.Forms.Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
+                NeedsDrawing = false;
                 IsReady = true;
                 mouse.Reset();
             }
@@ -47,6 +50,12 @@ namespace IwUVEditor.Tool
         public IEditorCommand CreateCommand(Material target)
         {
             return new CommandRectangleSelection(target, ToDrawRectangle.StartPos, ToDrawRectangle.EndPos, SelectionMode, ToUpdateElement.UpdateVertices);
+        }
+
+        public void PrepareDrawing()
+        {
+            if (NeedsDrawing)
+                ToDrawRectangle.Prepare();
         }
     }
 }

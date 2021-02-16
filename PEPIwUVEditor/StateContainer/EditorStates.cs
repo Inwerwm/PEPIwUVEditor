@@ -11,13 +11,6 @@ namespace IwUVEditor.StateContainer
     {
         private float radiusOfPositionSquare;
 
-        public DragManager MouseLeft { get; } = new DragManager();
-        public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>
-        {
-            { Keys.ShiftKey, false },
-            { Keys.ControlKey, false }
-        };
-
         public Material Material { get; set; }
         public IEditTool Tool { get; set; }
 

@@ -28,8 +28,6 @@ namespace IwUVEditor
             }
         }
         EditorStates Current { get; }
-        bool IsActive { get; set; }
-        Vector2 MousePos { get; set; }
 
         public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
         {

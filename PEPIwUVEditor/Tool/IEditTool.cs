@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.Tool
 {
-    interface IEditTool
+    interface IEditTool : IDisposable
     {
         bool IsReady { get; }
 

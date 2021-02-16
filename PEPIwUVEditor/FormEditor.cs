@@ -27,6 +27,7 @@ namespace IwUVEditor
             }
         }
         StateContainer Current { get; }
+        bool IsActive { get; set; }
 
         public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
         {
@@ -66,7 +67,7 @@ namespace IwUVEditor
 
         void MouseInput(object sender, MouseInputEventArgs e)
         {
-            if (!Current.IsActive)
+            if (!IsActive)
                 return;
 
             float modifier = (Current.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Current.IsPress[Keys.ControlKey] ? 4f : 1f);
@@ -135,12 +136,12 @@ namespace IwUVEditor
 
         private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)
         {
-            Current.IsActive = true;
+            IsActive = true;
         }
 
         private void splitUVMat_Panel1_MouseLeave(object sender, EventArgs e)
         {
-            Current.IsActive = false;
+            IsActive = false;
         }
 
         private void timerEvery_Tick(object sender, EventArgs e)

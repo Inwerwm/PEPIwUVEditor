@@ -19,8 +19,6 @@ namespace IwUVEditor.Manager
 
         public Vector2 MousePos { get; set; }
 
-        public bool IsActive { get; set; }
-
         public Material Material { get; set; }
         public IEditTool Tool { get; set; }
 

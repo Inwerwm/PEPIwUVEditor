@@ -11,6 +11,7 @@ namespace IwUVEditor.DirectX.DrawElement
     class SelectionRectangle : IDrawElement
     {
         private bool disposedValue;
+        private Color4 color;
 
         Device Device { get; }
         EffectPass UsingEffectPass { get; }
@@ -21,7 +22,15 @@ namespace IwUVEditor.DirectX.DrawElement
         Buffer VertexBuffer { get; set; }
         Buffer IndexBuffer { get; set; }
 
-        public Color4 Color { get; set; }
+        public Color4 Color
+        {
+            get => color;
+            set
+            {
+                color = value;
+                CreateVertexBuffer();
+            }
+        }
 
         public Vector2 StartPos { get; set; }
         public Vector2 EndPos { get; set; }
@@ -61,6 +70,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         void CreateVertexLayout()
         {
+            VertexLayout?.Dispose();
             VertexLayout = new InputLayout(
                 Device,
                 UsingEffectPass.Description.Signature,
@@ -70,6 +80,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         void CreateVertexBuffer()
         {
+            VertexBuffer?.Dispose();
             using (var vertexStream = new DataStream(CreateVertices(), true, true))
                 VertexBuffer = new Buffer(
                     Device,
@@ -84,6 +95,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         void CreateIndexBuffer()
         {
+            IndexBuffer?.Dispose();
             using (DataStream indexStream = new DataStream(CreateIndices(), true, true))
                 IndexBuffer = new Buffer(
                     Device,

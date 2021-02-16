@@ -58,15 +58,6 @@ namespace IwUVEditor.DirectX
         GenerableMap<Material, UVMesh> UVMeshes { get; set; }
         GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
 
-        //Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
-        //ShaderResourceView CurrentTexture { get; set; }
-
-        //Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
-        //UVMesh CurrentUVMesh { get; set; }
-
-        //Dictionary<Material, PositionSquares> PositionSquareCache { get; } = new Dictionary<Material, PositionSquares>();
-        //PositionSquares CurrentPositionSquares;
-
         public Color4 ColorInDefault
         {
             get => colorInDefault;

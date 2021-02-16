@@ -47,6 +47,8 @@ namespace IwUVEditor
             Pmx = Args.Host.Connector.Pmx.GetCurrentState();
 
             // 材質を読込
+            if (!Pmx.Material.Any())
+                throw new Exception("モデルに材質が含まれていません。");
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
             Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
             Current.Material = Materials.First();

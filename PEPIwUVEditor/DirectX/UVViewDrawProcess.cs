@@ -24,7 +24,7 @@ namespace IwUVEditor.DirectX
 
         public InputManager Current { get; }
 
-        RasterizerStateProvider Rasterize { get; set; }
+        public RasterizerStateProvider Rasterize { get; private set; }
 
         private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
         private Matrix InvertTransMatrix

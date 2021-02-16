@@ -59,7 +59,7 @@ namespace IwUVEditor
             Editor.LoadModel();
             Form.LoadMaterials(Editor.Materials.ToArray());
             StartDraw();
-            Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
+            Form.InitializeWhenStartDrawing();
         }
 
         /// <summary>

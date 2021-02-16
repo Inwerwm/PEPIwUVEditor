@@ -46,14 +46,13 @@ namespace IwUVEditor
             Input = new InputStates();
 
             InitializeComponent();
-            InitializeCurrent();
-
-            timerEvery.Enabled = true;
         }
 
-        private void InitializeCurrent()
+        internal void InitializeWhenStartDrawing()
         {
             DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
+            Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
+            timerEvery.Enabled = true;
         }
 
         internal void LoadMaterials(Material[] materials)

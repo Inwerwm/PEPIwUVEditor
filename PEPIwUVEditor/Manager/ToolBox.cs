@@ -1,14 +1,10 @@
 ﻿using IwUVEditor.DirectX;
-using SlimDX.Direct3D11;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.Tool
 {
-    class ToolBox:IDisposable
+    class ToolBox : IDisposable
     {
         private bool disposedValue;
 
@@ -25,7 +21,7 @@ namespace IwUVEditor.Tool
         T CallTool<T>(Func<T> constructor, UVViewDrawProcess process) where T : IEditTool
         {
             IEditTool tool;
-            if(!ToolOf.TryGetValue(typeof(T), out tool))
+            if (!ToolOf.TryGetValue(typeof(T), out tool))
                 ToolOf.Add(typeof(T), null);
 
             if (tool == null || Process != process)

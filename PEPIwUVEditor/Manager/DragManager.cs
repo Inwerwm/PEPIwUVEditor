@@ -1,10 +1,4 @@
 ﻿using SlimDX;
-using SlimDX.RawInput;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.Manager
 {
@@ -46,7 +40,7 @@ namespace IwUVEditor.Manager
                 IsStartingJust = false;
 
             // true => false : ドラッグ終了
-            if(this.state && !clickState)
+            if (this.state && !clickState)
             {
                 End = currentMousePosition;
                 IsDragging = false;

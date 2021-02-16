@@ -1,15 +1,10 @@
 ﻿using DxManager;
 using DxManager.Camera;
 using IwUVEditor.DirectX;
-using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
 using PEPlugin;
 using SlimDX;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor
 {

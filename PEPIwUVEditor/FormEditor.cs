@@ -1,13 +1,9 @@
 ﻿using DxManager;
-using IwUVEditor.Command;
 using IwUVEditor.DirectX;
-using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
-using IwUVEditor.Tool;
 using SlimDX;
 using SlimDX.RawInput;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace IwUVEditor

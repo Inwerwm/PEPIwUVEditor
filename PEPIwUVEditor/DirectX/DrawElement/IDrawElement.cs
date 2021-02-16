@@ -1,10 +1,4 @@
-﻿using SlimDX.Direct3D11;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Buffer = SlimDX.Direct3D11.Buffer;
+﻿using System;
 
 namespace IwUVEditor.DirectX.DrawElement
 {

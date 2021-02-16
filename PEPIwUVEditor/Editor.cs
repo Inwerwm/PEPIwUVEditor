@@ -38,11 +38,6 @@ namespace IwUVEditor
             Args = args;
             Current = inputManager;
             ToolBox = new Tool.ToolBox();
-
-            Current.InvokeCommand += (command) =>
-            {
-                Commanders[Current.Material].Do(command);
-            };
         }
 
         public void LoadModel()

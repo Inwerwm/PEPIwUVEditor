@@ -49,6 +49,7 @@ namespace IwUVEditor.Tool
 
         public IEditorCommand CreateCommand(Material target)
         {
+            IsReady = false;
             return new CommandRectangleSelection(target, ToDrawRectangle.StartPos, ToDrawRectangle.EndPos, SelectionMode, ToUpdateElement.UpdateVertices);
         }
 

@@ -101,23 +101,7 @@ namespace IwUVEditor
                 DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
             Current.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Current.MousePos), IsClicking[MouseButtons.Left]);
-            if (Current.MouseLeft.IsStartingJust)
-            {
-                DrawProcess.SelectionRectangle.StartPos = Current.MouseLeft.Start;
-            }
-
-            if (Current.MouseLeft.IsDragging)
-            {
-                DrawProcess.SelectionRectangle.EndPos = Current.MouseLeft.Current;
-            }
-
-            if (Current.MouseLeft.IsEndDrag)
-            {
-                Command.SelectionMode selectionMode = Current.IsPress[Keys.ShiftKey] ? Command.SelectionMode.Union : Current.IsPress[Keys.ControlKey] ? Command.SelectionMode.Difference : Command.SelectionMode.Create;
-                if (!(Current.Material is null))
-                    Current.Command = new CommandRectangleSelection(Current.Material, Current.MouseLeft.Start, Current.MouseLeft.End, selectionMode, DrawProcess.CurrentPositionSquares.UpdateVertices);
-                Current.MouseLeft.Reset();
-            }
+            // EditTool.ReadMouse(Current.MouseLeft);
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)

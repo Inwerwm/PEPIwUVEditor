@@ -1,4 +1,5 @@
 ﻿using IwUVEditor.Command;
+using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.Manager;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,42 @@ namespace IwUVEditor.Tool
 {
     class RectangleSelection : IEditTool
     {
-        public bool IsReady => throw new NotImplementedException();
+        public bool IsReady { get; private set; }
 
-        public IEditorCommand CreateCommand()
+        SelectionRectangle ToDrawRectangle { get; }
+        PositionSquares ToUpdateElement { get; }
+
+        SelectionMode SelectionMode { get; set; }
+
+        public RectangleSelection(SelectionRectangle toDrawRectangle, PositionSquares toUpdateElement)
         {
-            if (!IsReady)
-                throw new InvalidOperationException();
+            ToDrawRectangle = toDrawRectangle;
+            ToUpdateElement = toUpdateElement;
         }
 
-        public void ReadMouse(DragManager mouse)
+        public void ReadInput(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)
         {
-            throw new NotImplementedException();
+            if (mouse.IsStartingJust)
+            {
+                ToDrawRectangle.StartPos = mouse.Start;
+            }
+
+            if (mouse.IsDragging)
+            {
+                ToDrawRectangle.EndPos = mouse.Current;
+            }
+
+            if (mouse.IsEndDrag)
+            {
+                SelectionMode = pressKey[System.Windows.Forms.Keys.ShiftKey] ? SelectionMode.Union : pressKey[System.Windows.Forms.Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
+                IsReady = true;
+                mouse.Reset();
+            }
+        }
+
+        public IEditorCommand CreateCommand(Material target)
+        {
+            return new CommandRectangleSelection(target, ToDrawRectangle.StartPos, ToDrawRectangle.EndPos, SelectionMode, ToUpdateElement.UpdateVertices);
         }
     }
 }

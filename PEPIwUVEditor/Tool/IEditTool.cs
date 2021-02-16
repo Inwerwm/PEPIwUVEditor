@@ -12,7 +12,7 @@ namespace IwUVEditor.Tool
     {
         bool IsReady { get; }
 
-        void ReadMouse(DragManager mouse);
-        IEditorCommand CreateCommand();
+        void ReadInput(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey);
+        IEditorCommand CreateCommand(Material target);
     }
 }

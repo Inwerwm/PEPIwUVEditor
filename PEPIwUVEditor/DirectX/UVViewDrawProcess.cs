@@ -137,8 +137,6 @@ namespace IwUVEditor.DirectX
 
         public override void Init()
         {
-            CurrentTexture = LoadTexture(null);
-
             Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
@@ -158,16 +156,16 @@ namespace IwUVEditor.DirectX
             // 深度バッファ
             Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
             // テクスチャを読み込み
-            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(CurrentTexture);
+            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Textures[Current.Material]);
 
             // テクスチャ板を描画
             TexturePlate.Prepare();
 
             // メッシュを描画
-            CurrentUVMesh?.Prepare();
+            UVMeshes[Current.Material].Prepare();
 
             // 頂点位置に四角を描画
-            CurrentPositionSquares?.Prepare();
+            PositionSquares[Current.Material].Prepare();
 
             // ツール固有の描画処理を実行
             Current.Tool.PrepareDrawing();

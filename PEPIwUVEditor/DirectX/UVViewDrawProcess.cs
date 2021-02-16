@@ -32,7 +32,7 @@ namespace IwUVEditor.DirectX
             get
             {
                 Matrix iViewMat = Matrix.Invert(Camera.CreateViewMatrix());
-                Matrix iPrjMat = Matrix.Invert((Camera as DxManager.Camera.DxCameraOrthographic).CreateProjectionMatrix());
+                Matrix iPrjMat = Matrix.Invert((Camera as DxCameraOrthographic).CreateProjectionMatrix());
                 Matrix iOfstMat = Matrix.Invert(Matrix.Translation(ShiftOffset));
                 Matrix iSclMat = Matrix.Invert(Matrix.Scaling(Scale.Scale, Scale.Scale, 1));
                 return iSclMat * iOfstMat * iPrjMat * iViewMat;

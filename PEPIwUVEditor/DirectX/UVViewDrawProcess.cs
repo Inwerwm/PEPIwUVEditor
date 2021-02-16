@@ -250,12 +250,11 @@ namespace IwUVEditor.DirectX
         protected override void Dispose(bool disposing)
         {
             TexturePlate?.Dispose();
-            CurrentTexture = null;
-            foreach (var resource in TextureCache.Values)
+            foreach (var resource in Textures.Values)
             {
                 resource?.Dispose();
             }
-            foreach (var mesh in UVMeshCache.Values)
+            foreach (var mesh in UVMeshes.Values)
             {
                 mesh?.Dispose();
             }

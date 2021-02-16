@@ -164,15 +164,7 @@ namespace IwUVEditor.DirectX
             CurrentPositionSquares?.Prepare();
 
             // ツール固有の描画処理を実行
-            switch (Current.Tool)
-            {
-                case Tool.ToolType.RectangleSelection:
-                    if(Current.MouseLeft.IsDragging)
-                        SelectionRectangle.Prepare();
-                    break;
-                default:
-                    break;
-            }
+            Current.Tool.PrepareDrawing();
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);

@@ -53,9 +53,9 @@ namespace IwUVEditor.DirectX
 
         TexturePlate TexturePlate { get; set; }
 
-        GenerableMap<Material, ShaderResourceView> Textures { get; set; }
-        GenerableMap<Material, UVMesh> UVMeshes { get; set; }
-        GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
+        internal GenerableMap<Material, ShaderResourceView> Textures { get; set; }
+        internal GenerableMap<Material, UVMesh> UVMeshes { get; set; }
+        internal GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
 
         public Color4 ColorInDefault
         {

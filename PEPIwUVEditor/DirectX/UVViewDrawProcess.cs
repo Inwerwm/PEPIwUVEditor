@@ -54,6 +54,10 @@ namespace IwUVEditor.DirectX
         TexturePlate TexturePlate { get; set; }
         SelectionRectangle SelectionRectangle { get; set; }
 
+        GenerableMap<Material, ShaderResourceView> Textures { get; set; }
+        GenerableMap<Material, UVMesh> UVMeshes { get; set; }
+        GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
+
         Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
         ShaderResourceView CurrentTexture { get; set; }
 
@@ -133,6 +137,10 @@ namespace IwUVEditor.DirectX
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
             SelectionRectangle = new SelectionRectangle(Context.Device, Effect, Rasterize.Solid, new Color4(0.5f, 1, 1, 1));
+
+            Textures = new GenerableMap<Material, ShaderResourceView>(LoadTexture);
+            UVMeshes = new GenerableMap<Material, UVMesh>((material) => new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
+            PositionSquares = new GenerableMap<Material, PositionSquares>((material) => new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, Current.RadiusOfPositionSquare, ColorInDefault, colorInSelected));
         }
 
         public override void Draw()

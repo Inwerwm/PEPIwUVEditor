@@ -1,17 +1,11 @@
-﻿using DxManager;
-using DxManager.Camera;
-using IwUVEditor.Command;
-using IwUVEditor.DirectX;
+﻿using IwUVEditor.Command;
 using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
 using PEPlugin;
 using PEPlugin.Pmx;
-using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor
 {

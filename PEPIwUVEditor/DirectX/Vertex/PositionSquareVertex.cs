@@ -1,11 +1,6 @@
 ﻿using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.DirectX.Vertex
 {

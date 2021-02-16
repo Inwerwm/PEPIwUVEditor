@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor
 {
@@ -33,7 +29,7 @@ namespace IwUVEditor
         public LockedBitmap(Bitmap bitmap)
         {
             Bitmap = bitmap;
-            
+
             BitmapData = Bitmap.LockBits(
                 new Rectangle(0, 0, Bitmap.Width, Bitmap.Height),
                 ImageLockMode.ReadWrite,

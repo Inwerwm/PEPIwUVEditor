@@ -1,9 +1,4 @@
-﻿using IwUVEditor.Command;
-using IwUVEditor.Manager;
-using IwUVEditor.Tool;
-using SlimDX;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using IwUVEditor.Tool;
 
 namespace IwUVEditor.StateContainer
 {

@@ -17,10 +17,10 @@ namespace IwUVEditor.Command
 
         Action Update { get; }
 
-        public Vector2 StartPosition { get;}
-        public Vector2 EndPosition { get;}
+        public Vector2 StartPosition { get; }
+        public Vector2 EndPosition { get; }
 
-        public SelectionMode Mode { get;}
+        public SelectionMode Mode { get; }
 
         public CommandRectangleSelection(Material targetMaterial, Vector2 startPosition, Vector2 endPosition, SelectionMode mode, Action updateAction)
         {

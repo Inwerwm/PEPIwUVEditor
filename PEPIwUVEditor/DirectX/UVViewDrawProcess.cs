@@ -58,14 +58,14 @@ namespace IwUVEditor.DirectX
         GenerableMap<Material, UVMesh> UVMeshes { get; set; }
         GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
 
-        Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
-        ShaderResourceView CurrentTexture { get; set; }
+        //Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
+        //ShaderResourceView CurrentTexture { get; set; }
 
-        Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
-        UVMesh CurrentUVMesh { get; set; }
+        //Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
+        //UVMesh CurrentUVMesh { get; set; }
 
-        Dictionary<Material, PositionSquares> PositionSquareCache { get; } = new Dictionary<Material, PositionSquares>();
-        PositionSquares CurrentPositionSquares;
+        //Dictionary<Material, PositionSquares> PositionSquareCache { get; } = new Dictionary<Material, PositionSquares>();
+        //PositionSquares CurrentPositionSquares;
 
         public Color4 ColorInDefault
         {
@@ -101,23 +101,23 @@ namespace IwUVEditor.DirectX
         {
             Current = inputManager;
 
-            Current.MaterialIsChanged += (value) =>
-            {
-                Material material = value as Material;
+            //Current.MaterialIsChanged += (value) =>
+            //{
+            //    Material material = value as Material;
 
-                if (Context is null)
-                    return;
-                if (!TextureCache.Keys.Contains(material))
-                {
-                    TextureCache.Add(material, LoadTexture(material));
-                    UVMeshCache.Add(material, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
-                    PositionSquareCache.Add(material, new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, Current.RadiusOfPositionSquare, ColorInDefault, colorInSelected));
-                }
+            //    if (Context is null)
+            //        return;
+            //    if (!TextureCache.Keys.Contains(material))
+            //    {
+            //        TextureCache.Add(material, LoadTexture(material));
+            //        UVMeshCache.Add(material, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
+            //        PositionSquareCache.Add(material, new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, Current.RadiusOfPositionSquare, ColorInDefault, colorInSelected));
+            //    }
 
-                CurrentTexture = TextureCache[material];
-                CurrentUVMesh = UVMeshCache[material];
-                CurrentPositionSquares = PositionSquareCache[material];
-            };
+            //    CurrentTexture = TextureCache[material];
+            //    CurrentUVMesh = UVMeshCache[material];
+            //    CurrentPositionSquares = PositionSquareCache[material];
+            //};
 
             Current.RadiusOfPosSqIsChanged += (value) =>
             {

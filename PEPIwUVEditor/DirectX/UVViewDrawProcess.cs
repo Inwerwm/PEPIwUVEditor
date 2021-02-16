@@ -39,8 +39,8 @@ namespace IwUVEditor.DirectX
             }
         }
 
-        Vector3 ShiftOffset { get; set; }
-        ScaleManager Scale { get; } = new ScaleManager()
+        internal Vector3 ShiftOffset { get; set; }
+        internal ScaleManager Scale { get; } = new ScaleManager()
         {
             DeltaOffset = -10000,
             Amplitude = 200000,
@@ -49,12 +49,6 @@ namespace IwUVEditor.DirectX
             Gain = 1,
             LowerLimit = -10000,
             UpperLimit = 12000,
-        };
-        public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
-        {
-            { MouseButtons.Left, false },
-            { MouseButtons.Middle, false },
-            { MouseButtons.Right, false },
         };
 
         TexturePlate TexturePlate { get; set; }
@@ -139,8 +133,6 @@ namespace IwUVEditor.DirectX
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
             SelectionRectangle = new SelectionRectangle(Context.Device, Effect, Rasterize.Solid, new Color4(0.5f, 1, 1, 1));
-
-            AddMouseInputProcess(MouseInput);
         }
 
         public override void Draw()
@@ -189,62 +181,6 @@ namespace IwUVEditor.DirectX
             Scale.WheelDelta = 0;
         }
 
-        protected void MouseInput(object sender, MouseInputEventArgs e)
-        {
-            if (!Current.IsActive)
-                return;
-
-            float modifier = (Current.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Current.IsPress[Keys.ControlKey] ? 4f : 1f);
-
-            switch (e.ButtonFlags)
-            {
-                case MouseButtonFlags.MouseWheel:
-                    Scale.WheelDelta += e.WheelDelta * modifier;
-                    break;
-                case MouseButtonFlags.MiddleUp:
-                    IsClicking[MouseButtons.Middle] = false;
-                    break;
-                case MouseButtonFlags.MiddleDown:
-                    IsClicking[MouseButtons.Middle] = true;
-                    break;
-                case MouseButtonFlags.RightUp:
-                    IsClicking[MouseButtons.Right] = false;
-                    break;
-                case MouseButtonFlags.RightDown:
-                    IsClicking[MouseButtons.Right] = true;
-                    break;
-                case MouseButtonFlags.LeftUp:
-                    IsClicking[MouseButtons.Left] = false;
-                    break;
-                case MouseButtonFlags.LeftDown:
-                    IsClicking[MouseButtons.Left] = true;
-                    break;
-                default:
-                    break;
-            }
-
-            if (IsClicking[MouseButtons.Middle])
-                ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
-
-            Current.MouseLeft.ReadState(ScreenPosToWorldPos(Current.MousePos), IsClicking[MouseButtons.Left]);
-            if (Current.MouseLeft.IsStartingJust)
-            {
-                SelectionRectangle.StartPos = Current.MouseLeft.Start;
-            }
-
-            if (Current.MouseLeft.IsDragging)
-            {
-                SelectionRectangle.EndPos = Current.MouseLeft.Current;
-            }
-
-            if (Current.MouseLeft.IsEndDrag)
-            {
-                SelectionMode selectionMode = Current.IsPress[Keys.ShiftKey] ? SelectionMode.Union : Current.IsPress[Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
-                if (!(CurrentPositionSquares is null))
-                    Current.Command = new CommandRectangleSelection(Current.Material, Current.MouseLeft.Start, Current.MouseLeft.End, selectionMode, CurrentPositionSquares.UpdateVertices);
-                Current.MouseLeft.Reset();
-            }
-        }
 
         public void ChangeResolution()
         {

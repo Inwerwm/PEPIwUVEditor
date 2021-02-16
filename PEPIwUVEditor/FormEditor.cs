@@ -1,23 +1,38 @@
 ﻿using DxManager;
-using DxManager.Camera;
+using IwUVEditor.Command;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
-using PEPlugin;
-using PEPlugin.Pmx;
+using SlimDX;
+using SlimDX.RawInput;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace IwUVEditor
 {
     internal partial class FormEditor : Form
     {
+        private UVViewDrawProcess drawProcess;
+
         Editor Editor { get; }
         internal DxContext DrawContext { get; set; }
-        internal UVViewDrawProcess DrawProcess { get; set; }
+        internal UVViewDrawProcess DrawProcess
+        {
+            get => drawProcess;
+            set
+            {
+                drawProcess = value;
+                drawProcess.AddMouseInputProcess(MouseInput);
+            }
+        }
         InputManager Current { get; }
+
+        public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
+        {
+            { MouseButtons.Left, false },
+            { MouseButtons.Middle, false },
+            { MouseButtons.Right, false },
+        };
 
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
@@ -46,6 +61,63 @@ namespace IwUVEditor
         internal void AddProcessWhenClosing(FormClosingEventHandler handler)
         {
             FormClosing += handler;
+        }
+
+        void MouseInput(object sender, MouseInputEventArgs e)
+        {
+            if (!Current.IsActive)
+                return;
+
+            float modifier = (Current.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Current.IsPress[Keys.ControlKey] ? 4f : 1f);
+
+            switch (e.ButtonFlags)
+            {
+                case MouseButtonFlags.MouseWheel:
+                    DrawProcess.Scale.WheelDelta += e.WheelDelta * modifier;
+                    break;
+                case MouseButtonFlags.MiddleUp:
+                    IsClicking[MouseButtons.Middle] = false;
+                    break;
+                case MouseButtonFlags.MiddleDown:
+                    IsClicking[MouseButtons.Middle] = true;
+                    break;
+                case MouseButtonFlags.RightUp:
+                    IsClicking[MouseButtons.Right] = false;
+                    break;
+                case MouseButtonFlags.RightDown:
+                    IsClicking[MouseButtons.Right] = true;
+                    break;
+                case MouseButtonFlags.LeftUp:
+                    IsClicking[MouseButtons.Left] = false;
+                    break;
+                case MouseButtonFlags.LeftDown:
+                    IsClicking[MouseButtons.Left] = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if (IsClicking[MouseButtons.Middle])
+                DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
+
+            Current.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Current.MousePos), IsClicking[MouseButtons.Left]);
+            if (Current.MouseLeft.IsStartingJust)
+            {
+                DrawProcess.SelectionRectangle.StartPos = Current.MouseLeft.Start;
+            }
+
+            if (Current.MouseLeft.IsDragging)
+            {
+                DrawProcess.SelectionRectangle.EndPos = Current.MouseLeft.Current;
+            }
+
+            if (Current.MouseLeft.IsEndDrag)
+            {
+                Command.SelectionMode selectionMode = Current.IsPress[Keys.ShiftKey] ? Command.SelectionMode.Union : Current.IsPress[Keys.ControlKey] ? Command.SelectionMode.Difference : Command.SelectionMode.Create;
+                if (!(Current.Material is null))
+                    Current.Command = new CommandRectangleSelection(Current.Material, Current.MouseLeft.Start, Current.MouseLeft.End, selectionMode, DrawProcess.CurrentPositionSquares.UpdateVertices);
+                Current.MouseLeft.Reset();
+            }
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)

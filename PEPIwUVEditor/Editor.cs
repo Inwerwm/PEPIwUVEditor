@@ -28,12 +28,14 @@ namespace IwUVEditor
         public InputManager Current { get; }
 
         // エディタ機能
+        public Tool.ToolBox ToolBox { get; }
         Dictionary<Material, CommandManager> Commanders { get; set; }
 
         public Editor(IPERunArgs args, InputManager inputManager)
         {
             Args = args;
             Current = inputManager;
+            ToolBox = new Tool.ToolBox();
 
             Current.InvokeCommand += (command) =>
             {

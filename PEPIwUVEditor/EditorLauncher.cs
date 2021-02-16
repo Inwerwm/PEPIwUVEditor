@@ -38,6 +38,8 @@ namespace IwUVEditor
                 RefreshRate = 120
             };
 
+            // Editorへの入力
+            Editor.ToolBox.Device = DrawContext.Device;
             // Formへの入力
             Form.DrawContext = DrawContext;
             Form.AddProcessWhenClosing((sender, e) =>

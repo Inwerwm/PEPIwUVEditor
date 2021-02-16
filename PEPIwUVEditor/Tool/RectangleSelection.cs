@@ -15,14 +15,14 @@ namespace IwUVEditor.Tool
         private bool NeedsDrawing { get; set; }
 
         SelectionRectangle SelectionRectangle { get; }
-        PositionSquares ToUpdateElement { get; }
+        GenerableMap<Material, PositionSquares> PosSquares { get; }
 
         SelectionMode SelectionMode { get; set; }
 
-        public RectangleSelection(SlimDX.Direct3D11.Device device, SlimDX.Direct3D11.Effect effect, SlimDX.Direct3D11.RasterizerState drawMode, PositionSquares toUpdateElement)
+        public RectangleSelection(SlimDX.Direct3D11.Device device, SlimDX.Direct3D11.Effect effect, SlimDX.Direct3D11.RasterizerState drawMode, GenerableMap<Material, PositionSquares> posSquares)
         {
             SelectionRectangle = new SelectionRectangle(device, effect, drawMode, new SlimDX.Color4(1, 1, 1));
-            ToUpdateElement = toUpdateElement;
+            PosSquares = posSquares;
         }
 
         public void ReadInput(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)
@@ -50,7 +50,7 @@ namespace IwUVEditor.Tool
         public IEditorCommand CreateCommand(Material target)
         {
             IsReady = false;
-            return new CommandRectangleSelection(target, SelectionRectangle.StartPos, SelectionRectangle.EndPos, SelectionMode, ToUpdateElement.UpdateVertices);
+            return new CommandRectangleSelection(target, SelectionRectangle.StartPos, SelectionRectangle.EndPos, SelectionMode, PosSquares[target].UpdateVertices);
         }
 
         public void PrepareDrawing()

@@ -139,7 +139,7 @@ namespace IwUVEditor.DirectX
             PositionSquares[Current.Material].Prepare();
 
             // ツール固有の描画処理を実行
-            Current.Tool.PrepareDrawing();
+            Current.Tool?.PrepareDrawing();
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);

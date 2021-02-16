@@ -53,10 +53,13 @@ namespace IwUVEditor
             // 材質を読込
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
             Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
+            Current.Material = Materials.First();
         }
 
         public void DriveTool(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)
         {
+            if (Current.Tool is null)
+                return;
             Current.Tool.ReadInput(mouse, pressKey);
             if (Current.Tool.IsReady)
                 Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));

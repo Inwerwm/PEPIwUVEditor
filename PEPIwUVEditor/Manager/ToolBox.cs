@@ -17,15 +17,16 @@ namespace IwUVEditor.Tool
 
         public ToolBox()
         {
-            ToolOf = new Dictionary<Type, IEditTool>
-            {
-                { typeof(RectangleSelection), null}
-            };
+            ToolOf = new Dictionary<Type, IEditTool>();
         }
 
         T CallTool<T>(Func<T> constructor, UVViewDrawProcess process) where T : IEditTool
         {
-            if (ToolOf[typeof(T)] == null || Process != process)
+            IEditTool tool;
+            if(!ToolOf.TryGetValue(typeof(T), out tool))
+                ToolOf.Add(typeof(T), null);
+
+            if (tool == null || Process != process)
             {
                 ToolOf[typeof(T)] = constructor();
                 Process = process;

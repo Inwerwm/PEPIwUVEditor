@@ -11,6 +11,7 @@ namespace IwUVEditor.Tool
         internal SlimDX.Direct3D11.Device Device { get; set; }
         UVViewDrawProcess Process { get; set; }
 
+        // ツールオブジェクトのキャッシュ
         Dictionary<Type, IEditTool> ToolOf { get; }
 
         public ToolBox()
@@ -20,14 +21,18 @@ namespace IwUVEditor.Tool
 
         T CallTool<T>(Func<T> constructor, UVViewDrawProcess process) where T : IEditTool
         {
+            // 呼び出された型がToolOfに未登録だった場合は追加する
             IEditTool tool;
             if (!ToolOf.TryGetValue(typeof(T), out tool))
                 ToolOf.Add(typeof(T), null);
 
+            // 型に対応したインスタンスが存在しないか
+            // 引数のプロセスがインスタンス生成時と変わっていた場合
+            // インスタンスを生成してToolOfに代入
             if (tool == null || Process != process)
             {
-                ToolOf[typeof(T)] = constructor();
                 Process = process;
+                ToolOf[typeof(T)] = constructor();
             }
 
             return (T)ToolOf[typeof(T)];

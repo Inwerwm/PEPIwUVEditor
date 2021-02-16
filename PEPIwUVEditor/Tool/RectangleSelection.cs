@@ -14,14 +14,14 @@ namespace IwUVEditor.Tool
         public bool IsReady { get; private set; }
         private bool NeedsDrawing { get; set; }
 
-        SelectionRectangle ToDrawRectangle { get; }
+        SelectionRectangle SelectionRectangle { get; }
         PositionSquares ToUpdateElement { get; }
 
         SelectionMode SelectionMode { get; set; }
 
-        public RectangleSelection(SelectionRectangle toDrawRectangle, PositionSquares toUpdateElement)
+        public RectangleSelection(SelectionRectangle selectionRectangle, PositionSquares toUpdateElement)
         {
-            ToDrawRectangle = toDrawRectangle;
+            SelectionRectangle = selectionRectangle;
             ToUpdateElement = toUpdateElement;
         }
 
@@ -29,12 +29,12 @@ namespace IwUVEditor.Tool
         {
             if (mouse.IsStartingJust)
             {
-                ToDrawRectangle.StartPos = mouse.Start;
+                SelectionRectangle.StartPos = mouse.Start;
             }
 
             if (mouse.IsDragging)
             {
-                ToDrawRectangle.EndPos = mouse.Current;
+                SelectionRectangle.EndPos = mouse.Current;
                 NeedsDrawing = true;
             }
 
@@ -50,13 +50,13 @@ namespace IwUVEditor.Tool
         public IEditorCommand CreateCommand(Material target)
         {
             IsReady = false;
-            return new CommandRectangleSelection(target, ToDrawRectangle.StartPos, ToDrawRectangle.EndPos, SelectionMode, ToUpdateElement.UpdateVertices);
+            return new CommandRectangleSelection(target, SelectionRectangle.StartPos, SelectionRectangle.EndPos, SelectionMode, ToUpdateElement.UpdateVertices);
         }
 
         public void PrepareDrawing()
         {
             if (NeedsDrawing)
-                ToDrawRectangle.Prepare();
+                SelectionRectangle.Prepare();
         }
     }
 }

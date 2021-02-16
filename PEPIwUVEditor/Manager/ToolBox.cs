@@ -1,6 +1,5 @@
 ﻿using IwUVEditor.DirectX;
 using System;
-using System.Collections.Generic;
 
 namespace IwUVEditor.Tool
 {
@@ -43,7 +42,7 @@ namespace IwUVEditor.Tool
         {
             // Processが既存で引数と異なれば入れ替え
             // 入れ替えると全ツールが削除される
-            if(Process != null && Process != process)
+            if (Process != process)
                 Process = process;
 
             // 呼び出し元の型に対応するインスタンスが存在しなければ生成する
@@ -53,11 +52,10 @@ namespace IwUVEditor.Tool
             return (T)ToolOf[typeof(T)];
         }
 
-        public RectangleSelection RectangleSelection(UVViewDrawProcess process)
-        {
-            return CallTool(() => new RectangleSelection(Device, process.Effect, process.Rasterize.Solid, process.PositionSquares), process);
-        }
+        public RectangleSelection RectangleSelection(UVViewDrawProcess process) =>
+            CallTool(() => new RectangleSelection(Device, process.Effect, process.Rasterize.Solid, process.PositionSquares), process);
 
+        #region IDisposable
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -90,5 +88,6 @@ namespace IwUVEditor.Tool
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+        #endregion
     }
 }

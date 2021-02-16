@@ -73,11 +73,13 @@ namespace IwUVEditor.DirectX
             set
             {
                 colorInDefault = value;
-                foreach (var mesh in UVMeshCache.Values)
+                if (UVMeshes is null)
+                    return;
+                foreach (var mesh in UVMeshes.Values)
                 {
                     mesh.LineColor = value;
                 }
-                foreach (var sq in PositionSquareCache.Values)
+                foreach (var sq in PositionSquares.Values)
                 {
                     sq.ColorInDefault = value;
                 }
@@ -90,7 +92,9 @@ namespace IwUVEditor.DirectX
             set
             {
                 colorInSelected = value;
-                foreach (var sq in PositionSquareCache.Values)
+                if (PositionSquares is null)
+                    return;
+                foreach (var sq in PositionSquares.Values)
                 {
                     sq.ColorInSelected = value;
                 }

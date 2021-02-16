@@ -126,7 +126,9 @@ namespace IwUVEditor.DirectX
             Current.RadiusOfPosSqIsChanged += (value) =>
             {
                 float radius = (float)value;
-                foreach (var sq in PositionSquareCache.Values)
+                if (PositionSquares is null)
+                    return;
+                foreach (var sq in PositionSquares.Values)
                 {
                     sq.Radius = radius;
                 }

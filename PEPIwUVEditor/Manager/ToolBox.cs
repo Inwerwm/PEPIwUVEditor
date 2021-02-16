@@ -1,38 +1,45 @@
-﻿using PEPExtensions;
-using PEPlugin;
+﻿using IwUVEditor.DirectX;
+using SlimDX.Direct3D11;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IwUVEditor
+namespace IwUVEditor.Tool
 {
-    public class IwUVEditor : IPEPlugin
+    class ToolBox:IDisposable
     {
         private bool disposedValue;
 
-        public string Name => "IwUVEditor";
+        internal SlimDX.Direct3D11.Device Device { get; set; }
+        UVViewDrawProcess Process { get; set; }
 
-        public string Version => "1.0";
+        Dictionary<Type, IEditTool> ToolOf { get; }
 
-        public string Description => "UVをGUIで編集する";
-
-        public IPEPluginOption Option => new PEPluginOption(false, true);
-
-        private EditorLauncher EditorLauncher { get; set; }
-
-        public void Run(IPERunArgs args)
+        public ToolBox()
         {
-            try
+            ToolOf = new Dictionary<Type, IEditTool>();
+        }
+
+        T CallTool<T>(Func<T> constructor, UVViewDrawProcess process) where T : IEditTool
+        {
+            IEditTool tool;
+            if(!ToolOf.TryGetValue(typeof(T), out tool))
+                ToolOf.Add(typeof(T), null);
+
+            if (tool == null || Process != process)
             {
-                EditorLauncher = EditorLauncher ?? new EditorLauncher(args);
-                EditorLauncher.Run();
+                ToolOf[typeof(T)] = constructor();
+                Process = process;
             }
-            catch (Exception ex)
-            {
-                Utility.ShowException(ex);
-            }
+
+            return (T)ToolOf[typeof(T)];
+        }
+
+        public RectangleSelection RectangleSelection(UVViewDrawProcess process)
+        {
+            return CallTool(() => new RectangleSelection(Device, process.Effect, process.Rasterize.Solid, process.PositionSquares), process);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -42,7 +49,10 @@ namespace IwUVEditor
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
-                    EditorLauncher?.Dispose();
+                    foreach (var tool in ToolOf.Values)
+                    {
+                        tool?.Dispose();
+                    }
                 }
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
@@ -52,7 +62,7 @@ namespace IwUVEditor
         }
 
         // // TODO: 'Dispose(bool disposing)' にアンマネージド リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします
-        // ~IwUVEditor()
+        // ~ToolBox()
         // {
         //     // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
         //     Dispose(disposing: false);

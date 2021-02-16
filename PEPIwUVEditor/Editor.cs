@@ -1,4 +1,9 @@
-﻿using IwUVEditor.Command;
+﻿using DxManager;
+using DxManager.Camera;
+using IwUVEditor.Command;
+using IwUVEditor.DirectX;
+using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using PEPlugin;
 using PEPlugin.Pmx;
 using SlimDX;
@@ -13,37 +18,27 @@ namespace IwUVEditor
     /// <summary>
     /// エディタ機能クラス
     /// </summary>
-    class Editor
+    class Editor : IDisposable
     {
-        // モデル関連プロパティ
+        private bool disposedValue;
+
+        // モデル
         IPERunArgs Args { get; }
         IPXPmx Pmx { get; set; }
         public List<Material> Materials { get; private set; }
-        public Material CurrentMaterial { get; set; }
-        public Tool CurrentTool { get; set; }
 
-        // エディタ機能関連プロパティ
-        public Tools Tools { get; private set; }
+        // 現在の状態
+        public EditorStates Current { get; }
 
-        public Editor(IPERunArgs args)
+        // エディタ機能
+        public Tool.ToolBox ToolBox { get; }
+        Dictionary<Material, CommandManager> Commanders { get; set; }
+
+        public Editor(IPERunArgs args, EditorStates inputManager)
         {
             Args = args;
-        }
-
-        public void Undo()
-        {
-            if (CurrentMaterial is null)
-                return;
-
-            Tools.Undo(CurrentMaterial);
-        }
-
-        public void Redo()
-        {
-            if (CurrentMaterial is null)
-                return;
-
-            Tools.Redo(CurrentMaterial);
+            Current = inputManager;
+            ToolBox = new Tool.ToolBox();
         }
 
         public void LoadModel()
@@ -52,9 +47,66 @@ namespace IwUVEditor
             Pmx = Args.Host.Connector.Pmx.GetCurrentState();
 
             // 材質を読込
+            if (!Pmx.Material.Any())
+                throw new Exception("モデルに材質が含まれていません。");
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
+            Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
+            Current.Material = Materials.First();
+        }
 
-            Tools = new Tools(Materials);
+        public void DriveTool(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)
+        {
+            if (Current.Tool is null)
+                return;
+            Current.Tool.ReadInput(mouse, pressKey);
+            if (Current.Tool.IsReady)
+                Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));
+        }
+
+        public void Undo()
+        {
+            if (Current.Material is null)
+                return;
+
+            Commanders[Current.Material].Undo();
+        }
+
+        public void Redo()
+        {
+            if (Current.Material is null)
+                return;
+
+            Commanders[Current.Material].Redo();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    ToolBox?.Dispose();
+                }
+
+                // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
+                // TODO: 大きなフィールドを null に設定します
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: 'Dispose(bool disposing)' にアンマネージド リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします
+        // ~Editor()
+        // {
+        //     // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

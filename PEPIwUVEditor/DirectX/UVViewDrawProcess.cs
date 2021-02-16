@@ -1,7 +1,9 @@
 ﻿using DxManager;
 using DxManager.Camera;
+using IwUVEditor.Command;
 using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
@@ -18,16 +20,32 @@ namespace IwUVEditor.DirectX
 {
     class UVViewDrawProcess : DxProcess
     {
-        private Material currentMaterial;
-
+        #region フィールド
         private float radiusOfPositionSquare;
+        private Color4 colorInDefault;
+        private Color4 colorInSelected;
+        #endregion
 
-        Editor Editor { get; set; }
+        #region プロパティ - EditorStates
+        public EditorStates Current { get; }
+        #endregion
 
-        RasterizerStateProvider Rasterize { get; set; }
+        #region プロパティ - 変換行列
+        private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
+        private Matrix InvertTransMatrix
+        {
+            get
+            {
+                Matrix iViewMat = Matrix.Invert(Camera.CreateViewMatrix());
+                Matrix iPrjMat = Matrix.Invert((Camera as DxCameraOrthographic).CreateProjectionMatrix());
+                Matrix iOfstMat = Matrix.Invert(Matrix.Translation(ShiftOffset));
+                Matrix iSclMat = Matrix.Invert(Matrix.Scaling(Scale.Scale, Scale.Scale, 1));
+                return iSclMat * iOfstMat * iPrjMat * iViewMat;
+            }
+        }
 
-        Vector3 ShiftOffset { get; set; }
-        ScaleManager Scale { get; } = new ScaleManager()
+        internal Vector3 ShiftOffset { get; set; }
+        internal ScaleManager Scale { get; } = new ScaleManager()
         {
             DeltaOffset = -10000,
             Amplitude = 200000,
@@ -37,86 +55,31 @@ namespace IwUVEditor.DirectX
             LowerLimit = -10000,
             UpperLimit = 12000,
         };
-        private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
-        private Matrix InvertTransMatrix
-        {
-            get
-            {
-                Matrix iViewMat = Matrix.Invert(Camera.CreateViewMatrix());
-                Matrix iPrjMat = Matrix.Invert((Camera as DxManager.Camera.DxCameraOrthographic).CreateProjectionMatrix());
-                Matrix iOfstMat = Matrix.Invert(Matrix.Translation(ShiftOffset));
-                Matrix iSclMat = Matrix.Invert(Matrix.Scaling(Scale.Scale, Scale.Scale, 1));
-                return iSclMat * iOfstMat * iPrjMat * iViewMat;
-            }
-        }
+        #endregion
 
-        public bool IsActive { get; set; } = true;
-        public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>
-        {
-            { Keys.ShiftKey, false },
-            { Keys.ControlKey, false }
-        };
-        public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
-        {
-            { MouseButtons.Left, false },
-            { MouseButtons.Middle, false },
-            { MouseButtons.Right, false },
-        };
-
-        public DragManager LeftDrag { get; set; } = new DragManager();
-
-        /// <summary>
-        /// <para>現在のマウスポインタの座標</para>
-        /// <para>set : form側での描画位置</para>
-        /// <para>get : 描画されている空間におけるXY座標</para>
-        /// </summary>
-        public Vector2 CurrentMousePos
-        {
-            get => currentMousePos;
-            set
-            {
-                Vector2 normalizedPos = new Vector2(2 * value.X / Context.TargetControl.Width - 1, 1 - 2 * value.Y / Context.TargetControl.Height);
-                Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), InvertTransMatrix);
-                currentMousePos = new Vector2(worldPos.X, worldPos.Y);
-            }
-        }
-
-
+        #region プロパティ - 描画要素
         TexturePlate TexturePlate { get; set; }
-        SelectionRectangle SelectionRectangle { get; set; }
 
-        Dictionary<Material, ShaderResourceView> TextureCache { get; } = new Dictionary<Material, ShaderResourceView>();
-        ShaderResourceView CurrentTexture { get; set; }
+        internal GenerableMap<Material, ShaderResourceView> Textures { get; set; }
+        internal GenerableMap<Material, UVMesh> UVMeshes { get; set; }
+        internal GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
+        #endregion
 
-        Dictionary<Material, UVMesh> UVMeshCache { get; } = new Dictionary<Material, UVMesh>();
-        UVMesh CurrentUVMesh { get; set; }
+        #region プロパティ - 描画設定
+        public RasterizerStateProvider Rasterize { get; private set; }
 
-        Dictionary<Material, PositionSquares> PositionSquareCache { get; } = new Dictionary<Material, PositionSquares>();
-        PositionSquares CurrentPositionSquares;
-        private Color4 colorInDefault;
-        private Color4 colorInSelected;
-        private Vector2 currentMousePos;
-
-        public Material CurrentMaterial
+        public float RadiusOfPositionSquare
         {
-            get => currentMaterial;
+            get => radiusOfPositionSquare;
             set
             {
-                Editor.CurrentMaterial = value;
-
-                if (Context is null)
+                radiusOfPositionSquare = value;
+                if (PositionSquares is null)
                     return;
-                currentMaterial = value;
-                if (!TextureCache.Keys.Contains(value))
+                foreach (var sq in PositionSquares.Values)
                 {
-                    TextureCache.Add(value, LoadTexture(value));
-                    UVMeshCache.Add(value, new UVMesh(Context.Device, Effect, Rasterize.Wireframe, value, ColorInDefault));
-                    PositionSquareCache.Add(value, new PositionSquares(Context.Device, Effect, Rasterize.Solid, value, RadiusOfPositionSquare, ColorInDefault, colorInSelected));
+                    sq.Radius = radiusOfPositionSquare;
                 }
-
-                CurrentTexture = TextureCache[value];
-                CurrentUVMesh = UVMeshCache[value];
-                CurrentPositionSquares = PositionSquareCache[value];
             }
         }
 
@@ -126,11 +89,13 @@ namespace IwUVEditor.DirectX
             set
             {
                 colorInDefault = value;
-                foreach (var mesh in UVMeshCache.Values)
+                if (UVMeshes is null)
+                    return;
+                foreach (var mesh in UVMeshes.Values)
                 {
                     mesh.LineColor = value;
                 }
-                foreach (var sq in PositionSquareCache.Values)
+                foreach (var sq in PositionSquares.Values)
                 {
                     sq.ColorInDefault = value;
                 }
@@ -143,39 +108,33 @@ namespace IwUVEditor.DirectX
             set
             {
                 colorInSelected = value;
-                foreach (var sq in PositionSquareCache.Values)
+                if (PositionSquares is null)
+                    return;
+                foreach (var sq in PositionSquares.Values)
                 {
                     sq.ColorInSelected = value;
                 }
             }
         }
+        #endregion
 
-        public float RadiusOfPositionSquare
+        #region コンストラクタ
+        public UVViewDrawProcess(EditorStates inputManager)
         {
-            get => radiusOfPositionSquare;
-            set
-            {
-                radiusOfPositionSquare = value;
-                foreach (var sq in PositionSquareCache.Values)
-                {
-                    sq.Radius = radiusOfPositionSquare;
-                }
-            }
+            Current = inputManager;
         }
+        #endregion
 
-        public UVViewDrawProcess(Editor editor)
-        {
-            Editor = editor;
-        }
-
+        #region オーバーライド
         public override void Init()
         {
-            CurrentTexture = LoadTexture(null);
-
             Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
-            SelectionRectangle = new SelectionRectangle(Context.Device, Effect, Rasterize.Solid, new Color4(0.5f, 1, 1, 1));
+
+            Textures = new GenerableMap<Material, ShaderResourceView>(LoadTexture);
+            UVMeshes = new GenerableMap<Material, UVMesh>((material) => new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
+            PositionSquares = new GenerableMap<Material, PositionSquares>((material) => new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, RadiusOfPositionSquare, ColorInDefault, colorInSelected));
         }
 
         public override void Draw()
@@ -185,27 +144,19 @@ namespace IwUVEditor.DirectX
             // 深度バッファ
             Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
             // テクスチャを読み込み
-            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(CurrentTexture);
+            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Textures[Current.Material]);
 
             // テクスチャ板を描画
             TexturePlate.Prepare();
 
             // メッシュを描画
-            CurrentUVMesh?.Prepare();
+            UVMeshes[Current.Material].Prepare();
 
             // 頂点位置に四角を描画
-            CurrentPositionSquares?.Prepare();
+            PositionSquares[Current.Material].Prepare();
 
             // ツール固有の描画処理を実行
-            switch (Editor.CurrentTool)
-            {
-                case Tool.RectangleSelection:
-                    if(LeftDrag.IsDragging)
-                        SelectionRectangle.Prepare();
-                    break;
-                default:
-                    break;
-            }
+            Current.Tool?.PrepareDrawing();
 
             // 描画内容を反映
             Context.SwapChain.Present(0, PresentFlags.None);
@@ -215,79 +166,36 @@ namespace IwUVEditor.DirectX
         {
             Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(TransMatrix);
         }
+        #endregion
 
+        #region 状態操作
         public void ResetCamera()
         {
             ShiftOffset = Vector3.Zero;
             Scale.WheelDelta = 0;
         }
 
-        protected override void MouseInput(object sender, MouseInputEventArgs e)
-        {
-            if (!IsActive)
-                return;
-
-            float modifier = (IsPress[Keys.ShiftKey] ? 4f : 1f) / (IsPress[Keys.ControlKey] ? 4f : 1f);
-
-            switch (e.ButtonFlags)
-            {
-                case MouseButtonFlags.MouseWheel:
-                    Scale.WheelDelta += e.WheelDelta * modifier;
-                    break;
-                case MouseButtonFlags.MiddleUp:
-                    IsClicking[MouseButtons.Middle] = false;
-                    break;
-                case MouseButtonFlags.MiddleDown:
-                    IsClicking[MouseButtons.Middle] = true;
-                    break;
-                case MouseButtonFlags.RightUp:
-                    IsClicking[MouseButtons.Right] = false;
-                    break;
-                case MouseButtonFlags.RightDown:
-                    IsClicking[MouseButtons.Right] = true;
-                    break;
-                case MouseButtonFlags.LeftUp:
-                    IsClicking[MouseButtons.Left] = false;
-                    break;
-                case MouseButtonFlags.LeftDown:
-                    IsClicking[MouseButtons.Left] = true;
-                    break;
-                default:
-                    break;
-            }
-
-            if (IsClicking[MouseButtons.Middle])
-                ShiftOffset += modifier * new Vector3(1f * e.X / Context.TargetControl.Width, -1f * e.Y / Context.TargetControl.Height, 0) / Scale.Scale;
-
-            LeftDrag.ReadState(CurrentMousePos, IsClicking[MouseButtons.Left]);
-            if (LeftDrag.IsStartingJust)
-            {
-                SelectionRectangle.StartPos = LeftDrag.Start;
-            }
-
-            if (LeftDrag.IsDragging)
-            {
-                SelectionRectangle.EndPos = LeftDrag.Current;
-            }
-
-            if (LeftDrag.IsEndDrag)
-            {
-                SelectionMode selectionMode = IsPress[Keys.ShiftKey] ? SelectionMode.Union : IsPress[Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
-                Editor.Tools.RectangleSelect(CurrentMaterial, LeftDrag.Start, LeftDrag.End, selectionMode, CurrentPositionSquares.UpdateVertices);
-                LeftDrag.Reset();
-            }
-        }
-
         public void ChangeResolution()
         {
-            Vector2 screenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
+            var screenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
 
             (Camera as DxCameraOrthographic).ViewVolumeSize = (screenSize.X, screenSize.Y);
 
-            foreach (var ps in PositionSquareCache.Values)
+            if (PositionSquares is null)
+                return;
+            foreach (var ps in PositionSquares.Values)
             {
                 ps.ScreenSize = screenSize;
             }
+        }
+        #endregion
+
+        #region ヘルパー関数
+        public Vector2 ScreenPosToWorldPos(Vector2 screenPos)
+        {
+            Vector2 normalizedPos = new Vector2(2 * screenPos.X / Context.TargetControl.Width - 1, 1 - 2 * screenPos.Y / Context.TargetControl.Height);
+            Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), InvertTransMatrix);
+            return new Vector2(worldPos.X, worldPos.Y);
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)
@@ -329,20 +237,29 @@ namespace IwUVEditor.DirectX
 
             return ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
         }
+        #endregion
 
+        #region IDisposable
         protected override void Dispose(bool disposing)
         {
-            TexturePlate?.Dispose();
-            CurrentTexture = null;
-            foreach (var resource in TextureCache.Values)
+            if (!disposedValue)
             {
-                resource?.Dispose();
-            }
-            foreach (var mesh in UVMeshCache.Values)
-            {
-                mesh?.Dispose();
+                if (disposing)
+                {
+                    // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    TexturePlate?.Dispose();
+                    foreach (var resource in Textures.Values)
+                    {
+                        resource?.Dispose();
+                    }
+                    foreach (var mesh in UVMeshes.Values)
+                    {
+                        mesh?.Dispose();
+                    }
+                }
             }
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

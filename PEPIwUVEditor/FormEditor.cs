@@ -1,104 +1,115 @@
 ﻿using DxManager;
-using DxManager.Camera;
+using IwUVEditor.Command;
 using IwUVEditor.DirectX;
-using PEPlugin;
-using PEPlugin.Pmx;
+using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
+using IwUVEditor.Tool;
+using SlimDX;
+using SlimDX.RawInput;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace IwUVEditor
 {
-    public partial class FormEditor : Form
+    internal partial class FormEditor : Form
     {
-        bool initialized = false;
+        private UVViewDrawProcess drawProcess;
 
         Editor Editor { get; }
-
-        DxContext DxContext { get; }
-        UVViewDrawProcess DrawProcess { get; set; }
-
-        public FormEditor(IPERunArgs args)
+        internal DxContext DrawContext { get; set; }
+        internal UVViewDrawProcess DrawProcess
         {
-            InitializeComponent();
-
-            Editor = new Editor(args);
-            DxContext = DxContext.GetInstance(splitUVMat.Panel1);
-            DxContext.RefreshRate = 120;
-        }
-
-        public void Initialize()
-        {
-            if (initialized)
-                ReDraw();
-            else
+            get => drawProcess;
+            set
             {
-                LoadModel();
-                DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
-                initialized = true;
+                drawProcess = value;
+                drawProcess.AddMouseInputProcess(MouseInput);
             }
         }
 
-        private void ReDraw()
+        EditorStates Current { get; }
+        InputStates Input { get; }
+
+        internal Control DrawTargetControl => splitUVMat.Panel1;
+
+        public FormEditor(Editor editor, EditorStates inputManager)
         {
-            DxContext.StopDrawLoop();
-            LoadModel();
-            DxContext.AddDrawloop(DrawProcess, Properties.Resources.Shader);
+            Editor = editor;
+            Current = inputManager;
+            Input = new InputStates();
+
+            InitializeComponent();
         }
 
-        public void LoadModel()
+        internal void InitializeWhenStartDrawing()
         {
-            Editor.LoadModel();
+            DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
+            Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
+            timerEvery.Enabled = true;
+        }
 
-            // 材質表示リストボックスを構築
+        internal void LoadMaterials(Material[] materials)
+        {
             listBoxMaterial.Items.Clear();
-            listBoxMaterial.Items.AddRange(Editor.Materials.ToArray());
-
-            // 描画プロセスオブジェクトを生成
-            DrawProcess?.Dispose();
-            float cPos = 0;
-            float zoom = 1;
-            DrawProcess = new UVViewDrawProcess(Editor)
-            {
-                Camera = new DxCameraOrthographic()
-                {
-                    Position = new SlimDX.Vector3(cPos, cPos, -1),
-                    Target = new SlimDX.Vector3(cPos, cPos, 0),
-                    Up = new SlimDX.Vector3(0, -1, 0),
-                    ViewVolumeSize = (DxContext.TargetControl.ClientSize.Width / zoom, DxContext.TargetControl.ClientSize.Height / zoom),
-                    ViewVolumeDepth = (0, 1)
-                },
-                RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value,
-                ColorInDefault = new SlimDX.Color4(1, 0, 0, 0),
-                ColorInSelected = new SlimDX.Color4(1, 1, 0, 0)
-            };
+            listBoxMaterial.Items.AddRange(materials);
         }
 
-        private void FormEditor_FormClosing(object sender, FormClosingEventArgs e)
+        internal void AddProcessWhenClosing(FormClosingEventHandler handler)
         {
-            e.Cancel = true;
-            Visible = false;
-            DxContext.StopDrawLoop();
+            FormClosing += handler;
+        }
+
+        void MouseInput(object sender, MouseInputEventArgs e)
+        {
+            if (!Input.IsActive)
+                return;
+
+            float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
+
+            switch (e.ButtonFlags)
+            {
+                case MouseButtonFlags.MouseWheel:
+                    DrawProcess.Scale.WheelDelta += e.WheelDelta * modifier;
+                    break;
+                case MouseButtonFlags.MiddleUp:
+                    Input.IsClicking[MouseButtons.Middle] = false;
+                    break;
+                case MouseButtonFlags.MiddleDown:
+                    Input.IsClicking[MouseButtons.Middle] = true;
+                    break;
+                case MouseButtonFlags.RightUp:
+                    Input.IsClicking[MouseButtons.Right] = false;
+                    break;
+                case MouseButtonFlags.RightDown:
+                    Input.IsClicking[MouseButtons.Right] = true;
+                    break;
+                case MouseButtonFlags.LeftUp:
+                    Input.IsClicking[MouseButtons.Left] = false;
+                    break;
+                case MouseButtonFlags.LeftDown:
+                    Input.IsClicking[MouseButtons.Left] = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if (Input.IsClicking[MouseButtons.Middle])
+                DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
+
+            Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), Input.IsClicking[MouseButtons.Left]);
+            Editor.DriveTool(Input.MouseLeft, Input.IsPress);
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)
         {
-            DxContext?.ChangeResolution();
-            if (DrawProcess != null)
-            {
-                DrawProcess.ChangeResolution();
-            }
-        }
-
-        private void splitUVMat_Panel1_MouseWheel(object sender, MouseEventArgs e)
-        {
+            DrawContext?.ChangeResolution();
+            DrawProcess?.ChangeResolution();
         }
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DrawProcess.CurrentMaterial = (sender as ListBox).SelectedItem as Material;
+            Current.Material = (sender as ListBox).SelectedItem as Material;
         }
 
         private void buttonResetCamera_Click(object sender, EventArgs e)
@@ -108,38 +119,30 @@ namespace IwUVEditor
 
         private void FormEditor_KeyDown(object sender, KeyEventArgs e)
         {
-            DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
-            DrawProcess.IsPress[Keys.ControlKey] = e.Control;
+            Input.IsPress[Keys.ShiftKey] = e.Shift;
+            Input.IsPress[Keys.ControlKey] = e.Control;
         }
 
         private void FormEditor_KeyUp(object sender, KeyEventArgs e)
         {
-            DrawProcess.IsPress[Keys.ShiftKey] = e.Shift;
-            DrawProcess.IsPress[Keys.ControlKey] = e.Control;
+            Input.IsPress[Keys.ShiftKey] = e.Shift;
+            Input.IsPress[Keys.ControlKey] = e.Control;
         }
 
         private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)
         {
-            if (DrawProcess is null)
-                return;
-            DrawProcess.IsActive = true;
+            Input.IsActive = true;
         }
 
         private void splitUVMat_Panel1_MouseLeave(object sender, EventArgs e)
         {
-            if (DrawProcess is null)
-                return;
-            DrawProcess.IsActive = false;
+            Input.IsActive = false;
         }
 
         private void timerEvery_Tick(object sender, EventArgs e)
         {
-            if (DrawProcess is null)
-                return;
-
-            var mousePos = DxContext.TargetControl.PointToClient(Cursor.Position);
-            DrawProcess.CurrentMousePos = new SlimDX.Vector2(mousePos.X, mousePos.Y);
-            toolStripStatusLabelState.Text = $"{mousePos} => {DrawProcess.CurrentMousePos}, Drag State : {DrawProcess.LeftDrag.Start} - {DrawProcess.LeftDrag.Current} - {DrawProcess.LeftDrag.End}";
+            var mousePos = DrawTargetControl.PointToClient(Cursor.Position);
+            Input.MousePos = new Vector2(mousePos.X, mousePos.Y);
             toolStripStatusLabelFPS.Text = $"{DrawProcess.CurrentFPS:###.##}fps";
         }
 
@@ -160,11 +163,7 @@ namespace IwUVEditor
         private void radioButtonRectangleSelection_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as RadioButton).Checked)
-                Editor.CurrentTool = Tool.RectangleSelection;
-        }
-
-        private void splitUVMat_Panel1_MouseMove(object sender, MouseEventArgs e)
-        {
+                Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
         }
 
         private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)

@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenerableMap.cs" />
     <Compile Include="Command\CommandRectangleSelection.cs" />
     <Compile Include="Command\CommandManager.cs" />
     <Compile Include="Command\IEditorCommand.cs" />
@@ -77,6 +78,7 @@
       <DependentUpon>FormEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Manager\DragManager.cs" />
+    <Compile Include="StateContainer\EditorStates.cs" />
     <Compile Include="PluginMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -87,11 +89,15 @@
     <Compile Include="DirectX\RasterizerStateProvider.cs" />
     <Compile Include="Material.cs" />
     <Compile Include="Manager\ScaleManager.cs" />
+    <Compile Include="StateContainer\InputStates.cs" />
     <Compile Include="TGASharpLib.cs" />
     <Compile Include="DirectX\UVViewDrawProcess.cs" />
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
     <Compile Include="DirectX\Vertex\VertexStruct.cs" />
-    <Compile Include="Tool.cs" />
+    <Compile Include="Tool\IEditTool.cs" />
+    <Compile Include="Tool\RectangleSelection.cs" />
+    <Compile Include="EditorLauncher.cs" />
+    <Compile Include="Manager\ToolBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

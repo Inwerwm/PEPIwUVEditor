@@ -81,6 +81,8 @@ namespace IwUVEditor.DirectX.DrawElement
 
         public void UpdateVertices()
         {
+            if (SourceMaterial is null)
+                return;
             CreateVertexBuffer();
         }
 

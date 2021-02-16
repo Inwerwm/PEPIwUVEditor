@@ -21,6 +21,7 @@ namespace IwUVEditor.DirectX
     class UVViewDrawProcess : DxProcess
     {
         #region フィールド
+        private float radiusOfPositionSquare;
         private Color4 colorInDefault;
         private Color4 colorInSelected;
         #endregion
@@ -61,6 +62,21 @@ namespace IwUVEditor.DirectX
         internal GenerableMap<Material, UVMesh> UVMeshes { get; set; }
         internal GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
 
+        public float RadiusOfPositionSquare
+        {
+            get => radiusOfPositionSquare;
+            set
+            {
+                radiusOfPositionSquare = value;
+                if (PositionSquares is null)
+                    return;
+                foreach (var sq in PositionSquares.Values)
+                {
+                    sq.Radius = radiusOfPositionSquare;
+                }
+            }
+        }
+
         public Color4 ColorInDefault
         {
             get => colorInDefault;
@@ -100,17 +116,6 @@ namespace IwUVEditor.DirectX
         public UVViewDrawProcess(EditorStates inputManager)
         {
             Current = inputManager;
-
-            Current.RadiusOfPosSqIsChanged += (value) =>
-            {
-                float radius = (float)value;
-                if (PositionSquares is null)
-                    return;
-                foreach (var sq in PositionSquares.Values)
-                {
-                    sq.Radius = radius;
-                }
-            };
         }
         #endregion
 
@@ -123,7 +128,7 @@ namespace IwUVEditor.DirectX
 
             Textures = new GenerableMap<Material, ShaderResourceView>(LoadTexture);
             UVMeshes = new GenerableMap<Material, UVMesh>((material) => new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
-            PositionSquares = new GenerableMap<Material, PositionSquares>((material) => new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, Current.RadiusOfPositionSquare, ColorInDefault, colorInSelected));
+            PositionSquares = new GenerableMap<Material, PositionSquares>((material) => new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, RadiusOfPositionSquare, ColorInDefault, colorInSelected));
         }
 
         public override void Draw()

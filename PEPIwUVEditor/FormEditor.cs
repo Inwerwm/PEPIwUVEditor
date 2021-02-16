@@ -53,7 +53,7 @@ namespace IwUVEditor
 
         private void InitializeCurrent()
         {
-            Current.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
+            DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
         }
 
         internal void LoadMaterials(Material[] materials)
@@ -160,7 +160,7 @@ namespace IwUVEditor
 
         private void numericRadiusOfPosSq_ValueChanged(object sender, EventArgs e)
         {
-            Current.RadiusOfPositionSquare = (float)(sender as NumericUpDown).Value;
+            DrawProcess.RadiusOfPositionSquare = (float)(sender as NumericUpDown).Value;
         }
 
         private void buttonReverseV_Click(object sender, EventArgs e)

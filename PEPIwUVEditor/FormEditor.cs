@@ -27,6 +27,7 @@ namespace IwUVEditor
                 drawProcess.AddMouseInputProcess(MouseInput);
             }
         }
+
         EditorStates Current { get; }
         InputStates Input { get; }
 

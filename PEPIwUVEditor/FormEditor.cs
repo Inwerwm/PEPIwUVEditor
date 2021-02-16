@@ -26,7 +26,7 @@ namespace IwUVEditor
                 drawProcess.AddMouseInputProcess(MouseInput);
             }
         }
-        StateContainer Current { get; }
+        EditorStates Current { get; }
         bool IsActive { get; set; }
         Vector2 MousePos { get; set; }
 
@@ -39,7 +39,7 @@ namespace IwUVEditor
 
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
-        public FormEditor(Editor editor, StateContainer inputManager)
+        public FormEditor(Editor editor, EditorStates inputManager)
         {
             Editor = editor;
             Current = inputManager;

@@ -22,7 +22,7 @@ namespace IwUVEditor
         DxContext DrawContext { get; }
         UVViewDrawProcess DrawProcess { get; set; }
 
-        public StateContainer Current { get; }
+        public EditorStates Current { get; }
 
         float CenterPosition => 0;
         float Zoom => 1;
@@ -30,7 +30,7 @@ namespace IwUVEditor
         public EditorLauncher(IPERunArgs args)
         {
             // インスタンスの作成
-            Current = new StateContainer();
+            Current = new EditorStates();
             Editor = new Editor(args, Current);
             Form = Form ?? new FormEditor(Editor, Current);
             DrawContext = DrawContext ?? new DxContext(Form.DrawTargetControl)

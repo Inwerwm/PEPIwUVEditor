@@ -7,33 +7,48 @@ namespace IwUVEditor.Tool
     class ToolBox : IDisposable
     {
         private bool disposedValue;
+        private UVViewDrawProcess _process;
 
         internal SlimDX.Direct3D11.Device Device { get; set; }
-        UVViewDrawProcess Process { get; set; }
+        UVViewDrawProcess Process
+        {
+            get => _process;
+            set
+            {
+                _process = value;
+                foreach (var tool in ToolOf)
+                {
+                    tool.Value?.Dispose();
+                }
+                ToolOf.Clear();
+            }
+        }
 
         // ツールオブジェクトのキャッシュ
-        Dictionary<Type, IEditTool> ToolOf { get; }
+        GenerableMap<Type, IEditTool> ToolOf { get; }
 
         public ToolBox()
         {
-            ToolOf = new Dictionary<Type, IEditTool>();
+            ToolOf = new GenerableMap<Type, IEditTool>((_) => null);
         }
 
-        T CallTool<T>(Func<T> constructor, UVViewDrawProcess process) where T : IEditTool
+        /// <summary>
+        /// 型に対応したツールのインスタンスを返す
+        /// </summary>
+        /// <typeparam name="T">ツールの型</typeparam>
+        /// <param name="constructor">ツールのコンストラクタ呼び出し関数</param>
+        /// <param name="process">描画プロセス</param>
+        /// <returns>指定した型のインスタンス</returns>
+        private T CallTool<T>(Func<T> constructor, UVViewDrawProcess process) where T : IEditTool
         {
-            // 呼び出された型がToolOfに未登録だった場合は追加する
-            IEditTool tool;
-            if (!ToolOf.TryGetValue(typeof(T), out tool))
-                ToolOf.Add(typeof(T), null);
-
-            // 型に対応したインスタンスが存在しないか
-            // 引数のプロセスがインスタンス生成時と変わっていた場合
-            // インスタンスを生成してToolOfに代入
-            if (tool == null || Process != process)
-            {
+            // Processが既存で引数と異なれば入れ替え
+            // 入れ替えると全ツールが削除される
+            if(Process != null && Process != process)
                 Process = process;
+
+            // 呼び出し元の型に対応するインスタンスが存在しなければ生成する
+            if (ToolOf[typeof(T)] == null)
                 ToolOf[typeof(T)] = constructor();
-            }
 
             return (T)ToolOf[typeof(T)];
         }

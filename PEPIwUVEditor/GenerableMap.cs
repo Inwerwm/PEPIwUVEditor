@@ -17,10 +17,13 @@ namespace IwUVEditor
 
         public new TValue this[TKey key]
         {
-            get
+            get => TryGetValue(key, out var value) ? value : AddAndReturn(key, DefaultGenerator(key));
+            set
             {
-                TValue value;
-                return TryGetValue(key, out value) ? value : AddAndReturn(key, DefaultGenerator(key));
+                if (TryGetValue(key, out var _))
+                    base[key] = value;
+                else
+                    Add(key, value);
             }
         }
 

@@ -158,7 +158,7 @@ namespace IwUVEditor.DirectX
             // ツール固有の描画処理を実行
             switch (Current.Tool)
             {
-                case Tool.RectangleSelection:
+                case Tool.ToolType.RectangleSelection:
                     if(Current.MouseLeft.IsDragging)
                         SelectionRectangle.Prepare();
                     break;

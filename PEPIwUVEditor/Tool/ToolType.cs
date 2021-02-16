@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IwUVEditor
+namespace IwUVEditor.Tool
 {
-    enum Tool
+    enum ToolType
     {
         RectangleSelection,
 

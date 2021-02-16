@@ -32,7 +32,7 @@ namespace IwUVEditor.Manager
                     MaterialIsChanged(material);
             }
         }
-        public Tool Tool { get; set; }
+        public Tool.ToolType Tool { get; set; }
 
         public float RadiusOfPositionSquare
         {

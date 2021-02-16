@@ -182,7 +182,7 @@ namespace IwUVEditor
         private void radioButtonRectangleSelection_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as RadioButton).Checked)
-                Current.Tool = Tool.RectangleSelection;
+                Current.Tool = Tool.ToolType.RectangleSelection;
         }
 
         private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)

@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.Tool
 {
-    class ToolBox
+    class ToolBox:IDisposable
     {
+        private bool disposedValue;
+
         internal SlimDX.Direct3D11.Device Device { get; set; }
         UVViewDrawProcess Process { get; set; }
 
@@ -38,6 +40,39 @@ namespace IwUVEditor.Tool
         public RectangleSelection RectangleSelection(UVViewDrawProcess process)
         {
             return CallTool(() => new RectangleSelection(Device, process.Effect, process.Rasterize.Solid, process.PositionSquares), process);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    foreach (var tool in ToolOf.Values)
+                    {
+                        tool?.Dispose();
+                    }
+                }
+
+                // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
+                // TODO: 大きなフィールドを null に設定します
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: 'Dispose(bool disposing)' にアンマネージド リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします
+        // ~ToolBox()
+        // {
+        //     // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

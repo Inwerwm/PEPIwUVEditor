@@ -112,6 +112,7 @@ namespace IwUVEditor
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    Editor?.Dispose();
                     DrawProcess?.Dispose();
                     DrawContext?.Dispose();
                     Form?.Dispose();

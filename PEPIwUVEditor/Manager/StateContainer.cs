@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace IwUVEditor.Manager
 {
-    class InputManager
+    class StateContainer
     {
         private float radiusOfPositionSquare;
 

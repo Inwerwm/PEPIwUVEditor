@@ -26,7 +26,7 @@ namespace IwUVEditor
                 drawProcess.AddMouseInputProcess(MouseInput);
             }
         }
-        InputManager Current { get; }
+        StateContainer Current { get; }
 
         public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
         {
@@ -37,7 +37,7 @@ namespace IwUVEditor
 
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
-        public FormEditor(Editor editor, InputManager inputManager)
+        public FormEditor(Editor editor, StateContainer inputManager)
         {
             Editor = editor;
             Current = inputManager;

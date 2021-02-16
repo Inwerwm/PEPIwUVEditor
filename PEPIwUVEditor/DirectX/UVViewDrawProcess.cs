@@ -25,7 +25,7 @@ namespace IwUVEditor.DirectX
         #endregion
 
         #region プロパティ
-        public InputManager Current { get; }
+        public StateContainer Current { get; }
 
         public RasterizerStateProvider Rasterize { get; private set; }
 
@@ -96,7 +96,7 @@ namespace IwUVEditor.DirectX
         #endregion
 
         #region コンストラクタ
-        public UVViewDrawProcess(InputManager inputManager)
+        public UVViewDrawProcess(StateContainer inputManager)
         {
             Current = inputManager;
 

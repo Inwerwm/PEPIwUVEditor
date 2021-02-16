@@ -27,13 +27,13 @@ namespace IwUVEditor
         public List<Material> Materials { get; private set; }
 
         // 現在の状態
-        public InputManager Current { get; }
+        public StateContainer Current { get; }
 
         // エディタ機能
         public Tool.ToolBox ToolBox { get; }
         Dictionary<Material, CommandManager> Commanders { get; set; }
 
-        public Editor(IPERunArgs args, InputManager inputManager)
+        public Editor(IPERunArgs args, StateContainer inputManager)
         {
             Args = args;
             Current = inputManager;

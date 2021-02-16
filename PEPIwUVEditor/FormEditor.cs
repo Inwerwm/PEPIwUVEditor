@@ -150,7 +150,7 @@ namespace IwUVEditor
         {
             var mousePos = DrawTargetControl.PointToClient(Cursor.Position);
             Input.MousePos = new Vector2(mousePos.X, mousePos.Y);
-            toolStripStatusLabelFPS.Text = $"{Current.FPS:###.##}fps";
+            toolStripStatusLabelFPS.Text = $"{DrawProcess.FPS:###.##}fps";
         }
 
         private void 描画リミッター解除ToolStripMenuItem_Click(object sender, EventArgs e)

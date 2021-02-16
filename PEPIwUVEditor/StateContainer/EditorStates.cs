@@ -11,6 +11,5 @@ namespace IwUVEditor.StateContainer
     {
         public Material Material { get; set; }
         public IEditTool Tool { get; set; }
-        public float FPS { get; set; }
     }
 }

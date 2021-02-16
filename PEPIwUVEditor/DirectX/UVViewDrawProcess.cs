@@ -133,8 +133,6 @@ namespace IwUVEditor.DirectX
 
         public override void Draw()
         {
-            Current.FPS = CurrentFPS;
-
             // 背景を灰色に
             Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
             // 深度バッファ

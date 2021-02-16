@@ -17,8 +17,6 @@ namespace IwUVEditor.Manager
             { Keys.ControlKey, false }
         };
 
-        public Vector2 MousePos { get; set; }
-
         public Material Material { get; set; }
         public IEditTool Tool { get; set; }
 

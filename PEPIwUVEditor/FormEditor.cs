@@ -28,6 +28,7 @@ namespace IwUVEditor
         }
         StateContainer Current { get; }
         bool IsActive { get; set; }
+        Vector2 MousePos { get; set; }
 
         public Dictionary<MouseButtons, bool> IsClicking { get; } = new Dictionary<MouseButtons, bool>
         {
@@ -102,7 +103,7 @@ namespace IwUVEditor
             if (IsClicking[MouseButtons.Middle])
                 DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
-            Current.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Current.MousePos), IsClicking[MouseButtons.Left]);
+            Current.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(MousePos), IsClicking[MouseButtons.Left]);
             Editor.DriveTool(Current.MouseLeft, Current.IsPress);
         }
 
@@ -147,7 +148,7 @@ namespace IwUVEditor
         private void timerEvery_Tick(object sender, EventArgs e)
         {
             var mousePos = DrawTargetControl.PointToClient(Cursor.Position);
-            Current.MousePos = new SlimDX.Vector2(mousePos.X, mousePos.Y);
+            MousePos = new SlimDX.Vector2(mousePos.X, mousePos.Y);
             toolStripStatusLabelFPS.Text = $"{Current.FPS:###.##}fps";
         }
 

@@ -8,7 +8,6 @@ namespace IwUVEditor.Manager
 {
     class InputManager
     {
-        private Material material;
         private float radiusOfPositionSquare;
 
         public DragManager MouseLeft { get; } = new DragManager();
@@ -23,16 +22,7 @@ namespace IwUVEditor.Manager
 
         public bool IsActive { get; set; }
 
-        public Material Material
-        {
-            get => material;
-            set
-            {
-                material = value;
-                if (!(MaterialIsChanged is null))
-                    MaterialIsChanged(material);
-            }
-        }
+        public Material Material { get; set; }
         public IEditTool Tool { get; set; }
 
         public float RadiusOfPositionSquare
@@ -47,22 +37,8 @@ namespace IwUVEditor.Manager
         }
         public float FPS { get; set; }
 
-        public IEditorCommand Command
-        {
-            set
-            {
-                if (Material is null)
-                    return;
-                InvokeCommand(value);
-            }
-        }
-
-        public event InputSetEventHandler MaterialIsChanged;
         public event InputSetEventHandler RadiusOfPosSqIsChanged;
-
-        public event CommandInvokeHandler InvokeCommand;
     }
 
     delegate void InputSetEventHandler(object setValue);
-    delegate void CommandInvokeHandler(IEditorCommand command);
 }

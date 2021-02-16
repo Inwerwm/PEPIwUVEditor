@@ -39,7 +39,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 radius = value;
-                CreateVertexBuffer();
+                UpdateVertices();
             }
         }
 
@@ -49,7 +49,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 screenSize = value;
-                CreateVertexBuffer();
+                UpdateVertices();
             }
         }
 

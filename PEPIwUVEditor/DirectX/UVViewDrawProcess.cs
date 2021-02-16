@@ -3,6 +3,7 @@ using DxManager.Camera;
 using IwUVEditor.Command;
 using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;

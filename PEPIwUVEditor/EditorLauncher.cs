@@ -2,6 +2,7 @@
 using DxManager.Camera;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using PEPlugin;
 using SlimDX;
 using System;

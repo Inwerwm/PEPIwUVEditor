@@ -2,6 +2,7 @@
 using IwUVEditor.Command;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using IwUVEditor.Tool;
 using SlimDX;
 using SlimDX.RawInput;

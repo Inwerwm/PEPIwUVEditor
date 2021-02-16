@@ -19,9 +19,9 @@ namespace IwUVEditor.Tool
 
         SelectionMode SelectionMode { get; set; }
 
-        public RectangleSelection(SelectionRectangle selectionRectangle, PositionSquares toUpdateElement)
+        public RectangleSelection(SlimDX.Direct3D11.Device device, SlimDX.Direct3D11.Effect effect, SlimDX.Direct3D11.RasterizerState drawMode, PositionSquares toUpdateElement)
         {
-            SelectionRectangle = selectionRectangle;
+            SelectionRectangle = new SelectionRectangle(device, effect, drawMode, new SlimDX.Color4(1, 1, 1));
             ToUpdateElement = toUpdateElement;
         }
 

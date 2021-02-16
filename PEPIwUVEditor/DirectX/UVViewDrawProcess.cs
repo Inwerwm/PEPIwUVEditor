@@ -52,7 +52,6 @@ namespace IwUVEditor.DirectX
         };
 
         TexturePlate TexturePlate { get; set; }
-        SelectionRectangle SelectionRectangle { get; set; }
 
         GenerableMap<Material, ShaderResourceView> Textures { get; set; }
         GenerableMap<Material, UVMesh> UVMeshes { get; set; }
@@ -113,7 +112,6 @@ namespace IwUVEditor.DirectX
             Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
-            SelectionRectangle = new SelectionRectangle(Context.Device, Effect, Rasterize.Solid, new Color4(0.5f, 1, 1, 1));
 
             Textures = new GenerableMap<Material, ShaderResourceView>(LoadTexture);
             UVMeshes = new GenerableMap<Material, UVMesh>((material) => new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));

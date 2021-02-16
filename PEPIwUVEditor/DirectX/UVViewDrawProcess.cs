@@ -167,15 +167,15 @@ namespace IwUVEditor.DirectX
 
         public void ChangeResolution()
         {
-            Current.ScreenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
+            var screenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
 
-            (Camera as DxCameraOrthographic).ViewVolumeSize = (Current.ScreenSize.X, Current.ScreenSize.Y);
+            (Camera as DxCameraOrthographic).ViewVolumeSize = (screenSize.X, screenSize.Y);
 
             if (PositionSquares is null)
                 return;
             foreach (var ps in PositionSquares.Values)
             {
-                ps.ScreenSize = Current.ScreenSize;
+                ps.ScreenSize = screenSize;
             }
         }
         #endregion

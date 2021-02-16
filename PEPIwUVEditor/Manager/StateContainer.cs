@@ -17,7 +17,6 @@ namespace IwUVEditor.Manager
             { Keys.ControlKey, false }
         };
 
-        public Vector2 ScreenSize { get; set; }
         public Vector2 MousePos { get; set; }
 
         public bool IsActive { get; set; }

@@ -19,9 +19,12 @@ namespace IwUVEditor.DirectX
 {
     class UVViewDrawProcess : DxProcess
     {
+        #region フィールド
         private Color4 colorInDefault;
         private Color4 colorInSelected;
+        #endregion
 
+        #region プロパティ
         public InputManager Current { get; }
 
         public RasterizerStateProvider Rasterize { get; private set; }
@@ -90,7 +93,9 @@ namespace IwUVEditor.DirectX
                 }
             }
         }
+        #endregion
 
+        #region コンストラクタ
         public UVViewDrawProcess(InputManager inputManager)
         {
             Current = inputManager;
@@ -106,7 +111,9 @@ namespace IwUVEditor.DirectX
                 }
             };
         }
+        #endregion
 
+        #region オーバーライド
         public override void Init()
         {
             Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
@@ -149,13 +156,14 @@ namespace IwUVEditor.DirectX
         {
             Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(TransMatrix);
         }
+        #endregion
 
+        #region 状態操作
         public void ResetCamera()
         {
             ShiftOffset = Vector3.Zero;
             Scale.WheelDelta = 0;
         }
-
 
         public void ChangeResolution()
         {
@@ -170,7 +178,9 @@ namespace IwUVEditor.DirectX
                 ps.ScreenSize = Current.ScreenSize;
             }
         }
+        #endregion
 
+        #region ヘルパー関数
         public Vector2 ScreenPosToWorldPos(Vector2 screenPos)
         {
             Vector2 normalizedPos = new Vector2(2 * screenPos.X / Context.TargetControl.Width - 1, 1 - 2 * screenPos.Y / Context.TargetControl.Height);
@@ -217,19 +227,29 @@ namespace IwUVEditor.DirectX
 
             return ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
         }
+        #endregion
 
+        #region IDisposable
         protected override void Dispose(bool disposing)
         {
-            TexturePlate?.Dispose();
-            foreach (var resource in Textures.Values)
+            if (!disposedValue)
             {
-                resource?.Dispose();
-            }
-            foreach (var mesh in UVMeshes.Values)
-            {
-                mesh?.Dispose();
+                if (disposing)
+                {
+                    // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    TexturePlate?.Dispose();
+                    foreach (var resource in Textures.Values)
+                    {
+                        resource?.Dispose();
+                    }
+                    foreach (var mesh in UVMeshes.Values)
+                    {
+                        mesh?.Dispose();
+                    }
+                }
             }
             base.Dispose(disposing);
         }
+        #endregion
     }
 }

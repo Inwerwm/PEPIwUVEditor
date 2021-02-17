@@ -43,7 +43,7 @@ namespace IwUVEditor.Subform
             this.radioButtonSelectionRect = new System.Windows.Forms.RadioButton();
             this.panelSelectionRectB = new System.Windows.Forms.Panel();
             this.panelSelectionRect = new System.Windows.Forms.Panel();
-            this.colorSelectorMain = new ColorSelector.ColorSelector();
+            this.colorSelector1 = new ColorSelector.ColorSelector();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelBackgroundB.SuspendLayout();
             this.panelVtxMeshB.SuspendLayout();
@@ -225,27 +225,29 @@ namespace IwUVEditor.Subform
             this.panelSelectionRect.Size = new System.Drawing.Size(119, 69);
             this.panelSelectionRect.TabIndex = 2;
             // 
-            // colorSelectorMain
+            // colorSelector1
             // 
-            this.colorSelectorMain.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.colorSelectorMain.Location = new System.Drawing.Point(269, 12);
-            this.colorSelectorMain.Margin = new System.Windows.Forms.Padding(4);
-            this.colorSelectorMain.Name = "colorSelectorMain";
-            this.colorSelectorMain.Size = new System.Drawing.Size(300, 300);
-            this.colorSelectorMain.TabIndex = 2;
+            this.colorSelector1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.colorSelector1.Font = new System.Drawing.Font("游ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.colorSelector1.Location = new System.Drawing.Point(268, 12);
+            this.colorSelector1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.colorSelector1.Name = "colorSelector1";
+            this.colorSelector1.Size = new System.Drawing.Size(300, 300);
+            this.colorSelector1.TabIndex = 2;
             // 
             // FormColorSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(585, 325);
-            this.Controls.Add(this.colorSelectorMain);
+            this.ClientSize = new System.Drawing.Size(580, 325);
+            this.Controls.Add(this.colorSelector1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("游ゴシック", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormColorSettings";
             this.Text = "色設定";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormColorSettings_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panelBackgroundB.ResumeLayout(false);
@@ -271,6 +273,6 @@ namespace IwUVEditor.Subform
         private System.Windows.Forms.Panel panelVtxMesh;
         private System.Windows.Forms.Panel panelSelectedVtx;
         private System.Windows.Forms.Panel panelSelectionRect;
-        private ColorSelector.ColorSelector colorSelectorMain;
+        private ColorSelector.ColorSelector colorSelector1;
     }
 }

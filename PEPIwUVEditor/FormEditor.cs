@@ -1,6 +1,7 @@
 ﻿using DxManager;
 using IwUVEditor.DirectX;
 using IwUVEditor.StateContainer;
+using IwUVEditor.Subform;
 using SlimDX;
 using SlimDX.RawInput;
 using System;
@@ -27,6 +28,8 @@ namespace IwUVEditor
         EditorStates Current { get; }
         InputStates Input { get; }
 
+        FormColorSettings ColorSettings { get; }
+
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
         public FormEditor(Editor editor, EditorStates inputManager)
@@ -36,6 +39,8 @@ namespace IwUVEditor
             Input = new InputStates();
 
             InitializeComponent();
+
+            ColorSettings = new FormColorSettings();
         }
 
         internal void InitializeWhenStartDrawing()
@@ -170,6 +175,11 @@ namespace IwUVEditor
         private void やり直しToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Editor.Redo();
+        }
+
+        private void 色を変更ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorSettings.Visible = true;
         }
     }
 }

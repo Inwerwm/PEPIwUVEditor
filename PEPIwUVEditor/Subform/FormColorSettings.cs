@@ -16,5 +16,11 @@ namespace IwUVEditor.Subform
         {
             InitializeComponent();
         }
+
+        private void FormColorSettings_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            Visible = false;
+        }
     }
 }

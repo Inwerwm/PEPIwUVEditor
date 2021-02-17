@@ -179,6 +179,11 @@ namespace IwUVEditor
 
         private void 色を変更ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Tool.IEditTool recSel;
+            if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out recSel))
+                ColorSettings.SelectionRectangleColor = (recSel as Tool.RectangleSelection).RectangleColor.ToColor();
+            
+
             ColorSettings.Visible = true;
         }
     }

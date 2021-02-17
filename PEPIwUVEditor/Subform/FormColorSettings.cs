@@ -12,6 +12,12 @@ namespace IwUVEditor.Subform
 {
     public partial class FormColorSettings : Form
     {
+        internal Color SelectionRectangleColor
+        {
+            get => panelSelectionRect.BackColor;
+            set => panelSelectionRect.BackColor = value;
+        }
+
         public FormColorSettings()
         {
             InitializeComponent();

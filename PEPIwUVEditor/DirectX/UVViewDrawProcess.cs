@@ -19,6 +19,10 @@ namespace IwUVEditor.DirectX
         private Color4 colorInSelected;
         #endregion
 
+        #region イベント
+        internal event CatchExceptionOnDrawHandler CatchException;
+        #endregion
+
         #region プロパティ - EditorStates
         public EditorStates Current { get; }
         #endregion
@@ -132,27 +136,34 @@ namespace IwUVEditor.DirectX
 
         public override void Draw()
         {
-            // 背景を灰色に
-            Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
-            // 深度バッファ
-            Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
-            // テクスチャを読み込み
-            Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Textures[Current.Material]);
+            try
+            {
+                // 背景を灰色に
+                Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
+                // 深度バッファ
+                Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
+                // テクスチャを読み込み
+                Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Textures[Current.Material]);
 
-            // テクスチャ板を描画
-            TexturePlate.Prepare();
+                // テクスチャ板を描画
+                TexturePlate.Prepare();
 
-            // メッシュを描画
-            UVMeshes[Current.Material].Prepare();
+                // メッシュを描画
+                UVMeshes[Current.Material].Prepare();
 
-            // 頂点位置に四角を描画
-            PositionSquares[Current.Material].Prepare();
+                // 頂点位置に四角を描画
+                PositionSquares[Current.Material].Prepare();
 
-            // ツール固有の描画処理を実行
-            Current.Tool?.PrepareDrawing();
+                // ツール固有の描画処理を実行
+                Current.Tool?.PrepareDrawing();
 
-            // 描画内容を反映
-            Context.SwapChain.Present(0, PresentFlags.None);
+                // 描画内容を反映
+                Context.SwapChain.Present(0, PresentFlags.None);
+            }
+            catch (Exception ex)
+            {
+                CatchException(ex);
+            }
         }
 
         protected override void UpdateCamera()
@@ -255,4 +266,6 @@ namespace IwUVEditor.DirectX
         }
         #endregion
     }
+
+    internal delegate void CatchExceptionOnDrawHandler(Exception ex);
 }

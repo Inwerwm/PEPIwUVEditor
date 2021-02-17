@@ -100,6 +100,13 @@ namespace IwUVEditor
                 ColorInSelected = new Color4(1, 1, 0, 0)
             };
             Form.DrawProcess = DrawProcess;
+
+            DrawProcess.CatchException += (ex) =>
+            {
+                StopDraw();
+
+                PEPExtensions.Utility.ShowException(ex);
+            };
         }
 
         protected virtual void Dispose(bool disposing)

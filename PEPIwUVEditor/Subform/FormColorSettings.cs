@@ -108,6 +108,13 @@ namespace IwUVEditor.Subform
             if (IsActive && (sender as RadioButton).Checked)
                 SyncColor();
         }
+
+        private void Panel_Click(object sender, System.EventArgs e)
+        {
+            ColorSettingControler selected = Settings.FirstOrDefault(s => s.Panel == sender);
+            if (selected != null)
+                selected.Selector.Checked = true;
+        }
     }
 
     internal class ColorSettingControler

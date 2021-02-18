@@ -112,6 +112,7 @@ namespace IwUVEditor.Subform
             this.panelBackground.Name = "panelBackground";
             this.panelBackground.Size = new System.Drawing.Size(119, 69);
             this.panelBackground.TabIndex = 2;
+            this.panelBackground.Click += new System.EventHandler(this.Panel_Click);
             // 
             // radioButtonVtxMesh
             // 
@@ -166,6 +167,7 @@ namespace IwUVEditor.Subform
             this.panelVtxMesh.Name = "panelVtxMesh";
             this.panelVtxMesh.Size = new System.Drawing.Size(119, 69);
             this.panelVtxMesh.TabIndex = 2;
+            this.panelVtxMesh.Click += new System.EventHandler(this.Panel_Click);
             // 
             // panelSelectedVtxB
             // 
@@ -189,6 +191,7 @@ namespace IwUVEditor.Subform
             this.panelSelectedVtx.Name = "panelSelectedVtx";
             this.panelSelectedVtx.Size = new System.Drawing.Size(119, 69);
             this.panelSelectedVtx.TabIndex = 2;
+            this.panelSelectedVtx.Click += new System.EventHandler(this.Panel_Click);
             // 
             // radioButtonSelectionRect
             // 
@@ -226,6 +229,7 @@ namespace IwUVEditor.Subform
             this.panelSelectionRect.Name = "panelSelectionRect";
             this.panelSelectionRect.Size = new System.Drawing.Size(119, 69);
             this.panelSelectionRect.TabIndex = 2;
+            this.panelSelectionRect.Click += new System.EventHandler(this.Panel_Click);
             // 
             // colorSelector1
             // 

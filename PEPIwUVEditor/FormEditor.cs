@@ -182,7 +182,9 @@ namespace IwUVEditor
             Tool.IEditTool recSel;
             if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out recSel))
                 ColorSettings.SelectionRectangleColor = (recSel as Tool.RectangleSelection).RectangleColor.ToColor();
-            
+            ColorSettings.VertexMeshColor = DrawProcess.ColorInDefault.ToColor();
+            ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
+            ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
 
             ColorSettings.Visible = true;
         }

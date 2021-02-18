@@ -18,6 +18,24 @@ namespace IwUVEditor.Subform
             set => panelSelectionRect.BackColor = value;
         }
 
+        internal Color VertexMeshColor
+        {
+            get => panelVtxMesh.BackColor;
+            set => panelVtxMesh.BackColor = value;
+        }
+
+        internal Color SelectedVertexColor
+        {
+            get => panelSelectedVtx.BackColor;
+            set => panelSelectedVtx.BackColor = value;
+        }
+
+        internal Color BackgroundColor
+        {
+            get => panelBackground.BackColor;
+            set => panelBackground.BackColor = value;
+        }
+
         public FormColorSettings()
         {
             InitializeComponent();

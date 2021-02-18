@@ -186,6 +186,7 @@ namespace IwUVEditor
             ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
             ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
 
+            ColorSettings.IsActive = true;
             ColorSettings.Visible = true;
         }
     }

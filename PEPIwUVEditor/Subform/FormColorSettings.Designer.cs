@@ -61,9 +61,9 @@ namespace IwUVEditor.Subform
             this.radioButtonBackground.Name = "radioButtonBackground";
             this.radioButtonBackground.Size = new System.Drawing.Size(60, 69);
             this.radioButtonBackground.TabIndex = 0;
-            this.radioButtonBackground.TabStop = true;
             this.radioButtonBackground.Text = "背景";
             this.radioButtonBackground.UseVisualStyleBackColor = true;
+            this.radioButtonBackground.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // tableLayoutPanel1
             // 
@@ -118,6 +118,7 @@ namespace IwUVEditor.Subform
             this.radioButtonVtxMesh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.radioButtonVtxMesh.AutoSize = true;
+            this.radioButtonVtxMesh.Checked = true;
             this.radioButtonVtxMesh.Font = new System.Drawing.Font("游ゴシック", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.radioButtonVtxMesh.Location = new System.Drawing.Point(3, 3);
             this.radioButtonVtxMesh.Name = "radioButtonVtxMesh";
@@ -126,6 +127,7 @@ namespace IwUVEditor.Subform
             this.radioButtonVtxMesh.TabStop = true;
             this.radioButtonVtxMesh.Text = "頂点";
             this.radioButtonVtxMesh.UseVisualStyleBackColor = true;
+            this.radioButtonVtxMesh.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // radioButtonSelectedVtx
             // 
@@ -137,9 +139,9 @@ namespace IwUVEditor.Subform
             this.radioButtonSelectedVtx.Name = "radioButtonSelectedVtx";
             this.radioButtonSelectedVtx.Size = new System.Drawing.Size(92, 69);
             this.radioButtonSelectedVtx.TabIndex = 0;
-            this.radioButtonSelectedVtx.TabStop = true;
             this.radioButtonSelectedVtx.Text = "選択頂点";
             this.radioButtonSelectedVtx.UseVisualStyleBackColor = true;
+            this.radioButtonSelectedVtx.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // panelVtxMeshB
             // 
@@ -198,9 +200,9 @@ namespace IwUVEditor.Subform
             this.radioButtonSelectionRect.Name = "radioButtonSelectionRect";
             this.radioButtonSelectionRect.Size = new System.Drawing.Size(92, 69);
             this.radioButtonSelectionRect.TabIndex = 0;
-            this.radioButtonSelectionRect.TabStop = true;
             this.radioButtonSelectionRect.Text = "範囲選択";
             this.radioButtonSelectionRect.UseVisualStyleBackColor = true;
+            this.radioButtonSelectionRect.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // panelSelectionRectB
             // 

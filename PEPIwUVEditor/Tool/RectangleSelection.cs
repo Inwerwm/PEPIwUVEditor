@@ -1,6 +1,7 @@
 ﻿using IwUVEditor.Command;
 using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.Manager;
+using SlimDX;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +10,7 @@ namespace IwUVEditor.Tool
     class RectangleSelection : IEditTool
     {
         private bool disposedValue;
+        private static Color4 rectangleColor = new Color4(0.5f, 1, 1, 1);
 
         public bool IsReady { get; private set; }
         private bool NeedsDrawing { get; set; }
@@ -16,11 +18,21 @@ namespace IwUVEditor.Tool
         SelectionRectangle SelectionRectangle { get; }
         GenerableMap<Material, PositionSquares> PosSquares { get; }
 
+        public Color4 RectangleColor
+        {
+            get => rectangleColor;
+            set
+            {
+                rectangleColor = value;
+                SelectionRectangle.Color = rectangleColor;
+            }
+        }
+
         SelectionMode SelectionMode { get; set; }
 
         public RectangleSelection(SlimDX.Direct3D11.Device device, SlimDX.Direct3D11.Effect effect, SlimDX.Direct3D11.RasterizerState drawMode, GenerableMap<Material, PositionSquares> posSquares)
         {
-            SelectionRectangle = new SelectionRectangle(device, effect, drawMode, new SlimDX.Color4(0.5f, 1, 1, 1));
+            SelectionRectangle = new SelectionRectangle(device, effect, drawMode, RectangleColor);
             PosSquares = posSquares;
         }
 

@@ -105,7 +105,7 @@ namespace IwUVEditor
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Current.Material = (sender as ListBox).SelectedItem as Material;
+            Current.Material = (sender as ListBox).SelectedItem as Material ?? Current.Material;
         }
 
         private void buttonResetCamera_Click(object sender, EventArgs e)

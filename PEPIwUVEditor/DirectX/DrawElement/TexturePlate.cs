@@ -112,6 +112,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         void CreateVertexLayout()
         {
+            VertexLayout?.Dispose();
             VertexLayout = new InputLayout(
                 Device,
                 UsingEffectPass.Description.Signature,
@@ -121,6 +122,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         void CreateVertexBuffer()
         {
+            VertexBuffer?.Dispose();
             using (var vertexStream = new DataStream(PlateVertices, true, true))
             {
                 VertexBuffer = new Buffer(
@@ -137,6 +139,7 @@ namespace IwUVEditor.DirectX.DrawElement
 
         void CreateIndexBuffer()
         {
+            IndexBuffer?.Dispose();
             using (DataStream indexStream = new DataStream(PlateIndices, true, true))
             {
                 IndexBuffer = new Buffer(
@@ -155,6 +158,7 @@ namespace IwUVEditor.DirectX.DrawElement
         {
             CreateInstances();
 
+            InstanceBuffer?.Dispose();
             using (DataStream instanceStream = new DataStream(Instances.ToArray(), false, true))
                 InstanceBuffer = new Buffer(
                     Device,

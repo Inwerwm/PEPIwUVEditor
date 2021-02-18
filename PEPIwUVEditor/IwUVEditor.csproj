@@ -33,6 +33,9 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColorSelector">
+      <HintPath>..\..\..\..\Users\owner\source\repos\ColorSelector\ColorSelector\bin\Release\ColorSelector.dll</HintPath>
+    </Reference>
     <Reference Include="DxManager">
       <HintPath>..\..\DxManager\DxManager\bin\Release\DxManager.dll</HintPath>
     </Reference>
@@ -90,6 +93,12 @@
     <Compile Include="Material.cs" />
     <Compile Include="Manager\ScaleManager.cs" />
     <Compile Include="StateContainer\InputStates.cs" />
+    <Compile Include="Subform\FormColorSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Subform\FormColorSettings.Designer.cs">
+      <DependentUpon>FormColorSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="TGASharpLib.cs" />
     <Compile Include="DirectX\UVViewDrawProcess.cs" />
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
@@ -107,10 +116,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Subform\FormColorSettings.resx">
+      <DependentUpon>FormColorSettings.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Shader.fx" />
     <Content Include="Properties\White.png" />
+    <None Include="Properties\CheckPattern.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

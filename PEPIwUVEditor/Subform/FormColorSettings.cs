@@ -18,6 +18,8 @@ namespace IwUVEditor.Subform
                 isActive = value;
                 if (isActive)
                     SyncColor();
+                else if (CurrentSetting != null)
+                    colorSelector1.ColorChanged -= CurrentSetting.ColorSetter;
             }
         }
 

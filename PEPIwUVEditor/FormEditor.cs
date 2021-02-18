@@ -48,6 +48,15 @@ namespace IwUVEditor
         {
             DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
             Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
+
+            // 色設定フォームに色を反映
+            Tool.IEditTool recSel;
+            if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out recSel))
+                ColorSettings.SelectionRectangleColor = (recSel as Tool.RectangleSelection).RectangleColor.ToColor();
+            ColorSettings.VertexMeshColor = DrawProcess.ColorInDefault.ToColor();
+            ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
+            ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
+
             timerEvery.Enabled = true;
         }
 
@@ -180,13 +189,6 @@ namespace IwUVEditor
 
         private void 色を変更ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Tool.IEditTool recSel;
-            if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out recSel))
-                ColorSettings.SelectionRectangleColor = (recSel as Tool.RectangleSelection).RectangleColor.ToColor();
-            ColorSettings.VertexMeshColor = DrawProcess.ColorInDefault.ToColor();
-            ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
-            ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
-
             if (!IsListeningColorSettingEvents)
             {
                 ColorSettings.SelectionRectangleColorChanged +=
@@ -194,7 +196,7 @@ namespace IwUVEditor
                     {
                         Tool.IEditTool rs;
                         if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out rs))
-                            (recSel as Tool.RectangleSelection).RectangleColor = new Color4(c);
+                            (rs as Tool.RectangleSelection).RectangleColor = new Color4(c);
                     });
 
                 ColorSettings.VertexMeshColorChanged +=

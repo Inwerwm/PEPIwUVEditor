@@ -24,26 +24,49 @@ namespace IwUVEditor.Subform
         public Color SelectionRectangleColor
         {
             get => panelSelectionRect.BackColor;
-            set => panelSelectionRect.BackColor = value;
+            set
+            {
+                panelSelectionRect.BackColor = value;
+                if (IsActive)
+                    SelectionRectangleColorChanged(value);
+            }
         }
 
         public Color VertexMeshColor
         {
             get => panelVtxMesh.BackColor;
-            set => panelVtxMesh.BackColor = value;
+            set
+            {
+                panelVtxMesh.BackColor = value;
+                if (IsActive)
+                    VertexMeshColorChanged(value);
+            }
         }
 
         public Color SelectedVertexColor
         {
             get => panelSelectedVtx.BackColor;
-            set => panelSelectedVtx.BackColor = value;
+            set {
+                panelSelectedVtx.BackColor = value;
+                if (IsActive)
+                    SelectedVertexColorChanged(value);
+            }
         }
 
         public Color BackgroundColor
         {
             get => panelBackground.BackColor;
-            set => panelBackground.BackColor = value;
+            set {
+                panelBackground.BackColor = value;
+                if (IsActive)
+                    BackgroundColorChanged(value);
+            }
         }
+
+        public event ColorHandler SelectionRectangleColorChanged = delegate { };
+        public event ColorHandler VertexMeshColorChanged = delegate { };
+        public event ColorHandler SelectedVertexColorChanged = delegate { };
+        public event ColorHandler BackgroundColorChanged = delegate { };
 
         private List<ColorSettingControler> Settings { get; }
         ColorSettingControler CurrentSetting { get; set; }

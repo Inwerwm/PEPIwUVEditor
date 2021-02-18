@@ -29,6 +29,7 @@ namespace IwUVEditor
         InputStates Input { get; }
 
         FormColorSettings ColorSettings { get; }
+        bool IsListeningColorSettingEvents { get; set; }
 
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
@@ -185,6 +186,26 @@ namespace IwUVEditor
             ColorSettings.VertexMeshColor = DrawProcess.ColorInDefault.ToColor();
             ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
             ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
+
+            if (!IsListeningColorSettingEvents)
+            {
+                ColorSettings.SelectionRectangleColorChanged +=
+                    new ColorSelector.ColorHandler(c =>
+                    {
+                        Tool.IEditTool rs;
+                        if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out rs))
+                            (recSel as Tool.RectangleSelection).RectangleColor = new Color4(c);
+                    });
+
+                ColorSettings.VertexMeshColorChanged +=
+                    new ColorSelector.ColorHandler(c => DrawProcess.ColorInDefault = new Color4(c));
+                ColorSettings.SelectedVertexColorChanged +=
+                    new ColorSelector.ColorHandler(c => DrawProcess.ColorInSelected = new Color4(c));
+                ColorSettings.BackgroundColorChanged +=
+                    new ColorSelector.ColorHandler(c => DrawProcess.BackgroundColor = new Color4(c));
+
+                IsListeningColorSettingEvents = true;
+            }
 
             ColorSettings.IsActive = true;
             ColorSettings.Visible = true;

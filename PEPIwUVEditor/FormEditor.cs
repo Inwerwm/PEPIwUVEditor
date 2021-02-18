@@ -1,6 +1,7 @@
 ﻿using DxManager;
 using IwUVEditor.DirectX;
 using IwUVEditor.StateContainer;
+using IwUVEditor.Subform;
 using SlimDX;
 using SlimDX.RawInput;
 using System;
@@ -27,6 +28,9 @@ namespace IwUVEditor
         EditorStates Current { get; }
         InputStates Input { get; }
 
+        FormColorSettings ColorSettings { get; }
+        bool IsListeningColorSettingEvents { get; set; }
+
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
         public FormEditor(Editor editor, EditorStates inputManager)
@@ -36,12 +40,23 @@ namespace IwUVEditor
             Input = new InputStates();
 
             InitializeComponent();
+
+            ColorSettings = new FormColorSettings();
         }
 
         internal void InitializeWhenStartDrawing()
         {
             DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
             Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
+
+            // 色設定フォームに色を反映
+            Tool.IEditTool recSel;
+            if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out recSel))
+                ColorSettings.SelectionRectangleColor = (recSel as Tool.RectangleSelection).RectangleColor.ToColor();
+            ColorSettings.VertexMeshColor = DrawProcess.ColorInDefault.ToColor();
+            ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
+            ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
+
             timerEvery.Enabled = true;
         }
 
@@ -170,6 +185,32 @@ namespace IwUVEditor
         private void やり直しToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Editor.Redo();
+        }
+
+        private void 色を変更ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!IsListeningColorSettingEvents)
+            {
+                ColorSettings.SelectionRectangleColorChanged +=
+                    new ColorSelector.ColorHandler(c =>
+                    {
+                        Tool.IEditTool rs;
+                        if (Editor.ToolBox.InstanceOf.TryGetValue(typeof(Tool.RectangleSelection), out rs))
+                            (rs as Tool.RectangleSelection).RectangleColor = new Color4(c);
+                    });
+
+                ColorSettings.VertexMeshColorChanged +=
+                    new ColorSelector.ColorHandler(c => DrawProcess.ColorInDefault = new Color4(c));
+                ColorSettings.SelectedVertexColorChanged +=
+                    new ColorSelector.ColorHandler(c => DrawProcess.ColorInSelected = new Color4(c));
+                ColorSettings.BackgroundColorChanged +=
+                    new ColorSelector.ColorHandler(c => DrawProcess.BackgroundColor = new Color4(c));
+
+                IsListeningColorSettingEvents = true;
+            }
+
+            ColorSettings.IsActive = true;
+            ColorSettings.Visible = true;
         }
     }
 }

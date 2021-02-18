@@ -19,6 +19,7 @@ namespace IwUVEditor
             if (disposing && (components != null))
             {
                 components.Dispose();
+                ColorSettings.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -60,6 +61,7 @@ namespace IwUVEditor
             this.やり直しToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.描画リミッター解除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.色を変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -235,7 +237,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 1005;
+            this.splitUVMat.SplitterDistance = 1001;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -247,7 +249,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(364, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(368, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -348,7 +350,8 @@ namespace IwUVEditor
             this.元に戻すToolStripMenuItem,
             this.やり直しToolStripMenuItem,
             this.toolStripSeparator2,
-            this.描画リミッター解除ToolStripMenuItem});
+            this.描画リミッター解除ToolStripMenuItem,
+            this.色を変更ToolStripMenuItem});
             this.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem";
             this.編集ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
             this.編集ToolStripMenuItem.Text = "編集";
@@ -384,6 +387,13 @@ namespace IwUVEditor
             this.描画リミッター解除ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
             this.描画リミッター解除ToolStripMenuItem.Text = "描画リミッター解除";
             this.描画リミッター解除ToolStripMenuItem.Click += new System.EventHandler(this.描画リミッター解除ToolStripMenuItem_Click);
+            // 
+            // 色を変更ToolStripMenuItem
+            // 
+            this.色を変更ToolStripMenuItem.Name = "色を変更ToolStripMenuItem";
+            this.色を変更ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.色を変更ToolStripMenuItem.Text = "色を変更";
+            this.色を変更ToolStripMenuItem.Click += new System.EventHandler(this.色を変更ToolStripMenuItem_Click);
             // 
             // テクスチャToolStripMenuItem
             // 
@@ -478,5 +488,6 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem 描画リミッター解除ToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown numericRadiusOfPosSq;
+        private System.Windows.Forms.ToolStripMenuItem 色を変更ToolStripMenuItem;
     }
 }

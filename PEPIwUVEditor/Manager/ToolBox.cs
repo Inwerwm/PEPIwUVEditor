@@ -1,5 +1,7 @@
 ﻿using IwUVEditor.DirectX;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace IwUVEditor.Tool
 {
@@ -25,6 +27,10 @@ namespace IwUVEditor.Tool
 
         // ツールオブジェクトのキャッシュ
         GenerableMap<Type, IEditTool> ToolOf { get; }
+        /// <summary>
+        /// ツールのインスタンスを参照したいとき用
+        /// </summary>
+        public ReadOnlyDictionary<Type, IEditTool> InstanceOf => new ReadOnlyDictionary<Type, IEditTool>(ToolOf);
 
         public ToolBox()
         {

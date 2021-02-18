@@ -113,12 +113,16 @@ namespace IwUVEditor.DirectX
                 }
             }
         }
+
+        public Color4 BackgroundColor { get; set; }
+
         #endregion
 
         #region コンストラクタ
         public UVViewDrawProcess(EditorStates inputManager)
         {
             Current = inputManager;
+            BackgroundColor = new Color4(1.0f, 0.3f, 0.3f, 0.3f);
         }
         #endregion
 
@@ -138,8 +142,8 @@ namespace IwUVEditor.DirectX
         {
             try
             {
-                // 背景を灰色に
-                Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, new Color4(1.0f, 0.3f, 0.3f, 0.3f));
+                // 背景色を描画
+                Context.Device.ImmediateContext.ClearRenderTargetView(Context.RenderTarget, BackgroundColor);
                 // 深度バッファ
                 Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
                 // テクスチャを読み込み

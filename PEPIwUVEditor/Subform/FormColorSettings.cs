@@ -115,6 +115,12 @@ namespace IwUVEditor.Subform
             if (selected != null)
                 selected.Selector.Checked = true;
         }
+
+        private void toolStripStatusLabelForefront_Click(object sender, System.EventArgs e)
+        {
+            TopMost = !TopMost;
+            toolStripStatusLabelForefront.BackColor = TopMost ? SystemColors.ActiveCaption : SystemColors.ButtonFace;
+        }
     }
 
     internal class ColorSettingControler

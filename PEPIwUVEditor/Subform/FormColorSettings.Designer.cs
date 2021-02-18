@@ -44,11 +44,14 @@ namespace IwUVEditor.Subform
             this.panelSelectionRectB = new System.Windows.Forms.Panel();
             this.panelSelectionRect = new System.Windows.Forms.Panel();
             this.colorSelector1 = new ColorSelector.ColorSelector();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelForefront = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelBackgroundB.SuspendLayout();
             this.panelVtxMeshB.SuspendLayout();
             this.panelSelectedVtxB.SuspendLayout();
             this.panelSelectionRectB.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // radioButtonBackground
@@ -67,8 +70,7 @@ namespace IwUVEditor.Subform
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -80,7 +82,7 @@ namespace IwUVEditor.Subform
             this.tableLayoutPanel1.Controls.Add(this.panelSelectedVtxB, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.radioButtonSelectionRect, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.panelSelectionRectB, 1, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 13);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -233,19 +235,42 @@ namespace IwUVEditor.Subform
             // 
             // colorSelector1
             // 
+            this.colorSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.colorSelector1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.colorSelector1.Font = new System.Drawing.Font("游ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.colorSelector1.Location = new System.Drawing.Point(268, 12);
+            this.colorSelector1.Location = new System.Drawing.Point(268, 13);
             this.colorSelector1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.colorSelector1.Name = "colorSelector1";
             this.colorSelector1.Size = new System.Drawing.Size(300, 300);
             this.colorSelector1.TabIndex = 2;
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelForefront});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 323);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(580, 24);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelForefront
+            // 
+            this.toolStripStatusLabelForefront.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.toolStripStatusLabelForefront.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelForefront.Name = "toolStripStatusLabelForefront";
+            this.toolStripStatusLabelForefront.Size = new System.Drawing.Size(71, 19);
+            this.toolStripStatusLabelForefront.Text = "最前面表示";
+            this.toolStripStatusLabelForefront.Click += new System.EventHandler(this.toolStripStatusLabelForefront_Click);
+            // 
             // FormColorSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(580, 325);
+            this.ClientSize = new System.Drawing.Size(580, 347);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.colorSelector1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("游ゴシック", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
@@ -260,7 +285,10 @@ namespace IwUVEditor.Subform
             this.panelVtxMeshB.ResumeLayout(false);
             this.panelSelectedVtxB.ResumeLayout(false);
             this.panelSelectionRectB.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -280,5 +308,7 @@ namespace IwUVEditor.Subform
         private System.Windows.Forms.Panel panelSelectedVtx;
         private System.Windows.Forms.Panel panelSelectionRect;
         private ColorSelector.ColorSelector colorSelector1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelForefront;
     }
 }

@@ -36,7 +36,7 @@ namespace IwUVEditor.Tool
 
         public IEditorCommand CreateCommand(Material target)
         {
-            return new CommandMoveVertices();
+            return new CommandMoveVertices(TargetVertices, Offset);
         }
 
         public void PrepareDrawing()

@@ -1,5 +1,7 @@
 ﻿using IwUVEditor.DirectX;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace IwUVEditor.Tool
 {
@@ -15,20 +17,24 @@ namespace IwUVEditor.Tool
             set
             {
                 _process = value;
-                foreach (var tool in ToolOf)
+                foreach (var tool in ToolInstances)
                 {
                     tool.Value?.Dispose();
                 }
-                ToolOf.Clear();
+                ToolInstances.Clear();
             }
         }
 
         // ツールオブジェクトのキャッシュ
-        GenerableMap<Type, IEditTool> ToolOf { get; }
+        GenerableMap<Type, IEditTool> ToolInstances { get; }
+        /// <summary>
+        /// ツールのインスタンスを参照したいとき用
+        /// </summary>
+        public ReadOnlyDictionary<Type, IEditTool> InstanceOf => new ReadOnlyDictionary<Type, IEditTool>(ToolInstances);
 
         public ToolBox()
         {
-            ToolOf = new GenerableMap<Type, IEditTool>((_) => null);
+            ToolInstances = new GenerableMap<Type, IEditTool>((_) => null);
         }
 
         /// <summary>
@@ -46,14 +52,17 @@ namespace IwUVEditor.Tool
                 Process = process;
 
             // 呼び出し元の型に対応するインスタンスが存在しなければ生成する
-            if (ToolOf[typeof(T)] == null)
-                ToolOf[typeof(T)] = constructor();
+            if (ToolInstances[typeof(T)] == null)
+                ToolInstances[typeof(T)] = constructor();
 
-            return (T)ToolOf[typeof(T)];
+            return (T)ToolInstances[typeof(T)];
         }
 
         public RectangleSelection RectangleSelection(UVViewDrawProcess process) =>
             CallTool(() => new RectangleSelection(Device, process.Effect, process.Rasterize.Solid, process.PositionSquares), process);
+
+        public MoveVertices MoveVertices(UVViewDrawProcess process) =>
+            CallTool(() => new MoveVertices(process), process);
 
         #region IDisposable
         protected virtual void Dispose(bool disposing)
@@ -63,7 +72,7 @@ namespace IwUVEditor.Tool
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
-                    foreach (var tool in ToolOf.Values)
+                    foreach (var tool in ToolInstances.Values)
                     {
                         tool?.Dispose();
                     }

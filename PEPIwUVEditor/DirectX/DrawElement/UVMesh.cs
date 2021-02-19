@@ -131,12 +131,11 @@ namespace IwUVEditor.DirectX.DrawElement
         private VertexStruct[] LoadUVVertices(Material material) =>
             material.Vertices.Select(vtx => new VertexStruct()
             {
-                Position = new Vector3(vtx.UV.X, vtx.UV.Y, 0),
+                Position = Vector3.TransformCoordinate(new Vector3(vtx.UV.X, vtx.UV.Y, 0), material.TemporaryTransformMatrices[vtx]),
                 Color = LineColor,
                 TEXCOORD = vtx.UV
             }
             ).ToArray();
-
 
         protected virtual void Dispose(bool disposing)
         {

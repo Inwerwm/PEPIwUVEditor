@@ -36,6 +36,7 @@ namespace IwUVEditor.Tool
 
         public IEditorCommand CreateCommand(Material target)
         {
+            IsReady = false;
             return new CommandMoveVertices(TargetVertices, Offset);
         }
 
@@ -56,11 +57,6 @@ namespace IwUVEditor.Tool
             {
                 CurrentPos = mouse.Current;
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset);
-                //foreach (var vtx in TargetVertices)
-                //{
-                //    TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset;
-                //}
-
                 TotalOffset *= Offset;
 
                 // オフセットを得た時点で現在地点を次の初期位置扱いする

@@ -42,7 +42,7 @@ namespace IwUVEditor
 
             InitializeComponent();
 
-            SelectionSaver = new FormSaveSelection(Current);
+            SelectionSaver = new FormSaveSelection(Current) { CommandInvoker = Editor.Do };
             ColorSettings = new FormColorSettings();
         }
 

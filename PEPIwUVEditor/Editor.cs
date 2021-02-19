@@ -57,6 +57,14 @@ namespace IwUVEditor
                 Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));
         }
 
+        public void Do(Material targetMaterial, IEditorCommand command)
+        {
+            if (Current.Material is null)
+                return;
+
+            Commanders[targetMaterial].Do(command);
+        }
+
         public void Undo()
         {
             if (Current.Material is null)

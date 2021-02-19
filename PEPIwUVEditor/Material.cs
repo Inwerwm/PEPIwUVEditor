@@ -11,9 +11,8 @@ namespace IwUVEditor
 {
     class Material : IPXMaterial
     {
-        // デバッグ用
-        static int count;
-        int id;
+        private static int instanceCount;
+        public int InstanceId { get; }
 
         IPXMaterial Value { get; }
 
@@ -33,10 +32,8 @@ namespace IwUVEditor
 
         public Material(IPXMaterial material, IPXPmx pmx)
         {
-            //デバッグ用
-            id = count;
-            count++;
-            //
+            InstanceId = instanceCount;
+            instanceCount++;
 
             Value = material;
             ModelPath = pmx.FilePath;

@@ -196,6 +196,12 @@ namespace IwUVEditor.DirectX
                 ps.ScreenSize = screenSize;
             }
         }
+
+        public void UpdateDrawingVertices()
+        {
+            UVMeshes[Current.Material].UpdateVertices();
+            PositionSquares[Current.Material].UpdateVertices();
+        }
         #endregion
 
         #region ヘルパー関数

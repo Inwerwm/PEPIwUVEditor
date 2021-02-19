@@ -24,7 +24,7 @@ namespace IwUVEditor.Command
 
         public void Do()
         {
-            PreviousState = TargetMaterial.IsSelected.Select(pair => (pair.Key, pair.Value)).ToDictionary(p => p.Key, p => p.Value);
+            PreviousState = TargetMaterial.IsSelected.ToDictionary(p => p.Key, p => p.Value);
             foreach (var sel in VertexSelect)
             {
                 switch (Mode)

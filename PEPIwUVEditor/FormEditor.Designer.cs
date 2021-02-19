@@ -154,6 +154,7 @@ namespace IwUVEditor
             this.radioButtonMove.Text = "移動";
             this.radioButtonMove.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioButtonMove.UseVisualStyleBackColor = true;
+            this.radioButtonMove.CheckedChanged += new System.EventHandler(this.radioButtonMove_CheckedChanged);
             // 
             // radioButtonRotate
             // 
@@ -237,7 +238,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 1001;
+            this.splitUVMat.SplitterDistance = 999;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -249,7 +250,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(368, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(370, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 

@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\CommandMoveVertices.cs" />
+    <Compile Include="Command\CommandSelectVertices.cs" />
     <Compile Include="GenerableMap.cs" />
     <Compile Include="Command\CommandRectangleSelection.cs" />
     <Compile Include="Command\CommandManager.cs" />
@@ -126,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Subform\FormColorSettings.resx">
       <DependentUpon>FormColorSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Subform\FormSaveSelection.resx">
+      <DependentUpon>FormSaveSelection.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

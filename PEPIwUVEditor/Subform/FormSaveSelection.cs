@@ -12,9 +12,18 @@ namespace IwUVEditor.Subform
 {
     public partial class FormSaveSelection : Form
     {
+        List<SavedSelection> SavedSelections { get; }
+
         public FormSaveSelection()
         {
+            SavedSelections = new List<SavedSelection>();
             InitializeComponent();
         }
+    }
+
+    class SavedSelection
+    {
+        public string Name { get; set; }
+        public Command.CommandSelectVertices Command { get; }
     }
 }

@@ -28,6 +28,7 @@ namespace IwUVEditor
         EditorStates Current { get; }
         InputStates Input { get; }
 
+        FormSaveSelection SelectionSaver { get; set; }
         FormColorSettings ColorSettings { get; }
         bool IsListeningColorSettingEvents { get; set; }
 
@@ -41,6 +42,7 @@ namespace IwUVEditor
 
             InitializeComponent();
 
+            SelectionSaver = new FormSaveSelection(Current);
             ColorSettings = new FormColorSettings();
         }
 
@@ -56,6 +58,8 @@ namespace IwUVEditor
             ColorSettings.VertexMeshColor = DrawProcess.ColorInDefault.ToColor();
             ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
             ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
+
+            SelectionSaver.VertexUpdater = DrawProcess.UpdateDrawingVertices;
 
             timerEvery.Enabled = true;
         }
@@ -205,6 +209,11 @@ namespace IwUVEditor
 
             ColorSettings.IsActive = true;
             ColorSettings.Visible = true;
+        }
+
+        private void 頂点選択保存ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectionSaver.Visible = true;
         }
 
         private void radioButtonRectangleSelection_CheckedChanged(object sender, EventArgs e)

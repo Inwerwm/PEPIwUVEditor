@@ -17,19 +17,16 @@ namespace IwUVEditor.Subform
     {
         private int SaveCount { get; set; }
 
-        Action<Material> VertexUpdater { get; }
+        internal Action VertexUpdater { get; set; }
+        internal Action<IEditorCommand> CommandInvoker { get; set; }
         EditorStates Current { get; }
-        List<SavedSelection> SavedSelections { get; }
 
-        internal FormSaveSelection(EditorStates editorStates, Action<Material> vertexUpdater)
+        internal FormSaveSelection(EditorStates editorStates)
         {
             Current = editorStates;
-            VertexUpdater = vertexUpdater;
 
             InitializeComponent();
 
-            SavedSelections = new List<SavedSelection>();
-            dataGridViewSelections.DataSource = SavedSelections;
         }
 
         private Dictionary<TKey, TValue> CopyDictionary<TKey, TValue>(Dictionary<TKey, TValue> source) =>
@@ -37,23 +34,38 @@ namespace IwUVEditor.Subform
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            SavedSelections.Add(new SavedSelection(
-                $"{SaveCount} : {Current.Material.Name} - {Current.Material.IsSelected.Count(p => p.Value)}",
-                new CommandSelectVertices(Current.Material, CopyDictionary(Current.Material.IsSelected),() => VertexUpdater(Current.Material))
+            listBoxSaved.Items.Insert(0, new SavedSelection(
+                $"{SaveCount:00} : {Current.Material.Name}",
+                Current.Material.IsSelected.Count(p => p.Value),
+                new CommandSelectVertices(Current.Material, CopyDictionary(Current.Material.IsSelected),VertexUpdater)
             ));
             SaveCount++;
         }
+
+        private void FormSaveSelection_Load(object sender, EventArgs e)
+        {
+            SavedSelection selectedSelection = listBoxSaved.SelectedItem as SavedSelection;
+            if (!(selectedSelection is null))
+                CommandInvoker(selectedSelection.Command);
+        }
     }
 
-    class SavedSelection
+    internal class SavedSelection
     {
-        public string Name { get; set; }
-        public CommandSelectVertices Command { get; }
+        internal string Name { get; set; }
+        internal int Count { get; }
+        internal CommandSelectVertices Command { get; }
 
-        public SavedSelection(string name, CommandSelectVertices command)
+        internal SavedSelection(string name, int count, CommandSelectVertices command)
         {
             Name = name;
+            Count = count;
             Command = command;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} - {Count}";
         }
     }
 }

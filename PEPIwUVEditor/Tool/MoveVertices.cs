@@ -1,5 +1,7 @@
 ﻿using IwUVEditor.Command;
 using IwUVEditor.Manager;
+using PEPlugin.Pmx;
+using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +17,14 @@ namespace IwUVEditor.Tool
 
         public bool IsReady { get; private set; }
 
+        List<IPXVertex> TargetVertices { get; set; }
+        Material TargetMaterial { get; set; }
+
+        Vector2 StartPos { get; set; }
+        Vector2 CurrentPos { get; set; }
+
+        Matrix Offset => Matrix.Translation(new Vector3(CurrentPos - StartPos, 0));
+
         public IEditorCommand CreateCommand(Material target)
         {
             return new CommandMoveVertices();
@@ -22,12 +32,24 @@ namespace IwUVEditor.Tool
 
         public void PrepareDrawing()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void ReadInput(DragManager mouse, Dictionary<Keys, bool> pressKey)
         {
-            throw new NotImplementedException();
+            if (mouse.IsStartingJust)
+            {
+                TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
+                StartPos = mouse.Start;
+            }
+            if (mouse.IsDragging)
+            {
+                CurrentPos = mouse.Current;
+            }
+            if (mouse.IsEndDrag)
+            {
+                IsReady = true;
+            }
         }
 
         protected virtual void Dispose(bool disposing)

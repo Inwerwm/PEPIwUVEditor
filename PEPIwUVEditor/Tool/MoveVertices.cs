@@ -63,7 +63,7 @@ namespace IwUVEditor.Tool
                 // 評価ごとの移動量にすることで累積が可能になる
                 StartPos = CurrentPos;
             }
-            if (mouse.IsEndDrag)
+            if (mouse.IsEndingJust)
             {
                 IsReady = true;
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));

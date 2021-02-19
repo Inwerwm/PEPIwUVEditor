@@ -14,7 +14,7 @@ namespace IwUVEditor.Manager
         /// <summary>
         /// ドラッグが終了したか
         /// </summary>
-        public bool IsEndDrag { get; private set; }
+        public bool IsEndingJust { get; private set; }
 
         public Vector2 Start { get; private set; }
         public Vector2 Current { get; private set; }
@@ -34,7 +34,7 @@ namespace IwUVEditor.Manager
                 Start = currentMousePosition;
                 IsStartingJust = true;
                 IsDragging = true;
-                IsEndDrag = false;
+                IsEndingJust = false;
             }
             else
                 IsStartingJust = false;
@@ -44,7 +44,11 @@ namespace IwUVEditor.Manager
             {
                 End = currentMousePosition;
                 IsDragging = false;
-                IsEndDrag = true;
+                IsEndingJust = true;
+            }
+            else
+            {
+                IsEndingJust = false;
             }
 
             Current = currentMousePosition;
@@ -56,7 +60,7 @@ namespace IwUVEditor.Manager
         /// </summary>
         public void Reset()
         {
-            IsEndDrag = false;
+            IsEndingJust = false;
         }
     }
 }

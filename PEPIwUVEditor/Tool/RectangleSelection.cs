@@ -49,7 +49,7 @@ namespace IwUVEditor.Tool
                 NeedsDrawing = true;
             }
 
-            if (mouse.IsEndDrag)
+            if (mouse.IsEndingJust)
             {
                 SelectionMode = pressKey[System.Windows.Forms.Keys.ShiftKey] ? SelectionMode.Union : pressKey[System.Windows.Forms.Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
                 NeedsDrawing = false;

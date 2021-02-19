@@ -1,6 +1,7 @@
 ﻿using PEPExtensions;
 using PEPlugin.Pmx;
 using PEPlugin.SDX;
+using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,14 +11,14 @@ namespace IwUVEditor
 {
     class Material : IPXMaterial
     {
-        // デバッグ用
-        static int count;
-        int id;
+        private static int instanceCount;
+        public int InstanceId { get; }
 
         IPXMaterial Value { get; }
 
         public IList<IPXVertex> Vertices { get; }
         public Dictionary<IPXVertex, bool> IsSelected { get; }
+        public Dictionary<IPXVertex, Matrix> TemporaryTransformMatrices { get; }
 
         /// <summary>
         /// インデックスバッファに与える面の構成頂点番号配列
@@ -31,10 +32,8 @@ namespace IwUVEditor
 
         public Material(IPXMaterial material, IPXPmx pmx)
         {
-            //デバッグ用
-            id = count;
-            count++;
-            //
+            InstanceId = instanceCount;
+            instanceCount++;
 
             Value = material;
             ModelPath = pmx.FilePath;
@@ -44,6 +43,7 @@ namespace IwUVEditor
 
             Vertices = faceVertices.Distinct().ToList();
             IsSelected = Vertices.ToDictionary(vtx => vtx, _ => false);
+            TemporaryTransformMatrices = Vertices.ToDictionary(vtx => vtx, _ => Matrix.Identity);
 
             var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => (uint)pair.i);
             FaceSequence = faceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();

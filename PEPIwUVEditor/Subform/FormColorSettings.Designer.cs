@@ -43,12 +43,15 @@ namespace IwUVEditor.Subform
             this.radioButtonSelectionRect = new System.Windows.Forms.RadioButton();
             this.panelSelectionRectB = new System.Windows.Forms.Panel();
             this.panelSelectionRect = new System.Windows.Forms.Panel();
-            this.colorSelectorMain = new ColorSelector.ColorSelector();
+            this.colorSelector1 = new ColorSelector.ColorSelector();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabelForefront = new System.Windows.Forms.ToolStripStatusLabel();
             this.tableLayoutPanel1.SuspendLayout();
             this.panelBackgroundB.SuspendLayout();
             this.panelVtxMeshB.SuspendLayout();
             this.panelSelectedVtxB.SuspendLayout();
             this.panelSelectionRectB.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // radioButtonBackground
@@ -61,14 +64,13 @@ namespace IwUVEditor.Subform
             this.radioButtonBackground.Name = "radioButtonBackground";
             this.radioButtonBackground.Size = new System.Drawing.Size(60, 69);
             this.radioButtonBackground.TabIndex = 0;
-            this.radioButtonBackground.TabStop = true;
             this.radioButtonBackground.Text = "背景";
             this.radioButtonBackground.UseVisualStyleBackColor = true;
+            this.radioButtonBackground.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // tableLayoutPanel1
             // 
-            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -80,7 +82,7 @@ namespace IwUVEditor.Subform
             this.tableLayoutPanel1.Controls.Add(this.panelSelectedVtxB, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.radioButtonSelectionRect, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.panelSelectionRectB, 1, 2);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 13);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
@@ -112,12 +114,14 @@ namespace IwUVEditor.Subform
             this.panelBackground.Name = "panelBackground";
             this.panelBackground.Size = new System.Drawing.Size(119, 69);
             this.panelBackground.TabIndex = 2;
+            this.panelBackground.Click += new System.EventHandler(this.Panel_Click);
             // 
             // radioButtonVtxMesh
             // 
             this.radioButtonVtxMesh.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.radioButtonVtxMesh.AutoSize = true;
+            this.radioButtonVtxMesh.Checked = true;
             this.radioButtonVtxMesh.Font = new System.Drawing.Font("游ゴシック", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.radioButtonVtxMesh.Location = new System.Drawing.Point(3, 3);
             this.radioButtonVtxMesh.Name = "radioButtonVtxMesh";
@@ -126,6 +130,7 @@ namespace IwUVEditor.Subform
             this.radioButtonVtxMesh.TabStop = true;
             this.radioButtonVtxMesh.Text = "頂点";
             this.radioButtonVtxMesh.UseVisualStyleBackColor = true;
+            this.radioButtonVtxMesh.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // radioButtonSelectedVtx
             // 
@@ -137,9 +142,9 @@ namespace IwUVEditor.Subform
             this.radioButtonSelectedVtx.Name = "radioButtonSelectedVtx";
             this.radioButtonSelectedVtx.Size = new System.Drawing.Size(92, 69);
             this.radioButtonSelectedVtx.TabIndex = 0;
-            this.radioButtonSelectedVtx.TabStop = true;
             this.radioButtonSelectedVtx.Text = "選択頂点";
             this.radioButtonSelectedVtx.UseVisualStyleBackColor = true;
+            this.radioButtonSelectedVtx.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // panelVtxMeshB
             // 
@@ -164,6 +169,7 @@ namespace IwUVEditor.Subform
             this.panelVtxMesh.Name = "panelVtxMesh";
             this.panelVtxMesh.Size = new System.Drawing.Size(119, 69);
             this.panelVtxMesh.TabIndex = 2;
+            this.panelVtxMesh.Click += new System.EventHandler(this.Panel_Click);
             // 
             // panelSelectedVtxB
             // 
@@ -187,6 +193,7 @@ namespace IwUVEditor.Subform
             this.panelSelectedVtx.Name = "panelSelectedVtx";
             this.panelSelectedVtx.Size = new System.Drawing.Size(119, 69);
             this.panelSelectedVtx.TabIndex = 2;
+            this.panelSelectedVtx.Click += new System.EventHandler(this.Panel_Click);
             // 
             // radioButtonSelectionRect
             // 
@@ -198,9 +205,9 @@ namespace IwUVEditor.Subform
             this.radioButtonSelectionRect.Name = "radioButtonSelectionRect";
             this.radioButtonSelectionRect.Size = new System.Drawing.Size(92, 69);
             this.radioButtonSelectionRect.TabIndex = 0;
-            this.radioButtonSelectionRect.TabStop = true;
             this.radioButtonSelectionRect.Text = "範囲選択";
             this.radioButtonSelectionRect.UseVisualStyleBackColor = true;
+            this.radioButtonSelectionRect.CheckedChanged += new System.EventHandler(this.RadioButton_CheckedChanged);
             // 
             // panelSelectionRectB
             // 
@@ -224,35 +231,64 @@ namespace IwUVEditor.Subform
             this.panelSelectionRect.Name = "panelSelectionRect";
             this.panelSelectionRect.Size = new System.Drawing.Size(119, 69);
             this.panelSelectionRect.TabIndex = 2;
+            this.panelSelectionRect.Click += new System.EventHandler(this.Panel_Click);
             // 
-            // colorSelectorMain
+            // colorSelector1
             // 
-            this.colorSelectorMain.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.colorSelectorMain.Location = new System.Drawing.Point(269, 12);
-            this.colorSelectorMain.Margin = new System.Windows.Forms.Padding(4);
-            this.colorSelectorMain.Name = "colorSelectorMain";
-            this.colorSelectorMain.Size = new System.Drawing.Size(300, 300);
-            this.colorSelectorMain.TabIndex = 2;
+            this.colorSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.colorSelector1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.colorSelector1.Font = new System.Drawing.Font("游ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.colorSelector1.Location = new System.Drawing.Point(268, 13);
+            this.colorSelector1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.colorSelector1.Name = "colorSelector1";
+            this.colorSelector1.Size = new System.Drawing.Size(300, 300);
+            this.colorSelector1.TabIndex = 2;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabelForefront});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 323);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(580, 24);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabelForefront
+            // 
+            this.toolStripStatusLabelForefront.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.toolStripStatusLabelForefront.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.toolStripStatusLabelForefront.Name = "toolStripStatusLabelForefront";
+            this.toolStripStatusLabelForefront.Size = new System.Drawing.Size(71, 19);
+            this.toolStripStatusLabelForefront.Text = "最前面表示";
+            this.toolStripStatusLabelForefront.Click += new System.EventHandler(this.toolStripStatusLabelForefront_Click);
             // 
             // FormColorSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(585, 325);
-            this.Controls.Add(this.colorSelectorMain);
+            this.ClientSize = new System.Drawing.Size(580, 347);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.colorSelector1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("游ゴシック", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormColorSettings";
             this.Text = "色設定";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormColorSettings_FormClosing);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.panelBackgroundB.ResumeLayout(false);
             this.panelVtxMeshB.ResumeLayout(false);
             this.panelSelectedVtxB.ResumeLayout(false);
             this.panelSelectionRectB.ResumeLayout(false);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -271,6 +307,8 @@ namespace IwUVEditor.Subform
         private System.Windows.Forms.Panel panelVtxMesh;
         private System.Windows.Forms.Panel panelSelectedVtx;
         private System.Windows.Forms.Panel panelSelectionRect;
-        private ColorSelector.ColorSelector colorSelectorMain;
+        private ColorSelector.ColorSelector colorSelector1;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelForefront;
     }
 }

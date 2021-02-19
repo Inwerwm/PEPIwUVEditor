@@ -62,7 +62,7 @@ namespace IwUVEditor.Tool
             CallTool(() => new RectangleSelection(Device, process.Effect, process.Rasterize.Solid, process.PositionSquares), process);
 
         public MoveVertices MoveVertices(UVViewDrawProcess process) =>
-            CallTool(() => new MoveVertices(), process);
+            CallTool(() => new MoveVertices(process), process);
 
         #region IDisposable
         protected virtual void Dispose(bool disposing)

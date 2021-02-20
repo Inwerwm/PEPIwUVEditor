@@ -49,6 +49,10 @@ namespace IwUVEditor
         internal void InitializeWhenStartDrawing()
         {
             DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
+
+            Editor.UpdateDraw = DrawProcess.UpdateDrawingVertices;
+            SelectionSaver.VertexUpdater = DrawProcess.UpdateDrawingVertices;
+
             Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
 
             // 色設定フォームに色を反映
@@ -59,7 +63,6 @@ namespace IwUVEditor
             ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
             ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
 
-            SelectionSaver.VertexUpdater = DrawProcess.UpdateDrawingVertices;
 
             timerEvery.Enabled = true;
         }

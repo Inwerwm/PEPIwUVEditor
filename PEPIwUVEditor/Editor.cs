@@ -28,6 +28,9 @@ namespace IwUVEditor
         public Tool.ToolBox ToolBox { get; }
         Dictionary<Material, CommandManager> Commanders { get; set; }
 
+        // 描画の更新メソッド
+        public Action UpdateDraw { get; set; }
+
         public Editor(IPERunArgs args, EditorStates inputManager)
         {
             Args = args;
@@ -54,7 +57,10 @@ namespace IwUVEditor
                 return;
             Current.Tool.ReadInput(mouse, pressKey);
             if (Current.Tool.IsReady)
+            {
                 Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));
+                UpdateDraw();
+            }
         }
 
         public void Do(Material targetMaterial, IEditorCommand command)
@@ -63,6 +69,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[targetMaterial].Do(command);
+            UpdateDraw();
         }
 
         public void Undo()
@@ -71,6 +78,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[Current.Material].Undo();
+            UpdateDraw();
         }
 
         public void Redo()
@@ -79,6 +87,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[Current.Material].Redo();
+            UpdateDraw();
         }
 
         protected virtual void Dispose(bool disposing)

@@ -13,13 +13,11 @@ namespace IwUVEditor.Command
         Dictionary<IPXVertex, bool> VertexSelect { get; }
         Dictionary<IPXVertex, bool> PreviousState { get; set; }
         public SelectionMode Mode { get; set; }
-        Action Update { get; }
 
-        public CommandSelectVertices(Material targetMaterial, Dictionary<IPXVertex, bool> vertexSelect, Action updateAction)
+        public CommandSelectVertices(Material targetMaterial, Dictionary<IPXVertex, bool> vertexSelect)
         {
             TargetMaterial = targetMaterial;
             VertexSelect = vertexSelect;
-            Update = updateAction;
         }
 
         public void Do()
@@ -42,8 +40,6 @@ namespace IwUVEditor.Command
                         throw new NotImplementedException();
                 }
             }
-
-            Update();
         }
 
         public void Undo()
@@ -52,8 +48,6 @@ namespace IwUVEditor.Command
             {
                 TargetMaterial.IsSelected[state.Key] = state.Value;
             }
-
-            Update();
         }
     }
 }

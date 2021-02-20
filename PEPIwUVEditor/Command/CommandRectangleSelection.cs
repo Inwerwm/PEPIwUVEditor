@@ -15,20 +15,17 @@ namespace IwUVEditor.Command
         Dictionary<IPXVertex, bool> PreviousState { get; set; }
         Dictionary<IPXVertex, bool> SelectionResult { get; set; }
 
-        Action Update { get; }
-
         public Vector2 StartPosition { get; }
         public Vector2 EndPosition { get; }
 
         public SelectionMode Mode { get; }
 
-        public CommandRectangleSelection(Material targetMaterial, Vector2 startPosition, Vector2 endPosition, SelectionMode mode, Action updateAction)
+        public CommandRectangleSelection(Material targetMaterial, Vector2 startPosition, Vector2 endPosition, SelectionMode mode)
         {
             TargetMaterial = targetMaterial;
             StartPosition = startPosition;
             EndPosition = endPosition;
             Mode = mode;
-            Update = updateAction;
         }
 
         private void CreateSelectionRange()
@@ -68,8 +65,6 @@ namespace IwUVEditor.Command
                         throw new NotImplementedException();
                 }
             }
-
-            Update();
         }
 
         public void Undo()
@@ -78,8 +73,6 @@ namespace IwUVEditor.Command
             {
                 TargetMaterial.IsSelected[state.Key] = state.Value;
             }
-
-            Update();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace IwUVEditor.Subform
                 SaveCount.ToString("00"),
                 Current.Material.IsSelected.Count(p => p.Value),
                 Current.Material,
-                new CommandSelectVertices(Current.Material, CopyDictionary(Current.Material.IsSelected), VertexUpdater)
+                new CommandSelectVertices(Current.Material, CopyDictionary(Current.Material.IsSelected))
             );
             SaveCount++;
         }

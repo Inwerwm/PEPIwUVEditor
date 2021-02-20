@@ -48,9 +48,14 @@ namespace IwUVEditor.Subform
             if(dataGridViewSelections.SelectedRows.Count > 0)
             {
                 var selectedRow = dataGridViewSelections.SelectedRows[0];
+                CommandSelectVertices cmd = selectedRow.Cells["SelectionCommand"].Value as CommandSelectVertices;
+                cmd.Mode = (ModifierKeys & Keys.Shift) == Keys.Shift ? Command.SelectionMode.Union :
+                           (ModifierKeys & Keys.Control) == Keys.Control ? Command.SelectionMode.Difference :
+                           Command.SelectionMode.Create;
+
                 CommandInvoker(
                     selectedRow.Cells["SelectionMaterial"].Value as Material,
-                    selectedRow.Cells["SelectionCommand"].Value as CommandSelectVertices
+                    cmd
                 );
             }
         }

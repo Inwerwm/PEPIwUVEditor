@@ -34,24 +34,25 @@ namespace IwUVEditor.Subform
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            listBoxSaved.Items.Insert(0, new SavedSelection(
-                $"{SaveCount:00} : {Current.Material.Name}",
+            dataGridViewSelections.Rows.Add(
+                SaveCount.ToString("00"),
                 Current.Material.IsSelected.Count(p => p.Value),
-                new CommandSelectVertices(Current.Material, CopyDictionary(Current.Material.IsSelected),VertexUpdater),
-                Current.Material
-            ));
+                Current.Material,
+                new CommandSelectVertices(Current.Material, CopyDictionary(Current.Material.IsSelected), VertexUpdater)
+            );
             SaveCount++;
-        }
-
-        private void FormSaveSelection_Load(object sender, EventArgs e)
-        {
         }
 
         private void buttonApply_Click(object sender, EventArgs e)
         {
-            SavedSelection selectedSelection = listBoxSaved.SelectedItem as SavedSelection;
-            if (!(selectedSelection is null))
-                CommandInvoker(selectedSelection.Material, selectedSelection.Command);
+            if(dataGridViewSelections.SelectedRows.Count > 0)
+            {
+                var selectedRow = dataGridViewSelections.SelectedRows[0];
+                CommandInvoker(
+                    selectedRow.Cells["SelectionMaterial"].Value as Material,
+                    selectedRow.Cells["SelectionCommand"].Value as CommandSelectVertices
+                );
+            }
         }
 
         private void toolStripStatusLabelForefront_Click(object sender, EventArgs e)
@@ -60,46 +61,16 @@ namespace IwUVEditor.Subform
             (sender as ToolStripStatusLabel).BackColor = TopMost ? SystemColors.ActiveCaption : SystemColors.ButtonFace;
         }
 
-        private void listBoxSaved_MouseDown(object sender, MouseEventArgs e)
+        private void 削除ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 右クリックされた？
-            if (e.Button == MouseButtons.Right)
-            {
-                ListBox listBox = (sender as ListBox);
-
-                int index = listBox.IndexFromPoint(e.Location);
-                if (index >= 0)
-                {
-                    listBox.ClearSelected();
-                    listBox.SelectedIndex = index;
-                }
-            }
+            if (dataGridViewSelections.SelectedRows.Count > 0)
+                dataGridViewSelections.Rows.Remove(dataGridViewSelections.SelectedRows[0]);
         }
 
-        private void 名前を変更ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void dataGridViewSelections_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
         {
-
-        }
-    }
-
-    internal class SavedSelection
-    {
-        internal string Name { get; set; }
-        internal int Count { get; }
-        internal CommandSelectVertices Command { get; }
-        internal Material Material { get; }
-
-        internal SavedSelection(string name, int count, CommandSelectVertices command, Material material)
-        {
-            Name = name;
-            Count = count;
-            Command = command;
-            Material = material;
-        }
-
-        public override string ToString()
-        {
-            return $"{Name} - {Count}";
+            if (e.Button == MouseButtons.Right && e.RowIndex >= 0)
+                dataGridViewSelections.Rows[e.RowIndex].Cells[0].Selected = true;
         }
     }
 }

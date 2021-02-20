@@ -33,15 +33,19 @@ namespace IwUVEditor.Subform
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonApply = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
-            this.listBoxSaved = new System.Windows.Forms.ListBox();
+            this.contextMenuStripSelection = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.削除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataGridViewSelections = new System.Windows.Forms.DataGridView();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelForefront = new System.Windows.Forms.ToolStripStatusLabel();
-            this.contextMenuStripSelection = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.名前を変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.削除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SelectionName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SelectionCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SelectionMaterial = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SelectionCommand = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             this.contextMenuStripSelection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSelections)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -50,18 +54,18 @@ namespace IwUVEditor.Subform
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.buttonApply, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.buttonSave, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.listBoxSaved, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.dataGridViewSelections, 0, 1);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(243, 437);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(484, 437);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // buttonApply
@@ -69,7 +73,7 @@ namespace IwUVEditor.Subform
             this.buttonApply.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonApply.Location = new System.Drawing.Point(3, 3);
             this.buttonApply.Name = "buttonApply";
-            this.buttonApply.Size = new System.Drawing.Size(115, 42);
+            this.buttonApply.Size = new System.Drawing.Size(236, 42);
             this.buttonApply.TabIndex = 1;
             this.buttonApply.Text = "適用";
             this.buttonApply.UseVisualStyleBackColor = true;
@@ -78,27 +82,49 @@ namespace IwUVEditor.Subform
             // buttonSave
             // 
             this.buttonSave.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSave.Location = new System.Drawing.Point(124, 3);
+            this.buttonSave.Location = new System.Drawing.Point(245, 3);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(116, 42);
+            this.buttonSave.Size = new System.Drawing.Size(236, 42);
             this.buttonSave.TabIndex = 2;
             this.buttonSave.Text = "保存";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
-            // listBoxSaved
+            // contextMenuStripSelection
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.listBoxSaved, 2);
-            this.listBoxSaved.ContextMenuStrip = this.contextMenuStripSelection;
-            this.listBoxSaved.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxSaved.FormattingEnabled = true;
-            this.listBoxSaved.ItemHeight = 20;
-            this.listBoxSaved.Location = new System.Drawing.Point(0, 48);
-            this.listBoxSaved.Margin = new System.Windows.Forms.Padding(0);
-            this.listBoxSaved.Name = "listBoxSaved";
-            this.listBoxSaved.Size = new System.Drawing.Size(243, 389);
-            this.listBoxSaved.TabIndex = 3;
-            this.listBoxSaved.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBoxSaved_MouseDown);
+            this.contextMenuStripSelection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.削除ToolStripMenuItem});
+            this.contextMenuStripSelection.Name = "contextMenuStripSelection";
+            this.contextMenuStripSelection.Size = new System.Drawing.Size(181, 48);
+            // 
+            // 削除ToolStripMenuItem
+            // 
+            this.削除ToolStripMenuItem.Name = "削除ToolStripMenuItem";
+            this.削除ToolStripMenuItem.ShortcutKeyDisplayString = "Delete";
+            this.削除ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.削除ToolStripMenuItem.Text = "削除(&D)";
+            this.削除ToolStripMenuItem.Click += new System.EventHandler(this.削除ToolStripMenuItem_Click);
+            // 
+            // dataGridViewSelections
+            // 
+            this.dataGridViewSelections.AllowUserToAddRows = false;
+            this.dataGridViewSelections.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSelections.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.SelectionName,
+            this.SelectionCount,
+            this.SelectionMaterial,
+            this.SelectionCommand});
+            this.tableLayoutPanel1.SetColumnSpan(this.dataGridViewSelections, 2);
+            this.dataGridViewSelections.ContextMenuStrip = this.contextMenuStripSelection;
+            this.dataGridViewSelections.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewSelections.Location = new System.Drawing.Point(3, 51);
+            this.dataGridViewSelections.MultiSelect = false;
+            this.dataGridViewSelections.Name = "dataGridViewSelections";
+            this.dataGridViewSelections.RowTemplate.Height = 21;
+            this.dataGridViewSelections.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewSelections.Size = new System.Drawing.Size(478, 383);
+            this.dataGridViewSelections.TabIndex = 4;
+            this.dataGridViewSelections.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewSelections_CellMouseDown);
             // 
             // statusStrip1
             // 
@@ -106,7 +132,7 @@ namespace IwUVEditor.Subform
             this.toolStripStatusLabelForefront});
             this.statusStrip1.Location = new System.Drawing.Point(0, 437);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(243, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(484, 24);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -121,33 +147,42 @@ namespace IwUVEditor.Subform
             this.toolStripStatusLabelForefront.Text = "最前面表示";
             this.toolStripStatusLabelForefront.Click += new System.EventHandler(this.toolStripStatusLabelForefront_Click);
             // 
-            // contextMenuStripSelection
+            // SelectionName
             // 
-            this.contextMenuStripSelection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.削除ToolStripMenuItem,
-            this.名前を変更ToolStripMenuItem});
-            this.contextMenuStripSelection.Name = "contextMenuStripSelection";
-            this.contextMenuStripSelection.Size = new System.Drawing.Size(181, 70);
+            this.SelectionName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.SelectionName.HeaderText = "名前";
+            this.SelectionName.Name = "SelectionName";
+            this.SelectionName.Width = 64;
             // 
-            // 名前を変更ToolStripMenuItem
+            // SelectionCount
             // 
-            this.名前を変更ToolStripMenuItem.Name = "名前を変更ToolStripMenuItem";
-            this.名前を変更ToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.名前を変更ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.名前を変更ToolStripMenuItem.Text = "名前を変更(&M)";
-            this.名前を変更ToolStripMenuItem.Click += new System.EventHandler(this.名前を変更ToolStripMenuItem_Click);
+            this.SelectionCount.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.SelectionCount.HeaderText = "選択頂点数";
+            this.SelectionCount.Name = "SelectionCount";
+            this.SelectionCount.ReadOnly = true;
+            this.SelectionCount.Width = 109;
             // 
-            // 削除ToolStripMenuItem
+            // SelectionMaterial
             // 
-            this.削除ToolStripMenuItem.Name = "削除ToolStripMenuItem";
-            this.削除ToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
-            this.削除ToolStripMenuItem.Text = "削除(&D)";
+            this.SelectionMaterial.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.SelectionMaterial.HeaderText = "材質";
+            this.SelectionMaterial.Name = "SelectionMaterial";
+            this.SelectionMaterial.ReadOnly = true;
+            this.SelectionMaterial.Width = 64;
+            // 
+            // SelectionCommand
+            // 
+            this.SelectionCommand.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.SelectionCommand.HeaderText = "コマンド";
+            this.SelectionCommand.Name = "SelectionCommand";
+            this.SelectionCommand.ReadOnly = true;
+            this.SelectionCommand.Visible = false;
             // 
             // FormSaveSelection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(243, 461);
+            this.ClientSize = new System.Drawing.Size(484, 461);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("游ゴシック", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
@@ -157,9 +192,10 @@ namespace IwUVEditor.Subform
             this.Name = "FormSaveSelection";
             this.Text = "選択保存";
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.contextMenuStripSelection.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSelections)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.contextMenuStripSelection.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -172,9 +208,12 @@ namespace IwUVEditor.Subform
         private System.Windows.Forms.Button buttonSave;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelForefront;
-        private System.Windows.Forms.ListBox listBoxSaved;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripSelection;
-        private System.Windows.Forms.ToolStripMenuItem 名前を変更ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 削除ToolStripMenuItem;
+        private System.Windows.Forms.DataGridView dataGridViewSelections;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SelectionName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SelectionCount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SelectionMaterial;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SelectionCommand;
     }
 }

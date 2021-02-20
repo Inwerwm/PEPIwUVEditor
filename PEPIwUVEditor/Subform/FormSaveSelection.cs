@@ -45,9 +45,19 @@ namespace IwUVEditor.Subform
 
         private void FormSaveSelection_Load(object sender, EventArgs e)
         {
+        }
+
+        private void buttonApply_Click(object sender, EventArgs e)
+        {
             SavedSelection selectedSelection = listBoxSaved.SelectedItem as SavedSelection;
             if (!(selectedSelection is null))
                 CommandInvoker(selectedSelection.Material, selectedSelection.Command);
+        }
+
+        private void toolStripStatusLabelForefront_Click(object sender, EventArgs e)
+        {
+            TopMost = !TopMost;
+            (sender as ToolStripStatusLabel).BackColor = TopMost ? SystemColors.ActiveCaption : SystemColors.ButtonFace;
         }
     }
 

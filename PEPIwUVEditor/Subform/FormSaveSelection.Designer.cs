@@ -32,9 +32,9 @@ namespace IwUVEditor.Subform
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonApply = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
+            this.listBoxSaved = new System.Windows.Forms.ListBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelForefront = new System.Windows.Forms.ToolStripStatusLabel();
-            this.listBoxSaved = new System.Windows.Forms.ListBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -68,6 +68,7 @@ namespace IwUVEditor.Subform
             this.buttonApply.TabIndex = 1;
             this.buttonApply.Text = "適用";
             this.buttonApply.UseVisualStyleBackColor = true;
+            this.buttonApply.Click += new System.EventHandler(this.buttonApply_Click);
             // 
             // buttonSave
             // 
@@ -79,6 +80,18 @@ namespace IwUVEditor.Subform
             this.buttonSave.Text = "保存";
             this.buttonSave.UseVisualStyleBackColor = true;
             this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // listBoxSaved
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.listBoxSaved, 2);
+            this.listBoxSaved.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listBoxSaved.FormattingEnabled = true;
+            this.listBoxSaved.ItemHeight = 20;
+            this.listBoxSaved.Location = new System.Drawing.Point(0, 48);
+            this.listBoxSaved.Margin = new System.Windows.Forms.Padding(0);
+            this.listBoxSaved.Name = "listBoxSaved";
+            this.listBoxSaved.Size = new System.Drawing.Size(243, 389);
+            this.listBoxSaved.TabIndex = 3;
             // 
             // statusStrip1
             // 
@@ -99,18 +112,7 @@ namespace IwUVEditor.Subform
             this.toolStripStatusLabelForefront.Name = "toolStripStatusLabelForefront";
             this.toolStripStatusLabelForefront.Size = new System.Drawing.Size(71, 19);
             this.toolStripStatusLabelForefront.Text = "最前面表示";
-            // 
-            // listBoxSaved
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.listBoxSaved, 2);
-            this.listBoxSaved.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listBoxSaved.FormattingEnabled = true;
-            this.listBoxSaved.ItemHeight = 20;
-            this.listBoxSaved.Location = new System.Drawing.Point(0, 48);
-            this.listBoxSaved.Margin = new System.Windows.Forms.Padding(0);
-            this.listBoxSaved.Name = "listBoxSaved";
-            this.listBoxSaved.Size = new System.Drawing.Size(243, 389);
-            this.listBoxSaved.TabIndex = 3;
+            this.toolStripStatusLabelForefront.Click += new System.EventHandler(this.toolStripStatusLabelForefront_Click);
             // 
             // FormSaveSelection
             // 
@@ -125,7 +127,6 @@ namespace IwUVEditor.Subform
             this.MinimumSize = new System.Drawing.Size(250, 250);
             this.Name = "FormSaveSelection";
             this.Text = "選択保存";
-            this.Load += new System.EventHandler(this.FormSaveSelection_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

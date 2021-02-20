@@ -29,14 +29,19 @@ namespace IwUVEditor.Subform
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.buttonApply = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.listBoxSaved = new System.Windows.Forms.ListBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelForefront = new System.Windows.Forms.ToolStripStatusLabel();
+            this.contextMenuStripSelection = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.名前を変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.削除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
+            this.contextMenuStripSelection.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -84,6 +89,7 @@ namespace IwUVEditor.Subform
             // listBoxSaved
             // 
             this.tableLayoutPanel1.SetColumnSpan(this.listBoxSaved, 2);
+            this.listBoxSaved.ContextMenuStrip = this.contextMenuStripSelection;
             this.listBoxSaved.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBoxSaved.FormattingEnabled = true;
             this.listBoxSaved.ItemHeight = 20;
@@ -92,6 +98,7 @@ namespace IwUVEditor.Subform
             this.listBoxSaved.Name = "listBoxSaved";
             this.listBoxSaved.Size = new System.Drawing.Size(243, 389);
             this.listBoxSaved.TabIndex = 3;
+            this.listBoxSaved.MouseDown += new System.Windows.Forms.MouseEventHandler(this.listBoxSaved_MouseDown);
             // 
             // statusStrip1
             // 
@@ -114,6 +121,28 @@ namespace IwUVEditor.Subform
             this.toolStripStatusLabelForefront.Text = "最前面表示";
             this.toolStripStatusLabelForefront.Click += new System.EventHandler(this.toolStripStatusLabelForefront_Click);
             // 
+            // contextMenuStripSelection
+            // 
+            this.contextMenuStripSelection.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.削除ToolStripMenuItem,
+            this.名前を変更ToolStripMenuItem});
+            this.contextMenuStripSelection.Name = "contextMenuStripSelection";
+            this.contextMenuStripSelection.Size = new System.Drawing.Size(181, 70);
+            // 
+            // 名前を変更ToolStripMenuItem
+            // 
+            this.名前を変更ToolStripMenuItem.Name = "名前を変更ToolStripMenuItem";
+            this.名前を変更ToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.名前を変更ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.名前を変更ToolStripMenuItem.Text = "名前を変更(&M)";
+            this.名前を変更ToolStripMenuItem.Click += new System.EventHandler(this.名前を変更ToolStripMenuItem_Click);
+            // 
+            // 削除ToolStripMenuItem
+            // 
+            this.削除ToolStripMenuItem.Name = "削除ToolStripMenuItem";
+            this.削除ToolStripMenuItem.Size = new System.Drawing.Size(169, 22);
+            this.削除ToolStripMenuItem.Text = "削除(&D)";
+            // 
             // FormSaveSelection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -130,6 +159,7 @@ namespace IwUVEditor.Subform
             this.tableLayoutPanel1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.contextMenuStripSelection.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -143,5 +173,8 @@ namespace IwUVEditor.Subform
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelForefront;
         private System.Windows.Forms.ListBox listBoxSaved;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripSelection;
+        private System.Windows.Forms.ToolStripMenuItem 名前を変更ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 削除ToolStripMenuItem;
     }
 }

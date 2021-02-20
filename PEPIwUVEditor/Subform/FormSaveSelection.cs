@@ -59,6 +59,27 @@ namespace IwUVEditor.Subform
             TopMost = !TopMost;
             (sender as ToolStripStatusLabel).BackColor = TopMost ? SystemColors.ActiveCaption : SystemColors.ButtonFace;
         }
+
+        private void listBoxSaved_MouseDown(object sender, MouseEventArgs e)
+        {
+            // 右クリックされた？
+            if (e.Button == MouseButtons.Right)
+            {
+                ListBox listBox = (sender as ListBox);
+
+                int index = listBox.IndexFromPoint(e.Location);
+                if (index >= 0)
+                {
+                    listBox.ClearSelected();
+                    listBox.SelectedIndex = index;
+                }
+            }
+        }
+
+        private void 名前を変更ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     internal class SavedSelection

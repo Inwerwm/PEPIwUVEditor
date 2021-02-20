@@ -44,7 +44,7 @@ namespace IwUVEditor.DirectX
         internal Vector3 ShiftOffset { get; set; }
         internal ScaleManager Scale { get; } = new ScaleManager()
         {
-            DeltaOffset = -10000,
+            DeltaOffset = -6600,
             Amplitude = 200000,
             Offset = 50f,
             Step = 0.1f,

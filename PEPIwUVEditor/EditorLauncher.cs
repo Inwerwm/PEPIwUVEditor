@@ -20,7 +20,7 @@ namespace IwUVEditor
 
         public EditorStates Current { get; }
 
-        float CenterPosition => 0;
+        float CenterPosition => 0.5f;
         float Zoom => 1;
 
         public EditorLauncher(IPERunArgs args)

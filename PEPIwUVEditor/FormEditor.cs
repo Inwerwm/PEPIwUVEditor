@@ -132,18 +132,6 @@ namespace IwUVEditor
             DrawProcess.ResetCamera();
         }
 
-        private void FormEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-            Input.IsPress[Keys.ShiftKey] = e.Shift;
-            Input.IsPress[Keys.ControlKey] = e.Control;
-        }
-
-        private void FormEditor_KeyUp(object sender, KeyEventArgs e)
-        {
-            Input.IsPress[Keys.ShiftKey] = e.Shift;
-            Input.IsPress[Keys.ControlKey] = e.Control;
-        }
-
         private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)
         {
             Input.IsActive = true;
@@ -158,7 +146,12 @@ namespace IwUVEditor
         {
             var mousePos = DrawTargetControl.PointToClient(Cursor.Position);
             Input.MousePos = new Vector2(mousePos.X, mousePos.Y);
+
+            Input.IsPress[Keys.ShiftKey] = (ModifierKeys & Keys.Shift) == Keys.Shift;
+            Input.IsPress[Keys.ControlKey] = (ModifierKeys & Keys.Control) == Keys.Control;
+
             toolStripStatusLabelFPS.Text = $"{DrawProcess.CurrentFPS:###.##}fps";
+            toolStripStatusLabelState.Text = $"Shift:{Input.IsPress[Keys.ShiftKey]}, Ctrl:{Input.IsPress[Keys.ControlKey]}";
         }
 
         private void 描画リミッター解除ToolStripMenuItem_Click(object sender, EventArgs e)

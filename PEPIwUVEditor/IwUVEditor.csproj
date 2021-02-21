@@ -111,6 +111,7 @@
     <Compile Include="DirectX\UVViewDrawProcess.cs" />
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
     <Compile Include="DirectX\Vertex\VertexStruct.cs" />
+    <Compile Include="Tool\EditVertices.cs" />
     <Compile Include="Tool\IEditTool.cs" />
     <Compile Include="Tool\MoveVertices.cs" />
     <Compile Include="Tool\RectangleSelection.cs" />

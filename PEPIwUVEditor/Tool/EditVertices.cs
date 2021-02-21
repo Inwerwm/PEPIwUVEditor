@@ -52,7 +52,7 @@ namespace IwUVEditor.Tool
             GC.SuppressFinalize(this);
         }
 
-        public void PrepareDrawing()
+        public virtual void PrepareDrawing()
         {
             Process.UpdateDrawingVertices();
         }

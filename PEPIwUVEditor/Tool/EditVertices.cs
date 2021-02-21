@@ -40,6 +40,8 @@ namespace IwUVEditor.Tool
             Process = process;
         }
 
+        public virtual void Initialize() { }
+
         public IEditorCommand CreateCommand(Material target)
         {
             IsReady = false;

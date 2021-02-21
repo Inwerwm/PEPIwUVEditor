@@ -10,6 +10,7 @@ namespace IwUVEditor.Tool
     {
         bool IsReady { get; }
 
+        void Initialize();
         void ReadInput(InputStates input);
         IEditorCommand CreateCommand(Material target);
         void PrepareDrawing();

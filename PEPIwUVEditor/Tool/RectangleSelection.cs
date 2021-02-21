@@ -35,6 +35,8 @@ namespace IwUVEditor.Tool
             SelectionRectangle = new SelectionRectangle(device, effect, drawMode, RectangleColor);
         }
 
+        public void Initialize() { }
+
         public void ReadInput(InputStates input)
         {
             if (input.MouseLeft.IsStartingJust)

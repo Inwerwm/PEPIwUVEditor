@@ -116,6 +116,7 @@
     <Compile Include="Tool\RectangleSelection.cs" />
     <Compile Include="EditorLauncher.cs" />
     <Compile Include="Manager\ToolBox.cs" />
+    <Compile Include="Tool\RotateVertices.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

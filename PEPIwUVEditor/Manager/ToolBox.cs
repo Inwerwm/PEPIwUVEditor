@@ -59,7 +59,7 @@ namespace IwUVEditor.Tool
         }
 
         public RectangleSelection RectangleSelection(UVViewDrawProcess process) =>
-            CallTool(() => new RectangleSelection(Device, process.Effect, process.Rasterize.Solid), process);
+            CallTool(() => new RectangleSelection(Device, process), process);
 
         public MoveVertices MoveVertices(UVViewDrawProcess process) =>
             CallTool(() => new MoveVertices(process), process);

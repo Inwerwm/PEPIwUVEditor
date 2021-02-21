@@ -18,7 +18,7 @@ namespace IwUVEditor.Tool
 
         public bool IsReady { get; private set; }
 
-        DirectX.UVViewDrawProcess Process { get; }
+        UVViewDrawProcess Process { get; }
 
         List<IPXVertex> TargetVertices { get; set; }
         Material TargetMaterial => Process.Current.Material;

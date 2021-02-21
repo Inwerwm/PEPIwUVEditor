@@ -29,9 +29,9 @@ namespace IwUVEditor.Tool
 
         SelectionMode SelectionMode { get; set; }
 
-        public RectangleSelection(SlimDX.Direct3D11.Device device, SlimDX.Direct3D11.Effect effect, SlimDX.Direct3D11.RasterizerState drawMode)
+        public RectangleSelection(SlimDX.Direct3D11.Device device, DirectX.UVViewDrawProcess process)
         {
-            SelectionRectangle = new SelectionRectangle(device, effect, drawMode, RectangleColor);
+            SelectionRectangle = new SelectionRectangle(device, process.Effect, process.Rasterize.Solid, RectangleColor);
         }
 
         public void ReadInput(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)

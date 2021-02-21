@@ -13,6 +13,7 @@ namespace IwUVEditor.Tool
     internal abstract class EditVertices
     {
         private bool disposedValue;
+        private Vector3 centerPos;
 
         public bool IsReady { get; private set; }
 
@@ -23,6 +24,14 @@ namespace IwUVEditor.Tool
 
         protected Vector2 StartPos { get; set; }
         protected Vector2 CurrentPos { get; set; }
+        protected Vector3 CenterPos
+        {
+            get => centerPos;
+            private set => centerPos = value;
+        }
+
+        protected Dictionary<Keys, bool> IsPress { get; private set; }
+
         protected abstract Matrix Offset { get; }
         protected Matrix TotalOffset { get; set; }
 
@@ -48,12 +57,15 @@ namespace IwUVEditor.Tool
             Process.UpdateDrawingVertices();
         }
 
-        public void ReadInput(DragManager mouse, Dictionary<Keys, bool> pressKey)
+        public virtual void ReadInput(DragManager mouse, Dictionary<Keys, bool> pressKey)
         {
+            IsPress = pressKey;
+
             if (mouse.IsStartingJust)
             {
                 TotalOffset = Matrix.Identity;
                 TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
+                CenterPos = CalcCenterPos();
                 StartPos = mouse.Start;
             }
             if (mouse.IsDragging)
@@ -71,6 +83,14 @@ namespace IwUVEditor.Tool
                 IsReady = true;
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));
             }
+        }
+
+        private Vector3 CalcCenterPos()
+        {
+            Vector2 min = new Vector2(TargetVertices.Min(vtx => vtx.UV.X), TargetVertices.Min(vtx => vtx.UV.Y));
+            Vector2 max = new Vector2(TargetVertices.Max(vtx => vtx.UV.X), TargetVertices.Max(vtx => vtx.UV.Y));
+            Vector2 center = new Vector2((min.X + max.X) / 2, (min.Y + max.Y) / 2);
+            return new Vector3(center, 0);
         }
 
         protected virtual void Dispose(bool disposing)

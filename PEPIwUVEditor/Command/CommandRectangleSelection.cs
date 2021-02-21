@@ -9,6 +9,8 @@ namespace IwUVEditor.Command
 {
     class CommandRectangleSelection : IEditorCommand
     {
+        bool isInitialInvoke;
+
         Material TargetMaterial { get; }
 
         RectangleF SelectionRange { get; set; }
@@ -26,6 +28,8 @@ namespace IwUVEditor.Command
             StartPosition = startPosition;
             EndPosition = endPosition;
             Mode = mode;
+
+            isInitialInvoke = true;
         }
 
         private void CreateSelectionRange()
@@ -37,7 +41,7 @@ namespace IwUVEditor.Command
             SelectionRange = new RectangleF(min.X, min.Y, size.X, size.Y);
         }
 
-        public void Do()
+        private void ReadSelectionState()
         {
             CreateSelectionRange();
 
@@ -46,6 +50,12 @@ namespace IwUVEditor.Command
 
             // 現在の選択状態を保存
             PreviousState = TargetMaterial.IsSelected.Select(pair => (pair.Key, pair.Value)).ToDictionary(p => p.Key, p => p.Value);
+        }
+
+        public void Do()
+        {
+            if (isInitialInvoke)
+                ReadSelectionState();
 
             // 選択状態を反映
             foreach (var sel in SelectionResult)

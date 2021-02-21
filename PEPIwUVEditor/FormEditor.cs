@@ -83,39 +83,15 @@ namespace IwUVEditor
             if (!Input.IsActive)
                 return;
 
+            Input.ReadMouseInput(e, DrawProcess.ScreenPosToWorldPos);
+
             float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
 
-            switch (e.ButtonFlags)
-            {
-                case MouseButtonFlags.MouseWheel:
-                    DrawProcess.Scale.WheelDelta += e.WheelDelta * modifier;
-                    break;
-                case MouseButtonFlags.MiddleUp:
-                    Input.IsClicking[MouseButtons.Middle] = false;
-                    break;
-                case MouseButtonFlags.MiddleDown:
-                    Input.IsClicking[MouseButtons.Middle] = true;
-                    break;
-                case MouseButtonFlags.RightUp:
-                    Input.IsClicking[MouseButtons.Right] = false;
-                    break;
-                case MouseButtonFlags.RightDown:
-                    Input.IsClicking[MouseButtons.Right] = true;
-                    break;
-                case MouseButtonFlags.LeftUp:
-                    Input.IsClicking[MouseButtons.Left] = false;
-                    break;
-                case MouseButtonFlags.LeftDown:
-                    Input.IsClicking[MouseButtons.Left] = true;
-                    break;
-                default:
-                    break;
-            }
-
+            if(Input.Wheel.IsScrolling)
+                DrawProcess.Scale.WheelDelta += Input.Wheel.Delta * modifier;
             if (Input.IsClicking[MouseButtons.Middle])
                 DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
-            Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), Input.IsClicking[MouseButtons.Left]);
             Editor.DriveTool(Input);
         }
 

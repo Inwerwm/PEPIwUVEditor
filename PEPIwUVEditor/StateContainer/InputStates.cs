@@ -8,6 +8,9 @@ namespace IwUVEditor.StateContainer
     class InputStates
     {
         public bool IsActive { get; set; }
+        /// <summary>
+        /// マウスのスクリーン座標
+        /// </summary>
         public Vector2 MousePos { get; set; }
         public DragManager MouseLeft { get; } = new DragManager();
         public Dictionary<Keys, bool> IsPress { get; } = new Dictionary<Keys, bool>

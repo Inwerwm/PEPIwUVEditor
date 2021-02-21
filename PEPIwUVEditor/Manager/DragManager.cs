@@ -24,8 +24,6 @@ namespace IwUVEditor.Manager
         /// <para>ドラッグ情報の監視メソッド</para>
         /// <para>マウスイベントの発生時に毎回このメソッドを呼び出す</para>
         /// </summary>
-        /// <param name="e"></param>
-        /// <param name="clickState"></param>
         public void ReadState(Vector2 currentMousePosition, bool clickState)
         {
             // false => true : ドラッグ開始

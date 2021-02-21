@@ -60,8 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\CommandMoveVertices.cs" />
-    <Compile Include="Command\CommandRotateVertices.cs" />
+    <Compile Include="Command\CommandApplyVertexEdit.cs" />
     <Compile Include="Command\CommandSelectVertices.cs" />
     <Compile Include="GenerableMap.cs" />
     <Compile Include="Command\CommandRectangleSelection.cs" />

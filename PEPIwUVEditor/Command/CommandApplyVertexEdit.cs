@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.Command
 {
-    class CommandRotateVertices : IEditorCommand
+    class CommandApplyVertexEdit : IEditorCommand
     {
         List<IPXVertex> TargetVertices { get; }
         Matrix Offset { get; }
 
-        public CommandRotateVertices(List<IPXVertex> targetVertices, Matrix offset)
+        public CommandApplyVertexEdit(List<IPXVertex> targetVertices, Matrix offset)
         {
             TargetVertices = targetVertices;
             Offset = offset;
@@ -28,6 +28,5 @@ namespace IwUVEditor.Command
         {
             TargetVertices.AsParallel().ForAll(vtx => vtx.UV = Vector2.TransformCoordinate(vtx.UV, Matrix.Invert(Offset)));
         }
-
     }
 }

@@ -13,6 +13,8 @@ namespace IwUVEditor
     {
         private UVViewDrawProcess drawProcess;
 
+        internal event CatchExceptionEventHandler CatchException;
+
         Editor Editor { get; }
         internal DxContext DrawContext { get; set; }
         internal UVViewDrawProcess DrawProcess
@@ -80,19 +82,26 @@ namespace IwUVEditor
 
         void MouseInput(object sender, MouseInputEventArgs e)
         {
-            if (!Input.IsActive)
-                return;
+            try
+            {
+                if (!Input.IsActive)
+                    return;
 
-            Input.ReadMouseInput(e, DrawProcess.ScreenPosToWorldPos);
+                Input.ReadMouseInput(e, DrawProcess.ScreenPosToWorldPos);
 
-            float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
+                float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
 
-            if(Input.Wheel.IsScrolling)
-                DrawProcess.Scale.WheelDelta += Input.Wheel.Delta * modifier;
-            if (Input.IsClicking[MouseButtons.Middle])
-                DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
+                if(Input.Wheel.IsScrolling)
+                    DrawProcess.Scale.WheelDelta += Input.Wheel.Delta * modifier;
+                if (Input.IsClicking[MouseButtons.Middle])
+                    DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
-            Editor.DriveTool(Input);
+                Editor.DriveTool(Input);
+            }
+            catch (Exception ex)
+            {
+                CatchException?.Invoke(ex);
+            }
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)

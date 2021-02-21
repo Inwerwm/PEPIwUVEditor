@@ -20,7 +20,7 @@ namespace IwUVEditor.DirectX
         #endregion
 
         #region イベント
-        internal event CatchExceptionOnDrawHandler CatchException;
+        internal event CatchExceptionEventHandler CatchException;
         #endregion
 
         #region プロパティ - EditorStates
@@ -166,7 +166,7 @@ namespace IwUVEditor.DirectX
             }
             catch (Exception ex)
             {
-                CatchException(ex);
+                CatchException?.Invoke(ex);
             }
         }
 
@@ -276,6 +276,4 @@ namespace IwUVEditor.DirectX
         }
         #endregion
     }
-
-    internal delegate void CatchExceptionOnDrawHandler(Exception ex);
 }

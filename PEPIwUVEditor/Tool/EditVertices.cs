@@ -19,6 +19,7 @@ namespace IwUVEditor.Tool
         public bool IsReady { get; private set; }
 
         protected UVViewDrawProcess Process { get; }
+        protected InputStates Input { get; private set; }
 
         protected List<IPXVertex> TargetVertices { get; set; }
         protected Material TargetMaterial => Process.Current.Material;
@@ -58,6 +59,8 @@ namespace IwUVEditor.Tool
 
         public virtual void ReadInput(InputStates input)
         {
+            Input = input;
+
             if (input.MouseLeft.IsStartingJust)
             {
                 TotalOffset = Matrix.Identity;

@@ -59,6 +59,9 @@ namespace IwUVEditor.Tool
 
         public virtual void ReadInput(InputStates input)
         {
+            if (!TargetVertices.Any())
+                return;
+
             Input = input;
 
             if (input.MouseLeft.IsStartingJust)

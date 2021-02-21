@@ -40,7 +40,11 @@ namespace IwUVEditor.Tool
             Process = process;
         }
 
-        public virtual void Initialize() { }
+        public virtual void Initialize() 
+        {
+            TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
+            CenterPos = CalcCenterPos();
+        }
 
         public IEditorCommand CreateCommand(Material target)
         {
@@ -68,9 +72,8 @@ namespace IwUVEditor.Tool
 
             if (input.MouseLeft.IsStartingJust)
             {
-                TotalOffset = Matrix.Identity;
                 TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
-                CenterPos = CalcCenterPos();
+                TotalOffset = Matrix.Identity;
                 StartPos = input.MouseLeft.Start;
             }
             if (input.MouseLeft.IsDragging)

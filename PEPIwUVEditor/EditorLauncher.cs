@@ -16,6 +16,8 @@ namespace IwUVEditor
         private bool isDrawing;
         private bool disposedValue;
 
+        public bool RequireReset { get; private set; }
+
         Editor Editor { get; }
         FormEditor Form { get; }
         DxContext DrawContext { get; }
@@ -110,6 +112,7 @@ namespace IwUVEditor
 
         void OnThrowException(Exception ex)
         {
+            RequireReset = true;
             StopDraw();
             PEPExtensions.Utility.ShowException(ex);
         }

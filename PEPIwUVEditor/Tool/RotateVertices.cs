@@ -10,13 +10,18 @@ namespace IwUVEditor.Tool
 {
     class RotateVertices : EditVertices, IEditTool
     {
+        /// <summary>
+        /// 回転量/移動量
+        /// </summary>
+        private static double Step => 0.001;
         protected override Matrix Offset
         {
             get
             {
-                return Matrix.Translation(CenterPos * -1) * Matrix.RotationZ((CurrentPos.Y - StartPos.Y) * (float)Math.PI * 2f) * Matrix.Translation(CenterPos);
+                return Matrix.Translation(CenterPos * -1) * Matrix.RotationZ((float)(Step * Input.MouseOffset.Y * 2 * Math.PI)) * Matrix.Translation(CenterPos);
             }
         }
+
 
         public RotateVertices(UVViewDrawProcess process) : base(process) { }
     }

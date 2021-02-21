@@ -223,5 +223,11 @@ namespace IwUVEditor
             if ((sender as RadioButton).Checked)
                 Current.Tool = Editor.ToolBox.MoveVertices(DrawProcess);
         }
+
+        private void radioButtonRotate_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+                Current.Tool = Editor.ToolBox.RotateVertices(DrawProcess);
+        }
     }
 }

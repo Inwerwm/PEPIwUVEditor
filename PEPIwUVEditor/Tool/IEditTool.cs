@@ -1,5 +1,6 @@
 ﻿using IwUVEditor.Command;
 using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace IwUVEditor.Tool
     {
         bool IsReady { get; }
 
-        void ReadInput(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey);
+        void ReadInput(InputStates input);
         IEditorCommand CreateCommand(Material target);
         void PrepareDrawing();
     }

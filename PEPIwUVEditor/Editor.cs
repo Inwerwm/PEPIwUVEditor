@@ -51,11 +51,11 @@ namespace IwUVEditor
             Current.Material = Materials.First();
         }
 
-        public void DriveTool(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)
+        public void DriveTool(InputStates input)
         {
             if (Current.Tool is null)
                 return;
-            Current.Tool.ReadInput(mouse, pressKey);
+            Current.Tool.ReadInput(input);
             if (Current.Tool.IsReady)
             {
                 Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));

@@ -116,7 +116,7 @@ namespace IwUVEditor
                 DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
             Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), Input.IsClicking[MouseButtons.Left]);
-            Editor.DriveTool(Input.MouseLeft, Input.IsPress);
+            Editor.DriveTool(Input);
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)

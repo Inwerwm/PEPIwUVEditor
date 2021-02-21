@@ -1,6 +1,7 @@
 ﻿using IwUVEditor.Command;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using PEPlugin.Pmx;
 using SlimDX;
 using System;
@@ -10,7 +11,7 @@ using System.Windows.Forms;
 
 namespace IwUVEditor.Tool
 {
-    internal abstract class EditVertices
+    internal abstract class EditVertices : IEditTool
     {
         private bool disposedValue;
         private Vector3 centerPos;
@@ -29,8 +30,6 @@ namespace IwUVEditor.Tool
             get => centerPos;
             private set => centerPos = value;
         }
-
-        protected Dictionary<Keys, bool> IsPress { get; private set; }
 
         protected abstract Matrix Offset { get; }
         protected Matrix TotalOffset { get; set; }
@@ -57,20 +56,18 @@ namespace IwUVEditor.Tool
             Process.UpdateDrawingVertices();
         }
 
-        public virtual void ReadInput(DragManager mouse, Dictionary<Keys, bool> pressKey)
+        public virtual void ReadInput(InputStates input)
         {
-            IsPress = pressKey;
-
-            if (mouse.IsStartingJust)
+            if (input.MouseLeft.IsStartingJust)
             {
                 TotalOffset = Matrix.Identity;
                 TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
                 CenterPos = CalcCenterPos();
-                StartPos = mouse.Start;
+                StartPos = input.MouseLeft.Start;
             }
-            if (mouse.IsDragging)
+            if (input.MouseLeft.IsDragging)
             {
-                CurrentPos = mouse.Current;
+                CurrentPos = input.MouseLeft.Current;
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset);
                 TotalOffset *= Offset;
 
@@ -78,7 +75,7 @@ namespace IwUVEditor.Tool
                 // 評価ごとの移動量にすることで累積が可能になる
                 StartPos = CurrentPos;
             }
-            if (mouse.IsEndingJust)
+            if (input.MouseLeft.IsEndingJust)
             {
                 IsReady = true;
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));

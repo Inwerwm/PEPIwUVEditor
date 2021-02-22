@@ -23,6 +23,9 @@ namespace IwUVEditor.Tool
         }
 
 
-        public RotateVertices(UVViewDrawProcess process) : base(process) { }
+        public RotateVertices(UVViewDrawProcess process) : base(process)
+        {
+
+        }
     }
 }

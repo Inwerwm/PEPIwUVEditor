@@ -56,6 +56,7 @@ namespace IwUVEditor.DirectX
 
         #region プロパティ - 描画要素
         TexturePlate TexturePlate { get; set; }
+        ShaderResourceView SignTexture { get; set; }
 
         internal GenerableMap<Material, ShaderResourceView> Textures { get; set; }
         internal GenerableMap<Material, UVMesh> UVMeshes { get; set; }
@@ -132,6 +133,7 @@ namespace IwUVEditor.DirectX
             Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
+            SignTexture = new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.CenterSign));
 
             Textures = new GenerableMap<Material, ShaderResourceView>(LoadTexture);
             UVMeshes = new GenerableMap<Material, UVMesh>((material) => new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
@@ -148,6 +150,7 @@ namespace IwUVEditor.DirectX
                 Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
                 // テクスチャを読み込み
                 Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Textures[Current.Material]);
+                Effect.GetVariableByName("signTexture").AsResource().SetResource(SignTexture);
 
                 // テクスチャ板を描画
                 TexturePlate.Prepare();
@@ -262,6 +265,7 @@ namespace IwUVEditor.DirectX
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
                     TexturePlate?.Dispose();
+                    SignTexture?.Dispose();
                     foreach (var resource in Textures.Values)
                     {
                         resource?.Dispose();

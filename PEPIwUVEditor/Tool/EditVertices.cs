@@ -13,13 +13,13 @@ namespace IwUVEditor.Tool
 {
     internal abstract class EditVertices : IEditTool
     {
-        private bool disposedValue;
+        protected bool disposedValue;
         private Vector3 centerPos;
 
         public bool IsReady { get; private set; }
 
         protected UVViewDrawProcess Process { get; }
-        protected InputStates Input { get; private set; }
+        protected InputStates Input { get; set; }
 
         protected List<IPXVertex> TargetVertices { get; set; }
         protected Material TargetMaterial => Process.Current.Material;

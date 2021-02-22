@@ -121,7 +121,7 @@ float4 PS_FromVertexColorPSV(PositionSquareVertex input) : SV_Target
 // ‰ñ“]’†S—p
 float4 PS_RotationCenter(RotationCenter input) : SV_Target
 {
-	float4 texColor = signTexture.Sample(Sampler, input.TexCoord)
+	float4 texColor = signTexture.Sample(Sampler, input.TexCoord);
 	return float4(texColor.rgb + input.Color.rgb, texColor.a * input.Color.a * input.AlphaRatio);
 }
 

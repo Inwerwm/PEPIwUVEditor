@@ -46,6 +46,8 @@ namespace IwUVEditor
 
             SelectionSaver = new FormSaveSelection(Current) { CommandInvoker = Editor.Do };
             ColorSettings = new FormColorSettings();
+
+            Input.ScreenSize = (DrawTargetControl.ClientSize.Width, DrawTargetControl.ClientSize.Height);
         }
 
         internal void InitializeWhenStartDrawing()
@@ -108,6 +110,7 @@ namespace IwUVEditor
         {
             DrawContext?.ChangeResolution();
             DrawProcess?.ChangeResolution();
+            Input.ScreenSize = (DrawTargetControl.ClientSize.Width, DrawTargetControl.ClientSize.Height);
         }
 
         private void listBoxMaterial_SelectedIndexChanged(object sender, EventArgs e)

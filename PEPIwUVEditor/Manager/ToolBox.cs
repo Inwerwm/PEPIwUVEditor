@@ -65,7 +65,7 @@ namespace IwUVEditor.Tool
             CallTool(() => new MoveVertices(process), process);
 
         public RotateVertices RotateVertices(UVViewDrawProcess process) =>
-            CallTool(() => new RotateVertices(process), process);
+            CallTool(() => new RotateVertices(Device, process), process);
 
         #region IDisposable
         protected virtual void Dispose(bool disposing)

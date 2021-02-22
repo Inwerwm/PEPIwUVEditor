@@ -15,6 +15,10 @@ namespace IwUVEditor.StateContainer
         /// </summary>
         public bool IsActive { get; set; }
         /// <summary>
+        /// スクリーンの大きさ
+        /// </summary>
+        public (int X, int Y) ScreenSize { get; set; }
+        /// <summary>
         /// マウスのスクリーン座標
         /// </summary>
         public Vector2 MousePos { get; set; }

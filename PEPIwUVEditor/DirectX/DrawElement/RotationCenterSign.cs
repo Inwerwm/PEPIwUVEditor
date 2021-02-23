@@ -3,10 +3,6 @@ using SlimDX;
 using SlimDX.Direct3D11;
 using SlimDX.DXGI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 
@@ -20,8 +16,6 @@ namespace IwUVEditor.DirectX.DrawElement
         private Color4 color;
         private Vector2 screenSize;
 
-        private int instanceCount = 4;
-
         Device Device { get; }
         EffectPass UsingEffectPass { get; }
         public RasterizerState DrawMode { get; set; }
@@ -30,7 +24,6 @@ namespace IwUVEditor.DirectX.DrawElement
 
         Buffer VertexBuffer { get; set; }
         Buffer IndexBuffer { get; set; }
-        Buffer InstanceBuffer { get; set; }
 
         internal Vector3 Center
         {
@@ -38,7 +31,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 center = value;
-                CreateVertexBuffer();
+                UpdateVertices();
             }
         }
 
@@ -48,7 +41,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 radius = value;
-                CreateInstanceBuffer();
+                UpdateVertices();
             }
         }
 
@@ -58,7 +51,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 color = value;
-                CreateInstanceBuffer();
+                UpdateVertices();
             }
         }
 
@@ -68,7 +61,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 screenSize = value;
-                CreateInstanceBuffer();
+                UpdateVertices();
             }
         }
 
@@ -86,7 +79,6 @@ namespace IwUVEditor.DirectX.DrawElement
 
             CreateVertexBuffer();
             CreateIndexBuffer();
-            CreateInstanceBuffer();
         }
 
         public void Prepare()
@@ -102,20 +94,17 @@ namespace IwUVEditor.DirectX.DrawElement
             // バッファを設定
             Device.ImmediateContext.InputAssembler.SetVertexBuffers(
                 0,
-                new VertexBufferBinding(VertexBuffer, PositionVertex.SizeInBytes, 0),
-                new VertexBufferBinding(InstanceBuffer, VectorOffset.SizeInBytes, 0)
+                new VertexBufferBinding(VertexBuffer, VectorOffset.SizeInBytes, 0)
             );
             Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
 
-            // 描画を設定
-            Device.ImmediateContext.DrawIndexedInstanced(3, instanceCount, 0, 0, 0);
-            Device.ImmediateContext.DrawIndexedInstanced(3, instanceCount, 3, 0, 0);
+            Device.ImmediateContext.DrawIndexed(3, 0, 0);
+            Device.ImmediateContext.DrawIndexed(3, 3, 0);
         }
 
         public void UpdateVertices()
         {
             CreateVertexBuffer();
-            CreateInstanceBuffer();
         }
 
         private void CreateVertexLayout()
@@ -124,7 +113,7 @@ namespace IwUVEditor.DirectX.DrawElement
             VertexLayout = new InputLayout(
                 Device,
                 UsingEffectPass.Description.Signature,
-                PositionVertex.VertexElements.Concat(VectorOffset.VertexElements).ToArray()
+                VectorOffset.VertexElements
             );
         }
 
@@ -162,45 +151,16 @@ namespace IwUVEditor.DirectX.DrawElement
             }
         }
 
-        private void CreateInstanceBuffer()
-        {
-            InstanceBuffer?.Dispose();
-            using (DataStream instanceStream = new DataStream(CreateInstances(), false, true))
-                InstanceBuffer = new Buffer(
-                    Device,
-                    instanceStream,
-                    new BufferDescription
-                    (
-                        (int)instanceStream.Length,
-                        ResourceUsage.Dynamic,
-                        BindFlags.VertexBuffer,
-                        CpuAccessFlags.Write,
-                        ResourceOptionFlags.None,
-                        0
-                    )
-                );
-        }
-
-        private PositionVertex[] CreateVertices()
-        {
-            return new[] {
-                new PositionVertex
-                {
-                    Position = Center,
-                }
-            };
-        }
-
-        private VectorOffset[] CreateInstances()
+        private VectorOffset[] CreateVertices()
         {
             Vector2 aspectCorrection = new Vector2(
                 ScreenSize.X > ScreenSize.Y ? ScreenSize.Y / ScreenSize.X : 1,
                 ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1
             );
-
             return new[] {
                 new VectorOffset
                 {
+                    Position = Center,
                     Color = Color,
                     Offset = new Vector3(-Radius * aspectCorrection.X, Radius * aspectCorrection.Y, 0),
                     TEXCOORD = new Vector2(0, 1),
@@ -208,6 +168,7 @@ namespace IwUVEditor.DirectX.DrawElement
                 },
                 new VectorOffset
                 {
+                    Position = Center,
                     Color = Color,
                     Offset = new Vector3(Radius * aspectCorrection.X, Radius * aspectCorrection.Y, 0),
                     TEXCOORD = new Vector2(1, 1),
@@ -215,6 +176,7 @@ namespace IwUVEditor.DirectX.DrawElement
                 },
                 new VectorOffset
                 {
+                    Position = Center,
                     Color = Color,
                     Offset = new Vector3(-Radius * aspectCorrection.X, -Radius * aspectCorrection.Y, 0),
                     TEXCOORD = new Vector2(0 ,0),
@@ -222,6 +184,7 @@ namespace IwUVEditor.DirectX.DrawElement
                 },
                 new VectorOffset
                 {
+                    Position = Center,
                     Color = Color,
                     Offset = new Vector3(Radius * aspectCorrection.X, -Radius * aspectCorrection.Y, 0),
                     TEXCOORD = new Vector2(1, 0),
@@ -248,7 +211,6 @@ namespace IwUVEditor.DirectX.DrawElement
                     VertexLayout?.Dispose();
                     VertexBuffer?.Dispose();
                     IndexBuffer?.Dispose();
-                    InstanceBuffer?.Dispose();
                 }
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします

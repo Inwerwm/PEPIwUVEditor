@@ -215,6 +215,13 @@ namespace IwUVEditor.DirectX
             return new Vector2(worldPos.X, worldPos.Y);
         }
 
+        public Vector2 WorldPosToScreenPos(Vector2 worldPos)
+        {
+            // 描画領域内での割合座標 [0,1]
+            Vector2 rationalPos = (Vector2.TransformCoordinate(worldPos, TransMatrix) + new Vector2(1, 1)) / 2;
+            return new Vector2((int)Math.Round(rationalPos.X * ScreenSize.X, MidpointRounding.AwayFromZero), (int)Math.Round((1 - rationalPos.Y) * ScreenSize.Y, MidpointRounding.AwayFromZero));
+        }
+
         private Texture2D TextureFromBitmap(Bitmap bitmap)
         {
             using (LockedBitmap lockedBitmap = new LockedBitmap(bitmap))

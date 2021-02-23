@@ -16,6 +16,8 @@ namespace IwUVEditor.Tool
 
         SlimDX.Direct3D11.Device Device { get; }
 
+        Vector2 ScreenSize { get; set; }
+
         /// <summary>
         /// 回転量/移動量
         /// </summary>
@@ -31,12 +33,6 @@ namespace IwUVEditor.Tool
         public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
         {
             Device = device;
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            CenterSign?.Dispose();
             CenterSign = new RotationCenterSign(
                 Device,
                 Process.Effect,
@@ -44,8 +40,15 @@ namespace IwUVEditor.Tool
                 CenterPos,
                 0.1f,
                 new Color4(0, 0, 1),
-                new Vector2(1, 1)
+                ScreenSize
             );
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            CenterSign.ScreenSize = Process.ScreenSize;
+            ScreenSize = Process.ScreenSize;
         }
 
         public override void PrepareDrawing()
@@ -57,7 +60,12 @@ namespace IwUVEditor.Tool
         public override void ReadInput(InputStates input)
         {
             Input = input;
-            CenterSign.ScreenSize = new Vector2(Input.ScreenSize.X, Input.ScreenSize.Y);
+            if(ScreenSize != Process.ScreenSize)
+            {
+                CenterSign.ScreenSize = Process.ScreenSize;
+                ScreenSize = Process.ScreenSize;
+            }
+
             base.ReadInput(input);
         }
 

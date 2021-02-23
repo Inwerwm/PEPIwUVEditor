@@ -66,6 +66,8 @@ namespace IwUVEditor.DirectX
         #region プロパティ - 描画設定
         public RasterizerStateProvider Rasterize { get; private set; }
 
+        public Vector2 ScreenSize => new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
+
         public float RadiusOfPositionSquare
         {
             get => radiusOfPositionSquare;
@@ -188,15 +190,13 @@ namespace IwUVEditor.DirectX
 
         public void ChangeResolution()
         {
-            var screenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
-
-            (Camera as DxCameraOrthographic).ViewVolumeSize = (screenSize.X, screenSize.Y);
+            (Camera as DxCameraOrthographic).ViewVolumeSize = (ScreenSize.X, ScreenSize.Y);
 
             if (PositionSquares is null)
                 return;
             foreach (var ps in PositionSquares.Values)
             {
-                ps.ScreenSize = screenSize;
+                ps.ScreenSize = ScreenSize;
             }
         }
 

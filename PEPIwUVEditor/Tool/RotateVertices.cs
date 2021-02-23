@@ -33,13 +33,8 @@ namespace IwUVEditor.Tool
         /// 回転量/移動量
         /// </summary>
         private static double Step => 0.001;
-        protected override Matrix Offset
-        {
-            get
-            {
-                return Matrix.Translation(CenterPos * -1) * Matrix.RotationZ((float)(Step * Input.MouseOffset.Y * 2 * Math.PI)) * Matrix.Translation(CenterPos);
-            }
-        }
+        protected override Matrix Offset =>
+            Matrix.Translation(RotationCenter * -1) * Matrix.RotationZ((float)(Step * Input.MouseOffset.Y * 2 * Math.PI)) * Matrix.Translation(RotationCenter);
 
         public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
         {

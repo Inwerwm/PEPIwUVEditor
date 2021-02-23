@@ -24,6 +24,7 @@ namespace IwUVEditor.Tool
                 CenterSign.Center = rotationCenter;
             }
         }
+        public float Radius { get; set; } = 0.025f;
 
         SlimDX.Direct3D11.Device Device { get; }
 
@@ -46,7 +47,7 @@ namespace IwUVEditor.Tool
                 Process.Effect,
                 Process.Rasterize.Solid,
                 CenterPos,
-                0.025f,
+                Radius,
                 new Color4(0, 0, 1),
                 ScreenSize
             );
@@ -72,9 +73,19 @@ namespace IwUVEditor.Tool
 
         public override void ReadInput(InputStates input)
         {
-            Input = input;
-
-            base.ReadInput(input);
+            var radPos = input.MousePos - Process.WorldPosToScreenPos(new Vector2(CenterPos.X, CenterPos.Y));
+            var normalizedPos = new Vector2(radPos.X / Process.ScreenSize.X, radPos.Y / Process.ScreenSize.Y);
+            float length = normalizedPos.Length() * 2;
+            // TODO: 回転中心選択状態と回転操作状態がドラッグ中に遷移すると起きる不具合が起きるので修正する
+            if (length < Radius)
+            {
+                CenterSign.Color = new Color4(1, 0, 1);
+            }
+            else
+            {
+                CenterSign.Color = new Color4(0, 0, 1);
+                base.ReadInput(input);
+            }
         }
 
         protected override void Dispose(bool disposing)

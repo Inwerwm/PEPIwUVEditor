@@ -168,6 +168,7 @@ namespace IwUVEditor
             this.radioButtonRotate.Text = "回転";
             this.radioButtonRotate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioButtonRotate.UseVisualStyleBackColor = true;
+            this.radioButtonRotate.CheckedChanged += new System.EventHandler(this.radioButtonRotate_CheckedChanged);
             // 
             // buttonReverseV
             // 
@@ -240,7 +241,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 995;
+            this.splitUVMat.SplitterDistance = 993;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -252,7 +253,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(374, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(376, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 

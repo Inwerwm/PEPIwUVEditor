@@ -6,6 +6,7 @@ matrix ViewProjection;
 
 // テクスチャ画像
 Texture2D diffuseTexture;
+Texture2D signTexture;
 
 // テクスチャのサンプリング設定
 // 補間は近傍頂点
@@ -39,6 +40,17 @@ struct PositionSquareVertex
 	float4 Position : SV_Position;
 	float4 Color	: Color;
 	float4 Offset   : Offset;
+	uint InstanceId : SV_InstanceID;
+};
+
+// 回転中心用
+struct RotationCenter
+{
+	float4 Position : SV_Position;
+	float4 Color	: Color;
+	float3 Offset   : Offset;
+	float2 TexCoord : TEXCOORD;
+	float AlphaRatio : Ratio;
 	uint InstanceId : SV_InstanceID;
 };
 
@@ -77,6 +89,14 @@ PositionSquareVertex VS_PutPositionSquare(PositionSquareVertex input)
 	return output;
 }
 
+// 回転中心用
+RotationCenter VS_PutRotationCenter(RotationCenter input)
+{
+	RotationCenter output = input;
+	output.Position = mul(input.Position, ViewProjection) + float4(input.Offset, 0);
+	return output;
+}
+
 //////////////////////
 //    ピクセルシェーダ
 
@@ -96,6 +116,13 @@ float4 PS_FromVertexColorInfluencedTexture(TexturePlateVertex input) : SV_Target
 float4 PS_FromVertexColorPSV(PositionSquareVertex input) : SV_Target
 {
 	return input.Color;
+}
+
+// 回転中心用
+float4 PS_RotationCenter(RotationCenter input) : SV_Target
+{
+	float4 texColor = signTexture.Sample(Sampler, input.TexCoord);
+	return float4(texColor.rgb + input.Color.rgb, texColor.a * input.Color.a * input.AlphaRatio);
 }
 
 //////////////////////
@@ -132,5 +159,14 @@ technique10 PositionSquaresTechnique
 	{
 		SetVertexShader(CompileShader(vs_5_0, VS_PutPositionSquare()));
 		SetPixelShader(CompileShader(ps_5_0, PS_FromVertexColorPSV()));
+	}
+}
+
+technique10 RotationCenterTechnique
+{
+	pass DrawRotationCenterPass
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS_PutRotationCenter()));
+		SetPixelShader(CompileShader(ps_5_0, PS_RotationCenter()));
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using IwUVEditor.Command;
 using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.Manager;
+using IwUVEditor.StateContainer;
 using SlimDX;
 using System;
 using System.Collections.Generic;
@@ -34,25 +35,27 @@ namespace IwUVEditor.Tool
             SelectionRectangle = new SelectionRectangle(device, process.Effect, process.Rasterize.Solid, RectangleColor);
         }
 
-        public void ReadInput(DragManager mouse, Dictionary<System.Windows.Forms.Keys, bool> pressKey)
+        public void Initialize() { }
+
+        public void ReadInput(InputStates input)
         {
-            if (mouse.IsStartingJust)
+            if (input.MouseLeft.IsStartingJust)
             {
-                SelectionRectangle.StartPos = mouse.Start;
+                SelectionRectangle.StartPos = input.MouseLeft.Start;
             }
 
-            if (mouse.IsDragging)
+            if (input.MouseLeft.IsDragging)
             {
-                SelectionRectangle.EndPos = mouse.Current;
+                SelectionRectangle.EndPos = input.MouseLeft.Current;
                 NeedsDrawing = true;
             }
 
-            if (mouse.IsEndingJust)
+            if (input.MouseLeft.IsEndingJust)
             {
-                SelectionMode = pressKey[System.Windows.Forms.Keys.ShiftKey] ? SelectionMode.Union : pressKey[System.Windows.Forms.Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
+                SelectionMode = input.IsPress[System.Windows.Forms.Keys.ShiftKey] ? SelectionMode.Union : input.IsPress[System.Windows.Forms.Keys.ControlKey] ? SelectionMode.Difference : SelectionMode.Create;
                 NeedsDrawing = false;
                 IsReady = true;
-                mouse.Reset();
+                input.MouseLeft.Reset();
             }
         }
 

@@ -23,6 +23,13 @@ namespace IwUVEditor
             try
             {
                 EditorLauncher = EditorLauncher ?? new EditorLauncher(args);
+
+                if (EditorLauncher.RequireReset)
+                {
+                    EditorLauncher.Dispose();
+                    EditorLauncher = new EditorLauncher(args);
+                }
+
                 EditorLauncher.Run();
             }
             catch (Exception ex)

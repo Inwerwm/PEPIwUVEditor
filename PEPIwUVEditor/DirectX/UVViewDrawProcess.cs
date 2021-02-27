@@ -20,7 +20,7 @@ namespace IwUVEditor.DirectX
         #endregion
 
         #region イベント
-        internal event CatchExceptionOnDrawHandler CatchException;
+        internal event CatchExceptionEventHandler CatchException;
         #endregion
 
         #region プロパティ - EditorStates
@@ -56,6 +56,7 @@ namespace IwUVEditor.DirectX
 
         #region プロパティ - 描画要素
         TexturePlate TexturePlate { get; set; }
+        ShaderResourceView SignTexture { get; set; }
 
         internal GenerableMap<Material, ShaderResourceView> Textures { get; set; }
         internal GenerableMap<Material, UVMesh> UVMeshes { get; set; }
@@ -64,6 +65,8 @@ namespace IwUVEditor.DirectX
 
         #region プロパティ - 描画設定
         public RasterizerStateProvider Rasterize { get; private set; }
+
+        public Vector2 ScreenSize => new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
 
         public float RadiusOfPositionSquare
         {
@@ -132,6 +135,7 @@ namespace IwUVEditor.DirectX
             Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
 
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
+            SignTexture = new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.CenterSign));
 
             Textures = new GenerableMap<Material, ShaderResourceView>(LoadTexture);
             UVMeshes = new GenerableMap<Material, UVMesh>((material) => new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
@@ -148,6 +152,7 @@ namespace IwUVEditor.DirectX
                 Context.Device.ImmediateContext.ClearDepthStencilView(Context.DepthStencil, DepthStencilClearFlags.Depth, 1, 0);
                 // テクスチャを読み込み
                 Effect.GetVariableByName("diffuseTexture").AsResource().SetResource(Textures[Current.Material]);
+                Effect.GetVariableByName("signTexture").AsResource().SetResource(SignTexture);
 
                 // テクスチャ板を描画
                 TexturePlate.Prepare();
@@ -166,7 +171,7 @@ namespace IwUVEditor.DirectX
             }
             catch (Exception ex)
             {
-                CatchException(ex);
+                CatchException?.Invoke(ex);
             }
         }
 
@@ -185,15 +190,13 @@ namespace IwUVEditor.DirectX
 
         public void ChangeResolution()
         {
-            var screenSize = new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
-
-            (Camera as DxCameraOrthographic).ViewVolumeSize = (screenSize.X, screenSize.Y);
+            (Camera as DxCameraOrthographic).ViewVolumeSize = (ScreenSize.X, ScreenSize.Y);
 
             if (PositionSquares is null)
                 return;
             foreach (var ps in PositionSquares.Values)
             {
-                ps.ScreenSize = screenSize;
+                ps.ScreenSize = ScreenSize;
             }
         }
 
@@ -210,6 +213,13 @@ namespace IwUVEditor.DirectX
             Vector2 normalizedPos = new Vector2(2 * screenPos.X / Context.TargetControl.Width - 1, 1 - 2 * screenPos.Y / Context.TargetControl.Height);
             Vector4 worldPos = Vector4.Transform(new Vector4(normalizedPos, 0, 1), InvertTransMatrix);
             return new Vector2(worldPos.X, worldPos.Y);
+        }
+
+        public Vector2 WorldPosToScreenPos(Vector2 worldPos)
+        {
+            // 描画領域内での割合座標 [0,1]
+            Vector2 rationalPos = (Vector2.TransformCoordinate(worldPos, TransMatrix) + new Vector2(1, 1)) / 2;
+            return new Vector2((int)Math.Round(rationalPos.X * ScreenSize.X, MidpointRounding.AwayFromZero), (int)Math.Round((1 - rationalPos.Y) * ScreenSize.Y, MidpointRounding.AwayFromZero));
         }
 
         private Texture2D TextureFromBitmap(Bitmap bitmap)
@@ -262,6 +272,7 @@ namespace IwUVEditor.DirectX
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
                     TexturePlate?.Dispose();
+                    SignTexture?.Dispose();
                     foreach (var resource in Textures.Values)
                     {
                         resource?.Dispose();
@@ -276,6 +287,4 @@ namespace IwUVEditor.DirectX
         }
         #endregion
     }
-
-    internal delegate void CatchExceptionOnDrawHandler(Exception ex);
 }

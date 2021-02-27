@@ -13,6 +13,8 @@ namespace IwUVEditor
     {
         private UVViewDrawProcess drawProcess;
 
+        internal event CatchExceptionEventHandler CatchException;
+
         Editor Editor { get; }
         internal DxContext DrawContext { get; set; }
         internal UVViewDrawProcess DrawProcess
@@ -80,43 +82,26 @@ namespace IwUVEditor
 
         void MouseInput(object sender, MouseInputEventArgs e)
         {
-            if (!Input.IsActive)
-                return;
-
-            float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
-
-            switch (e.ButtonFlags)
+            try
             {
-                case MouseButtonFlags.MouseWheel:
-                    DrawProcess.Scale.WheelDelta += e.WheelDelta * modifier;
-                    break;
-                case MouseButtonFlags.MiddleUp:
-                    Input.IsClicking[MouseButtons.Middle] = false;
-                    break;
-                case MouseButtonFlags.MiddleDown:
-                    Input.IsClicking[MouseButtons.Middle] = true;
-                    break;
-                case MouseButtonFlags.RightUp:
-                    Input.IsClicking[MouseButtons.Right] = false;
-                    break;
-                case MouseButtonFlags.RightDown:
-                    Input.IsClicking[MouseButtons.Right] = true;
-                    break;
-                case MouseButtonFlags.LeftUp:
-                    Input.IsClicking[MouseButtons.Left] = false;
-                    break;
-                case MouseButtonFlags.LeftDown:
-                    Input.IsClicking[MouseButtons.Left] = true;
-                    break;
-                default:
-                    break;
+                if (!Input.IsActive)
+                    return;
+
+                Input.ReadMouseInput(e, DrawProcess.ScreenPosToWorldPos);
+
+                float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
+
+                if(Input.Wheel.IsScrolling)
+                    DrawProcess.Scale.WheelDelta += Input.Wheel.Delta * modifier;
+                if (Input.IsClicking[MouseButtons.Middle])
+                    DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
+
+                Editor.DriveTool(Input);
             }
-
-            if (Input.IsClicking[MouseButtons.Middle])
-                DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
-
-            Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), Input.IsClicking[MouseButtons.Left]);
-            Editor.DriveTool(Input.MouseLeft, Input.IsPress);
+            catch (Exception ex)
+            {
+                CatchException?.Invoke(ex);
+            }
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)
@@ -222,6 +207,12 @@ namespace IwUVEditor
         {
             if ((sender as RadioButton).Checked)
                 Current.Tool = Editor.ToolBox.MoveVertices(DrawProcess);
+        }
+
+        private void radioButtonRotate_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+                Current.Tool = Editor.ToolBox.RotateVertices(DrawProcess);
         }
     }
 }

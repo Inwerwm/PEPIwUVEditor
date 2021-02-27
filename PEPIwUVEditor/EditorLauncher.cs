@@ -8,10 +8,15 @@ using System;
 
 namespace IwUVEditor
 {
+
+    internal delegate void CatchExceptionEventHandler(Exception ex);
+
     class EditorLauncher : IDisposable
     {
         private bool isDrawing;
         private bool disposedValue;
+
+        public bool RequireReset { get; private set; }
 
         Editor Editor { get; }
         FormEditor Form { get; }
@@ -38,6 +43,7 @@ namespace IwUVEditor
             Editor.ToolBox.Device = DrawContext.Device;
             // Formへの入力
             Form.DrawContext = DrawContext;
+            Form.CatchException += OnThrowException;
             Form.AddProcessWhenClosing((sender, e) =>
             {
                 e.Cancel = true;
@@ -101,12 +107,14 @@ namespace IwUVEditor
             };
             Form.DrawProcess = DrawProcess;
 
-            DrawProcess.CatchException += (ex) =>
-            {
-                StopDraw();
+            DrawProcess.CatchException += OnThrowException;
+        }
 
-                PEPExtensions.Utility.ShowException(ex);
-            };
+        void OnThrowException(Exception ex)
+        {
+            RequireReset = true;
+            StopDraw();
+            PEPExtensions.Utility.ShowException(ex);
         }
 
         protected virtual void Dispose(bool disposing)

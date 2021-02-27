@@ -60,7 +60,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\CommandMoveVertices.cs" />
+    <Compile Include="Command\CommandApplyVertexEdit.cs" />
+    <Compile Include="Command\CommandSelectVertices.cs" />
+    <Compile Include="DirectX\DrawElement\RotationCenterSign.cs" />
+    <Compile Include="DirectX\Vertex\VectorOffset.cs" />
     <Compile Include="GenerableMap.cs" />
     <Compile Include="Command\CommandRectangleSelection.cs" />
     <Compile Include="Command\CommandManager.cs" />
@@ -100,15 +103,23 @@
     <Compile Include="Subform\FormColorSettings.Designer.cs">
       <DependentUpon>FormColorSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Subform\FormSaveSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Subform\FormSaveSelection.Designer.cs">
+      <DependentUpon>FormSaveSelection.cs</DependentUpon>
+    </Compile>
     <Compile Include="TGASharpLib.cs" />
     <Compile Include="DirectX\UVViewDrawProcess.cs" />
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
     <Compile Include="DirectX\Vertex\VertexStruct.cs" />
+    <Compile Include="Tool\EditVertices.cs" />
     <Compile Include="Tool\IEditTool.cs" />
     <Compile Include="Tool\MoveVertices.cs" />
     <Compile Include="Tool\RectangleSelection.cs" />
     <Compile Include="EditorLauncher.cs" />
     <Compile Include="Manager\ToolBox.cs" />
+    <Compile Include="Tool\RotateVertices.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">
@@ -121,8 +132,12 @@
     <EmbeddedResource Include="Subform\FormColorSettings.resx">
       <DependentUpon>FormColorSettings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Subform\FormSaveSelection.resx">
+      <DependentUpon>FormSaveSelection.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Properties\CenterSign.png" />
     <Content Include="Properties\Shader.fx" />
     <Content Include="Properties\White.png" />
     <None Include="Properties\CheckPattern.png" />

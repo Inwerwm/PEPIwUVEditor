@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.Command
 {
-    class CommandMoveVertices : IEditorCommand
+    class CommandApplyVertexEdit : IEditorCommand
     {
         List<IPXVertex> TargetVertices { get; }
         Matrix Offset { get; }
 
-        public CommandMoveVertices(List<IPXVertex> targetVertices, Matrix offset)
+        public CommandApplyVertexEdit(List<IPXVertex> targetVertices, Matrix offset)
         {
             TargetVertices = targetVertices;
             Offset = offset;

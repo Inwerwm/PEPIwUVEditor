@@ -13,6 +13,8 @@ namespace IwUVEditor
     {
         private UVViewDrawProcess drawProcess;
 
+        internal event CatchExceptionEventHandler CatchException;
+
         Editor Editor { get; }
         internal DxContext DrawContext { get; set; }
         internal UVViewDrawProcess DrawProcess
@@ -28,6 +30,7 @@ namespace IwUVEditor
         EditorStates Current { get; }
         InputStates Input { get; }
 
+        FormSaveSelection SelectionSaver { get; set; }
         FormColorSettings ColorSettings { get; }
         bool IsListeningColorSettingEvents { get; set; }
 
@@ -41,12 +44,17 @@ namespace IwUVEditor
 
             InitializeComponent();
 
+            SelectionSaver = new FormSaveSelection(Current) { CommandInvoker = Editor.Do };
             ColorSettings = new FormColorSettings();
         }
 
         internal void InitializeWhenStartDrawing()
         {
             DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
+
+            Editor.UpdateDraw = DrawProcess.UpdateDrawingVertices;
+            SelectionSaver.VertexUpdater = DrawProcess.UpdateDrawingVertices;
+
             Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
 
             // 色設定フォームに色を反映
@@ -56,6 +64,7 @@ namespace IwUVEditor
             ColorSettings.VertexMeshColor = DrawProcess.ColorInDefault.ToColor();
             ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
             ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
+
 
             timerEvery.Enabled = true;
         }
@@ -73,43 +82,26 @@ namespace IwUVEditor
 
         void MouseInput(object sender, MouseInputEventArgs e)
         {
-            if (!Input.IsActive)
-                return;
-
-            float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
-
-            switch (e.ButtonFlags)
+            try
             {
-                case MouseButtonFlags.MouseWheel:
-                    DrawProcess.Scale.WheelDelta += e.WheelDelta * modifier;
-                    break;
-                case MouseButtonFlags.MiddleUp:
-                    Input.IsClicking[MouseButtons.Middle] = false;
-                    break;
-                case MouseButtonFlags.MiddleDown:
-                    Input.IsClicking[MouseButtons.Middle] = true;
-                    break;
-                case MouseButtonFlags.RightUp:
-                    Input.IsClicking[MouseButtons.Right] = false;
-                    break;
-                case MouseButtonFlags.RightDown:
-                    Input.IsClicking[MouseButtons.Right] = true;
-                    break;
-                case MouseButtonFlags.LeftUp:
-                    Input.IsClicking[MouseButtons.Left] = false;
-                    break;
-                case MouseButtonFlags.LeftDown:
-                    Input.IsClicking[MouseButtons.Left] = true;
-                    break;
-                default:
-                    break;
+                if (!Input.IsActive)
+                    return;
+
+                Input.ReadMouseInput(e, DrawProcess.ScreenPosToWorldPos);
+
+                float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
+
+                if(Input.Wheel.IsScrolling)
+                    DrawProcess.Scale.WheelDelta += Input.Wheel.Delta * modifier;
+                if (Input.IsClicking[MouseButtons.Middle])
+                    DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
+
+                Editor.DriveTool(Input);
             }
-
-            if (Input.IsClicking[MouseButtons.Middle])
-                DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
-
-            Input.MouseLeft.ReadState(DrawProcess.ScreenPosToWorldPos(Input.MousePos), Input.IsClicking[MouseButtons.Left]);
-            Editor.DriveTool(Input.MouseLeft, Input.IsPress);
+            catch (Exception ex)
+            {
+                CatchException?.Invoke(ex);
+            }
         }
 
         private void splitUVMat_Panel1_ClientSizeChanged(object sender, EventArgs e)
@@ -128,18 +120,6 @@ namespace IwUVEditor
             DrawProcess.ResetCamera();
         }
 
-        private void FormEditor_KeyDown(object sender, KeyEventArgs e)
-        {
-            Input.IsPress[Keys.ShiftKey] = e.Shift;
-            Input.IsPress[Keys.ControlKey] = e.Control;
-        }
-
-        private void FormEditor_KeyUp(object sender, KeyEventArgs e)
-        {
-            Input.IsPress[Keys.ShiftKey] = e.Shift;
-            Input.IsPress[Keys.ControlKey] = e.Control;
-        }
-
         private void splitUVMat_Panel1_MouseEnter(object sender, EventArgs e)
         {
             Input.IsActive = true;
@@ -154,7 +134,12 @@ namespace IwUVEditor
         {
             var mousePos = DrawTargetControl.PointToClient(Cursor.Position);
             Input.MousePos = new Vector2(mousePos.X, mousePos.Y);
+
+            Input.IsPress[Keys.ShiftKey] = (ModifierKeys & Keys.Shift) == Keys.Shift;
+            Input.IsPress[Keys.ControlKey] = (ModifierKeys & Keys.Control) == Keys.Control;
+
             toolStripStatusLabelFPS.Text = $"{DrawProcess.CurrentFPS:###.##}fps";
+            toolStripStatusLabelState.Text = $"Shift:{Input.IsPress[Keys.ShiftKey]}, Ctrl:{Input.IsPress[Keys.ControlKey]}";
         }
 
         private void 描画リミッター解除ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -207,6 +192,11 @@ namespace IwUVEditor
             ColorSettings.Visible = true;
         }
 
+        private void 頂点選択保存ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectionSaver.Visible = true;
+        }
+
         private void radioButtonRectangleSelection_CheckedChanged(object sender, EventArgs e)
         {
             if ((sender as RadioButton).Checked)
@@ -217,6 +207,12 @@ namespace IwUVEditor
         {
             if ((sender as RadioButton).Checked)
                 Current.Tool = Editor.ToolBox.MoveVertices(DrawProcess);
+        }
+
+        private void radioButtonRotate_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+                Current.Tool = Editor.ToolBox.RotateVertices(DrawProcess);
         }
     }
 }

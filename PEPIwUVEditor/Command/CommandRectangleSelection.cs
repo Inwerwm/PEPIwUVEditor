@@ -9,26 +9,27 @@ namespace IwUVEditor.Command
 {
     class CommandRectangleSelection : IEditorCommand
     {
+        bool isInitialInvoke;
+
         Material TargetMaterial { get; }
 
         RectangleF SelectionRange { get; set; }
         Dictionary<IPXVertex, bool> PreviousState { get; set; }
         Dictionary<IPXVertex, bool> SelectionResult { get; set; }
 
-        Action Update { get; }
-
         public Vector2 StartPosition { get; }
         public Vector2 EndPosition { get; }
 
         public SelectionMode Mode { get; }
 
-        public CommandRectangleSelection(Material targetMaterial, Vector2 startPosition, Vector2 endPosition, SelectionMode mode, Action updateAction)
+        public CommandRectangleSelection(Material targetMaterial, Vector2 startPosition, Vector2 endPosition, SelectionMode mode)
         {
             TargetMaterial = targetMaterial;
             StartPosition = startPosition;
             EndPosition = endPosition;
             Mode = mode;
-            Update = updateAction;
+
+            isInitialInvoke = true;
         }
 
         private void CreateSelectionRange()
@@ -40,7 +41,7 @@ namespace IwUVEditor.Command
             SelectionRange = new RectangleF(min.X, min.Y, size.X, size.Y);
         }
 
-        public void Do()
+        private void ReadSelectionState()
         {
             CreateSelectionRange();
 
@@ -49,6 +50,12 @@ namespace IwUVEditor.Command
 
             // 現在の選択状態を保存
             PreviousState = TargetMaterial.IsSelected.Select(pair => (pair.Key, pair.Value)).ToDictionary(p => p.Key, p => p.Value);
+        }
+
+        public void Do()
+        {
+            if (isInitialInvoke)
+                ReadSelectionState();
 
             // 選択状態を反映
             foreach (var sel in SelectionResult)
@@ -68,8 +75,6 @@ namespace IwUVEditor.Command
                         throw new NotImplementedException();
                 }
             }
-
-            Update();
         }
 
         public void Undo()
@@ -78,8 +83,6 @@ namespace IwUVEditor.Command
             {
                 TargetMaterial.IsSelected[state.Key] = state.Value;
             }
-
-            Update();
         }
     }
 }

@@ -60,8 +60,10 @@ namespace IwUVEditor
             this.元に戻すToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.やり直しToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.描画リミッター解除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.色を変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.頂点選択保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.描画リミッター解除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -166,6 +168,7 @@ namespace IwUVEditor
             this.radioButtonRotate.Text = "回転";
             this.radioButtonRotate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioButtonRotate.UseVisualStyleBackColor = true;
+            this.radioButtonRotate.CheckedChanged += new System.EventHandler(this.radioButtonRotate_CheckedChanged);
             // 
             // buttonReverseV
             // 
@@ -238,7 +241,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 999;
+            this.splitUVMat.SplitterDistance = 993;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -250,7 +253,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(370, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(376, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -351,8 +354,10 @@ namespace IwUVEditor
             this.元に戻すToolStripMenuItem,
             this.やり直しToolStripMenuItem,
             this.toolStripSeparator2,
-            this.描画リミッター解除ToolStripMenuItem,
-            this.色を変更ToolStripMenuItem});
+            this.色を変更ToolStripMenuItem,
+            this.頂点選択保存ToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.描画リミッター解除ToolStripMenuItem});
             this.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem";
             this.編集ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
             this.編集ToolStripMenuItem.Text = "編集";
@@ -381,6 +386,25 @@ namespace IwUVEditor
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(231, 6);
             // 
+            // 色を変更ToolStripMenuItem
+            // 
+            this.色を変更ToolStripMenuItem.Name = "色を変更ToolStripMenuItem";
+            this.色を変更ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.色を変更ToolStripMenuItem.Text = "色を変更";
+            this.色を変更ToolStripMenuItem.Click += new System.EventHandler(this.色を変更ToolStripMenuItem_Click);
+            // 
+            // 頂点選択保存ToolStripMenuItem
+            // 
+            this.頂点選択保存ToolStripMenuItem.Name = "頂点選択保存ToolStripMenuItem";
+            this.頂点選択保存ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.頂点選択保存ToolStripMenuItem.Text = "頂点選択保存";
+            this.頂点選択保存ToolStripMenuItem.Click += new System.EventHandler(this.頂点選択保存ToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(231, 6);
+            // 
             // 描画リミッター解除ToolStripMenuItem
             // 
             this.描画リミッター解除ToolStripMenuItem.CheckOnClick = true;
@@ -388,13 +412,6 @@ namespace IwUVEditor
             this.描画リミッター解除ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
             this.描画リミッター解除ToolStripMenuItem.Text = "描画リミッター解除";
             this.描画リミッター解除ToolStripMenuItem.Click += new System.EventHandler(this.描画リミッター解除ToolStripMenuItem_Click);
-            // 
-            // 色を変更ToolStripMenuItem
-            // 
-            this.色を変更ToolStripMenuItem.Name = "色を変更ToolStripMenuItem";
-            this.色を変更ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
-            this.色を変更ToolStripMenuItem.Text = "色を変更";
-            this.色を変更ToolStripMenuItem.Click += new System.EventHandler(this.色を変更ToolStripMenuItem_Click);
             // 
             // テクスチャToolStripMenuItem
             // 
@@ -435,8 +452,6 @@ namespace IwUVEditor
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormEditor";
             this.Text = "UV編集";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FormEditor_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.FormEditor_KeyUp);
             this.splitCtrlView.Panel1.ResumeLayout(false);
             this.splitCtrlView.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).EndInit();
@@ -490,5 +505,7 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem 描画リミッター解除ToolStripMenuItem;
         private System.Windows.Forms.NumericUpDown numericRadiusOfPosSq;
         private System.Windows.Forms.ToolStripMenuItem 色を変更ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 頂点選択保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }

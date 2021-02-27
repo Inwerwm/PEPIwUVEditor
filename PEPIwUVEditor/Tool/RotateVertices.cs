@@ -37,6 +37,8 @@ namespace IwUVEditor.Tool
         protected override Matrix Offset =>
             Matrix.Translation(RotationCenter * -1) * Matrix.RotationZ((float)(Step * Input.MouseOffset.Y * 2 * Math.PI)) * Matrix.Translation(RotationCenter);
 
+        private Mode CurrentMode { get; set; }
+
         public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
         {
             Device = device;
@@ -73,18 +75,45 @@ namespace IwUVEditor.Tool
 
         public override void ReadInput(InputStates input)
         {
-            var radPos = input.MousePos - Process.WorldPosToScreenPos(new Vector2(CenterPos.X, CenterPos.Y));
-            var normalizedPos = new Vector2(radPos.X / Process.ScreenSize.X, radPos.Y / Process.ScreenSize.Y);
-            float length = normalizedPos.Length() * 2;
-            // TODO: 回転中心選択状態と回転操作状態がドラッグ中に遷移すると起きる不具合が起きるので修正する
-            if (length < Radius)
+            var modeTmp = CurrentMode;
+
+            if (!(input.MouseLeft.IsDragging || input.MouseLeft.IsEndingJust))
+                CurrentMode = CheckMode(input.MousePos);
+
+            switch (CurrentMode)
             {
-                CenterSign.Color = new Color4(1, 0, 1);
+                case Mode.Rotation:
+                    base.ReadInput(input);
+                    break;
+                case Mode.MoveCenter:
+                    MoveCenter(input);
+                    break;
+                default:
+                    break;
             }
-            else
+
+            // ドラッグ終了時点の場合はモードの再読込を行わないと
+            // 次のマウス入力までモードが持続してしまう
+            if (input.MouseLeft.IsEndingJust)
+                CurrentMode = CheckMode(input.MousePos);
+
+            if (modeTmp != CurrentMode)
+                CenterSign.Color = CurrentMode == Mode.MoveCenter ? new Color4(1, 0, 1) : new Color4(0, 0, 1);
+
+            Mode CheckMode(Vector2 mousePos)
             {
-                CenterSign.Color = new Color4(0, 0, 1);
-                base.ReadInput(input);
+                var radPos = mousePos - Process.WorldPosToScreenPos(new Vector2(RotationCenter.X, RotationCenter.Y));
+                var normalizedPos = new Vector2(radPos.X / Process.ScreenSize.X, radPos.Y / Process.ScreenSize.Y);
+                float length = normalizedPos.Length() * 2; // なぜか半分にすると正しそうな長さになる
+                return length < Radius ? Mode.MoveCenter : Mode.Rotation;
+            }
+        }
+
+        private void MoveCenter(InputStates input)
+        {
+            if (input.MouseLeft.IsDragging)
+            {
+                RotationCenter += new Vector3(input.MouseLeft.Offset, 0);
             }
         }
 
@@ -99,6 +128,12 @@ namespace IwUVEditor.Tool
             }
 
             base.Dispose(disposing);
+        }
+
+        enum Mode
+        {
+            Rotation,
+            MoveCenter,
         }
     }
 }

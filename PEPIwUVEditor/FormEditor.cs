@@ -217,12 +217,12 @@ namespace IwUVEditor
 
         private void 座標のコピーToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Editor.CopyPosition();
         }
 
         private void 座標のペーストToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Editor.PastePosition();
         }
     }
 }

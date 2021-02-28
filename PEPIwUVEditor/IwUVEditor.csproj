@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Command\CommandApplyVertexEdit.cs" />
     <Compile Include="Command\CommandSelectVertices.cs" />
+    <Compile Include="Command\CommandSetPosition.cs" />
     <Compile Include="DirectX\DrawElement\RotationCenterSign.cs" />
     <Compile Include="DirectX\Vertex\VectorOffset.cs" />
     <Compile Include="GenerableMap.cs" />

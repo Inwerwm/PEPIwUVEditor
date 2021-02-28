@@ -111,6 +111,9 @@ namespace IwUVEditor
         {
             if (PositionClip is null)
                 return;
+
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key).ToList();
+            Do(Current.Material, new CommandSetPosition(selectedVertices, PositionClip.Value));
         }
 
         protected virtual void Dispose(bool disposing)

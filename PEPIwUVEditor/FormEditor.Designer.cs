@@ -68,6 +68,8 @@ namespace IwUVEditor
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
+            this.座標のコピーToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.座標のペーストToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -241,7 +243,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 993;
+            this.splitUVMat.SplitterDistance = 991;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -253,7 +255,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(376, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(378, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -357,7 +359,9 @@ namespace IwUVEditor
             this.色を変更ToolStripMenuItem,
             this.頂点選択保存ToolStripMenuItem,
             this.toolStripSeparator3,
-            this.描画リミッター解除ToolStripMenuItem});
+            this.描画リミッター解除ToolStripMenuItem,
+            this.座標のコピーToolStripMenuItem,
+            this.座標のペーストToolStripMenuItem});
             this.編集ToolStripMenuItem.Name = "編集ToolStripMenuItem";
             this.編集ToolStripMenuItem.Size = new System.Drawing.Size(51, 24);
             this.編集ToolStripMenuItem.Text = "編集";
@@ -367,7 +371,7 @@ namespace IwUVEditor
             this.元に戻すToolStripMenuItem.Name = "元に戻すToolStripMenuItem";
             this.元に戻すToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Z";
             this.元に戻すToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.元に戻すToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.元に戻すToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
             this.元に戻すToolStripMenuItem.Text = "元に戻す";
             this.元に戻すToolStripMenuItem.Click += new System.EventHandler(this.元に戻すToolStripMenuItem_Click);
             // 
@@ -377,39 +381,39 @@ namespace IwUVEditor
             this.やり直しToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+Z";
             this.やり直しToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.Z)));
-            this.やり直しToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.やり直しToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
             this.やり直しToolStripMenuItem.Text = "やり直し";
             this.やり直しToolStripMenuItem.Click += new System.EventHandler(this.やり直しToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(231, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(234, 6);
             // 
             // 色を変更ToolStripMenuItem
             // 
             this.色を変更ToolStripMenuItem.Name = "色を変更ToolStripMenuItem";
-            this.色を変更ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.色を変更ToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
             this.色を変更ToolStripMenuItem.Text = "色を変更";
             this.色を変更ToolStripMenuItem.Click += new System.EventHandler(this.色を変更ToolStripMenuItem_Click);
             // 
             // 頂点選択保存ToolStripMenuItem
             // 
             this.頂点選択保存ToolStripMenuItem.Name = "頂点選択保存ToolStripMenuItem";
-            this.頂点選択保存ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.頂点選択保存ToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
             this.頂点選択保存ToolStripMenuItem.Text = "頂点選択保存";
             this.頂点選択保存ToolStripMenuItem.Click += new System.EventHandler(this.頂点選択保存ToolStripMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(231, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(234, 6);
             // 
             // 描画リミッター解除ToolStripMenuItem
             // 
             this.描画リミッター解除ToolStripMenuItem.CheckOnClick = true;
             this.描画リミッター解除ToolStripMenuItem.Name = "描画リミッター解除ToolStripMenuItem";
-            this.描画リミッター解除ToolStripMenuItem.Size = new System.Drawing.Size(234, 24);
+            this.描画リミッター解除ToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
             this.描画リミッター解除ToolStripMenuItem.Text = "描画リミッター解除";
             this.描画リミッター解除ToolStripMenuItem.Click += new System.EventHandler(this.描画リミッター解除ToolStripMenuItem_Click);
             // 
@@ -438,6 +442,22 @@ namespace IwUVEditor
             // 
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
+            // 
+            // 座標のコピーToolStripMenuItem
+            // 
+            this.座標のコピーToolStripMenuItem.Name = "座標のコピーToolStripMenuItem";
+            this.座標のコピーToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.座標のコピーToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
+            this.座標のコピーToolStripMenuItem.Text = "座標のコピー";
+            this.座標のコピーToolStripMenuItem.Click += new System.EventHandler(this.座標のコピーToolStripMenuItem_Click);
+            // 
+            // 座標のペーストToolStripMenuItem
+            // 
+            this.座標のペーストToolStripMenuItem.Name = "座標のペーストToolStripMenuItem";
+            this.座標のペーストToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.座標のペーストToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
+            this.座標のペーストToolStripMenuItem.Text = "座標のペースト";
+            this.座標のペーストToolStripMenuItem.Click += new System.EventHandler(this.座標のペーストToolStripMenuItem_Click);
             // 
             // FormEditor
             // 
@@ -507,5 +527,7 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem 色を変更ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 頂点選択保存ToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem 座標のコピーToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 座標のペーストToolStripMenuItem;
     }
 }

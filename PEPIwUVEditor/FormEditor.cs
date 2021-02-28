@@ -214,5 +214,15 @@ namespace IwUVEditor
             if ((sender as RadioButton).Checked)
                 Current.Tool = Editor.ToolBox.RotateVertices(DrawProcess);
         }
+
+        private void 座標のコピーToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void 座標のペーストToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

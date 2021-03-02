@@ -1,9 +1,7 @@
 ﻿using IwUVEditor.DirectX.Vertex;
 using SlimDX;
 using SlimDX.Direct3D11;
-using SlimDX.DXGI;
 using System;
-using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 
 namespace IwUVEditor.DirectX.DrawElement
@@ -25,7 +23,7 @@ namespace IwUVEditor.DirectX.DrawElement
         public Vector2 StartPos { get; set; }
         public Vector2 EndPos { get; set; }
 
-        public SelectionRectangle(Device device, Effect effect, RasterizerState drawMode, Color4 color):
+        public SelectionRectangle(Device device, Effect effect, RasterizerState drawMode, Color4 color) :
             base(device, effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass"), drawMode)
         {
             this.color = color;

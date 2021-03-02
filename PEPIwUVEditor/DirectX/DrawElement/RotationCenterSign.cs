@@ -1,9 +1,6 @@
 ﻿using IwUVEditor.DirectX.Vertex;
 using SlimDX;
 using SlimDX.Direct3D11;
-using SlimDX.DXGI;
-using System;
-using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 
 namespace IwUVEditor.DirectX.DrawElement
@@ -55,7 +52,7 @@ namespace IwUVEditor.DirectX.DrawElement
             }
         }
 
-        public RotationCenterSign(Device device, Effect effect, RasterizerState drawMode, Vector3 center, float radius, Color4 color, Vector2 screenSize):
+        public RotationCenterSign(Device device, Effect effect, RasterizerState drawMode, Vector3 center, float radius, Color4 color, Vector2 screenSize) :
             base(device, effect.GetTechniqueByName("RotationCenterTechnique").GetPassByName("DrawRotationCenterPass"), drawMode)
         {
             this.center = center;

@@ -1,11 +1,7 @@
 ﻿using IwUVEditor.DirectX.Vertex;
 using SlimDX;
 using SlimDX.Direct3D11;
-using SlimDX.DXGI;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 
 namespace IwUVEditor.DirectX.DrawElement
@@ -65,7 +61,7 @@ namespace IwUVEditor.DirectX.DrawElement
             }
         }
 
-        public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius, Color4 colorInDefault, Color4 colorInSelected):
+        public PositionSquares(Device device, Effect effect, RasterizerState drawMode, Material material, float radius, Color4 colorInDefault, Color4 colorInSelected) :
             base(device, effect.GetTechniqueByName("PositionSquaresTechnique").GetPassByName("DrawPositionSquaresPass"), drawMode)
         {
             SourceMaterial = material;

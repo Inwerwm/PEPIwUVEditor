@@ -1,12 +1,8 @@
 ﻿using IwUVEditor.DirectX.Vertex;
-using SlimDX.Direct3D11;
-using System;
-using Buffer = SlimDX.Direct3D11.Buffer;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SlimDX;
+using SlimDX.Direct3D11;
+using System.Linq;
+using Buffer = SlimDX.Direct3D11.Buffer;
 
 namespace IwUVEditor.DirectX.DrawElement
 {

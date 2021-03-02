@@ -1,12 +1,8 @@
 ﻿using IwUVEditor.DirectX.Vertex;
 using SlimDX;
 using SlimDX.Direct3D11;
-using SlimDX.DXGI;
-using System;
 using System.Linq;
-using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
-
 
 namespace IwUVEditor.DirectX.DrawElement
 {
@@ -26,7 +22,7 @@ namespace IwUVEditor.DirectX.DrawElement
             }
         }
 
-        public UVMesh(Device device, Effect effect, RasterizerState drawMode, Material material, Color4 lineColor):
+        public UVMesh(Device device, Effect effect, RasterizerState drawMode, Material material, Color4 lineColor) :
             base(device, effect.GetTechniqueByName("MainTechnique").GetPassByName("DrawVertexColorPass"), drawMode)
         {
             SourceMaterial = material;

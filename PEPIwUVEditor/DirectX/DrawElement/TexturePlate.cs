@@ -1,11 +1,8 @@
 ﻿using IwUVEditor.DirectX.Vertex;
 using SlimDX;
 using SlimDX.Direct3D11;
-using SlimDX.DXGI;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Buffer = SlimDX.Direct3D11.Buffer;
 using Device = SlimDX.Direct3D11.Device;
 
 namespace IwUVEditor.DirectX.DrawElement
@@ -59,7 +56,7 @@ namespace IwUVEditor.DirectX.DrawElement
             }
         }
 
-        public TexturePlate(Device device, Effect effect, RasterizerState drawMode):
+        public TexturePlate(Device device, Effect effect, RasterizerState drawMode) :
             base(device, effect.GetTechniqueByName("TexturePlatesTechnique").GetPassByName("DrawTexturePlatesPass"), drawMode)
         {
             Initialize();
@@ -71,7 +68,7 @@ namespace IwUVEditor.DirectX.DrawElement
             Device.ImmediateContext.DrawIndexedInstanced(3, InstanceCount, 3, 0, 0);
         }
 
-        protected override VertexStruct[] CreateVertices() => new[] 
+        protected override VertexStruct[] CreateVertices() => new[]
         {
             new VertexStruct
             {

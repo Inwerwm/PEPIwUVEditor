@@ -64,6 +64,7 @@
     <Compile Include="Command\CommandSelectVertices.cs" />
     <Compile Include="Command\CommandSetPosition.cs" />
     <Compile Include="DirectX\DrawElement\DrawElement.cs" />
+    <Compile Include="DirectX\DrawElement\DrawElementInstanced.cs" />
     <Compile Include="DirectX\DrawElement\RotationCenterSign.cs" />
     <Compile Include="DirectX\Vertex\IDxVertex.cs" />
     <Compile Include="DirectX\Vertex\VectorOffset.cs" />

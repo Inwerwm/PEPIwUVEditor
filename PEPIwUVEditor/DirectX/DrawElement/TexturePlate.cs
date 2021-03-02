@@ -10,25 +10,12 @@ using Device = SlimDX.Direct3D11.Device;
 
 namespace IwUVEditor.DirectX.DrawElement
 {
-    class TexturePlate : IDrawElement
+    class TexturePlate : DrawElementInstanced<VertexStruct, InstanceOffset>, IDrawElement
     {
-        private bool disposedValue;
         private float peripheryPlateAlpha;
         private int radius;
 
-        Device Device { get; }
-        EffectPass UsingEffectPass { get; }
-        public RasterizerState DrawMode { get; set; }
-
-        InputLayout VertexLayout { get; set; }
-
-        Buffer VertexBuffer { get; set; }
-        Buffer IndexBuffer { get; set; }
-        Buffer InstanceBuffer { get; set; }
-
-        VertexStruct[] PlateVertices { get; }
-        uint[] PlateIndices { get; }
-        List<InstanceOffset> Instances { get; set; }
+        int InstanceCount { get; set; }
 
         /// <summary>
         /// <para>テクスチャ板の敷き詰め半径</para>
@@ -40,7 +27,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 radius = value;
-                CreateInstanceBuffer();
+                UpdateVertices();
             }
         }
         /// <summary>
@@ -54,7 +41,7 @@ namespace IwUVEditor.DirectX.DrawElement
             set
             {
                 peripheryPlateAlpha = value;
-                CreateInstanceBuffer();
+                UpdateVertices();
             }
         }
         /// <summary>
@@ -68,119 +55,62 @@ namespace IwUVEditor.DirectX.DrawElement
                 radius = value.Radius;
                 peripheryPlateAlpha = value.PeripheryPlateAlpha;
 
-                CreateInstanceBuffer();
+                UpdateVertices();
             }
         }
 
-        public TexturePlate(Device device, Effect effect, RasterizerState drawMode)
+        public TexturePlate(Device device, Effect effect, RasterizerState drawMode):
+            base(device, effect.GetTechniqueByName("TexturePlatesTechnique").GetPassByName("DrawTexturePlatesPass"), drawMode)
         {
-            Device = device;
-            UsingEffectPass = effect.GetTechniqueByName("TexturePlatesTechnique").GetPassByName("DrawTexturePlatesPass");
-            DrawMode = drawMode;
-
-            (PlateVertices, PlateIndices) = CreateConstantData();
-
-            CreateVertexLayout();
-
-            CreateVertexBuffer();
-            CreateIndexBuffer();
-            CreateInstanceBuffer();
+            Initialize();
         }
 
-        public void Prepare()
+        protected override void DrawToDevice()
         {
-            // 描画方式を設定
-            UsingEffectPass.Apply(Device.ImmediateContext);
-            Device.ImmediateContext.Rasterizer.State = DrawMode;
-            Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
-
-            // レイアウトを設定
-            Device.ImmediateContext.InputAssembler.InputLayout = VertexLayout;
-
-            // バッファを設定
-            Device.ImmediateContext.InputAssembler.SetVertexBuffers(
-                0,
-                new VertexBufferBinding(VertexBuffer, VertexStruct.SizeInBytes, 0),
-                new VertexBufferBinding(InstanceBuffer, InstanceOffset.SizeInBytes, 0)
-            );
-            Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
-
-            // 描画を設定
-            Device.ImmediateContext.DrawIndexedInstanced(3, Instances.Count, 0, 0, 0);
-            Device.ImmediateContext.DrawIndexedInstanced(3, Instances.Count, 3, 0, 0);
+            Device.ImmediateContext.DrawIndexedInstanced(3, InstanceCount, 0, 0, 0);
+            Device.ImmediateContext.DrawIndexedInstanced(3, InstanceCount, 3, 0, 0);
         }
 
-        void CreateVertexLayout()
+        protected override VertexStruct[] CreateVertices() => new[] 
         {
-            VertexLayout?.Dispose();
-            VertexLayout = new InputLayout(
-                Device,
-                UsingEffectPass.Description.Signature,
-                VertexStruct.VertexElements.Concat(InstanceOffset.VertexElements).ToArray()
-            );
-        }
-
-        void CreateVertexBuffer()
-        {
-            VertexBuffer?.Dispose();
-            using (var vertexStream = new DataStream(PlateVertices, true, true))
+            new VertexStruct
             {
-                VertexBuffer = new Buffer(
-                    Device,
-                    vertexStream,
-                    new BufferDescription
-                    {
-                        SizeInBytes = (int)vertexStream.Length,
-                        BindFlags = BindFlags.VertexBuffer,
-                    }
-                );
-            }
-        }
-
-        void CreateIndexBuffer()
-        {
-            IndexBuffer?.Dispose();
-            using (DataStream indexStream = new DataStream(PlateIndices, true, true))
+                Position = new Vector3(0, 1, 0),
+                Color = new Color4(1, 1, 1, 1),
+                TEXCOORD = new Vector2(0, 1)
+            },
+            new VertexStruct
             {
-                IndexBuffer = new Buffer(
-                    Device,
-                    indexStream,
-                    new BufferDescription
-                    {
-                        SizeInBytes = (int)indexStream.Length,
-                        BindFlags = BindFlags.IndexBuffer,
-                    }
-                );
+                Position = new Vector3(1, 1, 0),
+                Color = new Color4(1, 1, 1, 1),
+                TEXCOORD = new Vector2(1, 1)
+            },
+            new VertexStruct
+            {
+                Position = new Vector3(0, 0, 0),
+                Color = new Color4(1, 1, 1, 1),
+                TEXCOORD = new Vector2(0 ,0)
+            },
+            new VertexStruct
+            {
+                Position = new Vector3(1, 0, 0),
+                Color = new Color4(1, 1, 1, 1),
+                TEXCOORD = new Vector2(1, 0)
             }
-        }
+        };
 
-        void CreateInstanceBuffer()
+        protected override uint[] CreateIndices() => new uint[]
         {
-            CreateInstances();
+            2, 1, 0,
+            1, 2, 3
+        };
 
-            InstanceBuffer?.Dispose();
-            using (DataStream instanceStream = new DataStream(Instances.ToArray(), false, true))
-                InstanceBuffer = new Buffer(
-                    Device,
-                    instanceStream,
-                    new BufferDescription
-                    (
-                        InstanceOffset.SizeInBytes * Instances.Count,
-                        ResourceUsage.Dynamic,
-                        BindFlags.VertexBuffer,
-                        CpuAccessFlags.Write,
-                        ResourceOptionFlags.None,
-                        0
-                    )
-                );
-        }
-
-        void CreateInstances()
+        protected override InstanceOffset[] CreateInstances()
         {
-            Instances = new List<InstanceOffset>();
+            var instances = new List<InstanceOffset>();
 
             // 中心
-            Instances.Add
+            instances.Add
             (
                 new InstanceOffset()
                 {
@@ -193,7 +123,7 @@ namespace IwUVEditor.DirectX.DrawElement
             foreach ((int i, int j) in Enumerable.Range(0, Radius + 1).SelectMany(i => Enumerable.Range(0, Radius + 1).Select(j => (i, j))).Skip(1))
             {
 
-                Instances.Add
+                instances.Add
                 (
                     new InstanceOffset()
                     {
@@ -203,7 +133,7 @@ namespace IwUVEditor.DirectX.DrawElement
                 );
 
                 if (j != 0)
-                    Instances.Add
+                    instances.Add
                     (
                         new InstanceOffset
                         {
@@ -213,7 +143,7 @@ namespace IwUVEditor.DirectX.DrawElement
                     );
 
                 if (i != 0)
-                    Instances.Add
+                    instances.Add
                     (
                         new InstanceOffset
                         {
@@ -223,7 +153,7 @@ namespace IwUVEditor.DirectX.DrawElement
                     );
 
                 if (i != 0 && j != 0)
-                    Instances.Add
+                    instances.Add
                     (
                         new InstanceOffset
                         {
@@ -232,75 +162,10 @@ namespace IwUVEditor.DirectX.DrawElement
                         }
                     );
             }
-        }
 
-        (VertexStruct[] vertices, uint[] indices) CreateConstantData()
-        {
-            var plateVertices = new[] {
-                new VertexStruct
-                {
-                    Position = new Vector3(0, 1, 0),
-                    Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(0, 1)
-                },
-                new VertexStruct
-                {
-                    Position = new Vector3(1, 1, 0),
-                    Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(1, 1)
-                },
-                new VertexStruct
-                {
-                    Position = new Vector3(0, 0, 0),
-                    Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(0 ,0)
-                },
-                new VertexStruct
-                {
-                    Position = new Vector3(1, 0, 0),
-                    Color = new Color4(1, 1, 1, 1),
-                    TEXCOORD = new Vector2(1, 0)
-                }
-            };
+            InstanceCount = instances.Count;
 
-            var plateIndices = new uint[] {
-                2, 1, 0,
-                1, 2, 3
-            };
-
-            return (plateVertices, plateIndices);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    VertexLayout?.Dispose();
-                    VertexBuffer?.Dispose();
-                    IndexBuffer?.Dispose();
-                    InstanceBuffer?.Dispose();
-                }
-
-                // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします
-                // TODO: 大きなフィールドを null に設定します
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: 'Dispose(bool disposing)' にアンマネージド リソースを解放するコードが含まれる場合にのみ、ファイナライザーをオーバーライドします
-        // ~TexturePlate()
-        // {
-        //     // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
-        //     Dispose(disposing: false);
-        // }
-
-        public void Dispose()
-        {
-            // このコードを変更しないでください。クリーンアップ コードを 'Dispose(bool disposing)' メソッドに記述します
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            return instances.ToArray();
         }
     }
 }

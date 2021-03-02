@@ -68,5 +68,18 @@ namespace IwUVEditor.DirectX.DrawElement
                     )
                 );
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    InstanceBuffer?.Dispose();
+                }
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

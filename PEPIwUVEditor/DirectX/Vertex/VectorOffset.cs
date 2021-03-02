@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.DirectX.Vertex
 {
-    struct VectorOffset
+    struct VectorOffset : IDxVertex
     {
         public Vector3 Position;
         public Color4 Color;
@@ -17,7 +17,7 @@ namespace IwUVEditor.DirectX.Vertex
         public Vector2 TEXCOORD;
         public float AlphaRatio;
 
-        public static readonly InputElement[] VertexElements = new[]
+        public InputElement[] VertexElements => new[]
         {
             new InputElement("SV_Position", 0, Format.R32G32B32_Float,    0,                          0, InputClassification.PerVertexData, 0),
             new InputElement("Color",       0, Format.R32G32B32A32_Float, InputElement.AppendAligned, 0, InputClassification.PerVertexData, 0),
@@ -26,13 +26,6 @@ namespace IwUVEditor.DirectX.Vertex
             new InputElement("Ratio",       0, Format.R32_Float,          InputElement.AppendAligned, 0, InputClassification.PerVertexData, 0)
         };
 
-        public static int SizeInBytes
-        {
-            get
-            {
-                return System.Runtime.InteropServices.
-                    Marshal.SizeOf(typeof(VectorOffset));
-            }
-        }
+        public int SizeInBytes => System.Runtime.InteropServices.Marshal.SizeOf(typeof(VectorOffset));
     }
 }

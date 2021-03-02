@@ -28,7 +28,7 @@ namespace IwUVEditor.DirectX.DrawElement
             DrawMode = drawMode;
         }
 
-        protected void Initialize()
+        protected virtual void Initialize()
         {
             CreateVertexLayout();
             CreateVertexBuffer();
@@ -51,13 +51,18 @@ namespace IwUVEditor.DirectX.DrawElement
             Device.ImmediateContext.InputAssembler.InputLayout = VertexLayout;
 
             // バッファを設定
-            Device.ImmediateContext.InputAssembler.SetVertexBuffers(
-                0,
-                new VertexBufferBinding(VertexBuffer, new TVertex().SizeInBytes, 0)
-            );
+            SetVertexBuffer();
             Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
 
             DrawToDevice();
+        }
+
+        protected virtual void SetVertexBuffer()
+        {
+            Device.ImmediateContext.InputAssembler.SetVertexBuffers(
+                            0,
+                            new VertexBufferBinding(VertexBuffer, new TVertex().SizeInBytes, 0)
+            );
         }
 
         /// <summary>

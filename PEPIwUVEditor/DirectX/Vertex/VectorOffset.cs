@@ -17,8 +17,6 @@ namespace IwUVEditor.DirectX.Vertex
         public Vector2 TEXCOORD;
         public float AlphaRatio;
 
-        public IDxVertex Instance => new VectorOffset();
-
         public InputElement[] VertexElements => new[]
         {
             new InputElement("SV_Position", 0, Format.R32G32B32_Float,    0,                          0, InputClassification.PerVertexData, 0),

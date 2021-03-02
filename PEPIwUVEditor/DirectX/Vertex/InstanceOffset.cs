@@ -9,7 +9,6 @@ namespace IwUVEditor.DirectX.Vertex
         public Matrix Offset;
         public float AlphaRatio;
 
-        public IDxVertex Instance => new InstanceOffset();
         public InputElement[] VertexElements => new[]
         {
             new InputElement("Offset",      0, Format.R32G32B32A32_Float, 0,                          1, InputClassification.PerInstanceData, 1),

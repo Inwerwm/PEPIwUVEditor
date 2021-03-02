@@ -8,8 +8,6 @@ namespace IwUVEditor.DirectX.Vertex
     {
         public Vector3 Position;
 
-        public IDxVertex Instance => new PositionVertex();
-
         public InputElement[] VertexElements => new[]
         {
             new InputElement("SV_Position", 0, Format.R32G32B32_Float,    0,                          0, InputClassification.PerVertexData,   0),

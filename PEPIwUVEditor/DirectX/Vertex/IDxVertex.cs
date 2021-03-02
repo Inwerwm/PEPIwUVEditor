@@ -9,7 +9,6 @@ namespace IwUVEditor.DirectX.Vertex
 {
     interface IDxVertex
     {
-        IDxVertex Instance { get; }
         InputElement[] VertexElements { get; }
         int SizeInBytes { get; }
     }

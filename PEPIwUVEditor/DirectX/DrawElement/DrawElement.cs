@@ -12,24 +12,32 @@ namespace IwUVEditor.DirectX.DrawElement
     {
         protected bool disposedValue;
 
-        Device Device { get; }
-        EffectPass UsingEffectPass { get; }
+        protected Device Device { get; }
+        protected EffectPass UsingEffectPass { get; }
         public RasterizerState DrawMode { get; set; }
 
-        InputLayout VertexLayout { get; set; }
+        protected InputLayout VertexLayout { get; set; }
 
-        Buffer VertexBuffer { get; set; }
-        Buffer IndexBuffer { get; set; }
+        protected Buffer VertexBuffer { get; set; }
+        protected Buffer IndexBuffer { get; set; }
 
         protected DrawElement(Device device, EffectPass usingEffectPass, RasterizerState drawMode)
         {
             Device = device;
             UsingEffectPass = usingEffectPass;
             DrawMode = drawMode;
+        }
 
+        protected void Initialize()
+        {
             CreateVertexLayout();
             CreateVertexBuffer();
             CreateIndexBuffer();
+        }
+
+        public virtual void UpdateVertices()
+        {
+            CreateVertexBuffer();
         }
 
         public virtual void Prepare()
@@ -52,15 +60,13 @@ namespace IwUVEditor.DirectX.DrawElement
             DrawToDevice();
         }
 
+        /// <summary>
+        /// Prepare()から呼ばれるポリゴンの描画方法
+        /// </summary>
         protected abstract void DrawToDevice();
 
-        public virtual void UpdateVertices()
-        {
-            CreateVertexBuffer();
-        }
-
         protected abstract TVertex[] CreateVertices();
-        protected abstract int[] CreateIndices();
+        protected abstract uint[] CreateIndices();
 
         protected virtual void CreateVertexLayout()
         {

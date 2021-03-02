@@ -66,6 +66,7 @@
     <Compile Include="DirectX\DrawElement\DrawElement.cs" />
     <Compile Include="DirectX\DrawElement\DrawElementInstanced.cs" />
     <Compile Include="DirectX\DrawElement\RotationCenterSign.cs" />
+    <Compile Include="DirectX\DrawElement\ScalingController.cs" />
     <Compile Include="DirectX\Vertex\IDxVertex.cs" />
     <Compile Include="DirectX\Vertex\VectorOffset.cs" />
     <Compile Include="GenerableMap.cs" />

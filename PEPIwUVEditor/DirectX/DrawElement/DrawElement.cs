@@ -1,18 +1,109 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IwUVEditor.DirectX.Vertex;
+using SlimDX;
+using SlimDX.Direct3D11;
+using SlimDX.DXGI;
+using System;
+using Buffer = SlimDX.Direct3D11.Buffer;
+using Device = SlimDX.Direct3D11.Device;
 
 namespace IwUVEditor.DirectX.DrawElement
 {
-    abstract class DrawElement<IDxVertex> : IDrawElement
+    abstract class DrawElement<TVertex> : IDrawElement where TVertex : IDxVertex, new()
     {
-        private bool disposedValue;
+        protected bool disposedValue;
 
-        public void Prepare()
+        Device Device { get; }
+        EffectPass UsingEffectPass { get; }
+        public RasterizerState DrawMode { get; set; }
+
+        InputLayout VertexLayout { get; set; }
+
+        Buffer VertexBuffer { get; set; }
+        Buffer IndexBuffer { get; set; }
+
+        protected DrawElement(Device device, EffectPass usingEffectPass, RasterizerState drawMode)
         {
-            throw new NotImplementedException();
+            Device = device;
+            UsingEffectPass = usingEffectPass;
+            DrawMode = drawMode;
+
+            CreateVertexLayout();
+            CreateVertexBuffer();
+            CreateIndexBuffer();
+        }
+
+        public virtual void Prepare()
+        {
+            // 描画方式を設定
+            UsingEffectPass.Apply(Device.ImmediateContext);
+            Device.ImmediateContext.Rasterizer.State = DrawMode;
+            Device.ImmediateContext.InputAssembler.PrimitiveTopology = PrimitiveTopology.TriangleStrip;
+
+            // レイアウトを設定
+            Device.ImmediateContext.InputAssembler.InputLayout = VertexLayout;
+
+            // バッファを設定
+            Device.ImmediateContext.InputAssembler.SetVertexBuffers(
+                0,
+                new VertexBufferBinding(VertexBuffer, new TVertex().SizeInBytes, 0)
+            );
+            Device.ImmediateContext.InputAssembler.SetIndexBuffer(IndexBuffer, Format.R32_UInt, 0);
+
+            DrawToDevice();
+        }
+
+        protected abstract void DrawToDevice();
+
+        public virtual void UpdateVertices()
+        {
+            CreateVertexBuffer();
+        }
+
+        protected abstract TVertex[] CreateVertices();
+        protected abstract int[] CreateIndices();
+
+        protected virtual void CreateVertexLayout()
+        {
+            VertexLayout?.Dispose();
+            VertexLayout = new InputLayout(
+                Device,
+                UsingEffectPass.Description.Signature,
+                new TVertex().VertexElements
+            );
+        }
+
+        protected virtual void CreateVertexBuffer()
+        {
+            VertexBuffer?.Dispose();
+            using (var vertexStream = new DataStream(CreateVertices(), true, true))
+            {
+                VertexBuffer = new Buffer(
+                    Device,
+                    vertexStream,
+                    new BufferDescription
+                    {
+                        SizeInBytes = (int)vertexStream.Length,
+                        BindFlags = BindFlags.VertexBuffer,
+                    }
+                );
+            }
+        }
+
+        protected virtual void CreateIndexBuffer()
+        {
+            IndexBuffer?.Dispose();
+            using (DataStream indexStream = new DataStream(CreateIndices(), true, true))
+            {
+                IndexBuffer = new Buffer(
+                    Device,
+                    indexStream,
+                    new BufferDescription
+                    {
+                        SizeInBytes = (int)indexStream.Length,
+                        BindFlags = BindFlags.IndexBuffer,
+                    }
+                );
+            }
         }
 
         protected virtual void Dispose(bool disposing)
@@ -22,6 +113,9 @@ namespace IwUVEditor.DirectX.DrawElement
                 if (disposing)
                 {
                     // TODO: マネージド状態を破棄します (マネージド オブジェクト)
+                    VertexLayout?.Dispose();
+                    VertexBuffer?.Dispose();
+                    IndexBuffer?.Dispose();
                 }
 
                 // TODO: アンマネージド リソース (アンマネージド オブジェクト) を解放し、ファイナライザーをオーバーライドします

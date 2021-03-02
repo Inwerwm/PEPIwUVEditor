@@ -9,6 +9,8 @@ namespace IwUVEditor.DirectX.Vertex
         public Color4 Color;
         public Vector4 Offset;
 
+        public IDxVertex Instance => new PositionSquareVertex();
+
         public InputElement[] VertexElements => new[]
         {
             new InputElement("Color",  0, Format.R32G32B32A32_Float, InputElement.AppendAligned, 1, InputClassification.PerInstanceData, 1),

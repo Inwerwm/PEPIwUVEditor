@@ -37,6 +37,10 @@ namespace IwUVEditor.Manager
         /// 直前時点からの移動量
         /// </summary>
         public Vector2 Offset => Current - Previous;
+        /// <summary>
+        /// 開始地点からの移動量
+        /// </summary>
+        public Vector2 Translation => Current - Start;
 
         /// <summary>
         /// <para>ドラッグ情報の監視メソッド</para>

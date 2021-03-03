@@ -64,12 +64,13 @@ namespace IwUVEditor
             this.頂点選択保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.描画リミッター解除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.座標のコピーToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.座標のペーストToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
-            this.座標のコピーToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.座標のペーストToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.radioButtonScale = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -113,6 +114,7 @@ namespace IwUVEditor
             this.flowEditTools.Controls.Add(this.radioButtonLassoSelection);
             this.flowEditTools.Controls.Add(this.radioButtonMove);
             this.flowEditTools.Controls.Add(this.radioButtonRotate);
+            this.flowEditTools.Controls.Add(this.radioButtonScale);
             this.flowEditTools.Controls.Add(this.buttonReverseV);
             this.flowEditTools.Controls.Add(this.buttonReverseH);
             this.flowEditTools.Controls.Add(this.buttonResetCamera);
@@ -174,7 +176,7 @@ namespace IwUVEditor
             // 
             // buttonReverseV
             // 
-            this.buttonReverseV.Location = new System.Drawing.Point(3, 135);
+            this.buttonReverseV.Location = new System.Drawing.Point(89, 135);
             this.buttonReverseV.Name = "buttonReverseV";
             this.buttonReverseV.Size = new System.Drawing.Size(80, 60);
             this.buttonReverseV.TabIndex = 3;
@@ -184,7 +186,7 @@ namespace IwUVEditor
             // 
             // buttonReverseH
             // 
-            this.buttonReverseH.Location = new System.Drawing.Point(89, 135);
+            this.buttonReverseH.Location = new System.Drawing.Point(3, 201);
             this.buttonReverseH.Name = "buttonReverseH";
             this.buttonReverseH.Size = new System.Drawing.Size(80, 60);
             this.buttonReverseH.TabIndex = 3;
@@ -193,7 +195,7 @@ namespace IwUVEditor
             // 
             // buttonResetCamera
             // 
-            this.buttonResetCamera.Location = new System.Drawing.Point(3, 201);
+            this.buttonResetCamera.Location = new System.Drawing.Point(89, 201);
             this.buttonResetCamera.Name = "buttonResetCamera";
             this.buttonResetCamera.Size = new System.Drawing.Size(80, 60);
             this.buttonResetCamera.TabIndex = 3;
@@ -243,7 +245,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 991;
+            this.splitUVMat.SplitterDistance = 989;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -255,7 +257,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(378, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(380, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -417,6 +419,22 @@ namespace IwUVEditor
             this.描画リミッター解除ToolStripMenuItem.Text = "描画リミッター解除";
             this.描画リミッター解除ToolStripMenuItem.Click += new System.EventHandler(this.描画リミッター解除ToolStripMenuItem_Click);
             // 
+            // 座標のコピーToolStripMenuItem
+            // 
+            this.座標のコピーToolStripMenuItem.Name = "座標のコピーToolStripMenuItem";
+            this.座標のコピーToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.座標のコピーToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
+            this.座標のコピーToolStripMenuItem.Text = "座標のコピー";
+            this.座標のコピーToolStripMenuItem.Click += new System.EventHandler(this.座標のコピーToolStripMenuItem_Click);
+            // 
+            // 座標のペーストToolStripMenuItem
+            // 
+            this.座標のペーストToolStripMenuItem.Name = "座標のペーストToolStripMenuItem";
+            this.座標のペーストToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.座標のペーストToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
+            this.座標のペーストToolStripMenuItem.Text = "座標のペースト";
+            this.座標のペーストToolStripMenuItem.Click += new System.EventHandler(this.座標のペーストToolStripMenuItem_Click);
+            // 
             // テクスチャToolStripMenuItem
             // 
             this.テクスチャToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -443,21 +461,17 @@ namespace IwUVEditor
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
-            // 座標のコピーToolStripMenuItem
+            // radioButtonScale
             // 
-            this.座標のコピーToolStripMenuItem.Name = "座標のコピーToolStripMenuItem";
-            this.座標のコピーToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.座標のコピーToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
-            this.座標のコピーToolStripMenuItem.Text = "座標のコピー";
-            this.座標のコピーToolStripMenuItem.Click += new System.EventHandler(this.座標のコピーToolStripMenuItem_Click);
-            // 
-            // 座標のペーストToolStripMenuItem
-            // 
-            this.座標のペーストToolStripMenuItem.Name = "座標のペーストToolStripMenuItem";
-            this.座標のペーストToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.座標のペーストToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
-            this.座標のペーストToolStripMenuItem.Text = "座標のペースト";
-            this.座標のペーストToolStripMenuItem.Click += new System.EventHandler(this.座標のペーストToolStripMenuItem_Click);
+            this.radioButtonScale.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioButtonScale.Location = new System.Drawing.Point(3, 135);
+            this.radioButtonScale.Name = "radioButtonScale";
+            this.radioButtonScale.Size = new System.Drawing.Size(80, 60);
+            this.radioButtonScale.TabIndex = 2;
+            this.radioButtonScale.Text = "拡縮";
+            this.radioButtonScale.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioButtonScale.UseVisualStyleBackColor = true;
+            this.radioButtonScale.CheckedChanged += new System.EventHandler(this.radioButtonScale_CheckedChanged);
             // 
             // FormEditor
             // 
@@ -529,5 +543,6 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem 座標のコピーToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 座標のペーストToolStripMenuItem;
+        private System.Windows.Forms.RadioButton radioButtonScale;
     }
 }

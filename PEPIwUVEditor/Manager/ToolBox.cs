@@ -67,6 +67,9 @@ namespace IwUVEditor.Tool
         public RotateVertices RotateVertices(UVViewDrawProcess process) =>
             CallTool(() => new RotateVertices(Device, process), process);
 
+        public ScaleVertices ScaleVertices(UVViewDrawProcess process) =>
+            CallTool(() => new ScaleVertices(Device, process), process);
+
         #region IDisposable
         protected virtual void Dispose(bool disposing)
         {

@@ -13,7 +13,17 @@ namespace IwUVEditor.DirectX.DrawElement
     {
         private Vector2 screenSize;
         private Vector3 center;
+        private Elements selectedElement;
 
+        internal Elements SelectedElement
+        {
+            get => selectedElement;
+            set
+            {
+                selectedElement = value;
+                UpdateVertices();
+            }
+        }
         public Vector3 Center
         {
             get => center;
@@ -51,6 +61,7 @@ namespace IwUVEditor.DirectX.DrawElement
         Color4 CenterColor { get; }
         Color4 AxisXColor { get; }
         Color4 AxisYColor { get; }
+        Color4 SelectionColor { get; }
 
         public (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) CenterSquareCoord => CreateSquare(Size / (MarginRatio + 2), 0, 0);
         public (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) XSquareCoord => CreateSquare(Size * AxisRatio / (MarginRatio + 2), (MarginRatio + 1) * 2, 0);
@@ -68,6 +79,7 @@ namespace IwUVEditor.DirectX.DrawElement
             CenterColor = new Color4(0, 0, 0);
             AxisXColor = new Color4(1, 0, 0);
             AxisYColor = new Color4(0, 1, 0);
+            SelectionColor = new Color4(1, 0, 1);
 
             Initialize();
         }
@@ -85,31 +97,35 @@ namespace IwUVEditor.DirectX.DrawElement
             var xPos = XSquareCoord;
             var yPos = YSquareCoord;
 
+            Color4 centerColor = SelectedElement == Elements.Center ? SelectionColor : CenterColor;
+            Color4 axisXColor = SelectedElement == Elements.X ? SelectionColor : AxisXColor;
+            Color4 axisYColor = SelectedElement == Elements.Y ? SelectionColor : AxisYColor;
+
             VectorOffset[] centerVertices = new[]
             {
                 new VectorOffset
                 {
                     Position = cPos.NN,
                     Offset = Center,
-                    Color = CenterColor,
+                    Color = centerColor,
                 },
                 new VectorOffset
                 {
                     Position = cPos.PN,
                     Offset = Center,
-                    Color = CenterColor,
+                    Color = centerColor,
                 },
                 new VectorOffset
                 {
                     Position = cPos.NP,
                     Offset = Center,
-                    Color = CenterColor,
+                    Color = centerColor,
                 },
                 new VectorOffset
                 {
                     Position = cPos.PP,
                     Offset = Center,
-                    Color = CenterColor,
+                    Color = centerColor,
                 },
             };
 
@@ -119,25 +135,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 {
                     Position = xPos.NN,
                     Offset = Center,
-                    Color = AxisXColor,
+                    Color = axisXColor,
                 },
                 new VectorOffset
                 {
                     Position = xPos.PN,
                     Offset = Center,
-                    Color = AxisXColor,
+                    Color = axisXColor,
                 },
                 new VectorOffset
                 {
                     Position = xPos.NP,
                     Offset = Center,
-                    Color = AxisXColor,
+                    Color = axisXColor,
                 },
                 new VectorOffset
                 {
                     Position = xPos.PP,
                     Offset = Center,
-                    Color = AxisXColor,
+                    Color = axisXColor,
                 },
             };
 
@@ -147,25 +163,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 {
                     Position = yPos.NN,
                     Offset = Center,
-                    Color = AxisYColor,
+                    Color = axisYColor,
                 },
                 new VectorOffset
                 {
                     Position = yPos.PN,
                     Offset = Center,
-                    Color = AxisYColor,
+                    Color = axisYColor,
                 },
                 new VectorOffset
                 {
                     Position = yPos.NP,
                     Offset = Center,
-                    Color = AxisYColor,
+                    Color = axisYColor,
                 },
                 new VectorOffset
                 {
                     Position = yPos.PP,
                     Offset = Center,
-                    Color = AxisYColor,
+                    Color = axisYColor,
                 },
             };
 
@@ -179,12 +195,25 @@ namespace IwUVEditor.DirectX.DrawElement
 
         (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) CreateSquare(float ratio, float xMargin, float yMargin)
         {
-            return (
-                ratio * new Vector3(-1 + xMargin, -1 + yMargin, 0),
-                ratio * new Vector3( 1 + xMargin, -1 + yMargin, 0),
-                ratio * new Vector3(-1 + xMargin,  1 + yMargin, 0),
-                ratio * new Vector3( 1 + xMargin,  1 + yMargin, 0)
+            Vector2 aspectCorrection = new Vector2(
+                ScreenSize.X > ScreenSize.Y ? ScreenSize.Y / ScreenSize.X : 1,
+                ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1
             );
+
+            return (
+                ratio * new Vector3(-aspectCorrection.X + xMargin, -aspectCorrection.Y + yMargin, 0),
+                ratio * new Vector3(aspectCorrection.X + xMargin, -aspectCorrection.Y + yMargin, 0),
+                ratio * new Vector3(-aspectCorrection.X + xMargin, aspectCorrection.Y + yMargin, 0),
+                ratio * new Vector3(aspectCorrection.X + xMargin, aspectCorrection.Y + yMargin, 0)
+            );
+        }
+
+        internal enum Elements
+        {
+            None,
+            Center,
+            X,
+            Y,
         }
     }
 }

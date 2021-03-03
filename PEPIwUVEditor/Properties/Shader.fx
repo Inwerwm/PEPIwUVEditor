@@ -89,8 +89,8 @@ PositionSquareVertex VS_PutPositionSquare(PositionSquareVertex input)
 	return output;
 }
 
-// 回転中心用
-VectorOffset VS_PutRotationCenter(VectorOffset input)
+// VectorOffset用
+VectorOffset VS_OffsetPosition(VectorOffset input)
 {
 	VectorOffset output = input;
 	output.Position = mul(input.Position, ViewProjection) + float4(input.Offset, 0);
@@ -123,6 +123,12 @@ float4 PS_RotationCenter(VectorOffset input) : SV_Target
 {
 	float4 texColor = signTexture.Sample(Sampler, input.TexCoord);
 	return float4(texColor.rgb + input.Color.rgb, texColor.a * input.Color.a * input.AlphaRatio);
+}
+
+// 拡大コントローラ用
+float4 PS_ScalingController(VectorOffset input) : SV_Target
+{
+	return input.Color;
 }
 
 //////////////////////
@@ -166,7 +172,12 @@ technique10 VectorOffsetTechnique
 {
 	pass DrawRotationCenterPass
 	{
-		SetVertexShader(CompileShader(vs_5_0, VS_PutRotationCenter()));
+		SetVertexShader(CompileShader(vs_5_0, VS_OffsetPosition()));
 		SetPixelShader(CompileShader(ps_5_0, PS_RotationCenter()));
+	}
+	pass DrawScalingControllerPass
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS_OffsetPosition()));
+		SetPixelShader(CompileShader(ps_5_0, PS_ScalingController()));
 	}
 }

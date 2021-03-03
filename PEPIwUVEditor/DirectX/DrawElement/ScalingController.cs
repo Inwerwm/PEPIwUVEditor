@@ -48,7 +48,7 @@ namespace IwUVEditor.DirectX.DrawElement
         Color4 AxisYColor { get; set; }
 
         public ScalingController(Device device, Effect effect, RasterizerState drawMode, float size, Vector2 screenSize) :
-            base(device, effect.GetTechniqueByName("").GetPassByName(""), drawMode)
+            base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
         {
             Size = size;
             this.screenSize = screenSize;

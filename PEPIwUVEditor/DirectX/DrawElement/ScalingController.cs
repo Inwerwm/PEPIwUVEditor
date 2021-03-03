@@ -105,26 +105,26 @@ namespace IwUVEditor.DirectX.DrawElement
             {
                 new VectorOffset
                 {
-                    Position = cPos.NN,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = cPos.NN,
                     Color = centerColor,
                 },
                 new VectorOffset
                 {
-                    Position = cPos.PN,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = cPos.PN,
                     Color = centerColor,
                 },
                 new VectorOffset
                 {
-                    Position = cPos.NP,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = cPos.NP,
                     Color = centerColor,
                 },
                 new VectorOffset
                 {
-                    Position = cPos.PP,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = cPos.PP,
                     Color = centerColor,
                 },
             };
@@ -133,26 +133,26 @@ namespace IwUVEditor.DirectX.DrawElement
             {
                 new VectorOffset
                 {
-                    Position = xPos.NN,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = xPos.NN,
                     Color = axisXColor,
                 },
                 new VectorOffset
                 {
-                    Position = xPos.PN,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = xPos.PN,
                     Color = axisXColor,
                 },
                 new VectorOffset
                 {
-                    Position = xPos.NP,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = xPos.NP,
                     Color = axisXColor,
                 },
                 new VectorOffset
                 {
-                    Position = xPos.PP,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = xPos.PP,
                     Color = axisXColor,
                 },
             };
@@ -161,26 +161,26 @@ namespace IwUVEditor.DirectX.DrawElement
             {
                 new VectorOffset
                 {
-                    Position = yPos.NN,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = yPos.NN,
                     Color = axisYColor,
                 },
                 new VectorOffset
                 {
-                    Position = yPos.PN,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = yPos.PN,
                     Color = axisYColor,
                 },
                 new VectorOffset
                 {
-                    Position = yPos.NP,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = yPos.NP,
                     Color = axisYColor,
                 },
                 new VectorOffset
                 {
-                    Position = yPos.PP,
-                    Offset = Center,
+                    Position = Center,
+                    Offset = yPos.PP,
                     Color = axisYColor,
                 },
             };

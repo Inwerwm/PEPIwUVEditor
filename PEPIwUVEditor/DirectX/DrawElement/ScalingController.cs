@@ -12,11 +12,16 @@ namespace IwUVEditor.DirectX.DrawElement
     class ScalingController : DrawElement<VectorOffset>, IDrawElement
     {
         private Vector2 screenSize;
+        private Vector2 center;
 
         public Vector2 Center
         {
-            get;
-            set;
+            get => center;
+            set
+            {
+                center = value;
+                UpdateVertices();
+            }
         }
         public Vector2 ScreenSize
         {
@@ -37,15 +42,15 @@ namespace IwUVEditor.DirectX.DrawElement
         /// <summary>
         /// 制御端子何個分間隔を開けるか
         /// </summary>
-        float MarginRatio { get; set; }
+        float MarginRatio { get; }
         /// <summary>
         /// X,Y軸拡大制御端子の中央位置制御端子に対する大きさの比率
         /// </summary>
-        float AxisRatio { get; set; }
+        float AxisRatio { get; }
 
-        Color4 CenterColor { get; set; }
-        Color4 AxisXColor { get; set; }
-        Color4 AxisYColor { get; set; }
+        Color4 CenterColor { get; }
+        Color4 AxisXColor { get; }
+        Color4 AxisYColor { get; }
 
         public ScalingController(Device device, Effect effect, RasterizerState drawMode, float size, Vector2 screenSize) :
             base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)

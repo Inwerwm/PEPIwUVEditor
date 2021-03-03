@@ -53,7 +53,7 @@ namespace IwUVEditor.DirectX.DrawElement
         }
 
         public RotationCenterSign(Device device, Effect effect, RasterizerState drawMode, Vector3 center, float radius, Color4 color, Vector2 screenSize) :
-            base(device, effect.GetTechniqueByName("RotationCenterTechnique").GetPassByName("DrawRotationCenterPass"), drawMode)
+            base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawRotationCenterPass"), drawMode)
         {
             this.center = center;
             this.radius = radius;

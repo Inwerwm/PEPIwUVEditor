@@ -12,9 +12,9 @@ namespace IwUVEditor.DirectX.DrawElement
     class ScalingController : DrawElement<VectorOffset>, IDrawElement
     {
         private Vector2 screenSize;
-        private Vector2 center;
+        private Vector3 center;
 
-        public Vector2 Center
+        public Vector3 Center
         {
             get => center;
             set
@@ -86,25 +86,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Size * unitRatio * new Vector3(-1, -1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = CenterColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * new Vector3(1, -1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = CenterColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * new Vector3(-1, 1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = CenterColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * new Vector3(1, 1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = CenterColor,
                 },
             };
@@ -114,25 +114,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(-1 + margin, -1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisXColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(1 + margin, -1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisXColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(-1 + margin, 1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisXColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(1 + margin, 1, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisXColor,
                 },
             };
@@ -142,25 +142,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(-1, -1 + margin, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisYColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(1, -1 + margin, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisYColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(-1, 1 + margin, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisYColor,
                 },
                 new VectorOffset
                 {
                     Position = Size * unitRatio * AxisRatio * new Vector3(1, 1 + margin, 0),
-                    Offset = new Vector3(Center, 0),
+                    Offset = Center,
                     Color = AxisYColor,
                 },
             };

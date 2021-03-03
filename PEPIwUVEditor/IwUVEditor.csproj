@@ -125,6 +125,7 @@
     <Compile Include="EditorLauncher.cs" />
     <Compile Include="Manager\ToolBox.cs" />
     <Compile Include="Tool\RotateVertices.cs" />
+    <Compile Include="Tool\ScaleVertices.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

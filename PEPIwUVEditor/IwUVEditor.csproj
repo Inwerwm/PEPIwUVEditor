@@ -69,6 +69,7 @@
     <Compile Include="DirectX\DrawElement\ScalingController.cs" />
     <Compile Include="DirectX\Vertex\IDxVertex.cs" />
     <Compile Include="DirectX\Vertex\VectorOffset.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="GenerableMap.cs" />
     <Compile Include="Command\CommandRectangleSelection.cs" />
     <Compile Include="Command\CommandManager.cs" />

@@ -19,5 +19,11 @@ namespace IwUVEditor
         /// Z座標は0
         /// </summary>
         public static Vector3 ToVector3(this Vector2 vec) => new Vector3(vec, 0);
+
+        public static Vector2 ElementDivision(this Vector2 dividend, Vector2 divisor) =>
+            new Vector2(dividend.X / divisor.X, dividend.Y / divisor.Y);
+
+        public static Vector3 ElementDivision(this Vector3 dividend, Vector3 divisor) =>
+            new Vector3(dividend.X / divisor.X, dividend.Y / divisor.Y, dividend.Z / divisor.Z);
     }
 }

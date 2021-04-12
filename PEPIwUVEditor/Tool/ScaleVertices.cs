@@ -98,25 +98,6 @@ namespace IwUVEditor.Tool
                 var xSq = Controller.XSquareCoord.ToRectangleF(centerOffset, cd => cd / 2);
                 var ySq = Controller.YSquareCoord.ReverseY().ToRectangleF(centerOffset, cd => cd / 2);
 
-                Log.DebugLog.Write(
-                    $"Log : {DateTime.Now:HH:mm:ss.ff}{Environment.NewLine}" +
-                    $"{Environment.NewLine}" +
-                    $"カーソルのスクリーン位置 :\t{mousePos}{Environment.NewLine}" +
-                    $"カーソルの割合での位置 :\t{rationalMousePos}{Environment.NewLine}" +
-                    $"{Environment.NewLine}" +
-                    $"回転中心コントローラ座標 :{Environment.NewLine}" +
-                    $"{Controller.CenterSquareCoord}{Environment.NewLine}" +
-                    $"中心の判定領域 : {cSq}{Environment.NewLine}" +
-                    $"{Environment.NewLine}" +
-                    $"X移動コントローラ座標 :{Environment.NewLine}" +
-                    $"{Controller.XSquareCoord}{Environment.NewLine}" +
-                    $"X移動の判定領域 : {xSq}{Environment.NewLine}" +
-                    $"{Environment.NewLine}" +
-                    $"Y移動コントローラ座標 :{Environment.NewLine}" +
-                    $"{Controller.YSquareCoord}{Environment.NewLine}" +
-                    $"Y移動の判定領域 : {ySq}"
-                );
-
                 return cSq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.MoveCenter :
                        xSq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.X :
                        ySq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.Y :

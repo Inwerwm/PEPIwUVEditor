@@ -17,9 +17,17 @@ namespace IwUVEditor.Log
             InitializeComponent();
         }
 
-        public void Write(string log) => textBoxLog.Text = log;
+        public void Write(string log)
+        {
+            if (checkBoxEnable.Checked)
+                textBoxLog.Text = log;
+        }
 
-        public void Append(string log) => textBoxLog.Text = Environment.NewLine + log;
+        public void Append(string log)
+        {
+            if (checkBoxEnable.Checked)
+                textBoxLog.AppendText(Environment.NewLine + log);
+        }
 
         public void Clear() => textBoxLog.Clear();
 

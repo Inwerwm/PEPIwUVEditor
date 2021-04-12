@@ -63,9 +63,9 @@ namespace IwUVEditor.DirectX.DrawElement
         Color4 AxisYColor { get; }
         Color4 SelectionColor { get; }
 
-        public (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) CenterSquareCoord => CreateSquare(Size / (MarginRatio + 2), 0, 0);
-        public (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) XSquareCoord => CreateSquare(Size * AxisRatio / (MarginRatio + 2), (MarginRatio + 1) * 2, 0);
-        public (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) YSquareCoord => CreateSquare(Size * AxisRatio / (MarginRatio + 2), 0, (MarginRatio + 1) * 2);
+        public SquareCoord CenterSquareCoord => CreateSquare(Size / (MarginRatio + 2), 0, 0);
+        public SquareCoord XSquareCoord => CreateSquare(Size * AxisRatio / (MarginRatio + 2), (MarginRatio + 1) * 2, 0);
+        public SquareCoord YSquareCoord => CreateSquare(Size * AxisRatio / (MarginRatio + 2), 0, (MarginRatio + 1) * 2);
 
         public ScalingController(Device device, Effect effect, RasterizerState drawMode, float size, Vector2 screenSize) :
             base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
@@ -193,7 +193,7 @@ namespace IwUVEditor.DirectX.DrawElement
             0, 1, 2, 3
         };
 
-        (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) CreateSquare(float ratio, float xMargin, float yMargin)
+        SquareCoord CreateSquare(float ratio, float xMargin, float yMargin)
         {
             Vector2 aspectCorrection = new Vector2(
                 ScreenSize.X > ScreenSize.Y ? ScreenSize.Y / ScreenSize.X : 1,
@@ -214,6 +214,72 @@ namespace IwUVEditor.DirectX.DrawElement
             Center,
             X,
             Y,
+        }
+    }
+
+    internal struct SquareCoord
+    {
+        public Vector3 NN;
+        public Vector3 PN;
+        public Vector3 NP;
+        public Vector3 PP;
+
+        public SquareCoord(Vector3 nN, Vector3 pN, Vector3 nP, Vector3 pP)
+        {
+            NN = nN;
+            PN = pN;
+            NP = nP;
+            PP = pP;
+        }
+
+        internal object ReverseY()
+        {
+            var ry = new Vector3(1, -1, 1);
+            return (NP.ElementProduct(ry), PP.ElementProduct(ry), NN.ElementProduct(ry), PN.ElementProduct(ry));
+        }
+
+        internal System.Drawing.RectangleF ToRectangleF(Vector3 centerOffset, Func<Vector2, Vector2> mapper)
+        {
+            var min = mapper(NN.ToVector2());
+            var max = mapper(PP.ToVector2());
+            return new System.Drawing.RectangleF(min.X + centerOffset.X, min.Y + centerOffset.X, max.X - min.X, max.Y - min.Y);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is SquareCoord other &&
+                   NN.Equals(other.NN) &&
+                   PN.Equals(other.PN) &&
+                   NP.Equals(other.NP) &&
+                   PP.Equals(other.PP);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = -1930981952;
+            hashCode = hashCode * -1521134295 + NN.GetHashCode();
+            hashCode = hashCode * -1521134295 + PN.GetHashCode();
+            hashCode = hashCode * -1521134295 + NP.GetHashCode();
+            hashCode = hashCode * -1521134295 + PP.GetHashCode();
+            return hashCode;
+        }
+
+        public void Deconstruct(out Vector3 nN, out Vector3 pN, out Vector3 nP, out Vector3 pP)
+        {
+            nN = NN;
+            pN = PN;
+            nP = NP;
+            pP = PP;
+        }
+
+        public static implicit operator (Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP)(SquareCoord value)
+        {
+            return (value.NN, value.PN, value.NP, value.PP);
+        }
+
+        public static implicit operator SquareCoord((Vector3 NN, Vector3 PN, Vector3 NP, Vector3 PP) value)
+        {
+            return new SquareCoord(value.NN, value.PN, value.NP, value.PP);
         }
     }
 }

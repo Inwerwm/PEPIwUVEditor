@@ -201,10 +201,10 @@ namespace IwUVEditor.DirectX.DrawElement
             );
 
             return (
-                ratio * new Vector3(-aspectCorrection.X + xMargin, -aspectCorrection.Y + yMargin, 0),
-                ratio * new Vector3(aspectCorrection.X + xMargin, -aspectCorrection.Y + yMargin, 0),
-                ratio * new Vector3(-aspectCorrection.X + xMargin, aspectCorrection.Y + yMargin, 0),
-                ratio * new Vector3(aspectCorrection.X + xMargin, aspectCorrection.Y + yMargin, 0)
+                ratio * new Vector3(xMargin - aspectCorrection.X, yMargin - aspectCorrection.Y, 0),
+                ratio * new Vector3(xMargin + aspectCorrection.X, yMargin - aspectCorrection.Y, 0),
+                ratio * new Vector3(xMargin - aspectCorrection.X, yMargin + aspectCorrection.Y, 0),
+                ratio * new Vector3(xMargin + aspectCorrection.X, yMargin + aspectCorrection.Y, 0)
             );
         }
 

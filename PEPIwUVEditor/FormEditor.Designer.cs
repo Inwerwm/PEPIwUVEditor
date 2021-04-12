@@ -39,6 +39,7 @@ namespace IwUVEditor
             this.radioButtonLassoSelection = new System.Windows.Forms.RadioButton();
             this.radioButtonMove = new System.Windows.Forms.RadioButton();
             this.radioButtonRotate = new System.Windows.Forms.RadioButton();
+            this.radioButtonScale = new System.Windows.Forms.RadioButton();
             this.buttonReverseV = new System.Windows.Forms.Button();
             this.buttonReverseH = new System.Windows.Forms.Button();
             this.buttonResetCamera = new System.Windows.Forms.Button();
@@ -70,7 +71,7 @@ namespace IwUVEditor
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
-            this.radioButtonScale = new System.Windows.Forms.RadioButton();
+            this.デバッグログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -174,6 +175,18 @@ namespace IwUVEditor
             this.radioButtonRotate.UseVisualStyleBackColor = true;
             this.radioButtonRotate.CheckedChanged += new System.EventHandler(this.radioButtonRotate_CheckedChanged);
             // 
+            // radioButtonScale
+            // 
+            this.radioButtonScale.Appearance = System.Windows.Forms.Appearance.Button;
+            this.radioButtonScale.Location = new System.Drawing.Point(3, 135);
+            this.radioButtonScale.Name = "radioButtonScale";
+            this.radioButtonScale.Size = new System.Drawing.Size(80, 60);
+            this.radioButtonScale.TabIndex = 2;
+            this.radioButtonScale.Text = "拡縮";
+            this.radioButtonScale.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.radioButtonScale.UseVisualStyleBackColor = true;
+            this.radioButtonScale.CheckedChanged += new System.EventHandler(this.radioButtonScale_CheckedChanged);
+            // 
             // buttonReverseV
             // 
             this.buttonReverseV.Location = new System.Drawing.Point(89, 135);
@@ -245,7 +258,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 989;
+            this.splitUVMat.SplitterDistance = 987;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -257,7 +270,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(380, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(382, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -299,7 +312,8 @@ namespace IwUVEditor
             this.menuStripEditor.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.再読込ToolStripMenuItem,
             this.編集ToolStripMenuItem,
-            this.テクスチャToolStripMenuItem});
+            this.テクスチャToolStripMenuItem,
+            this.デバッグログToolStripMenuItem});
             this.menuStripEditor.Location = new System.Drawing.Point(0, 0);
             this.menuStripEditor.Name = "menuStripEditor";
             this.menuStripEditor.Padding = new System.Windows.Forms.Padding(9, 3, 0, 3);
@@ -461,17 +475,12 @@ namespace IwUVEditor
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
-            // radioButtonScale
+            // デバッグログToolStripMenuItem
             // 
-            this.radioButtonScale.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonScale.Location = new System.Drawing.Point(3, 135);
-            this.radioButtonScale.Name = "radioButtonScale";
-            this.radioButtonScale.Size = new System.Drawing.Size(80, 60);
-            this.radioButtonScale.TabIndex = 2;
-            this.radioButtonScale.Text = "拡縮";
-            this.radioButtonScale.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.radioButtonScale.UseVisualStyleBackColor = true;
-            this.radioButtonScale.CheckedChanged += new System.EventHandler(this.radioButtonScale_CheckedChanged);
+            this.デバッグログToolStripMenuItem.Name = "デバッグログToolStripMenuItem";
+            this.デバッグログToolStripMenuItem.Size = new System.Drawing.Size(111, 24);
+            this.デバッグログToolStripMenuItem.Text = "デバッグログ";
+            this.デバッグログToolStripMenuItem.Click += new System.EventHandler(this.デバッグログToolStripMenuItem_Click);
             // 
             // FormEditor
             // 
@@ -544,5 +553,6 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem 座標のコピーToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 座標のペーストToolStripMenuItem;
         private System.Windows.Forms.RadioButton radioButtonScale;
+        private System.Windows.Forms.ToolStripMenuItem デバッグログToolStripMenuItem;
     }
 }

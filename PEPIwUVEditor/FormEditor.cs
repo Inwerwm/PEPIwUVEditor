@@ -230,5 +230,10 @@ namespace IwUVEditor
         {
             Editor.PastePosition();
         }
+
+        private void デバッグログToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Log.DebugLog.Show();
+        }
     }
 }

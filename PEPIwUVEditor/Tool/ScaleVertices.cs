@@ -2,11 +2,6 @@
 using IwUVEditor.DirectX.DrawElement;
 using IwUVEditor.StateContainer;
 using SlimDX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.Tool
 {
@@ -31,7 +26,7 @@ namespace IwUVEditor.Tool
 
         Mode CurrentMode { get; set; }
         Matrix PreviousScale { get; set; } = Matrix.Identity;
-        Matrix CurrentScale => Matrix.Scaling(new Vector3(Input.MouseLeft.Translation, 1));
+        Matrix CurrentScale => Matrix.Scaling(new Vector3(1 - Input.MouseOffset.X * 0.01f, 1 - Input.MouseOffset.Y * 0.01f, 1));
         protected override Matrix Offset => Matrix.Invert(PreviousScale) * Matrix.Invert(Matrix.Translation(ScalingCenter)) * CurrentScale * Matrix.Translation(ScalingCenter);
 
         public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
@@ -60,6 +55,7 @@ namespace IwUVEditor.Tool
 
         public override void ReadInput(InputStates input)
         {
+
             var modeTmp = CurrentMode;
 
             if (!(input.MouseLeft.IsDragging || input.MouseLeft.IsEndingJust))
@@ -72,6 +68,8 @@ namespace IwUVEditor.Tool
                     break;
                 default:
                     base.ReadInput(input);
+                    if (input.MouseLeft.IsDragging)
+                        Log.DebugLog.Append($"{Log.DebugLog.Count:0000}-直前の行列:{Offset}");
                     break;
             }
 
@@ -80,12 +78,23 @@ namespace IwUVEditor.Tool
 
             if (modeTmp != CurrentMode)
                 Controller.SelectedElement = CurrentMode == Mode.MoveCenter ? ScalingController.Elements.Center
-                                           : CurrentMode == Mode.X ?          ScalingController.Elements.X
-                                           : CurrentMode == Mode.Y ?          ScalingController.Elements.Y
-                                           :                                  ScalingController.Elements.None
+                                           : CurrentMode == Mode.X ? ScalingController.Elements.X
+                                           : CurrentMode == Mode.Y ? ScalingController.Elements.Y
+                                           : ScalingController.Elements.None
                                            ;
 
             PreviousScale = CurrentScale;
+
+            if (CurrentMode != Mode.MoveCenter && input.MouseLeft.IsDragging)
+            {
+                Log.DebugLog.Append($"{Log.DebugLog.Count:0000}-変更後行列:{Offset}");
+                Log.DebugLog.Append($"マウス移動量:{Input.MouseOffset}");
+                Log.DebugLog.Append($"スケール:{CurrentScale}");
+                Log.DebugLog.Append("");
+                Log.DebugLog.Count++;
+            }
+            if (input.MouseLeft.IsEndingJust)
+                Log.DebugLog.Append($"総計行列:{TotalOffset}");
 
             Mode checkMode(Vector2 mousePos)
             {

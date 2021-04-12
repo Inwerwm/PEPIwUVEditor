@@ -242,7 +242,7 @@ namespace IwUVEditor.DirectX.DrawElement
         {
             var min = mapper(NN.ToVector2());
             var max = mapper(PP.ToVector2());
-            return new System.Drawing.RectangleF(min.X + centerOffset.X, min.Y + centerOffset.X, max.X - min.X, max.Y - min.Y);
+            return new System.Drawing.RectangleF(min.X + centerOffset.X, min.Y + centerOffset.Y, max.X - min.X, max.Y - min.Y);
         }
 
         public override bool Equals(object obj)
@@ -252,6 +252,12 @@ namespace IwUVEditor.DirectX.DrawElement
                    PN.Equals(other.PN) &&
                    NP.Equals(other.NP) &&
                    PP.Equals(other.PP);
+        }
+
+        public override string ToString()
+        {
+            return $"X : {NN.X} - {PP.X}{Environment.NewLine}" +
+                   $"Y : {NN.Y} - {PP.Y}";
         }
 
         public override int GetHashCode()

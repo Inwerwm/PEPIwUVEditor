@@ -65,15 +65,15 @@ namespace IwUVEditor.Tool
             if (!(input.MouseLeft.IsDragging || input.MouseLeft.IsEndingJust))
                 CurrentMode = checkMode(input.MousePos);
 
-            //switch (CurrentMode)
-            //{
-            //    case Mode.MoveCenter:
-            //        MoveCenter(input);
-            //        break;
-            //    default:
-            //        base.ReadInput(input);
-            //        break;
-            //}
+            switch (CurrentMode)
+            {
+                case Mode.MoveCenter:
+                    MoveCenter(input);
+                    break;
+                default:
+                    base.ReadInput(input);
+                    break;
+            }
 
             if (input.MouseLeft.IsEndingJust)
                 CurrentMode = checkMode(input.MousePos);
@@ -85,7 +85,7 @@ namespace IwUVEditor.Tool
                                            :                                  ScalingController.Elements.None
                                            ;
 
-            //PreviousScale = CurrentScale;
+            PreviousScale = CurrentScale;
 
             Mode checkMode(Vector2 mousePos)
             {

@@ -11,6 +11,8 @@ namespace IwUVEditor.Log
     {
         private static FormDebugLog Form { get; } = new FormDebugLog();
 
+        public static int Count { get; set; }
+
         public static void Show() => Form.Show();
         public static void Hide() => Form.Hide();
 

@@ -232,7 +232,7 @@ namespace IwUVEditor.DirectX.DrawElement
             PP = pP;
         }
 
-        internal object ReverseY()
+        internal SquareCoord ReverseY()
         {
             var ry = new Vector3(1, -1, 1);
             return (NP.ElementProduct(ry), PP.ElementProduct(ry), NN.ElementProduct(ry), PN.ElementProduct(ry));

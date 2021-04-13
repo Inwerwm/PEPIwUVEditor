@@ -26,7 +26,26 @@ namespace IwUVEditor.Tool
 
         private static float Step => 0.01f;
         Mode CurrentMode { get; set; }
-        Matrix CurrentScale => Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1 - Input.MouseOffset.Y * Step, 1));
+        Matrix CurrentScale
+        {
+            get
+            {
+                switch (CurrentMode)
+                {
+                    case Mode.X:
+                        return XScale;
+                    case Mode.Y:
+                        return YScale;
+                    default:
+                        return BothScale;
+                }
+            }
+        }
+
+        private Matrix BothScale => Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1 - Input.MouseOffset.Y * Step, 1));
+        private Matrix XScale => Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1, 1));
+        private Matrix YScale => Matrix.Scaling(new Vector3(1, 1 - Input.MouseOffset.Y * Step, 1));
+
         protected override Matrix Offset => Matrix.Invert(Matrix.Translation(ScalingCenter)) * CurrentScale * Matrix.Translation(ScalingCenter);
 
         public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)

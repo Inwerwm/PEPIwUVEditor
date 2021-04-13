@@ -62,8 +62,15 @@
   <ItemGroup>
     <Compile Include="Command\CommandApplyVertexEdit.cs" />
     <Compile Include="Command\CommandSelectVertices.cs" />
+    <Compile Include="Command\CommandSetPosition.cs" />
+    <Compile Include="Log\DebugLog.cs" />
+    <Compile Include="DirectX\DrawElement\DrawElement.cs" />
+    <Compile Include="DirectX\DrawElement\DrawElementInstanced.cs" />
     <Compile Include="DirectX\DrawElement\RotationCenterSign.cs" />
+    <Compile Include="DirectX\DrawElement\ScalingController.cs" />
+    <Compile Include="DirectX\Vertex\IDxVertex.cs" />
     <Compile Include="DirectX\Vertex\VectorOffset.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="GenerableMap.cs" />
     <Compile Include="Command\CommandRectangleSelection.cs" />
     <Compile Include="Command\CommandManager.cs" />
@@ -103,6 +110,12 @@
     <Compile Include="Subform\FormColorSettings.Designer.cs">
       <DependentUpon>FormColorSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="Log\FormDebugLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Log\FormDebugLog.Designer.cs">
+      <DependentUpon>FormDebugLog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Subform\FormSaveSelection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +133,7 @@
     <Compile Include="EditorLauncher.cs" />
     <Compile Include="Manager\ToolBox.cs" />
     <Compile Include="Tool\RotateVertices.cs" />
+    <Compile Include="Tool\ScaleVertices.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">
@@ -131,6 +145,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Subform\FormColorSettings.resx">
       <DependentUpon>FormColorSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Log\FormDebugLog.resx">
+      <DependentUpon>FormDebugLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Subform\FormSaveSelection.resx">
       <DependentUpon>FormSaveSelection.cs</DependentUpon>

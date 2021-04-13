@@ -104,7 +104,7 @@ namespace IwUVEditor.Tool
             {
                 var radPos = mousePos - Process.WorldPosToScreenPos(new Vector2(RotationCenter.X, RotationCenter.Y));
                 var normalizedPos = new Vector2(radPos.X / Process.ScreenSize.X, radPos.Y / Process.ScreenSize.Y);
-                float length = normalizedPos.Length() * 2; // なぜか半分にすると正しそうな長さになる
+                float length = normalizedPos.Length() * 2;
                 return length < Radius ? Mode.MoveCenter : Mode.Rotation;
             }
         }

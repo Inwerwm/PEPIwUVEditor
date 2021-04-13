@@ -44,7 +44,7 @@ struct PositionSquareVertex
 };
 
 // 回転中心用
-struct RotationCenter
+struct VectorOffset
 {
 	float4 Position : SV_Position;
 	float4 Color	: Color;
@@ -89,10 +89,10 @@ PositionSquareVertex VS_PutPositionSquare(PositionSquareVertex input)
 	return output;
 }
 
-// 回転中心用
-RotationCenter VS_PutRotationCenter(RotationCenter input)
+// VectorOffset用
+VectorOffset VS_OffsetPosition(VectorOffset input)
 {
-	RotationCenter output = input;
+	VectorOffset output = input;
 	output.Position = mul(input.Position, ViewProjection) + float4(input.Offset, 0);
 	return output;
 }
@@ -119,10 +119,16 @@ float4 PS_FromVertexColorPSV(PositionSquareVertex input) : SV_Target
 }
 
 // 回転中心用
-float4 PS_RotationCenter(RotationCenter input) : SV_Target
+float4 PS_RotationCenter(VectorOffset input) : SV_Target
 {
 	float4 texColor = signTexture.Sample(Sampler, input.TexCoord);
 	return float4(texColor.rgb + input.Color.rgb, texColor.a * input.Color.a * input.AlphaRatio);
+}
+
+// 拡大コントローラ用
+float4 PS_ScalingController(VectorOffset input) : SV_Target
+{
+	return input.Color;
 }
 
 //////////////////////
@@ -162,11 +168,16 @@ technique10 PositionSquaresTechnique
 	}
 }
 
-technique10 RotationCenterTechnique
+technique10 VectorOffsetTechnique
 {
 	pass DrawRotationCenterPass
 	{
-		SetVertexShader(CompileShader(vs_5_0, VS_PutRotationCenter()));
+		SetVertexShader(CompileShader(vs_5_0, VS_OffsetPosition()));
 		SetPixelShader(CompileShader(ps_5_0, PS_RotationCenter()));
+	}
+	pass DrawScalingControllerPass
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS_OffsetPosition()));
+		SetPixelShader(CompileShader(ps_5_0, PS_ScalingController()));
 	}
 }

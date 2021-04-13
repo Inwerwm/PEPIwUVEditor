@@ -61,6 +61,9 @@ namespace IwUVEditor
             Form.LoadMaterials(Editor.Materials.ToArray());
             StartDraw();
             Form.InitializeWhenStartDrawing();
+
+            // リリース時は削除
+            Log.DebugLog.Show();
         }
 
         /// <summary>

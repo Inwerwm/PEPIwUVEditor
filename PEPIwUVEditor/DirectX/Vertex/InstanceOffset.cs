@@ -4,12 +4,12 @@ using SlimDX.DXGI;
 
 namespace IwUVEditor.DirectX.Vertex
 {
-    struct InstanceOffset
+    struct InstanceOffset : IDxVertex
     {
         public Matrix Offset;
         public float AlphaRatio;
 
-        public static readonly InputElement[] VertexElements = new[]
+        public InputElement[] VertexElements => new[]
         {
             new InputElement("Offset",      0, Format.R32G32B32A32_Float, 0,                          1, InputClassification.PerInstanceData, 1),
             new InputElement("Offset",      1, Format.R32G32B32A32_Float, InputElement.AppendAligned, 1, InputClassification.PerInstanceData, 1),
@@ -18,13 +18,6 @@ namespace IwUVEditor.DirectX.Vertex
             new InputElement("Ratio",       0, Format.R32_Float         , InputElement.AppendAligned, 1, InputClassification.PerInstanceData, 1)
         };
 
-        public static int SizeInBytes
-        {
-            get
-            {
-                return System.Runtime.InteropServices.
-                    Marshal.SizeOf(typeof(InstanceOffset));
-            }
-        }
+        public int SizeInBytes => System.Runtime.InteropServices.Marshal.SizeOf(typeof(InstanceOffset));
     }
 }

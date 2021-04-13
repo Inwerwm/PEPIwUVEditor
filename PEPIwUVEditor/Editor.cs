@@ -27,6 +27,7 @@ namespace IwUVEditor
         // エディタ機能
         public Tool.ToolBox ToolBox { get; }
         Dictionary<Material, CommandManager> Commanders { get; set; }
+        SlimDX.Vector2? PositionClip { get; set; }
 
         // 描画の更新メソッド
         public Action UpdateDraw { get; set; }
@@ -88,6 +89,31 @@ namespace IwUVEditor
 
             Commanders[Current.Material].Redo();
             UpdateDraw();
+        }
+
+        public void CopyPosition()
+        {
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key);
+
+            //LinqのAverageメソッドだと2回回す必要があるのでforeachで平均を計算する
+            PEPlugin.SDX.V2 sum = new PEPlugin.SDX.V2(0, 0);
+            int count = 0;
+            foreach (var vtx in selectedVertices)
+            {
+                sum += vtx.UV;
+                count++;
+            }
+
+            PositionClip = sum / count;
+        }
+
+        public void PastePosition()
+        {
+            if (PositionClip is null)
+                return;
+
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key).ToList();
+            Do(Current.Material, new CommandSetPosition(selectedVertices, PositionClip.Value));
         }
 
         protected virtual void Dispose(bool disposing)

@@ -214,5 +214,26 @@ namespace IwUVEditor
             if ((sender as RadioButton).Checked)
                 Current.Tool = Editor.ToolBox.RotateVertices(DrawProcess);
         }
+
+        private void radioButtonScale_CheckedChanged(object sender, EventArgs e)
+        {
+            if ((sender as RadioButton).Checked)
+                Current.Tool = Editor.ToolBox.ScaleVertices(DrawProcess);
+        }
+
+        private void 座標のコピーToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.CopyPosition();
+        }
+
+        private void 座標のペーストToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.PastePosition();
+        }
+
+        private void デバッグログToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Log.DebugLog.Show();
+        }
     }
 }

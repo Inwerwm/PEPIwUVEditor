@@ -24,10 +24,11 @@ namespace IwUVEditor.Tool
             }
         }
 
+        private static float Step => 0.01f;
         Mode CurrentMode { get; set; }
         Matrix PreviousScale { get; set; } = Matrix.Identity;
-        Matrix CurrentScale => Matrix.Scaling(new Vector3(1 - Input.MouseOffset.X * 0.01f, 1 - Input.MouseOffset.Y * 0.01f, 1));
-        protected override Matrix Offset => Matrix.Invert(PreviousScale) * Matrix.Invert(Matrix.Translation(ScalingCenter)) * CurrentScale * Matrix.Translation(ScalingCenter);
+        Matrix CurrentScale => Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1 - Input.MouseOffset.Y * Step, 1));
+        protected override Matrix Offset => Matrix.Invert(Matrix.Translation(ScalingCenter)) * CurrentScale * Matrix.Translation(ScalingCenter);
 
         public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
         {

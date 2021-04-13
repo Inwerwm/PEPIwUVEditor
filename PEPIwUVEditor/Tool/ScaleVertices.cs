@@ -26,7 +26,6 @@ namespace IwUVEditor.Tool
 
         private static float Step => 0.01f;
         Mode CurrentMode { get; set; }
-        Matrix PreviousScale { get; set; } = Matrix.Identity;
         Matrix CurrentScale => Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1 - Input.MouseOffset.Y * Step, 1));
         protected override Matrix Offset => Matrix.Invert(Matrix.Translation(ScalingCenter)) * CurrentScale * Matrix.Translation(ScalingCenter);
 
@@ -81,10 +80,7 @@ namespace IwUVEditor.Tool
                 Controller.SelectedElement = CurrentMode == Mode.MoveCenter ? ScalingController.Elements.Center
                                            : CurrentMode == Mode.X ? ScalingController.Elements.X
                                            : CurrentMode == Mode.Y ? ScalingController.Elements.Y
-                                           : ScalingController.Elements.None
-                                           ;
-
-            PreviousScale = CurrentScale;
+                                           : ScalingController.Elements.None;
 
             if (CurrentMode != Mode.MoveCenter && input.MouseLeft.IsDragging)
             {

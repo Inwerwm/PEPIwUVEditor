@@ -87,8 +87,6 @@ namespace IwUVEditor.Tool
                     break;
                 default:
                     base.ReadInput(input);
-                    if (input.MouseLeft.IsDragging)
-                        Log.DebugLog.Append($"{Log.DebugLog.Count:0000}-直前の行列:{Offset}");
                     break;
             }
 
@@ -100,17 +98,6 @@ namespace IwUVEditor.Tool
                                            : CurrentMode == Mode.X ? ScalingController.Elements.X
                                            : CurrentMode == Mode.Y ? ScalingController.Elements.Y
                                            : ScalingController.Elements.None;
-
-            if (CurrentMode != Mode.MoveCenter && input.MouseLeft.IsDragging)
-            {
-                Log.DebugLog.Append($"{Log.DebugLog.Count:0000}-変更後行列:{Offset}");
-                Log.DebugLog.Append($"マウス移動量:{Input.MouseOffset}");
-                Log.DebugLog.Append($"スケール:{CurrentScale}");
-                Log.DebugLog.Append("");
-                Log.DebugLog.Count++;
-            }
-            if (input.MouseLeft.IsEndingJust)
-                Log.DebugLog.Append($"総計行列:{TotalOffset}");
 
             Mode checkMode(Vector2 mousePos)
             {

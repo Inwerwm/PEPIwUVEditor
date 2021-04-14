@@ -11,6 +11,8 @@ namespace IwUVEditor.Command
     {
         bool isInitialInvoke;
 
+        public bool IsDestructive => false;
+
         Material TargetMaterial { get; }
 
         RectangleF SelectionRange { get; set; }

@@ -47,7 +47,8 @@ namespace IwUVEditor
             Form.AddProcessWhenClosing((sender, e) =>
             {
                 e.Cancel = true;
-                StopDraw();
+                if(Editor.CanContinueClosing())
+                    StopDraw();
             });
 
             // フィールドの初期値を明示

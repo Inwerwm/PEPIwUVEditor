@@ -349,6 +349,7 @@ namespace IwUVEditor
             this.uVを反映ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.uVを反映ToolStripMenuItem.Size = new System.Drawing.Size(280, 24);
             this.uVを反映ToolStripMenuItem.Text = "反映";
+            this.uVを反映ToolStripMenuItem.Click += new System.EventHandler(this.UVを反映ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 

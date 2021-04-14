@@ -52,6 +52,11 @@ namespace IwUVEditor
             Current.Material = Materials.First();
         }
 
+        public void SendModel()
+        {
+            PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
+        }
+
         public void DriveTool(InputStates input)
         {
             if (Current.Tool is null)

@@ -243,5 +243,10 @@ namespace IwUVEditor
         {
             Resetter.Invoke();
         }
+
+        private void UVを反映ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.SendModel();
+        }
     }
 }

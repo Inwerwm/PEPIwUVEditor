@@ -31,12 +31,15 @@ namespace IwUVEditor
 
         // 描画の更新メソッド
         public Action UpdateDraw { get; set; }
+        // エディタのリセットメソッド
+        Action Resetter { get; }
 
-        public Editor(IPERunArgs args, EditorStates inputManager)
+        public Editor(IPERunArgs args, EditorStates inputManager, Action resetter)
         {
             Args = args;
             Current = inputManager;
             ToolBox = new Tool.ToolBox();
+            Resetter = resetter;
         }
 
         public void LoadModel()
@@ -55,6 +58,11 @@ namespace IwUVEditor
         public void SendModel()
         {
             PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
+        }
+
+        public void Reset()
+        {
+            Resetter.Invoke();
         }
 
         public void DriveTool(InputStates input)

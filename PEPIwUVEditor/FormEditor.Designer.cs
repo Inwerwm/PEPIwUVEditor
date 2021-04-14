@@ -70,8 +70,8 @@ namespace IwUVEditor
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.デバッグログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
+            this.デバッグログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -258,7 +258,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 985;
+            this.splitUVMat.SplitterDistance = 987;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -270,7 +270,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(384, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(382, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -339,7 +339,6 @@ namespace IwUVEditor
             this.再読込ToolStripMenuItem1.ShortcutKeyDisplayString = "Ctrl+R";
             this.再読込ToolStripMenuItem1.Size = new System.Drawing.Size(284, 24);
             this.再読込ToolStripMenuItem1.Text = "再読込";
-            this.再読込ToolStripMenuItem1.Click += new System.EventHandler(this.再読込ToolStripMenuItem1_Click);
             // 
             // uVを反映ToolStripMenuItem
             // 
@@ -471,17 +470,17 @@ namespace IwUVEditor
             this.uV情報を合成して保存ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
             this.uV情報を合成して保存ToolStripMenuItem.Text = "UV情報を合成して保存";
             // 
+            // timerEvery
+            // 
+            this.timerEvery.Interval = 5;
+            this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
+            // 
             // デバッグログToolStripMenuItem
             // 
             this.デバッグログToolStripMenuItem.Name = "デバッグログToolStripMenuItem";
             this.デバッグログToolStripMenuItem.Size = new System.Drawing.Size(111, 24);
             this.デバッグログToolStripMenuItem.Text = "デバッグログ";
             this.デバッグログToolStripMenuItem.Click += new System.EventHandler(this.デバッグログToolStripMenuItem_Click);
-            // 
-            // timerEvery
-            // 
-            this.timerEvery.Interval = 5;
-            this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
             // FormEditor
             // 

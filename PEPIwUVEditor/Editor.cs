@@ -65,9 +65,39 @@ namespace IwUVEditor
             UpdateDraw();
         }
 
+        public bool CanContinueClosing()
+        {
+            //編集されていないなら閉じてもいい
+            if (!IsEdited)
+                return true;
+
+            var result = System.Windows.Forms.MessageBox.Show(
+                $"頂点の編集状態を反映しますか?{Environment.NewLine}" +
+                $"反映していない場合、編集は失われます。",
+                "UV編集",
+                System.Windows.Forms.MessageBoxButtons.YesNoCancel,
+                System.Windows.Forms.MessageBoxIcon.Exclamation
+            );
+
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.Cancel:
+                    // 閉じるのをやめる
+                    return false;
+                case System.Windows.Forms.DialogResult.Yes:
+                    // 反映してから閉じる
+                    SendModel();
+                    return true;
+                default:
+                    // そのまま閉じる
+                    return true;
+            }
+        }
+
         public void Reset()
         {
-            Resetter.Invoke();
+            if (CanContinueClosing())
+                Resetter.Invoke();
         }
 
         public void DriveTool(InputStates input)

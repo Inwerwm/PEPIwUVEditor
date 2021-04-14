@@ -69,17 +69,15 @@ namespace IwUVEditor
         {
             if (Current.Tool is null)
                 return;
+
             Current.Tool.ReadInput(input);
             if (Current.Tool.IsReady)
-            {
-                Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));
-                UpdateDraw();
-            }
+                Do(Current.Material, Current.Tool.CreateCommand(Current.Material));
         }
 
         public void Do(Material targetMaterial, IEditorCommand command)
         {
-            if (Current.Material is null)
+            if (targetMaterial is null)
                 return;
 
             Commanders[targetMaterial].Do(command);

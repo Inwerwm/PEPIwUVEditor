@@ -23,6 +23,7 @@ namespace IwUVEditor
 
         // 現在の状態
         public EditorStates Current { get; }
+        public bool IsEdited { get; private set; }
 
         // エディタ機能
         public Tool.ToolBox ToolBox { get; }
@@ -40,6 +41,7 @@ namespace IwUVEditor
             Current = inputManager;
             ToolBox = new Tool.ToolBox();
             Resetter = resetter;
+            IsEdited = false;
         }
 
         public void LoadModel()
@@ -53,11 +55,14 @@ namespace IwUVEditor
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
             Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
             Current.Material = Materials.First();
+            IsEdited = false;
         }
 
         public void SendModel()
         {
             PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
+            IsEdited = false;
+            UpdateDraw();
         }
 
         public void Reset()
@@ -81,6 +86,9 @@ namespace IwUVEditor
                 return;
 
             Commanders[targetMaterial].Do(command);
+            // 破壊的変更を行う命令だった場合、編集済みに変更
+            IsEdited |= command.IsDestructive;
+
             UpdateDraw();
         }
 

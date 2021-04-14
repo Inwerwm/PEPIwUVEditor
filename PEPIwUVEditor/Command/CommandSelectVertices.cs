@@ -9,6 +9,8 @@ namespace IwUVEditor.Command
 {
     class CommandSelectVertices : IEditorCommand
     {
+        public bool IsDestructive => false;
+
         Material TargetMaterial { get; }
         Dictionary<IPXVertex, bool> VertexSelect { get; }
         Dictionary<IPXVertex, bool> PreviousState { get; set; }

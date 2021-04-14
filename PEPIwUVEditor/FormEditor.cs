@@ -36,11 +36,14 @@ namespace IwUVEditor
 
         internal Control DrawTargetControl => splitUVMat.Panel1;
 
-        public FormEditor(Editor editor, EditorStates inputManager)
+        Action Resetter { get; }
+
+        public FormEditor(Editor editor, EditorStates inputManager, Action resetter)
         {
             Editor = editor;
             Current = inputManager;
             Input = new InputStates();
+            Resetter = resetter;
 
             InitializeComponent();
 
@@ -234,6 +237,11 @@ namespace IwUVEditor
         private void デバッグログToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Log.DebugLog.Show();
+        }
+
+        private void 再読込ToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Resetter.Invoke();
         }
     }
 }

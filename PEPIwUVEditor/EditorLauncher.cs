@@ -33,7 +33,7 @@ namespace IwUVEditor
             // インスタンスの作成
             Current = new EditorStates();
             Editor = new Editor(args, Current);
-            Form = Form ?? new FormEditor(Editor, Current);
+            Form = Form ?? new FormEditor(Editor, Current, Run);
             DrawContext = DrawContext ?? new DxContext(Form.DrawTargetControl)
             {
                 RefreshRate = 120

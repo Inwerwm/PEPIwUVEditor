@@ -52,7 +52,10 @@ namespace IwUVEditor
         {
             DrawProcess.RadiusOfPositionSquare = (float)numericRadiusOfPosSq.Value;
 
-            Editor.UpdateDraw = DrawProcess.UpdateDrawingVertices;
+            Editor.UpdateDraw = () => {
+                DrawProcess.UpdateDrawingVertices();
+                DisplayEditState();
+            };
             SelectionSaver.VertexUpdater = DrawProcess.UpdateDrawingVertices;
 
             Current.Tool = Editor.ToolBox.RectangleSelection(DrawProcess);
@@ -65,8 +68,16 @@ namespace IwUVEditor
             ColorSettings.SelectedVertexColor = DrawProcess.ColorInSelected.ToColor();
             ColorSettings.BackgroundColor = DrawProcess.BackgroundColor.ToColor();
 
-
+            DisplayEditState();
             timerEvery.Enabled = true;
+        }
+
+        /// <summary>
+        /// 編集された状態ならタイトルにそれを示す
+        /// </summary>
+        void DisplayEditState()
+        {
+            Text = Editor.IsEdited ? "UV編集 *" : "UV編集";
         }
 
         internal void LoadMaterials(Material[] materials)

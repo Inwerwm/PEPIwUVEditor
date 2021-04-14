@@ -10,6 +10,8 @@ namespace IwUVEditor.Command
 {
     class CommandSetPosition : IEditorCommand
     {
+        public bool IsDestructive => true;
+
         List<IPXVertex> TargetVertices { get; }
         Dictionary<IPXVertex, Vector2> PreviousPosition { get; }
         Vector2 Positon { get; }

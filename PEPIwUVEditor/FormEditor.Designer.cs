@@ -70,8 +70,8 @@ namespace IwUVEditor
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timerEvery = new System.Windows.Forms.Timer(this.components);
             this.デバッグログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerEvery = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -258,7 +258,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 987;
+            this.splitUVMat.SplitterDistance = 983;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -270,7 +270,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(382, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(386, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -336,34 +336,41 @@ namespace IwUVEditor
             // 再読込ToolStripMenuItem1
             // 
             this.再読込ToolStripMenuItem1.Name = "再読込ToolStripMenuItem1";
-            this.再読込ToolStripMenuItem1.ShortcutKeyDisplayString = "Ctrl+R";
-            this.再読込ToolStripMenuItem1.Size = new System.Drawing.Size(284, 24);
+            this.再読込ToolStripMenuItem1.ShortcutKeyDisplayString = "";
+            this.再読込ToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.再読込ToolStripMenuItem1.Size = new System.Drawing.Size(280, 24);
             this.再読込ToolStripMenuItem1.Text = "再読込";
+            this.再読込ToolStripMenuItem1.Click += new System.EventHandler(this.再読込ToolStripMenuItem1_Click);
             // 
             // uVを反映ToolStripMenuItem
             // 
             this.uVを反映ToolStripMenuItem.Name = "uVを反映ToolStripMenuItem";
-            this.uVを反映ToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-            this.uVを反映ToolStripMenuItem.Size = new System.Drawing.Size(284, 24);
+            this.uVを反映ToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.uVを反映ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.uVを反映ToolStripMenuItem.Size = new System.Drawing.Size(280, 24);
             this.uVを反映ToolStripMenuItem.Text = "反映";
+            this.uVを反映ToolStripMenuItem.Click += new System.EventHandler(this.UVを反映ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(281, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(277, 6);
             // 
             // 選択頂点を受信ToolStripMenuItem
             // 
             this.選択頂点を受信ToolStripMenuItem.Name = "選択頂点を受信ToolStripMenuItem";
-            this.選択頂点を受信ToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+X";
-            this.選択頂点を受信ToolStripMenuItem.Size = new System.Drawing.Size(284, 24);
+            this.選択頂点を受信ToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.選択頂点を受信ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.選択頂点を受信ToolStripMenuItem.Size = new System.Drawing.Size(280, 24);
             this.選択頂点を受信ToolStripMenuItem.Text = "選択頂点を送信";
             // 
             // 選択頂点を送信ToolStripMenuItem
             // 
             this.選択頂点を送信ToolStripMenuItem.Name = "選択頂点を送信ToolStripMenuItem";
-            this.選択頂点を送信ToolStripMenuItem.ShortcutKeyDisplayString = "Ctra+Shift+X";
-            this.選択頂点を送信ToolStripMenuItem.Size = new System.Drawing.Size(284, 24);
+            this.選択頂点を送信ToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.選択頂点を送信ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.X)));
+            this.選択頂点を送信ToolStripMenuItem.Size = new System.Drawing.Size(280, 24);
             this.選択頂点を送信ToolStripMenuItem.Text = "選択頂点を受信";
             // 
             // 編集ToolStripMenuItem
@@ -385,7 +392,7 @@ namespace IwUVEditor
             // 元に戻すToolStripMenuItem
             // 
             this.元に戻すToolStripMenuItem.Name = "元に戻すToolStripMenuItem";
-            this.元に戻すToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Z";
+            this.元に戻すToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.元に戻すToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.元に戻すToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
             this.元に戻すToolStripMenuItem.Text = "元に戻す";
@@ -394,7 +401,7 @@ namespace IwUVEditor
             // やり直しToolStripMenuItem
             // 
             this.やり直しToolStripMenuItem.Name = "やり直しToolStripMenuItem";
-            this.やり直しToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+Shift+Z";
+            this.やり直しToolStripMenuItem.ShortcutKeyDisplayString = "";
             this.やり直しToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.Z)));
             this.やり直しToolStripMenuItem.Size = new System.Drawing.Size(237, 24);
@@ -470,17 +477,17 @@ namespace IwUVEditor
             this.uV情報を合成して保存ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
             this.uV情報を合成して保存ToolStripMenuItem.Text = "UV情報を合成して保存";
             // 
-            // timerEvery
-            // 
-            this.timerEvery.Interval = 5;
-            this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
-            // 
             // デバッグログToolStripMenuItem
             // 
             this.デバッグログToolStripMenuItem.Name = "デバッグログToolStripMenuItem";
             this.デバッグログToolStripMenuItem.Size = new System.Drawing.Size(111, 24);
             this.デバッグログToolStripMenuItem.Text = "デバッグログ";
             this.デバッグログToolStripMenuItem.Click += new System.EventHandler(this.デバッグログToolStripMenuItem_Click);
+            // 
+            // timerEvery
+            // 
+            this.timerEvery.Interval = 5;
+            this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
             // FormEditor
             // 

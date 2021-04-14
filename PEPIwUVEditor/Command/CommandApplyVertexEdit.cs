@@ -10,6 +10,8 @@ namespace IwUVEditor.Command
 {
     class CommandApplyVertexEdit : IEditorCommand
     {
+        public bool IsDestructive => true;
+
         List<IPXVertex> TargetVertices { get; }
         Matrix Offset { get; }
 

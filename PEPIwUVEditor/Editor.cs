@@ -23,6 +23,7 @@ namespace IwUVEditor
 
         // 現在の状態
         public EditorStates Current { get; }
+        public bool IsEdited { get; private set; }
 
         // エディタ機能
         public Tool.ToolBox ToolBox { get; }
@@ -31,12 +32,16 @@ namespace IwUVEditor
 
         // 描画の更新メソッド
         public Action UpdateDraw { get; set; }
+        // エディタのリセットメソッド
+        Action Resetter { get; }
 
-        public Editor(IPERunArgs args, EditorStates inputManager)
+        public Editor(IPERunArgs args, EditorStates inputManager, Action resetter)
         {
             Args = args;
             Current = inputManager;
             ToolBox = new Tool.ToolBox();
+            Resetter = resetter;
+            IsEdited = false;
         }
 
         public void LoadModel()
@@ -50,26 +55,70 @@ namespace IwUVEditor
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
             Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
             Current.Material = Materials.First();
+            IsEdited = false;
+        }
+
+        public void SendModel()
+        {
+            PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
+            IsEdited = false;
+            UpdateDraw();
+        }
+
+        public bool CanContinueClosing()
+        {
+            //編集されていないなら閉じてもいい
+            if (!IsEdited)
+                return true;
+
+            var result = System.Windows.Forms.MessageBox.Show(
+                $"頂点の編集状態を反映しますか?{Environment.NewLine}" +
+                $"反映していない場合、編集は失われます。",
+                "UV編集",
+                System.Windows.Forms.MessageBoxButtons.YesNoCancel,
+                System.Windows.Forms.MessageBoxIcon.Exclamation
+            );
+
+            switch (result)
+            {
+                case System.Windows.Forms.DialogResult.Cancel:
+                    // 閉じるのをやめる
+                    return false;
+                case System.Windows.Forms.DialogResult.Yes:
+                    // 反映してから閉じる
+                    SendModel();
+                    return true;
+                default:
+                    // そのまま閉じる
+                    return true;
+            }
+        }
+
+        public void Reset()
+        {
+            if (CanContinueClosing())
+                Resetter.Invoke();
         }
 
         public void DriveTool(InputStates input)
         {
             if (Current.Tool is null)
                 return;
+
             Current.Tool.ReadInput(input);
             if (Current.Tool.IsReady)
-            {
-                Commanders[Current.Material].Do(Current.Tool.CreateCommand(Current.Material));
-                UpdateDraw();
-            }
+                Do(Current.Material, Current.Tool.CreateCommand(Current.Material));
         }
 
         public void Do(Material targetMaterial, IEditorCommand command)
         {
-            if (Current.Material is null)
+            if (targetMaterial is null)
                 return;
 
             Commanders[targetMaterial].Do(command);
+            // 破壊的変更を行う命令だった場合、編集済みに変更
+            IsEdited |= command.IsDestructive;
+
             UpdateDraw();
         }
 

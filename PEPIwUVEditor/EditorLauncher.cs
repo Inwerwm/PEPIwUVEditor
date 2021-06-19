@@ -32,7 +32,7 @@ namespace IwUVEditor
         {
             // インスタンスの作成
             Current = new EditorStates();
-            Editor = new Editor(args, Current);
+            Editor = new Editor(args, Current, Run);
             Form = Form ?? new FormEditor(Editor, Current);
             DrawContext = DrawContext ?? new DxContext(Form.DrawTargetControl)
             {
@@ -47,7 +47,8 @@ namespace IwUVEditor
             Form.AddProcessWhenClosing((sender, e) =>
             {
                 e.Cancel = true;
-                StopDraw();
+                if(Editor.CanContinueClosing())
+                    StopDraw();
             });
 
             // フィールドの初期値を明示

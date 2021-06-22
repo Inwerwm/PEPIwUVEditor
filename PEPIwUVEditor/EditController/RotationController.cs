@@ -1,15 +1,12 @@
 ﻿using IwUVEditor.StateContainer;
 using SlimDX;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.EditController
 {
-    class RotationController : EditController
+    class RotationController : EditController, IDisposable
     {
+        private bool disposedValue;
         private Vector3 center;
         private float radius = 0.025f;
 
@@ -66,6 +63,24 @@ namespace IwUVEditor.EditController
             float distanceFromRotationCenter = normalizedRelationalCursorPosition.Length() * 2;
 
             return distanceFromRotationCenter < Radius ? SelectionMode.Center : SelectionMode.None;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    CenterSign?.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

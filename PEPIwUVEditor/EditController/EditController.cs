@@ -1,10 +1,5 @@
-﻿using IwUVEditor.DirectX;
-using IwUVEditor.StateContainer;
+﻿using IwUVEditor.StateContainer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.EditController
 {
@@ -13,7 +8,7 @@ namespace IwUVEditor.EditController
         public SelectionMode CurrentMode { get; protected set; }
         protected DirectX.UVViewDrawProcess Process { get; }
 
-        protected EditController(UVViewDrawProcess process)
+        protected EditController(DirectX.UVViewDrawProcess process)
         {
             Process = process;
         }

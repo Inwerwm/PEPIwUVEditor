@@ -33,8 +33,9 @@ namespace IwUVEditor.EditController
 
             Execute(input, CurrentMode, editFunction);
 
-            // ドラッグ終了時点の場合はモードの再読込を行わないと
-            // 次のマウス入力までモードが持続してしまう
+            // ドラッグ終了時にモード変更が必要な位置にカーソルがあっても
+            // 次のマウス入力までモードが持続してしまうので
+            // モードを再計算する
             if (input.MouseLeft.IsEndingJust)
                 CurrentMode = CalcMode(input);
 

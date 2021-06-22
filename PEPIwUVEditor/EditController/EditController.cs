@@ -29,7 +29,7 @@ namespace IwUVEditor.EditController
             if (!(input.MouseLeft.IsDragging || input.MouseLeft.IsEndingJust))
                 CurrentMode = CalcMode(input);
 
-            Execute(CurrentMode, editFunction);
+            Execute(input, CurrentMode, editFunction);
 
             // ドラッグ終了時点の場合はモードの再読込を行わないと
             // 次のマウス入力までモードが持続してしまう
@@ -41,7 +41,7 @@ namespace IwUVEditor.EditController
         }
 
         protected abstract SelectionMode CalcMode(InputStates input);
-        protected abstract void Execute(SelectionMode mode, Action<InputStates> editFunction);
+        protected abstract void Execute(InputStates input, SelectionMode mode, Action<InputStates> editFunction);
         protected abstract void ApplyModeChange(SelectionMode mode);
 
         public enum SelectionMode

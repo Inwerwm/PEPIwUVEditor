@@ -11,6 +11,8 @@ using System.Drawing;
 
 namespace IwUVEditor.DirectX
 {
+    internal delegate void ScreenSizeChangedEventHandler(Vector2 screenSize);
+
     class UVViewDrawProcess : DxProcess
     {
         #region フィールド
@@ -21,6 +23,7 @@ namespace IwUVEditor.DirectX
 
         #region イベント
         internal event CatchExceptionEventHandler CatchException;
+        internal event ScreenSizeChangedEventHandler ScreenSizeChanged;
         #endregion
 
         #region プロパティ - EditorStates
@@ -198,6 +201,8 @@ namespace IwUVEditor.DirectX
             {
                 ps.ScreenSize = ScreenSize;
             }
+
+            ScreenSizeChanged?.Invoke(ScreenSize);
         }
 
         public void UpdateDrawingVertices()

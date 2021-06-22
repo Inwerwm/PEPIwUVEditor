@@ -1,4 +1,5 @@
 ﻿using IwUVEditor.StateContainer;
+using SlimDX;
 using System;
 
 namespace IwUVEditor.EditController
@@ -7,6 +8,7 @@ namespace IwUVEditor.EditController
     {
         public SelectionMode CurrentMode { get; protected set; }
         protected DirectX.UVViewDrawProcess Process { get; }
+        public abstract Vector3 Center { get; protected set; }
 
         protected EditController(DirectX.UVViewDrawProcess process)
         {
@@ -43,6 +45,11 @@ namespace IwUVEditor.EditController
         protected abstract SelectionMode CalcMode(InputStates input);
         protected abstract void Execute(InputStates input, SelectionMode mode, Action<InputStates> editFunction);
         protected abstract void ApplyModeChange(SelectionMode mode);
+        protected virtual void MoveCenter(InputStates input)
+        {
+            if (input.MouseLeft.IsDragging)
+                Center += new Vector3(input.MouseLeft.Offset, 0);
+        }
 
         public enum SelectionMode
         {

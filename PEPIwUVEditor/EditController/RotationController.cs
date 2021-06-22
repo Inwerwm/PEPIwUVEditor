@@ -17,7 +17,7 @@ namespace IwUVEditor.EditController
         public override Vector3 Center
         {
             get => center;
-            protected set
+            set
             {
                 center = value;
                 CenterSign.Center = value;

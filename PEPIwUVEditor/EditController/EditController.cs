@@ -8,7 +8,7 @@ namespace IwUVEditor.EditController
     {
         public SelectionMode CurrentMode { get; protected set; }
         protected DirectX.UVViewDrawProcess Process { get; }
-        public abstract Vector3 Center { get; protected set; }
+        public abstract Vector3 Center { get; set; }
 
         protected EditController(DirectX.UVViewDrawProcess process)
         {

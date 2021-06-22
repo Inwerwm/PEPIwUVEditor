@@ -40,6 +40,13 @@ namespace IwUVEditor.EditController
                 new Color4(0, 0, 1),
                 Process.ScreenSize
             );
+
+            Process.ScreenSizeChanged += Process_ScreenSizeChanged;
+        }
+
+        private void Process_ScreenSizeChanged(Vector2 screenSize)
+        {
+            CenterSign.ScreenSize = screenSize;
         }
 
         public override void PrepareDrawing()
@@ -72,6 +79,7 @@ namespace IwUVEditor.EditController
                 if (disposing)
                 {
                     CenterSign?.Dispose();
+                    Process.ScreenSizeChanged -= Process_ScreenSizeChanged;
                 }
                 disposedValue = true;
             }

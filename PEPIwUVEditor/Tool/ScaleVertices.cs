@@ -74,7 +74,6 @@ namespace IwUVEditor.Tool
 
         public override void ReadInput(InputStates input)
         {
-
             var modeTmp = CurrentMode;
 
             if (!(input.MouseLeft.IsDragging || input.MouseLeft.IsEndingJust))
@@ -90,6 +89,8 @@ namespace IwUVEditor.Tool
                     break;
             }
 
+            // ドラッグ終了時点の場合はモードの再読込を行わないと
+            // 次のマウス入力までモードが持続してしまう
             if (input.MouseLeft.IsEndingJust)
                 CurrentMode = checkMode(input.MousePos);
 

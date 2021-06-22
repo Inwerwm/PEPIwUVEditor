@@ -43,7 +43,18 @@ namespace IwUVEditor.EditController
         }
 
         protected abstract SelectionMode CalcMode(InputStates input);
-        protected abstract void Execute(InputStates input, SelectionMode mode, Action<InputStates> editFunction);
+        protected virtual void Execute(InputStates input, SelectionMode mode, Action<InputStates> editFunction)
+        {
+            switch (mode)
+            {
+                case SelectionMode.Center:
+                    MoveCenter(input);
+                    break;
+                default:
+                    editFunction(input);
+                    break;
+            }
+        }
         protected abstract void ApplyModeChange(SelectionMode mode);
         protected virtual void MoveCenter(InputStates input)
         {

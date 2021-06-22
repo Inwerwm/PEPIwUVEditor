@@ -102,7 +102,7 @@ namespace IwUVEditor.Tool
 
             Mode checkMode(Vector2 mousePos)
             {
-                var rationalMousePos = mousePos.ElementDivision(Process.ScreenSize);
+                var relationalMousePos = mousePos.ElementDivision(Process.ScreenSize);
 
                 Vector2 centerOnScreen = Process.WorldPosToScreenPos(ScalingCenter.ToVector2());
                 var centerOffset = centerOnScreen.ElementDivision(Process.ScreenSize).ToVector3();
@@ -111,9 +111,9 @@ namespace IwUVEditor.Tool
                 var xSq = Controller.XSquareCoord.ToRectangleF(centerOffset, cd => cd / 2);
                 var ySq = Controller.YSquareCoord.ReverseY().ToRectangleF(centerOffset, cd => cd / 2);
 
-                return cSq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.MoveCenter :
-                       xSq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.X :
-                       ySq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.Y :
+                return cSq.Contains(relationalMousePos.X, relationalMousePos.Y) ? Mode.MoveCenter :
+                       xSq.Contains(relationalMousePos.X, relationalMousePos.Y) ? Mode.X :
+                       ySq.Contains(relationalMousePos.X, relationalMousePos.Y) ? Mode.Y :
                                                                               Mode.Both;
             }
         }

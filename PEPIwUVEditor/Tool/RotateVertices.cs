@@ -102,10 +102,14 @@ namespace IwUVEditor.Tool
 
             Mode CheckMode(Vector2 mousePos)
             {
-                var radPos = mousePos - Process.WorldPosToScreenPos(new Vector2(RotationCenter.X, RotationCenter.Y));
-                var normalizedPos = new Vector2(radPos.X / Process.ScreenSize.X, radPos.Y / Process.ScreenSize.Y);
-                float length = normalizedPos.Length() * 2;
-                return length < Radius ? Mode.MoveCenter : Mode.Rotation;
+                var vecOfRotationCenterToMouseCursor = mousePos - Process.WorldPosToScreenPos(new Vector2(RotationCenter.X, RotationCenter.Y));
+                var normalizedRelationalCursorPosition = vecOfRotationCenterToMouseCursor.ElementDivision(Process.ScreenSize);
+
+                // 正規化された相対的カーソル位置は [0,1] の値域で計算されている
+                // なので [-1,1] の値域での長さは 2 倍された値になる
+                float distanceFromRotationCenter = normalizedRelationalCursorPosition.Length() * 2;
+
+                return distanceFromRotationCenter < Radius ? Mode.MoveCenter : Mode.Rotation;
             }
         }
 

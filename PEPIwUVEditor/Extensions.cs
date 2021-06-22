@@ -20,15 +20,27 @@ namespace IwUVEditor
         /// </summary>
         public static Vector3 ToVector3(this Vector2 vec) => new Vector3(vec, 0);
 
+        /// <summary>
+        /// 要素ごとの掛け算
+        /// </summary>
         public static Vector2 ElementProduct(this Vector2 multiplicand, Vector2 multiplier) =>
             new Vector2(multiplicand.X * multiplier.X, multiplicand.Y * multiplier.Y);
 
+        /// <summary>
+        /// 要素ごとの掛け算
+        /// </summary>
         public static Vector3 ElementProduct(this Vector3 multiplicand, Vector3 multiplier) =>
             new Vector3(multiplicand.X * multiplier.X, multiplicand.Y * multiplier.Y, multiplicand.Z * multiplier.Z);
 
+        /// <summary>
+        /// 要素ごとの割り算
+        /// </summary>
         public static Vector2 ElementDivision(this Vector2 dividend, Vector2 divisor) =>
             new Vector2(dividend.X / divisor.X, dividend.Y / divisor.Y);
 
+        /// <summary>
+        /// 要素ごとの割り算
+        /// </summary>
         public static Vector3 ElementDivision(this Vector3 dividend, Vector3 divisor) =>
             new Vector3(dividend.X / divisor.X, dividend.Y / divisor.Y, dividend.Z / divisor.Z);
     }

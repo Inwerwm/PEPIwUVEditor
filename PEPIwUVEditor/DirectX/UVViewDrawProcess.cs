@@ -26,11 +26,8 @@ namespace IwUVEditor.DirectX
         internal event ScreenSizeChangedEventHandler ScreenSizeChanged;
         #endregion
 
-        #region プロパティ - EditorStates
         public EditorStates Current { get; }
-        #endregion
 
-        #region プロパティ - 変換行列
         private Matrix TransMatrix => Camera.GetMatrix() * Matrix.Translation(ShiftOffset) * Matrix.Scaling(Scale.Scale, Scale.Scale, 1);
         private Matrix InvertTransMatrix
         {
@@ -55,18 +52,14 @@ namespace IwUVEditor.DirectX
             LowerLimit = -10000,
             UpperLimit = 12000,
         };
-        #endregion
 
-        #region プロパティ - 描画要素
         TexturePlate TexturePlate { get; set; }
         ShaderResourceView SignTexture { get; set; }
 
         internal GenerableMap<Material, ShaderResourceView> Textures { get; set; }
         internal GenerableMap<Material, UVMesh> UVMeshes { get; set; }
         internal GenerableMap<Material, PositionSquares> PositionSquares { get; set; }
-        #endregion
 
-        #region プロパティ - 描画設定
         public RasterizerStateProvider Rasterize { get; private set; }
 
         public Vector2 ScreenSize => new Vector2(Context.TargetControl.ClientSize.Width, Context.TargetControl.ClientSize.Height);
@@ -122,17 +115,12 @@ namespace IwUVEditor.DirectX
 
         public Color4 BackgroundColor { get; set; }
 
-        #endregion
-
-        #region コンストラクタ
         public UVViewDrawProcess(EditorStates inputManager)
         {
             Current = inputManager;
             BackgroundColor = new Color4(1.0f, 0.3f, 0.3f, 0.3f);
         }
-        #endregion
 
-        #region オーバーライド
         public override void Init()
         {
             Rasterize = new RasterizerStateProvider(Context.Device) { CullMode = CullMode.None };
@@ -182,9 +170,7 @@ namespace IwUVEditor.DirectX
         {
             Effect.GetVariableByName("ViewProjection").AsMatrix().SetMatrix(TransMatrix);
         }
-        #endregion
 
-        #region 状態操作
         public void ResetCamera()
         {
             ShiftOffset = Vector3.Zero;
@@ -210,9 +196,7 @@ namespace IwUVEditor.DirectX
             UVMeshes[Current.Material].UpdateVertices();
             PositionSquares[Current.Material].UpdateVertices();
         }
-        #endregion
 
-        #region ヘルパー関数
         public Vector2 ScreenPosToWorldPos(Vector2 screenPos)
         {
             Vector2 normalizedPos = new Vector2(2 * screenPos.X / Context.TargetControl.Width - 1, 1 - 2 * screenPos.Y / Context.TargetControl.Height);
@@ -266,9 +250,7 @@ namespace IwUVEditor.DirectX
 
             return ShaderResourceView.FromFile(Context.Device, material.TexFullPath);
         }
-        #endregion
 
-        #region IDisposable
         protected override void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -290,6 +272,5 @@ namespace IwUVEditor.DirectX
             }
             base.Dispose(disposing);
         }
-        #endregion
     }
 }

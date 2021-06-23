@@ -4,7 +4,7 @@ using System;
 
 namespace IwUVEditor.Controller
 {
-    abstract class EditController
+    abstract class EditController : IDisposable
     {
         public SelectionMode CurrentMode { get; protected set; }
         protected DirectX.UVViewDrawProcess Process { get; }
@@ -62,6 +62,8 @@ namespace IwUVEditor.Controller
             if (input.MouseLeft.IsDragging)
                 Center += new Vector3(input.MouseLeft.Offset, 0);
         }
+
+        public abstract void Dispose();
 
         public enum SelectionMode
         {

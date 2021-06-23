@@ -4,7 +4,7 @@ using System;
 
 namespace IwUVEditor.Controller
 {
-    class RotateController : EditController, IDisposable
+    class RotateController : EditController
     {
         private bool disposedValue;
         private Vector3 center;
@@ -85,7 +85,7 @@ namespace IwUVEditor.Controller
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);

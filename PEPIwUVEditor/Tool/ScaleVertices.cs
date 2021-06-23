@@ -1,72 +1,28 @@
-﻿using IwUVEditor.DirectX;
-using IwUVEditor.Controller;
-using IwUVEditor.StateContainer;
+﻿using IwUVEditor.Controller;
+using IwUVEditor.DirectX;
 using SlimDX;
 
 namespace IwUVEditor.Tool
 {
     class ScaleVertices : EditVertices, IEditTool
     {
-        private ScaleController Controller { get; }
-
         private static float Step => 0.01f;
-
         protected override Matrix Offset
         {
             get
             {
-                Matrix currentScale;
-                switch (Controller.CurrentMode)
-                {
-                    case EditController.SelectionMode.X:
-                        currentScale = Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1, 1));
-                        break;
-                    case EditController.SelectionMode.Y:
-                        currentScale = Matrix.Scaling(new Vector3(1, 1 - Input.MouseOffset.Y * Step, 1));
-                        break;
-                    default:
-                        currentScale = Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1 - Input.MouseOffset.Y * Step, 1));
-                        break;
-                }
+                float xScale = 1 + Input.MouseOffset.X * Step;
+                float yScale = 1 - Input.MouseOffset.Y * Step;
 
+                Matrix currentScale = Controller.CurrentMode == EditController.SelectionMode.X ? Matrix.Scaling(new Vector3(xScale, 1, 1))
+                                    : Controller.CurrentMode == EditController.SelectionMode.Y ? Matrix.Scaling(new Vector3(1, yScale, 1))
+                                    :                                                            Matrix.Scaling(new Vector3(xScale, yScale, 1));
                 Matrix centerOffset = Matrix.Translation(Controller.Center);
+
                 return Matrix.Invert(centerOffset) * currentScale * centerOffset;
             }
         }
 
-        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
-        {
-            Controller = new ScaleController(Process, device);
-        }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-            Controller.Center = CenterPos;
-        }
-
-        public override void PrepareDrawing()
-        {
-            base.PrepareDrawing();
-            Controller.PrepareDrawing();
-        }
-
-        public override void ReadInput(InputStates input)
-        {
-            Controller.ReadInput(input, base.ReadInput);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    Controller?.Dispose();
-                }
-            }
-
-            base.Dispose(disposing);
-        }
+        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new ScaleController(process, device)) { }
     }
 }

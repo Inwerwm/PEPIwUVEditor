@@ -1,4 +1,5 @@
 ﻿using IwUVEditor.Command;
+using IwUVEditor.Controller;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
@@ -19,6 +20,7 @@ namespace IwUVEditor.Tool
 
         protected UVViewDrawProcess Process { get; }
         protected InputStates Input { get; set; }
+        protected EditController Controller { get; }
 
         protected List<IPXVertex> TargetVertices { get; set; }
         protected Material TargetMaterial => Process.Current.Material;
@@ -42,14 +44,16 @@ namespace IwUVEditor.Tool
         protected abstract Matrix Offset { get; }
         protected Matrix TotalOffset { get; set; }
 
-        protected EditVertices(UVViewDrawProcess process)
+        protected EditVertices(UVViewDrawProcess process, EditController controller)
         {
             Process = process;
+            Controller = controller;
         }
 
         public virtual void Initialize() 
         {
             TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
+            Controller.Center = CenterPos;
         }
 
         public IEditorCommand CreateCommand(Material target)
@@ -67,14 +71,20 @@ namespace IwUVEditor.Tool
         public virtual void PrepareDrawing()
         {
             Process.UpdateDrawingVertices();
+            Controller.PrepareDrawing();
         }
 
         public virtual void ReadInput(InputStates input)
         {
+            Input = input;
+
+            Controller.ReadInput(input, DoEdit);
+        }
+
+        private void DoEdit(InputStates input)
+        {
             if (!TargetVertices.Any())
                 return;
-
-            Input = input;
 
             if (input.MouseLeft.IsStartingJust)
             {
@@ -84,8 +94,10 @@ namespace IwUVEditor.Tool
             }
             if (input.MouseLeft.IsDragging)
             {
+                // 頂点編集のプレビュー
+                // 直接頂点位置を編集するわけにはいかないので見た目だけ変換する
                 CurrentPos = input.MouseLeft.Current;
-                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset);
+                TargetMaterial.TemporaryTransformMatrices *= Offset;
                 TotalOffset *= Offset;
 
                 // オフセットを得た時点で現在地点を次の初期位置扱いする
@@ -94,8 +106,10 @@ namespace IwUVEditor.Tool
             }
             if (input.MouseLeft.IsEndingJust)
             {
+                // コマンド生成が可能であることを申告
                 IsReady = true;
-                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));
+                // プレビュー表示のための変換行列を初期化
+                TargetMaterial.TemporaryTransformMatrices = Matrix.Identity;
             }
         }
 
@@ -105,6 +119,7 @@ namespace IwUVEditor.Tool
             {
                 if (disposing)
                 {
+                    Controller?.Dispose();
                 }
                 disposedValue = true;
             }

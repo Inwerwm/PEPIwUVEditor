@@ -136,7 +136,7 @@ namespace IwUVEditor.DirectX.DrawElement
                 new PositionSquareVertex()
                 {
                     Color = SourceMaterial.IsSelected[vtx] ? ColorInSelected : ColorInDefault,
-                    Offset = Vector4.Transform(new Vector4(vtx.UV.X, vtx.UV.Y, 0, 1), SourceMaterial.TemporaryTransformMatrices[vtx]),
+                    Offset = Vector4.Transform(new Vector4(vtx.UV.X, vtx.UV.Y, 0, 1), SourceMaterial.IsSelected[vtx] ? SourceMaterial.TemporaryTransformMatrices : Matrix.Identity),
                 }
             ).ToArray();
             InstanceCount = instences.Length;

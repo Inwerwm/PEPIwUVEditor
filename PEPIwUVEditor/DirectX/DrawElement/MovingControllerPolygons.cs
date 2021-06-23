@@ -13,6 +13,7 @@ namespace IwUVEditor.DirectX.DrawElement
     {
         private Vector3 center;
         private Vector2 screenSize;
+        private Elements selectedElement;
 
         public Vector3 Center
         {
@@ -44,6 +45,17 @@ namespace IwUVEditor.DirectX.DrawElement
         public Color4 YAxisHeadColor { get; set; }
         public Color4 CenterSquareColor { get; set; }
 
+        internal Elements SelectedElement
+        {
+            get => selectedElement;
+            set
+            {
+                selectedElement = value;
+                UpdateVertices();
+            }
+        }
+        public Color4 SelectionColor { get; }
+
         public MovingControllerPolygons(Device device, Effect effect, RasterizerState drawMode) : base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
         {
             ArrowShaftLength = 0.1f;
@@ -56,6 +68,8 @@ namespace IwUVEditor.DirectX.DrawElement
             XAxisHeadColor = new Color4(1, 0, 0);
             YAxisHeadColor = new Color4(0, 1, 0);
             CenterSquareColor = new Color4(0, 0, 0);
+
+            SelectionColor = new Color4(1, 0, 1);
 
             Initialize();
         }
@@ -76,6 +90,9 @@ namespace IwUVEditor.DirectX.DrawElement
                 ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1,
                 0
             );
+
+            Color4 xAxisHeadColor = SelectedElement == Elements.X ? SelectionColor : XAxisHeadColor;
+            Color4 yAxisHeadColor = SelectedElement == Elements.Y ? SelectionColor : YAxisHeadColor;
 
             var arrowShaftX = new[]
             {
@@ -167,19 +184,19 @@ namespace IwUVEditor.DirectX.DrawElement
                 {
                     Position = Center,
                     Offset = new Vector3(ArrowShaftLength + ArrowHeadLength, 0, 0).ElementProduct(aspectCorrection),
-                    Color = XAxisHeadColor
+                    Color = xAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
                     Offset = new Vector3(ArrowShaftLength, ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection),
-                    Color = XAxisHeadColor
+                    Color = xAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
                     Offset = new Vector3(ArrowShaftLength, -ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection),
-                    Color = XAxisHeadColor
+                    Color = xAxisHeadColor
                 }
             };
 
@@ -189,19 +206,19 @@ namespace IwUVEditor.DirectX.DrawElement
                 {
                     Position = Center,
                     Offset = new Vector3(0, ArrowShaftLength + ArrowHeadLength, 0).ElementProduct(aspectCorrection),
-                    Color = YAxisHeadColor
+                    Color = yAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
                     Offset = new Vector3(ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
-                    Color = YAxisHeadColor
+                    Color = yAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
                     Offset = new Vector3(-ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
-                    Color = YAxisHeadColor
+                    Color = yAxisHeadColor
                 }
             };
 

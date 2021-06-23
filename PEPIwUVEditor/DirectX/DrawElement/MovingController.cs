@@ -11,8 +11,27 @@ namespace IwUVEditor.DirectX.DrawElement
 {
     class MovingController : DrawElement<VectorOffset>, IDrawElement
     {
-        public Vector3 Center { get; set; }
-        public Vector2 ScreenSize { get; set; }
+        private Vector3 center;
+        private Vector2 screenSize;
+
+        public Vector3 Center
+        {
+            get => center;
+            set
+            {
+                center = value;
+                UpdateVertices();
+            }
+        }
+        public Vector2 ScreenSize
+        {
+            get => screenSize;
+            set
+            {
+                screenSize = value;
+                UpdateVertices();
+            }
+        }
 
         public float ArrowShaftLength { get; set; }
         public float ArrowShaftWidth { get; set; }
@@ -52,9 +71,10 @@ namespace IwUVEditor.DirectX.DrawElement
 
         protected override VectorOffset[] CreateVertices()
         {
-            Vector2 aspectCorrection = new Vector2(
+            var aspectCorrection = new Vector3(
                 ScreenSize.X > ScreenSize.Y ? ScreenSize.Y / ScreenSize.X : 1,
-                ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1
+                ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1,
+                0
             );
 
             var arrowShaftX = new[]
@@ -62,25 +82,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(0, ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(0, ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(0, -ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(0, -ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowShaftLength, ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, -ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowShaftLength, -ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 }
             };
@@ -90,25 +110,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(-ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(-ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
                     Color = ArrowShaftColor
                 }
             };
@@ -118,25 +138,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
                     Color = CenterSquareColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
                     Color = CenterSquareColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(-CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
                     Color = CenterSquareColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(-CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
                     Color = CenterSquareColor
                 }
             };
@@ -146,19 +166,19 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength + ArrowHeadLength, 0, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowShaftLength + ArrowHeadLength, 0, 0).ElementProduct(aspectCorrection),
                     Color = XAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowShaftLength, ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection),
                     Color = XAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, -ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowShaftLength, -ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection),
                     Color = XAxisHeadColor
                 }
             };
@@ -168,19 +188,19 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(0, ArrowShaftLength + ArrowHeadLength, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(0, ArrowShaftLength + ArrowHeadLength, 0).ElementProduct(aspectCorrection),
                     Color = YAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
                     Color = YAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection.ToVector3()),
+                    Offset = new Vector3(-ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
                     Color = YAxisHeadColor
                 }
             };

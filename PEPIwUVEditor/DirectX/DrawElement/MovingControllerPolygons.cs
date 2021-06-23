@@ -279,6 +279,12 @@ namespace IwUVEditor.DirectX.DrawElement
         public Triangle Shift(Vector3 offset) =>
             new Triangle(A + offset, B + offset, C + offset);
 
+        public Triangle ReverseY()
+        {
+            Vector3 invy = new Vector3(1, -1, 1);
+            return new Triangle(A.ElementProduct(invy), B.ElementProduct(invy), C.ElementProduct(invy));
+        }
+
         public bool Include(Vector3 query)
         {
             var ab = B - A;
@@ -324,6 +330,12 @@ namespace IwUVEditor.DirectX.DrawElement
             c = C;
         }
 
+        public static Triangle operator *(Triangle left, float right) =>
+            new Triangle(left.A * right, left.B * right, left.C * right);
+
+        public static Triangle operator /(Triangle left, float right) =>
+            new Triangle(left.A / right, left.B / right, left.C / right);
+
         public static implicit operator (Vector3 A, Vector3 B, Vector3 C)(Triangle value)
         {
             return (value.A, value.B, value.C);
@@ -332,6 +344,11 @@ namespace IwUVEditor.DirectX.DrawElement
         public static implicit operator Triangle((Vector3 A, Vector3 B, Vector3 C) value)
         {
             return new Triangle(value.A, value.B, value.C);
+        }
+
+        public override string ToString()
+        {
+            return $"({A}), ({B}), ({C})";
         }
     }
 }

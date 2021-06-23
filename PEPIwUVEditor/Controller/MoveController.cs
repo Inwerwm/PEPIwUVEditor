@@ -49,12 +49,27 @@ namespace IwUVEditor.Controller
 
         protected override void ApplyModeChange(SelectionMode mode)
         {
-            ;
+            Controller.SelectedElement = mode == SelectionMode.X ? MovingControllerPolygons.Elements.X
+                                       : mode == SelectionMode.Y ? MovingControllerPolygons.Elements.Y
+                                       : MovingControllerPolygons.Elements.None;
         }
 
         protected override SelectionMode CalcMode(InputStates input)
         {
-            return SelectionMode.None;
+            var mouseScreenPos = input.MousePos;
+            var centerScreenPos = Process.WorldPosToScreenPos(Center.ToVector2());
+
+            var mouseOffset = mouseScreenPos.ElementDivision(Process.ScreenSize).ToVector3();
+            var centerOffset = centerScreenPos.ElementDivision(Process.ScreenSize).ToVector3();
+
+            // 三角形の座標を2で割ることで
+            // [-1,1]範囲での移動量表現を [0,1]範囲での移動量表現に変える
+            var xHead = (Controller.XAxisHeadVertices / 2).Shift(centerOffset);
+            var yHead = (Controller.YAxisHeadVertices / 2).ReverseY().Shift(centerOffset);
+
+            return xHead.Include(mouseOffset) ? SelectionMode.X
+                 : yHead.Include(mouseOffset) ? SelectionMode.Y
+                 : SelectionMode.None;
         }
 
         protected virtual void Dispose(bool disposing)

@@ -60,7 +60,7 @@ namespace IwUVEditor.DirectX.DrawElement
         protected override VertexStruct[] CreateVertices() =>
             SourceMaterial.Vertices.Select(vtx => new VertexStruct()
             {
-                Position = Vector3.TransformCoordinate(new Vector3(vtx.UV.X, vtx.UV.Y, 0), SourceMaterial.TemporaryTransformMatrices[vtx]),
+                Position = Vector3.TransformCoordinate(new Vector3(vtx.UV.X, vtx.UV.Y, 0), SourceMaterial.IsSelected[vtx] ? SourceMaterial.TemporaryTransformMatrices : Matrix.Identity),
                 Color = LineColor,
                 TEXCOORD = vtx.UV
             }

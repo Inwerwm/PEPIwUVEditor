@@ -18,7 +18,7 @@ namespace IwUVEditor
 
         public IList<IPXVertex> Vertices { get; }
         public Dictionary<IPXVertex, bool> IsSelected { get; }
-        public Dictionary<IPXVertex, Matrix> TemporaryTransformMatrices { get; }
+        public Matrix TemporaryTransformMatrices { get; set; }
 
         /// <summary>
         /// インデックスバッファに与える面の構成頂点番号配列
@@ -43,7 +43,7 @@ namespace IwUVEditor
 
             Vertices = faceVertices.Distinct().ToList();
             IsSelected = Vertices.ToDictionary(vtx => vtx, _ => false);
-            TemporaryTransformMatrices = Vertices.ToDictionary(vtx => vtx, _ => Matrix.Identity);
+            TemporaryTransformMatrices = Matrix.Identity;
 
             var VtxIdDic = Vertices.Select((vtx, i) => (vtx, i)).ToDictionary(pair => pair.vtx, pair => (uint)pair.i);
             FaceSequence = faceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();

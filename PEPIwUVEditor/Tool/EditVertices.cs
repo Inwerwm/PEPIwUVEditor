@@ -97,7 +97,7 @@ namespace IwUVEditor.Tool
                 // 頂点編集のプレビュー
                 // 直接頂点位置を編集するわけにはいかないので見た目だけ変換する
                 CurrentPos = input.MouseLeft.Current;
-                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset);
+                TargetMaterial.TemporaryTransformMatrices *= Offset;
                 TotalOffset *= Offset;
 
                 // オフセットを得た時点で現在地点を次の初期位置扱いする
@@ -109,7 +109,7 @@ namespace IwUVEditor.Tool
                 // コマンド生成が可能であることを申告
                 IsReady = true;
                 // プレビュー表示のための変換行列を初期化
-                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] = Matrix.Identity);
+                TargetMaterial.TemporaryTransformMatrices = Matrix.Identity;
             }
         }
 

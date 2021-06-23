@@ -64,6 +64,7 @@ namespace IwUVEditor.Controller
 
             // 三角形の座標を2で割ることで
             // [-1,1]範囲での移動量表現を [0,1]範囲での移動量表現に変える
+            // 描画時は上下が反転するためY端子は上下反転する
             var xHead = (Controller.XAxisHeadVertices / 2).Shift(centerOffset);
             var yHead = (Controller.YAxisHeadVertices / 2).ReverseY().Shift(centerOffset);
 

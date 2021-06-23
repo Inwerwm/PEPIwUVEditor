@@ -46,7 +46,7 @@ namespace IwUVEditor.DirectX.DrawElement
         public Color4 YAxisHeadColor { get; set; }
         public Color4 CenterSquareColor { get; set; }
 
-        public (Vector3 A, Vector3 B, Vector3 C) XAxisHeadVertices
+        public Triangle XAxisHeadVertices
         {
             get
             {
@@ -58,7 +58,7 @@ namespace IwUVEditor.DirectX.DrawElement
                         );
             }
         }
-        public (Vector3 A, Vector3 B, Vector3 C) YAxisHeadVertices
+        public Triangle YAxisHeadVertices
         {
             get
             {
@@ -260,6 +260,78 @@ namespace IwUVEditor.DirectX.DrawElement
             Center,
             X,
             Y,
+        }
+    }
+
+    public struct Triangle
+    {
+        public Vector3 A { get; }
+        public Vector3 B { get; }
+        public Vector3 C { get; }
+
+        public Triangle(Vector3 a, Vector3 b, Vector3 c)
+        {
+            A = a;
+            B = b;
+            C = c;
+        }
+
+        public Triangle Shift(Vector3 offset) =>
+            new Triangle(A + offset, B + offset, C + offset);
+
+        public bool Include(Vector3 query)
+        {
+            var ab = B - A;
+            var bc = C - B;
+            var ca = A - C;
+
+            var aq = query - A;
+            var bq = query - B;
+            var cq = query - C;
+
+            var proA = Vector3.Cross(ca, aq);
+            var proB = Vector3.Cross(ab, bq);
+            var proC = Vector3.Cross(bc, cq);
+
+            proA.Normalize();
+            proB.Normalize();
+            proC.Normalize();
+
+            return (proA == proB) && (proB == proC);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Triangle other &&
+                   A.Equals(other.A) &&
+                   B.Equals(other.B) &&
+                   C.Equals(other.C);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 793064651;
+            hashCode = hashCode * -1521134295 + A.GetHashCode();
+            hashCode = hashCode * -1521134295 + B.GetHashCode();
+            hashCode = hashCode * -1521134295 + C.GetHashCode();
+            return hashCode;
+        }
+
+        public void Deconstruct(out Vector3 a, out Vector3 b, out Vector3 c)
+        {
+            a = A;
+            b = B;
+            c = C;
+        }
+
+        public static implicit operator (Vector3 A, Vector3 B, Vector3 C)(Triangle value)
+        {
+            return (value.A, value.B, value.C);
+        }
+
+        public static implicit operator Triangle((Vector3 A, Vector3 B, Vector3 C) value)
+        {
+            return new Triangle(value.A, value.B, value.C);
         }
     }
 }

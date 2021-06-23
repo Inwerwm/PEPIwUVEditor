@@ -109,7 +109,7 @@ namespace IwUVEditor.Tool
                 // コマンド生成が可能であることを申告
                 IsReady = true;
                 // プレビュー表示のための変換行列を初期化
-                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));
+                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] = Matrix.Identity);
             }
         }
 

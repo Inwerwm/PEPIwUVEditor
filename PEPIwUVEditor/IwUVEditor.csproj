@@ -63,7 +63,7 @@
     <Compile Include="Command\CommandApplyVertexEdit.cs" />
     <Compile Include="Command\CommandSelectVertices.cs" />
     <Compile Include="Command\CommandSetPosition.cs" />
-    <Compile Include="DirectX\DrawElement\MovingController.cs" />
+    <Compile Include="DirectX\DrawElement\MovingControllerPolygons.cs" />
     <Compile Include="Controller\EditController.cs" />
     <Compile Include="Controller\MoveController.cs" />
     <Compile Include="Controller\RotateController.cs" />
@@ -72,7 +72,7 @@
     <Compile Include="DirectX\DrawElement\DrawElement.cs" />
     <Compile Include="DirectX\DrawElement\DrawElementInstanced.cs" />
     <Compile Include="DirectX\DrawElement\RotationCenterSign.cs" />
-    <Compile Include="DirectX\DrawElement\ScalingController.cs" />
+    <Compile Include="DirectX\DrawElement\ScalingControllerPolygons.cs" />
     <Compile Include="DirectX\Vertex\IDxVertex.cs" />
     <Compile Include="DirectX\Vertex\VectorOffset.cs" />
     <Compile Include="Extensions.cs" />

@@ -15,7 +15,7 @@ namespace IwUVEditor.Controller
         private bool disposedValue;
         private Vector3 center;
 
-        private ScalingController Controller { get; }
+        private ScalingControllerPolygons Controller { get; }
         public override Vector3 Center
         {
             get => center;
@@ -28,7 +28,7 @@ namespace IwUVEditor.Controller
 
         public ScaleController(UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process)
         {
-            Controller = new ScalingController(
+            Controller = new ScalingControllerPolygons(
                 device,
                 Process.Effect,
                 Process.Rasterize.Solid,
@@ -51,10 +51,10 @@ namespace IwUVEditor.Controller
 
         protected override void ApplyModeChange(SelectionMode mode)
         {
-            Controller.SelectedElement = CurrentMode == SelectionMode.Center ? ScalingController.Elements.Center
-                           : CurrentMode == SelectionMode.X ? ScalingController.Elements.X
-                           : CurrentMode == SelectionMode.Y ? ScalingController.Elements.Y
-                           : ScalingController.Elements.None;
+            Controller.SelectedElement = CurrentMode == SelectionMode.Center ? ScalingControllerPolygons.Elements.Center
+                           : CurrentMode == SelectionMode.X ? ScalingControllerPolygons.Elements.X
+                           : CurrentMode == SelectionMode.Y ? ScalingControllerPolygons.Elements.Y
+                           : ScalingControllerPolygons.Elements.None;
         }
 
         protected override SelectionMode CalcMode(InputStates input)

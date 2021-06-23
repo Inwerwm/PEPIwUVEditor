@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.DirectX.DrawElement
 {
-    class MovingController : DrawElement<VectorOffset>, IDrawElement
+    class MovingControllerPolygons : DrawElement<VectorOffset>, IDrawElement
     {
         private Vector3 center;
         private Vector2 screenSize;
@@ -44,7 +44,7 @@ namespace IwUVEditor.DirectX.DrawElement
         public Color4 YAxisHeadColor { get; set; }
         public Color4 CenterSquareColor { get; set; }
 
-        public MovingController(Device device, Effect effect, RasterizerState drawMode) : base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
+        public MovingControllerPolygons(Device device, Effect effect, RasterizerState drawMode) : base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
         {
             ArrowShaftLength = 0.1f;
             ArrowHeadWidth = 0.005f;

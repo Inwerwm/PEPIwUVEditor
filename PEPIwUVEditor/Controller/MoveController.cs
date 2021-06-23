@@ -15,7 +15,7 @@ namespace IwUVEditor.Controller
         private bool disposedValue;
         private Vector3 center;
 
-        private MovingController Controller { get; }
+        private MovingControllerPolygons Controller { get; }
         public override Vector3 Center
         {
             get => center;
@@ -28,7 +28,7 @@ namespace IwUVEditor.Controller
 
         public MoveController(UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process)
         {
-            Controller = new MovingController(device, Process.Effect, Process.Rasterize.Solid)
+            Controller = new MovingControllerPolygons(device, Process.Effect, Process.Rasterize.Solid)
             {
                 Center = Center,
                 ScreenSize = Process.ScreenSize

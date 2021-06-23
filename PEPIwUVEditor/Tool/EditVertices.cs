@@ -78,33 +78,35 @@ namespace IwUVEditor.Tool
         {
             Input = input;
 
-            Controller.ReadInput(input, (ins) =>
+            Controller.ReadInput(input, DoEdit);
+        }
+
+        private void DoEdit(InputStates input)
+        {
+            if (!TargetVertices.Any())
+                return;
+
+            if (input.MouseLeft.IsStartingJust)
             {
-                if (!TargetVertices.Any())
-                    return;
+                TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
+                TotalOffset = Matrix.Identity;
+                StartPos = input.MouseLeft.Start;
+            }
+            if (input.MouseLeft.IsDragging)
+            {
+                CurrentPos = input.MouseLeft.Current;
+                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset);
+                TotalOffset *= Offset;
 
-                if (ins.MouseLeft.IsStartingJust)
-                {
-                    TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
-                    TotalOffset = Matrix.Identity;
-                    StartPos = ins.MouseLeft.Start;
-                }
-                if (ins.MouseLeft.IsDragging)
-                {
-                    CurrentPos = ins.MouseLeft.Current;
-                    TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset);
-                    TotalOffset *= Offset;
-
-                    // オフセットを得た時点で現在地点を次の初期位置扱いする
-                    // 評価ごとの移動量にすることで累積が可能になる
-                    StartPos = CurrentPos;
-                }
-                if (ins.MouseLeft.IsEndingJust)
-                {
-                    IsReady = true;
-                    TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));
-                }
-            });
+                // オフセットを得た時点で現在地点を次の初期位置扱いする
+                // 評価ごとの移動量にすることで累積が可能になる
+                StartPos = CurrentPos;
+            }
+            if (input.MouseLeft.IsEndingJust)
+            {
+                IsReady = true;
+                TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));
+            }
         }
 
         protected virtual void Dispose(bool disposing)

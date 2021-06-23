@@ -22,34 +22,9 @@ namespace IwUVEditor.Tool
 
         public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new RotateController(process, device)){}
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            Controller.Center = CenterPos;
-        }
-
-        public override void PrepareDrawing()
-        {
-            base.PrepareDrawing();
-            Controller.PrepareDrawing();
-        }
-
         public override void ReadInput(InputStates input)
         {
             Controller.ReadInput(input, base.ReadInput);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    Controller?.Dispose();
-                }
-            }
-
-            base.Dispose(disposing);
         }
     }
 }

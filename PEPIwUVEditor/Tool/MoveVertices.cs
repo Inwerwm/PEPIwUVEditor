@@ -29,18 +29,6 @@ namespace IwUVEditor.Tool
 
         public MoveVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new MoveController(process, device)) {}
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            Controller.Center = CenterPos;
-        }
-
-        public override void PrepareDrawing()
-        {
-            base.PrepareDrawing();
-            Controller.PrepareDrawing();
-        }
-
         public override void ReadInput(InputStates input)
         {
             Controller.ReadInput(input, base.ReadInput);

@@ -25,7 +25,7 @@ namespace IwUVEditor.DirectX.DrawElement
         public Color4 YAxisHeadColor { get; set; }
         public Color4 CenterSquareColor { get; set; }
 
-        public MovingController(Device device, EffectPass usingEffectPass, RasterizerState drawMode) : base(device, usingEffectPass, drawMode)
+        public MovingController(Device device, Effect effect, RasterizerState drawMode) : base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
         {
             ArrowShaftLength = 0.1f;
             ArrowHeadWidth = 0.005f;

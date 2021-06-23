@@ -42,6 +42,19 @@ namespace IwUVEditor.Controller
             Controller.ScreenSize = screenSize;
         }
 
+        public override void ReadInput(InputStates input, Action<InputStates> editFunction)
+        {
+            base.ReadInput(input, editFunction);
+            if (input.MouseLeft.IsDragging)
+                MoveCenter(input);
+        }
+
+        protected override void MoveCenter(InputStates input)
+        {
+            Vector2 offset = input.MouseLeft.Offset;
+            Center += new Vector3(CurrentMode == SelectionMode.Y ? 0 : offset.X, CurrentMode == SelectionMode.X ? 0 : offset.Y, 0);
+        }
+
         public override void PrepareDrawing()
         {
             Controller.Prepare();

@@ -20,7 +20,7 @@ namespace IwUVEditor.Tool
 
         protected override Matrix Offset => Matrix.Translation(new Vector3(CurrentPos - StartPos, 0));
 
-        public MoveVertices(UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process) {
+        public MoveVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process) {
             Controller = new MoveController(process, device);
         }
 

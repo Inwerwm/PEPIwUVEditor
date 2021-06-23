@@ -1,4 +1,5 @@
 ﻿using IwUVEditor.Command;
+using IwUVEditor.Controller;
 using IwUVEditor.DirectX;
 using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
@@ -19,6 +20,7 @@ namespace IwUVEditor.Tool
 
         protected UVViewDrawProcess Process { get; }
         protected InputStates Input { get; set; }
+        protected EditController Controller { get; }
 
         protected List<IPXVertex> TargetVertices { get; set; }
         protected Material TargetMaterial => Process.Current.Material;
@@ -42,9 +44,10 @@ namespace IwUVEditor.Tool
         protected abstract Matrix Offset { get; }
         protected Matrix TotalOffset { get; set; }
 
-        protected EditVertices(UVViewDrawProcess process)
+        protected EditVertices(UVViewDrawProcess process, EditController controller)
         {
             Process = process;
+            Controller = controller;
         }
 
         public virtual void Initialize() 
@@ -105,6 +108,7 @@ namespace IwUVEditor.Tool
             {
                 if (disposing)
                 {
+                    Controller?.Dispose();
                 }
                 disposedValue = true;
             }

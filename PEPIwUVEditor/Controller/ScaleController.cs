@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.Controller
 {
-    class ScaleController : EditController, IDisposable
+    class ScaleController : EditController
     {
         private bool disposedValue;
         private Vector3 center;
@@ -88,7 +88,7 @@ namespace IwUVEditor.Controller
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             Dispose(disposing: true);
             GC.SuppressFinalize(this);

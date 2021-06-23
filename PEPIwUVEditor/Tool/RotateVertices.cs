@@ -13,8 +13,6 @@ namespace IwUVEditor.Tool
 {
     class RotateVertices : EditVertices, IEditTool
     {
-        RotateController Controller { get; }
-
         /// <summary>
         /// 回転量/移動量
         /// </summary>
@@ -22,10 +20,7 @@ namespace IwUVEditor.Tool
         protected override Matrix Offset =>
             Matrix.Translation(Controller.Center * -1) * Matrix.RotationZ((float)(Step * Input.MouseOffset.Y * 2 * Math.PI)) * Matrix.Translation(Controller.Center);
 
-        public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
-        {
-            Controller = new RotateController(process, device);
-        }
+        public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new RotateController(process, device)){}
 
         public override void Initialize()
         {

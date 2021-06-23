@@ -7,8 +7,6 @@ namespace IwUVEditor.Tool
 {
     class ScaleVertices : EditVertices, IEditTool
     {
-        private ScaleController Controller { get; }
-
         private static float Step => 0.01f;
 
         protected override Matrix Offset
@@ -34,10 +32,7 @@ namespace IwUVEditor.Tool
             }
         }
 
-        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
-        {
-            Controller = new ScaleController(Process, device);
-        }
+        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new ScaleController(process, device)){}
 
         public override void Initialize()
         {

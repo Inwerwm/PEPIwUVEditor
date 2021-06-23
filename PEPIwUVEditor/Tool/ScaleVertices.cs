@@ -1,5 +1,5 @@
 ﻿using IwUVEditor.DirectX;
-using IwUVEditor.EditController;
+using IwUVEditor.Controller;
 using IwUVEditor.StateContainer;
 using SlimDX;
 
@@ -18,10 +18,10 @@ namespace IwUVEditor.Tool
                 Matrix currentScale;
                 switch (Controller.CurrentMode)
                 {
-                    case EditController.EditController.SelectionMode.X:
+                    case EditController.SelectionMode.X:
                         currentScale = Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1, 1));
                         break;
-                    case EditController.EditController.SelectionMode.Y:
+                    case EditController.SelectionMode.Y:
                         currentScale = Matrix.Scaling(new Vector3(1, 1 - Input.MouseOffset.Y * Step, 1));
                         break;
                     default:

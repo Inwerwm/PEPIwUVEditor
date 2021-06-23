@@ -1,6 +1,6 @@
 ﻿using IwUVEditor.DirectX;
 using IwUVEditor.DirectX.DrawElement;
-using IwUVEditor.EditController;
+using IwUVEditor.Controller;
 using IwUVEditor.StateContainer;
 using SlimDX;
 using System;

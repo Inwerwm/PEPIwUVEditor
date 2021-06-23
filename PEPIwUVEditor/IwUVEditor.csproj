@@ -64,10 +64,10 @@
     <Compile Include="Command\CommandSelectVertices.cs" />
     <Compile Include="Command\CommandSetPosition.cs" />
     <Compile Include="DirectX\DrawElement\MovingController.cs" />
-    <Compile Include="EditController\EditController.cs" />
-    <Compile Include="EditController\MoveController.cs" />
-    <Compile Include="EditController\RotateController.cs" />
-    <Compile Include="EditController\ScaleController.cs" />
+    <Compile Include="Controller\EditController.cs" />
+    <Compile Include="Controller\MoveController.cs" />
+    <Compile Include="Controller\RotateController.cs" />
+    <Compile Include="Controller\ScaleController.cs" />
     <Compile Include="Log\DebugLog.cs" />
     <Compile Include="DirectX\DrawElement\DrawElement.cs" />
     <Compile Include="DirectX\DrawElement\DrawElementInstanced.cs" />

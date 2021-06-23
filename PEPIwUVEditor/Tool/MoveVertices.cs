@@ -1,6 +1,6 @@
 ﻿using IwUVEditor.Command;
 using IwUVEditor.DirectX;
-using IwUVEditor.EditController;
+using IwUVEditor.Controller;
 using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
 using PEPlugin.Pmx;

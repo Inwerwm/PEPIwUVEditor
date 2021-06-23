@@ -2,7 +2,7 @@
 using SlimDX;
 using System;
 
-namespace IwUVEditor.EditController
+namespace IwUVEditor.Controller
 {
     class RotateController : EditController, IDisposable
     {

@@ -85,9 +85,9 @@ namespace IwUVEditor.DirectX.DrawElement
         public MovingControllerPolygons(Device device, Effect effect, RasterizerState drawMode) : base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
         {
             ArrowShaftLength = 0.1f;
-            ArrowHeadWidth = 0.005f;
-            ArrowHeadLength = 0.05f;
-            ArrowHeadWidth = 0.025f;
+            ArrowShaftWidth = 0.001f;
+            ArrowHeadLength = 0.1f;
+            ArrowHeadWidth = 0.05f;
             CenterSquareEdgeLength = 0.025f;
 
             ArrowShaftColor = new Color4(0, 0, 0);

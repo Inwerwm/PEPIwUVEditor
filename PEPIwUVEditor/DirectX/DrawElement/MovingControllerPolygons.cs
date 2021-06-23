@@ -1,11 +1,7 @@
 ﻿using IwUVEditor.DirectX.Vertex;
 using SlimDX;
 using SlimDX.Direct3D11;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.DirectX.DrawElement
 {
@@ -33,6 +29,11 @@ namespace IwUVEditor.DirectX.DrawElement
                 UpdateVertices();
             }
         }
+        private Vector3 AspectRatio => new Vector3(
+                ScreenSize.X > ScreenSize.Y ? ScreenSize.Y / ScreenSize.X : 1,
+                ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1,
+                0
+            );
 
         public float ArrowShaftLength { get; set; }
         public float ArrowShaftWidth { get; set; }
@@ -44,6 +45,31 @@ namespace IwUVEditor.DirectX.DrawElement
         public Color4 XAxisHeadColor { get; set; }
         public Color4 YAxisHeadColor { get; set; }
         public Color4 CenterSquareColor { get; set; }
+
+        public (Vector3 A, Vector3 B, Vector3 C) XAxisHeadVertices
+        {
+            get
+            {
+                Vector3 aspectRatio = AspectRatio;
+                return (
+                            new Vector3(ArrowShaftLength + ArrowHeadLength, 0, 0).ElementProduct(aspectRatio),
+                            new Vector3(ArrowShaftLength, ArrowHeadWidth / 2, 0).ElementProduct(aspectRatio),
+                            new Vector3(ArrowShaftLength, -ArrowHeadWidth / 2, 0).ElementProduct(aspectRatio)
+                        );
+            }
+        }
+        public (Vector3 A, Vector3 B, Vector3 C) YAxisHeadVertices
+        {
+            get
+            {
+                Vector3 aspectRatio = AspectRatio;
+                return (
+                            new Vector3(0, ArrowShaftLength + ArrowHeadLength, 0).ElementProduct(aspectRatio),
+                            new Vector3(ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectRatio),
+                            new Vector3(-ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectRatio)
+                        );
+            }
+        }
 
         internal Elements SelectedElement
         {
@@ -85,39 +111,35 @@ namespace IwUVEditor.DirectX.DrawElement
 
         protected override VectorOffset[] CreateVertices()
         {
-            var aspectCorrection = new Vector3(
-                ScreenSize.X > ScreenSize.Y ? ScreenSize.Y / ScreenSize.X : 1,
-                ScreenSize.Y > ScreenSize.X ? ScreenSize.X / ScreenSize.Y : 1,
-                0
-            );
-
             Color4 xAxisHeadColor = SelectedElement == Elements.X ? SelectionColor : XAxisHeadColor;
             Color4 yAxisHeadColor = SelectedElement == Elements.Y ? SelectionColor : YAxisHeadColor;
+
+            Vector3 aspectRatio = AspectRatio;
 
             var arrowShaftX = new[]
             {
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(0, ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(0, ArrowShaftWidth / 2, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(0, -ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(0, -ArrowShaftWidth / 2, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(ArrowShaftLength, ArrowShaftWidth / 2, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, -ArrowShaftWidth / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(ArrowShaftLength, -ArrowShaftWidth / 2, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 }
             };
@@ -127,25 +149,25 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(-ArrowShaftWidth / 2, 0, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(-ArrowShaftWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectRatio),
                     Color = ArrowShaftColor
                 }
             };
@@ -155,69 +177,71 @@ namespace IwUVEditor.DirectX.DrawElement
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectRatio),
                     Color = CenterSquareColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectRatio),
                     Color = CenterSquareColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(-CenterSquareEdgeLength / 2, CenterSquareEdgeLength / 2, 0).ElementProduct(aspectRatio),
                     Color = CenterSquareColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = new Vector3(-CenterSquareEdgeLength / 2, -CenterSquareEdgeLength / 2, 0).ElementProduct(aspectRatio),
                     Color = CenterSquareColor
                 }
             };
 
+            (var xa, var xb, var xc) = XAxisHeadVertices;
             var arrowHeadX = new[]
             {
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength + ArrowHeadLength, 0, 0).ElementProduct(aspectCorrection),
+                    Offset = xa,
                     Color = xAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = xb,
                     Color = xAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowShaftLength, -ArrowHeadWidth / 2, 0).ElementProduct(aspectCorrection),
+                    Offset = xc,
                     Color = xAxisHeadColor
                 }
             };
 
+            (var ya, var yb, var yc) = YAxisHeadVertices;
             var arrowHeadY = new[]
             {
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(0, ArrowShaftLength + ArrowHeadLength, 0).ElementProduct(aspectCorrection),
+                    Offset = ya,
                     Color = yAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
+                    Offset = yb,
                     Color = yAxisHeadColor
                 },
                 new VectorOffset
                 {
                     Position = Center,
-                    Offset = new Vector3(-ArrowHeadWidth / 2, ArrowShaftLength, 0).ElementProduct(aspectCorrection),
+                    Offset = yc,
                     Color = yAxisHeadColor
                 }
             };

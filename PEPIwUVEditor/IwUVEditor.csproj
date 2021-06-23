@@ -65,7 +65,7 @@
     <Compile Include="Command\CommandSetPosition.cs" />
     <Compile Include="EditController\EditController.cs" />
     <Compile Include="EditController\MoveController.cs" />
-    <Compile Include="EditController\RotationController.cs" />
+    <Compile Include="EditController\RotateController.cs" />
     <Compile Include="EditController\ScaleController.cs" />
     <Compile Include="Log\DebugLog.cs" />
     <Compile Include="DirectX\DrawElement\DrawElement.cs" />

@@ -13,7 +13,7 @@ namespace IwUVEditor.Tool
 {
     class RotateVertices : EditVertices, IEditTool
     {
-        RotationController Controller { get; }
+        RotateController Controller { get; }
 
         /// <summary>
         /// 回転量/移動量
@@ -24,7 +24,7 @@ namespace IwUVEditor.Tool
 
         public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
         {
-            Controller = new RotationController(process, device);
+            Controller = new RotateController(process, device);
         }
 
         public override void Initialize()

@@ -4,7 +4,7 @@ using System;
 
 namespace IwUVEditor.EditController
 {
-    class RotationController : EditController, IDisposable
+    class RotateController : EditController, IDisposable
     {
         private bool disposedValue;
         private Vector3 center;
@@ -29,7 +29,7 @@ namespace IwUVEditor.EditController
                 CenterSign.Radius = value;
             }
         }
-        public RotationController(DirectX.UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process)
+        public RotateController(DirectX.UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process)
         {
             CenterSign = new DirectX.DrawElement.RotationCenterSign(
                 device,

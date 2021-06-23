@@ -14,7 +14,6 @@ namespace IwUVEditor.Tool
     internal abstract class EditVertices : IEditTool
     {
         protected bool disposedValue;
-        private Vector3 centerPos;
 
         public bool IsReady { get; private set; }
 
@@ -28,8 +27,16 @@ namespace IwUVEditor.Tool
         protected Vector2 CurrentPos { get; set; }
         protected Vector3 CenterPos
         {
-            get => centerPos;
-            private set => centerPos = value;
+            get
+            {
+                if (!TargetVertices.Any())
+                    return new Vector3();
+
+                Vector2 min = new Vector2(TargetVertices.Min(vtx => vtx.UV.X), TargetVertices.Min(vtx => vtx.UV.Y));
+                Vector2 max = new Vector2(TargetVertices.Max(vtx => vtx.UV.X), TargetVertices.Max(vtx => vtx.UV.Y));
+                Vector2 center = new Vector2((min.X + max.X) / 2, (min.Y + max.Y) / 2);
+                return new Vector3(center, 0);
+            }
         }
 
         protected abstract Matrix Offset { get; }
@@ -43,8 +50,6 @@ namespace IwUVEditor.Tool
         public virtual void Initialize() 
         {
             TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
-            if (TargetVertices.Any())
-                CenterPos = CalcCenterPos();
         }
 
         public IEditorCommand CreateCommand(Material target)
@@ -92,14 +97,6 @@ namespace IwUVEditor.Tool
                 IsReady = true;
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));
             }
-        }
-
-        private Vector3 CalcCenterPos()
-        {
-            Vector2 min = new Vector2(TargetVertices.Min(vtx => vtx.UV.X), TargetVertices.Min(vtx => vtx.UV.Y));
-            Vector2 max = new Vector2(TargetVertices.Max(vtx => vtx.UV.X), TargetVertices.Max(vtx => vtx.UV.Y));
-            Vector2 center = new Vector2((min.X + max.X) / 2, (min.Y + max.Y) / 2);
-            return new Vector3(center, 0);
         }
 
         protected virtual void Dispose(bool disposing)

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.DirectX.DrawElement
 {
-    class ScalingController : DrawElement<VectorOffset>, IDrawElement
+    class ScalingControllerPolygons : DrawElement<VectorOffset>, IDrawElement
     {
         private Vector2 screenSize;
         private Vector3 center;
@@ -67,7 +67,7 @@ namespace IwUVEditor.DirectX.DrawElement
         public SquareCoord XSquareCoord => CreateSquare(Size * AxisRatio / (MarginRatio + 2), (MarginRatio + 1) * 2, 0);
         public SquareCoord YSquareCoord => CreateSquare(Size * AxisRatio / (MarginRatio + 2), 0, (MarginRatio + 1) * 2);
 
-        public ScalingController(Device device, Effect effect, RasterizerState drawMode, float size, Vector2 screenSize) :
+        public ScalingControllerPolygons(Device device, Effect effect, RasterizerState drawMode, float size, Vector2 screenSize) :
             base(device, effect.GetTechniqueByName("VectorOffsetTechnique").GetPassByName("DrawScalingControllerPass"), drawMode)
         {
             Size = size;

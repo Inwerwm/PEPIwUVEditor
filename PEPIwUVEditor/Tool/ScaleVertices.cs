@@ -1,5 +1,5 @@
 ﻿using IwUVEditor.DirectX;
-using IwUVEditor.DirectX.DrawElement;
+using IwUVEditor.Controller;
 using IwUVEditor.StateContainer;
 using SlimDX;
 
@@ -7,124 +7,54 @@ namespace IwUVEditor.Tool
 {
     class ScaleVertices : EditVertices, IEditTool
     {
-        private Vector3 scalingCenter;
-
-        SlimDX.Direct3D11.Device Device { get; }
-
-        ScalingController Controller { get; }
-        Vector2 ScreenSize { get; set; }
-
-        Vector3 ScalingCenter
-        {
-            get => scalingCenter;
-            set
-            {
-                scalingCenter = value;
-                Controller.Center = scalingCenter;
-            }
-        }
+        private ScaleController Controller { get; }
 
         private static float Step => 0.01f;
-        Mode CurrentMode { get; set; }
-        Matrix CurrentScale
+
+        protected override Matrix Offset
         {
             get
             {
-                switch (CurrentMode)
+                Matrix currentScale;
+                switch (Controller.CurrentMode)
                 {
-                    case Mode.X:
-                        return XScale;
-                    case Mode.Y:
-                        return YScale;
+                    case EditController.SelectionMode.X:
+                        currentScale = Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1, 1));
+                        break;
+                    case EditController.SelectionMode.Y:
+                        currentScale = Matrix.Scaling(new Vector3(1, 1 - Input.MouseOffset.Y * Step, 1));
+                        break;
                     default:
-                        return BothScale;
+                        currentScale = Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1 - Input.MouseOffset.Y * Step, 1));
+                        break;
                 }
+
+                Matrix centerOffset = Matrix.Translation(Controller.Center);
+                return Matrix.Invert(centerOffset) * currentScale * centerOffset;
             }
         }
 
-        private Matrix BothScale => Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1 - Input.MouseOffset.Y * Step, 1));
-        private Matrix XScale => Matrix.Scaling(new Vector3(1 + Input.MouseOffset.X * Step, 1, 1));
-        private Matrix YScale => Matrix.Scaling(new Vector3(1, 1 - Input.MouseOffset.Y * Step, 1));
-
-        protected override Matrix Offset => Matrix.Invert(Matrix.Translation(ScalingCenter)) * CurrentScale * Matrix.Translation(ScalingCenter);
-
         public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process)
         {
-            Device = device;
-
-            Controller = new ScalingController(Device, Process.Effect, Process.Rasterize.Solid, 0.1f, Process.ScreenSize);
+            Controller = new ScaleController(Process, device);
         }
 
         public override void Initialize()
         {
             base.Initialize();
-            ScalingCenter = CenterPos;
+            Controller.Center = CenterPos;
         }
 
         public override void PrepareDrawing()
         {
             base.PrepareDrawing();
-            if (ScreenSize != Process.ScreenSize)
-            {
-                Controller.ScreenSize = Process.ScreenSize;
-                ScreenSize = Process.ScreenSize;
-            }
-            Controller.Prepare();
+            Controller.PrepareDrawing();
         }
 
         public override void ReadInput(InputStates input)
         {
-
-            var modeTmp = CurrentMode;
-
-            if (!(input.MouseLeft.IsDragging || input.MouseLeft.IsEndingJust))
-                CurrentMode = checkMode(input.MousePos);
-
-            switch (CurrentMode)
-            {
-                case Mode.MoveCenter:
-                    MoveCenter(input);
-                    break;
-                default:
-                    base.ReadInput(input);
-                    break;
-            }
-
-            if (input.MouseLeft.IsEndingJust)
-                CurrentMode = checkMode(input.MousePos);
-
-            if (modeTmp != CurrentMode)
-                Controller.SelectedElement = CurrentMode == Mode.MoveCenter ? ScalingController.Elements.Center
-                                           : CurrentMode == Mode.X ? ScalingController.Elements.X
-                                           : CurrentMode == Mode.Y ? ScalingController.Elements.Y
-                                           : ScalingController.Elements.None;
-
-            Mode checkMode(Vector2 mousePos)
-            {
-                var rationalMousePos = mousePos.ElementDivision(Process.ScreenSize);
-
-                Vector2 centerOnScreen = Process.WorldPosToScreenPos(ScalingCenter.ToVector2());
-                var centerOffset = centerOnScreen.ElementDivision(Process.ScreenSize).ToVector3();
-
-                var cSq = Controller.CenterSquareCoord.ToRectangleF(centerOffset, cd => cd / 2);
-                var xSq = Controller.XSquareCoord.ToRectangleF(centerOffset, cd => cd / 2);
-                var ySq = Controller.YSquareCoord.ReverseY().ToRectangleF(centerOffset, cd => cd / 2);
-
-                return cSq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.MoveCenter :
-                       xSq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.X :
-                       ySq.Contains(rationalMousePos.X, rationalMousePos.Y) ? Mode.Y :
-                                                                              Mode.Both;
-            }
+            Controller.ReadInput(input, base.ReadInput);
         }
-
-        private void MoveCenter(InputStates input)
-        {
-            if (input.MouseLeft.IsDragging)
-            {
-                ScalingCenter += new Vector3(input.MouseLeft.Offset, 0);
-            }
-        }
-
 
         protected override void Dispose(bool disposing)
         {
@@ -137,14 +67,6 @@ namespace IwUVEditor.Tool
             }
 
             base.Dispose(disposing);
-        }
-
-        enum Mode
-        {
-            Both,
-            X,
-            Y,
-            MoveCenter
         }
     }
 }

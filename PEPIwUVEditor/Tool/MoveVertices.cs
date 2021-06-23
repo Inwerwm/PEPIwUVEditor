@@ -18,7 +18,16 @@ namespace IwUVEditor.Tool
     {
         private MoveController Controller { get; }
 
-        protected override Matrix Offset => Matrix.Translation(new Vector3(CurrentPos - StartPos, 0));
+        protected override Matrix Offset
+        {
+            get
+            {
+                Vector3 trans = Controller.CurrentMode == EditController.SelectionMode.X ? new Vector3(CurrentPos.X - StartPos.X, 0, 0)
+                              : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(0, CurrentPos.Y - StartPos.Y, 0)
+                              : new Vector3(CurrentPos - StartPos, 0);
+                return Matrix.Translation(trans);
+            }
+        }
 
         public MoveVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process) {
             Controller = new MoveController(process, device);

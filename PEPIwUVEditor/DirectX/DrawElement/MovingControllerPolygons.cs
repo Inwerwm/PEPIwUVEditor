@@ -287,23 +287,19 @@ namespace IwUVEditor.DirectX.DrawElement
 
         public bool Include(Vector3 query)
         {
-            var ab = B - A;
-            var bc = C - B;
-            var ca = A - C;
+            var AB = B - A;
+            var BC = C - B;
+            var CA = A - C;
 
-            var aq = query - A;
-            var bq = query - B;
-            var cq = query - C;
+            var AQ = query - A;
+            var BQ = query - B;
+            var CQ = query - C;
 
-            var proA = Vector3.Cross(ca, aq);
-            var proB = Vector3.Cross(ab, bq);
-            var proC = Vector3.Cross(bc, cq);
+            double c1 = AB.X * BQ.Y - AB.Y * BQ.X;
+            double c2 = BC.X * CQ.Y - BC.Y * CQ.X;
+            double c3 = CA.X * AQ.Y - CA.Y * AQ.X;
 
-            proA.Normalize();
-            proB.Normalize();
-            proC.Normalize();
-
-            return (proA == proB) && (proB == proC);
+            return (c1 > 0 && c2 > 0 && c3 > 0) || (c1 < 0 && c2 < 0 && c3 < 0);
         }
 
         public override bool Equals(object obj)

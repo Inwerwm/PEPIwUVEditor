@@ -81,6 +81,7 @@ namespace IwUVEditor.EditController
                 if (disposing)
                 {
                     Controller.Dispose();
+                    Process.ScreenSizeChanged -= Process_ScreenSizeChanged;
                 }
 
                 disposedValue = true;

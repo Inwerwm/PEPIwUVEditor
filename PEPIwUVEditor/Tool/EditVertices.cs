@@ -94,6 +94,8 @@ namespace IwUVEditor.Tool
             }
             if (input.MouseLeft.IsDragging)
             {
+                // 頂点編集のプレビュー
+                // 直接頂点位置を編集するわけにはいかないので見た目だけ変換する
                 CurrentPos = input.MouseLeft.Current;
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Offset);
                 TotalOffset *= Offset;
@@ -104,7 +106,9 @@ namespace IwUVEditor.Tool
             }
             if (input.MouseLeft.IsEndingJust)
             {
+                // コマンド生成が可能であることを申告
                 IsReady = true;
+                // プレビュー表示のための変換行列を初期化
                 TargetVertices.AsParallel().ForAll(vtx => TargetMaterial.TemporaryTransformMatrices[vtx] *= Matrix.Invert(TotalOffset));
             }
         }

@@ -56,8 +56,8 @@ namespace IwUVEditor
                         rst.Min.Y > crt.Y ? crt.Y : rst.Min.Y
                     ),
                     new Vector2(
-                        rst.Max.X > crt.X ? crt.X : rst.Max.X,
-                        rst.Max.Y > crt.Y ? crt.Y : rst.Max.Y
+                        rst.Max.X < crt.X ? crt.X : rst.Max.X,
+                        rst.Max.Y < crt.Y ? crt.Y : rst.Max.Y
                     )
                 )
             );
@@ -75,9 +75,9 @@ namespace IwUVEditor
                         rst.Min.Z > crt.Z ? crt.Z : rst.Min.Z
                     ),
                     new Vector3(
-                        rst.Max.X > crt.X ? crt.X : rst.Max.X,
-                        rst.Max.Y > crt.Y ? crt.Y : rst.Max.Y,
-                        rst.Max.Z > crt.Z ? crt.Z : rst.Max.Z
+                        rst.Max.X < crt.X ? crt.X : rst.Max.X,
+                        rst.Max.Y < crt.Y ? crt.Y : rst.Max.Y,
+                        rst.Max.Z < crt.Z ? crt.Z : rst.Max.Z
                     )
                 )
             );

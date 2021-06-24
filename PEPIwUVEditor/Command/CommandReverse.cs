@@ -27,7 +27,10 @@ namespace IwUVEditor.Command
             (var min, var max) = TargetVertices.Select(vtx => vtx.UV.ToVector2()).MinMax();
             var center = ((min + max) / 2).ToVector3();
 
-            Matrix reverser = Matrix.Invert(Matrix.Translation(center)) * Matrix.Scaling(ReverseAxis != Axis.Y ? -1 : 1, ReverseAxis != Axis.X ? -1 : 1, 1) * Matrix.Translation(center);
+            bool XorBoth = ReverseAxis != Axis.Y;
+            bool YorBoth = ReverseAxis != Axis.X;
+
+            Matrix reverser = Matrix.Invert(Matrix.Translation(center)) * Matrix.Scaling(XorBoth ? -1 : 1, YorBoth ? -1 : 1, 1) * Matrix.Translation(center);
             TargetVertices.AsParallel().ForAll(vtx => vtx.UV = Vector2.TransformCoordinate(vtx.UV, reverser));
         }
 

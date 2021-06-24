@@ -163,10 +163,6 @@ namespace IwUVEditor
             DrawProcess.RadiusOfPositionSquare = (float)(sender as NumericUpDown).Value;
         }
 
-        private void buttonReverseV_Click(object sender, EventArgs e)
-        {
-        }
-
         private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Editor.Undo();
@@ -255,6 +251,16 @@ namespace IwUVEditor
         private void UVを反映ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Editor.SendModel();
+        }
+
+        private void buttonReverseV_Click(object sender, EventArgs e)
+        {
+            Editor.ReverseVerticesVertical();
+        }
+
+        private void buttonReverseH_Click(object sender, EventArgs e)
+        {
+            Editor.ReverseVerticesHorizontal();
         }
     }
 }

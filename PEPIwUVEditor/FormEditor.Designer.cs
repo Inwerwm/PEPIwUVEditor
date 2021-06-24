@@ -205,6 +205,7 @@ namespace IwUVEditor
             this.buttonReverseH.TabIndex = 3;
             this.buttonReverseH.Text = "鏡像反転";
             this.buttonReverseH.UseVisualStyleBackColor = true;
+            this.buttonReverseH.Click += new System.EventHandler(this.buttonReverseH_Click);
             // 
             // buttonResetCamera
             // 
@@ -258,7 +259,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 983;
+            this.splitUVMat.SplitterDistance = 981;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -270,7 +271,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(386, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(388, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 

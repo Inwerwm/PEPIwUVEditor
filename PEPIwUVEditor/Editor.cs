@@ -165,6 +165,25 @@ namespace IwUVEditor
             Do(Current.Material, new CommandSetPosition(selectedVertices, PositionClip.Value));
         }
 
+        private void ReverseVertices(CommandReverse.Axis axis)
+        {
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value);
+            if (!selectedVertices.Any())
+                return;
+
+            Do(Current.Material, new CommandReverse(selectedVertices.Select(selected => selected.Key), axis));
+        }
+
+        public void ReverseVerticesHorizontal()
+        {
+            ReverseVertices(CommandReverse.Axis.X);
+        }
+
+        public void ReverseVerticesVertical()
+        {
+            ReverseVertices(CommandReverse.Axis.Y);
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

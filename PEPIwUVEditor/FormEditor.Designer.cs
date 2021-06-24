@@ -113,11 +113,11 @@ namespace IwUVEditor
             // 
             this.flowEditTools.Controls.Add(this.radioButtonRectangleSelection);
             this.flowEditTools.Controls.Add(this.radioButtonLassoSelection);
+            this.flowEditTools.Controls.Add(this.buttonReverseV);
+            this.flowEditTools.Controls.Add(this.buttonReverseH);
             this.flowEditTools.Controls.Add(this.radioButtonMove);
             this.flowEditTools.Controls.Add(this.radioButtonRotate);
             this.flowEditTools.Controls.Add(this.radioButtonScale);
-            this.flowEditTools.Controls.Add(this.buttonReverseV);
-            this.flowEditTools.Controls.Add(this.buttonReverseH);
             this.flowEditTools.Controls.Add(this.buttonResetCamera);
             this.flowEditTools.Controls.Add(this.numericRadiusOfPosSq);
             this.flowEditTools.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -154,7 +154,7 @@ namespace IwUVEditor
             // radioButtonMove
             // 
             this.radioButtonMove.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonMove.Location = new System.Drawing.Point(3, 69);
+            this.radioButtonMove.Location = new System.Drawing.Point(3, 135);
             this.radioButtonMove.Name = "radioButtonMove";
             this.radioButtonMove.Size = new System.Drawing.Size(80, 60);
             this.radioButtonMove.TabIndex = 1;
@@ -166,7 +166,7 @@ namespace IwUVEditor
             // radioButtonRotate
             // 
             this.radioButtonRotate.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonRotate.Location = new System.Drawing.Point(89, 69);
+            this.radioButtonRotate.Location = new System.Drawing.Point(89, 135);
             this.radioButtonRotate.Name = "radioButtonRotate";
             this.radioButtonRotate.Size = new System.Drawing.Size(80, 60);
             this.radioButtonRotate.TabIndex = 2;
@@ -178,7 +178,7 @@ namespace IwUVEditor
             // radioButtonScale
             // 
             this.radioButtonScale.Appearance = System.Windows.Forms.Appearance.Button;
-            this.radioButtonScale.Location = new System.Drawing.Point(3, 135);
+            this.radioButtonScale.Location = new System.Drawing.Point(3, 201);
             this.radioButtonScale.Name = "radioButtonScale";
             this.radioButtonScale.Size = new System.Drawing.Size(80, 60);
             this.radioButtonScale.TabIndex = 2;
@@ -189,21 +189,21 @@ namespace IwUVEditor
             // 
             // buttonReverseV
             // 
-            this.buttonReverseV.Location = new System.Drawing.Point(89, 135);
+            this.buttonReverseV.Location = new System.Drawing.Point(3, 69);
             this.buttonReverseV.Name = "buttonReverseV";
             this.buttonReverseV.Size = new System.Drawing.Size(80, 60);
             this.buttonReverseV.TabIndex = 3;
-            this.buttonReverseV.Text = "垂直反転";
+            this.buttonReverseV.Text = "上下反転";
             this.buttonReverseV.UseVisualStyleBackColor = true;
             this.buttonReverseV.Click += new System.EventHandler(this.buttonReverseV_Click);
             // 
             // buttonReverseH
             // 
-            this.buttonReverseH.Location = new System.Drawing.Point(3, 201);
+            this.buttonReverseH.Location = new System.Drawing.Point(89, 69);
             this.buttonReverseH.Name = "buttonReverseH";
             this.buttonReverseH.Size = new System.Drawing.Size(80, 60);
             this.buttonReverseH.TabIndex = 3;
-            this.buttonReverseH.Text = "鏡像反転";
+            this.buttonReverseH.Text = "左右反転";
             this.buttonReverseH.UseVisualStyleBackColor = true;
             this.buttonReverseH.Click += new System.EventHandler(this.buttonReverseH_Click);
             // 
@@ -259,7 +259,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 981;
+            this.splitUVMat.SplitterDistance = 979;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -271,7 +271,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(388, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(390, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 

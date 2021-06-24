@@ -30,15 +30,24 @@ namespace UnitTest
             vertices[2].UV = new PEPlugin.SDX.V2(0, -1);
 
             // 垂直反転
-            new CommandReverse(vertices, CommandReverse.Axis.X).Do();
-
+            var vrCmd = new CommandReverse(vertices, CommandReverse.Axis.X);
+            
+            vrCmd.Do();
             Assert.AreEqual(-0.3f, vertices[0].UV.X);
             Assert.AreEqual(0.3f, vertices[1].UV.X);
 
-            // 水平反転
-            new CommandReverse(vertices, CommandReverse.Axis.Y).Do();
+            vrCmd.Undo();
+            Assert.AreEqual(0.3f, vertices[0].UV.X);
+            Assert.AreEqual(-0.3f, vertices[1].UV.X);
 
+            // 水平反転
+            var hrCmd = new CommandReverse(vertices, CommandReverse.Axis.Y);
+
+            hrCmd.Do();
             Assert.AreEqual(1, vertices[2].UV.Y);
+
+            hrCmd.Undo();
+            Assert.AreEqual(-1, vertices[2].UV.Y);
         }
     }
 }

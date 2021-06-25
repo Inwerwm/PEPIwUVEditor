@@ -1,10 +1,5 @@
 ﻿using PEPlugin.Pmx;
 using PEPlugin.SDX;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTest.PMX
 {
@@ -31,6 +26,13 @@ namespace UnitTest.PMX
         public V3 SDEF_R0 { get; set; }
         public V3 SDEF_R1 { get; set; }
         public float EdgeScale { get; set; }
+
+        public MockVertex() { }
+
+        public MockVertex(V2 uv)
+        {
+            UV = uv;
+        }
 
         public object Clone() => new MockVertex()
         {

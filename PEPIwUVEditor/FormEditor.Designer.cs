@@ -37,11 +37,11 @@ namespace IwUVEditor
             this.flowEditTools = new System.Windows.Forms.FlowLayoutPanel();
             this.radioButtonRectangleSelection = new System.Windows.Forms.RadioButton();
             this.radioButtonLassoSelection = new System.Windows.Forms.RadioButton();
+            this.buttonReverseV = new System.Windows.Forms.Button();
+            this.buttonReverseH = new System.Windows.Forms.Button();
             this.radioButtonMove = new System.Windows.Forms.RadioButton();
             this.radioButtonRotate = new System.Windows.Forms.RadioButton();
             this.radioButtonScale = new System.Windows.Forms.RadioButton();
-            this.buttonReverseV = new System.Windows.Forms.Button();
-            this.buttonReverseH = new System.Windows.Forms.Button();
             this.buttonResetCamera = new System.Windows.Forms.Button();
             this.numericRadiusOfPosSq = new System.Windows.Forms.NumericUpDown();
             this.splitUVMat = new System.Windows.Forms.SplitContainer();
@@ -122,6 +122,7 @@ namespace IwUVEditor
             this.flowEditTools.Controls.Add(this.numericRadiusOfPosSq);
             this.flowEditTools.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowEditTools.Location = new System.Drawing.Point(0, 0);
+            this.flowEditTools.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.flowEditTools.Name = "flowEditTools";
             this.flowEditTools.Size = new System.Drawing.Size(175, 911);
             this.flowEditTools.TabIndex = 0;
@@ -150,6 +151,26 @@ namespace IwUVEditor
             this.radioButtonLassoSelection.Text = "投縄選択";
             this.radioButtonLassoSelection.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioButtonLassoSelection.UseVisualStyleBackColor = true;
+            // 
+            // buttonReverseV
+            // 
+            this.buttonReverseV.Location = new System.Drawing.Point(3, 69);
+            this.buttonReverseV.Name = "buttonReverseV";
+            this.buttonReverseV.Size = new System.Drawing.Size(80, 60);
+            this.buttonReverseV.TabIndex = 3;
+            this.buttonReverseV.Text = "上下反転";
+            this.buttonReverseV.UseVisualStyleBackColor = true;
+            this.buttonReverseV.Click += new System.EventHandler(this.buttonReverseV_Click);
+            // 
+            // buttonReverseH
+            // 
+            this.buttonReverseH.Location = new System.Drawing.Point(89, 69);
+            this.buttonReverseH.Name = "buttonReverseH";
+            this.buttonReverseH.Size = new System.Drawing.Size(80, 60);
+            this.buttonReverseH.TabIndex = 3;
+            this.buttonReverseH.Text = "左右反転";
+            this.buttonReverseH.UseVisualStyleBackColor = true;
+            this.buttonReverseH.Click += new System.EventHandler(this.buttonReverseH_Click);
             // 
             // radioButtonMove
             // 
@@ -186,26 +207,6 @@ namespace IwUVEditor
             this.radioButtonScale.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.radioButtonScale.UseVisualStyleBackColor = true;
             this.radioButtonScale.CheckedChanged += new System.EventHandler(this.radioButtonScale_CheckedChanged);
-            // 
-            // buttonReverseV
-            // 
-            this.buttonReverseV.Location = new System.Drawing.Point(3, 69);
-            this.buttonReverseV.Name = "buttonReverseV";
-            this.buttonReverseV.Size = new System.Drawing.Size(80, 60);
-            this.buttonReverseV.TabIndex = 3;
-            this.buttonReverseV.Text = "上下反転";
-            this.buttonReverseV.UseVisualStyleBackColor = true;
-            this.buttonReverseV.Click += new System.EventHandler(this.buttonReverseV_Click);
-            // 
-            // buttonReverseH
-            // 
-            this.buttonReverseH.Location = new System.Drawing.Point(89, 69);
-            this.buttonReverseH.Name = "buttonReverseH";
-            this.buttonReverseH.Size = new System.Drawing.Size(80, 60);
-            this.buttonReverseH.TabIndex = 3;
-            this.buttonReverseH.Text = "左右反転";
-            this.buttonReverseH.UseVisualStyleBackColor = true;
-            this.buttonReverseH.Click += new System.EventHandler(this.buttonReverseH_Click);
             // 
             // buttonResetCamera
             // 
@@ -259,7 +260,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
             this.splitUVMat.Size = new System.Drawing.Size(1375, 911);
-            this.splitUVMat.SplitterDistance = 979;
+            this.splitUVMat.SplitterDistance = 977;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -271,7 +272,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(390, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(392, 911);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 

@@ -21,7 +21,7 @@ namespace UnitTest
             CreateCollection(constructor).Take(count);
 
         [TestMethod]
-        public void ReverseTest()
+        public void TestReverse()
         {
             var vertices = CreateCollection(3, () => new MockVertex()).ToArray();
 

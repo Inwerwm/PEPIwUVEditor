@@ -3,6 +3,7 @@ using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
 using PEPlugin;
 using PEPlugin.Pmx;
+using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace IwUVEditor
         public Tool.ToolBox ToolBox { get; }
         Dictionary<Material, CommandManager> Commanders { get; set; }
         SlimDX.Vector2? PositionClip { get; set; }
-        ObservableEditParameter EditParameters { get; }
+        public ObservableEditParameter EditParameters { get; }
 
         // 描画の更新メソッド
         public Action UpdateDraw { get; set; }
@@ -184,6 +185,19 @@ namespace IwUVEditor
         public void ReverseVerticesVertical()
         {
             ReverseVertices(CommandReverse.Axis.Y);
+        }
+
+        public void ApplyEditWithValue()
+        {
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value);
+            if (!selectedVertices.Any())
+                return;
+
+            var trsMat = Matrix.Translation(EditParameters.MoveOffset);
+            var rotMat = Matrix.Translation(EditParameters.RotationCenter * -1) * Matrix.RotationZ(EditParameters.RotationAngle) * Matrix.Translation(EditParameters.RotationCenter);
+            var sclMat = Matrix.Invert(Matrix.Translation(EditParameters.ScaleCenter)) * Matrix.Scaling(EditParameters.ScaleRatio) * Matrix.Translation(EditParameters.ScaleCenter);
+
+            Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key).ToList(), sclMat * rotMat * trsMat));
         }
 
         protected virtual void Dispose(bool disposing)

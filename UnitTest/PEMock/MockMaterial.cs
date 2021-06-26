@@ -10,28 +10,43 @@ namespace UnitTest.PEMock
 {
     class MockMaterial : IPXMaterial
     {
-        public string Name { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string NameE { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public V4 Diffuse { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public V3 Specular { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public V3 Ambient { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float Power { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool BothDraw { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Shadow { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool SelfShadowMap { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool SelfShadow { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool VertexColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public PrimitiveType PrimitiveType { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Edge { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public V4 EdgeColor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public float EdgeSize { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Tex { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Sphere { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public SphereType SphereMode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Toon { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public string Memo { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Name { get; set; }
+        public string NameE { get; set; }
+        public V4 Diffuse { get; set; }
+        public V3 Specular { get; set; }
+        public V3 Ambient { get; set; }
+        public float Power { get; set; }
+        public bool BothDraw { get; set; }
+        public bool Shadow { get; set; }
+        public bool SelfShadowMap { get; set; }
+        public bool SelfShadow { get; set; }
+        public bool VertexColor { get; set; }
+        public PrimitiveType PrimitiveType { get; set; }
+        public bool Edge { get; set; }
+        public V4 EdgeColor { get; set; }
+        public float EdgeSize { get; set; }
+        public string Tex { get; set; }
+        public string Sphere { get; set; }
+        public SphereType SphereMode { get; set; }
+        public string Toon { get; set; }
+        public string Memo { get; set; }
 
-        public IList<IPXFace> Faces => throw new NotImplementedException();
+        public IList<IPXFace> Faces { get; private set; }
+
+        public MockMaterial()
+        {
+            Faces = new List<IPXFace>();
+        }
+
+        public MockMaterial(IList<IPXVertex> vertices, params (int A, int B, int C)[] indices)
+        {
+            CreateFaces(vertices, indices);
+        }
+
+        public void CreateFaces(IList<IPXVertex> vertices, params (int A, int B, int C)[] indices)
+        {
+            Faces = indices.Select(i => (IPXFace)new MockFace(vertices[i.A], vertices[i.B], vertices[i.C])).ToList();
+        }
 
         public object Clone()
         {

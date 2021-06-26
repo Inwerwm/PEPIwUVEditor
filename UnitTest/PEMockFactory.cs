@@ -12,8 +12,8 @@ namespace UnitTest
 {
     static class PEMockFactory
     {
-        public static IPERunArgs CreateRunArgs(params V2[] uvs) => 
-            CreateRunArgs(CreateModel(uvs));
+        public static IPERunArgs CreateRunArgs(V2[] uvs, (int A, int B, int C)[] indices) =>
+            CreateRunArgs(CreateModel(uvs, indices));
 
         public static IPERunArgs CreateRunArgs(IPXPmx model)
         {
@@ -23,10 +23,10 @@ namespace UnitTest
             return new MockRunArgs(host);
         }
 
-        public static IPXPmx CreateModel(params V2[] uvs)
+        public static IPXPmx CreateModel(V2[] uvs, (int A, int B, int C)[] indices)
         {
             var vertices = uvs.Select(v => (IPXVertex)new MockVertex(v)).ToList();
-            var material = new[] { new MockMaterial() };
+            var material = new[] { new MockMaterial(vertices, indices) };
             return new MockPmx(vertices, material);
         }
     }

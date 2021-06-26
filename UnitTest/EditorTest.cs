@@ -34,14 +34,16 @@ namespace UnitTest
             }
         }
 
-        public void IsInitSuccess()
+        public void Reset()
         {
-            Assert.AreEqual(0, UV[0].X);
-            Assert.AreEqual(1, UV[0].Y);
-            Assert.AreEqual(-1, UV[1].X);
-            Assert.AreEqual(0, UV[1].Y);
-            Assert.AreEqual(1, UV[2].X);
-            Assert.AreEqual(-1, UV[2].Y);
+            Editor.Undo();
+            
+            Assert.AreEqual(0, UV[0].X, 1e-6);
+            Assert.AreEqual(1, UV[0].Y, 1e-6);
+            Assert.AreEqual(-1, UV[1].X, 1e-6);
+            Assert.AreEqual(0, UV[1].Y, 1e-6);
+            Assert.AreEqual(1, UV[2].X, 1e-6);
+            Assert.AreEqual(-1, UV[2].Y, 1e-6);
         }
 
         [TestMethod]
@@ -50,11 +52,31 @@ namespace UnitTest
             Editor.CopyPosition();
             Editor.PastePosition();
 
-            Assert.AreEqual(0, UV[0].X);
-            Assert.AreEqual(0, UV[0].Y);
+            Assert.AreEqual(0, UV[0].X, 1e-6);
+            Assert.AreEqual(0, UV[0].Y, 1e-6);
 
-            Editor.Undo();
-            IsInitSuccess();
+            Reset();
+        }
+
+        [TestMethod]
+        public void TestApplyEditWithValue()
+        {
+            Editor.EditParameters.MoveOffset = new SlimDX.Vector3(1, 1, 0);
+            Editor.EditParameters.RotationCenter = new SlimDX.Vector3(1, 1, 0);
+            Editor.EditParameters.RotationAngle = (float)(Math.PI / 2);
+            Editor.EditParameters.ScaleCenter = new SlimDX.Vector3(1, 1, 0);
+            Editor.EditParameters.ScaleRatio = new SlimDX.Vector3(2, 2, 1);
+
+            Editor.ApplyEditWithValue();
+
+            Assert.AreEqual(2, UV[0].X, 1e-6);
+            Assert.AreEqual(0, UV[0].Y, 1e-6);
+            Assert.AreEqual(4, UV[1].X, 1e-6);
+            Assert.AreEqual(-2, UV[1].Y, 1e-6);
+            Assert.AreEqual(6, UV[2].X, 1e-6);
+            Assert.AreEqual(2, UV[2].Y, 1e-6);
+
+            Reset();
         }
     }
 }

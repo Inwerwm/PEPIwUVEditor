@@ -13,7 +13,7 @@ namespace UnitTest
     public class EditorTest
     {
         static Editor Editor { get; set; }
-        static V2[] UV { get; set; }
+        static V2[] UV => Editor.Current.Material.Vertices.Select(v => v.UV).ToArray();
 
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
@@ -32,7 +32,6 @@ namespace UnitTest
             {
                 Editor.Current.Material.IsSelected[key] = true;
             }
-            UV = Editor.Current.Material.Vertices.Select(v => v.UV).ToArray();
         }
 
         public void IsInitSuccess()

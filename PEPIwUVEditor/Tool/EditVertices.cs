@@ -96,9 +96,10 @@ namespace IwUVEditor.Tool
             }
             if (input.MouseLeft.IsDragging)
             {
+                CurrentPos = input.MouseLeft.Current;
+                UpdateParameter();
                 // 頂点編集のプレビュー
                 // 直接頂点位置を編集するわけにはいかないので見た目だけ変換する
-                CurrentPos = input.MouseLeft.Current;
                 TargetMaterial.TemporaryTransformMatrices *= Offset;
                 TotalOffset *= Offset;
 
@@ -114,6 +115,8 @@ namespace IwUVEditor.Tool
                 TargetMaterial.TemporaryTransformMatrices = Matrix.Identity;
             }
         }
+
+        protected abstract void UpdateParameter();
 
         protected virtual void Dispose(bool disposing)
         {

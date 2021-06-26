@@ -3,7 +3,6 @@
 namespace IwUVEditor.Manager
 {
     delegate void Vector3EventHandler(Vector3 value);
-    delegate void FloatEventHandler(float value);
 
     class ObservableEditParameter : Tool.IEditParameter
     {
@@ -17,13 +16,8 @@ namespace IwUVEditor.Manager
         private Vector3 scaleRatio;
 
         event Vector3EventHandler MoveCenterChanged;
-        event Vector3EventHandler MoveOffsetChanged;
-
         event Vector3EventHandler RotationCenterChanged;
-        event FloatEventHandler RotationAngleChanged;
-
         event Vector3EventHandler ScaleCenterChanged;
-        event Vector3EventHandler ScaleRatioChanged;
 
         public bool EnableEvent { get; set; } = true;
 
@@ -43,8 +37,6 @@ namespace IwUVEditor.Manager
             set
             {
                 moveOffset = value;
-                if (EnableEvent)
-                    MoveOffsetChanged?.Invoke(value);
             }
         }
 
@@ -64,8 +56,6 @@ namespace IwUVEditor.Manager
             set
             {
                 rotationAngle = value;
-                if (EnableEvent)
-                    RotationAngleChanged?.Invoke(value);
             }
         }
 
@@ -85,8 +75,6 @@ namespace IwUVEditor.Manager
             set
             {
                 scaleRatio = value;
-                if (EnableEvent)
-                    ScaleRatioChanged?.Invoke(value);
             }
         }
     }

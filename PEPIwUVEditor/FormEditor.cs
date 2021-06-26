@@ -302,5 +302,10 @@ namespace IwUVEditor
 
             Editor.ApplyEditWithValue();
         }
+
+        private void buttonSelectContinuousFaces_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

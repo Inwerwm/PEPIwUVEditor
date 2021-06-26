@@ -24,6 +24,7 @@ namespace IwUVEditor.Tool
 
         protected List<IPXVertex> TargetVertices { get; set; }
         protected Material TargetMaterial => Process.Current.Material;
+        protected IEditParameter Parameters { get; }
 
         protected Vector2 StartPos { get; set; }
         protected Vector2 CurrentPos { get; set; }
@@ -44,10 +45,11 @@ namespace IwUVEditor.Tool
         protected abstract Matrix Offset { get; }
         protected Matrix TotalOffset { get; set; }
 
-        protected EditVertices(UVViewDrawProcess process, EditController controller)
+        protected EditVertices(UVViewDrawProcess process, EditController controller, IEditParameter parameters)
         {
             Process = process;
             Controller = controller;
+            Parameters = parameters;
         }
 
         public virtual void Initialize() 

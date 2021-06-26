@@ -29,6 +29,7 @@ namespace IwUVEditor
         public Tool.ToolBox ToolBox { get; }
         Dictionary<Material, CommandManager> Commanders { get; set; }
         SlimDX.Vector2? PositionClip { get; set; }
+        EditParameter EditParameters { get; }
 
         // 描画の更新メソッド
         public Action UpdateDraw { get; set; }
@@ -39,7 +40,8 @@ namespace IwUVEditor
         {
             Args = args;
             Current = inputManager;
-            ToolBox = new Tool.ToolBox();
+            EditParameters = new EditParameter();
+            ToolBox = new Tool.ToolBox(EditParameters);
             Resetter = resetter;
             IsEdited = false;
         }

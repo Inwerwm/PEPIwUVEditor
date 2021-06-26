@@ -23,6 +23,6 @@ namespace IwUVEditor.Tool
             }
         }
 
-        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new ScaleController(process, device)) { }
+        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process, IEditParameter parameters) : base(process, new ScaleController(process, device), parameters) { }
     }
 }

@@ -32,9 +32,12 @@ namespace IwUVEditor.Tool
         /// </summary>
         public ReadOnlyDictionary<Type, IEditTool> InstanceOf => new ReadOnlyDictionary<Type, IEditTool>(ToolInstances);
 
-        public ToolBox()
+        public IEditParameter Parameters { get; }
+
+        public ToolBox(IEditParameter parameters)
         {
             ToolInstances = new GenerableMap<Type, IEditTool>((_) => null);
+            Parameters = parameters;
         }
 
         /// <summary>
@@ -62,13 +65,13 @@ namespace IwUVEditor.Tool
             CallTool(() => new RectangleSelection(Device, process), process);
 
         public MoveVertices MoveVertices(UVViewDrawProcess process) =>
-            CallTool(() => new MoveVertices(Device, process), process);
+            CallTool(() => new MoveVertices(Device, process, Parameters), process);
 
         public RotateVertices RotateVertices(UVViewDrawProcess process) =>
-            CallTool(() => new RotateVertices(Device, process), process);
+            CallTool(() => new RotateVertices(Device, process, Parameters), process);
 
         public ScaleVertices ScaleVertices(UVViewDrawProcess process) =>
-            CallTool(() => new ScaleVertices(Device, process), process);
+            CallTool(() => new ScaleVertices(Device, process, Parameters), process);
 
         #region IDisposable
         protected virtual void Dispose(bool disposing)

@@ -11,6 +11,6 @@ namespace IwUVEditor.Tool
                              : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(0, CurrentPos.Y - StartPos.Y, 0)
                              : new Vector3(CurrentPos - StartPos, 0));
 
-        public MoveVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new MoveController(process, device)) { }
+        public MoveVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process, IEditParameter parameters) : base(process, new MoveController(process, device), parameters) { }
     }
 }

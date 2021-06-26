@@ -236,7 +236,7 @@ namespace IwUVEditor.DirectX
 
         private ShaderResourceView LoadTexture(Material material)
         {
-            if ((material is null) || string.IsNullOrWhiteSpace(material.Tex))
+            if ((material is null) || string.IsNullOrWhiteSpace(material.TexFullPath))
                 return new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.White));
 
             if (material.TexExt.ToLower() == ".tga")

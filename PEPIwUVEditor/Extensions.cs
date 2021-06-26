@@ -43,5 +43,43 @@ namespace IwUVEditor
         /// </summary>
         public static Vector3 ElementDivision(this Vector3 dividend, Vector3 divisor) =>
             new Vector3(dividend.X / divisor.X, dividend.Y / divisor.Y, dividend.Z / divisor.Z);
+
+        public static (Vector2 Min, Vector2 Max) MinMax(this IEnumerable<Vector2> source) =>
+            source.Aggregate(
+                (
+                    Min: new Vector2(float.MaxValue, float.MaxValue),
+                    Max: new Vector2(float.MinValue, float.MinValue)
+                ),
+                (rst, crt) => (
+                    new Vector2(
+                        rst.Min.X > crt.X ? crt.X : rst.Min.X,
+                        rst.Min.Y > crt.Y ? crt.Y : rst.Min.Y
+                    ),
+                    new Vector2(
+                        rst.Max.X < crt.X ? crt.X : rst.Max.X,
+                        rst.Max.Y < crt.Y ? crt.Y : rst.Max.Y
+                    )
+                )
+            );
+
+        public static (Vector3 Min, Vector3 Max) MinMax(this IEnumerable<Vector3> source) =>
+            source.Aggregate(
+                (
+                    Min: new Vector3(float.MaxValue, float.MaxValue, float.MaxValue),
+                    Max: new Vector3(float.MinValue, float.MinValue, float.MinValue)
+                ),
+                (rst, crt) => (
+                    new Vector3(
+                        rst.Min.X > crt.X ? crt.X : rst.Min.X,
+                        rst.Min.Y > crt.Y ? crt.Y : rst.Min.Y,
+                        rst.Min.Z > crt.Z ? crt.Z : rst.Min.Z
+                    ),
+                    new Vector3(
+                        rst.Max.X < crt.X ? crt.X : rst.Max.X,
+                        rst.Max.Y < crt.Y ? crt.Y : rst.Max.Y,
+                        rst.Max.Z < crt.Z ? crt.Z : rst.Max.Z
+                    )
+                )
+            );
     }
 }

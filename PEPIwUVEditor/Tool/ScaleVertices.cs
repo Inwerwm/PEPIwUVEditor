@@ -11,18 +11,28 @@ namespace IwUVEditor.Tool
         {
             get
             {
-                float xScale = 1 + Input.MouseOffset.X * Step;
-                float yScale = 1 - Input.MouseOffset.Y * Step;
+                Matrix centerOffset = Matrix.Translation(Parameters.ScaleCenter);
 
-                Matrix currentScale = Controller.CurrentMode == EditController.SelectionMode.X ? Matrix.Scaling(new Vector3(xScale, 1, 1))
-                                    : Controller.CurrentMode == EditController.SelectionMode.Y ? Matrix.Scaling(new Vector3(1, yScale, 1))
-                                    :                                                            Matrix.Scaling(new Vector3(xScale, yScale, 1));
-                Matrix centerOffset = Matrix.Translation(Controller.Center);
-
-                return Matrix.Invert(centerOffset) * currentScale * centerOffset;
+                return Matrix.Invert(centerOffset) * Matrix.Scaling(Parameters.ScaleRatio) * centerOffset;
             }
         }
 
-        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new ScaleController(process, device)) { }
+        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process, IEditParameter parameters) : base(process, new ScaleController(process, device, parameters), parameters) { }
+
+        protected override void UpdateParameter()
+        {
+            float xScale = 1 + Input.MouseOffset.X * Step;
+            float yScale = 1 - Input.MouseOffset.Y * Step;
+
+            Parameters.ScaleRatio = Controller.CurrentMode == EditController.SelectionMode.X ? new Vector3(xScale, 1, 1)
+                                  : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(1, yScale, 1)
+                                  : new Vector3(xScale, yScale, 1);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            Parameters.ScaleCenter = CenterPos;
+        }
     }
 }

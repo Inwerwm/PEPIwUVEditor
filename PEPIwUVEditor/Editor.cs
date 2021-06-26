@@ -3,6 +3,7 @@ using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
 using PEPlugin;
 using PEPlugin.Pmx;
+using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,7 @@ namespace IwUVEditor
         public Tool.ToolBox ToolBox { get; }
         Dictionary<Material, CommandManager> Commanders { get; set; }
         SlimDX.Vector2? PositionClip { get; set; }
+        public ObservableEditParameter EditParameters { get; }
 
         // 描画の更新メソッド
         public Action UpdateDraw { get; set; }
@@ -39,7 +41,8 @@ namespace IwUVEditor
         {
             Args = args;
             Current = inputManager;
-            ToolBox = new Tool.ToolBox();
+            EditParameters = new ObservableEditParameter();
+            ToolBox = new Tool.ToolBox(EditParameters);
             Resetter = resetter;
             IsEdited = false;
         }
@@ -62,7 +65,7 @@ namespace IwUVEditor
         {
             PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
             IsEdited = false;
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public bool CanContinueClosing()
@@ -119,7 +122,7 @@ namespace IwUVEditor
             // 破壊的変更を行う命令だった場合、編集済みに変更
             IsEdited |= command.IsDestructive;
 
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public void Undo()
@@ -128,7 +131,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[Current.Material].Undo();
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public void Redo()
@@ -137,7 +140,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[Current.Material].Redo();
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public void CopyPosition()
@@ -163,6 +166,38 @@ namespace IwUVEditor
 
             var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key).ToList();
             Do(Current.Material, new CommandSetPosition(selectedVertices, PositionClip.Value));
+        }
+
+        private void ReverseVertices(CommandReverse.Axis axis)
+        {
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value);
+            if (!selectedVertices.Any())
+                return;
+
+            Do(Current.Material, new CommandReverse(selectedVertices.Select(selected => selected.Key), axis));
+        }
+
+        public void ReverseVerticesHorizontal()
+        {
+            ReverseVertices(CommandReverse.Axis.X);
+        }
+
+        public void ReverseVerticesVertical()
+        {
+            ReverseVertices(CommandReverse.Axis.Y);
+        }
+
+        public void ApplyEditWithValue()
+        {
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value);
+            if (!selectedVertices.Any())
+                return;
+
+            var trsMat = Matrix.Translation(EditParameters.MoveOffset);
+            var rotMat = Matrix.Translation(EditParameters.RotationCenter * -1) * Matrix.RotationZ(EditParameters.RotationAngle) * Matrix.Translation(EditParameters.RotationCenter);
+            var sclMat = Matrix.Invert(Matrix.Translation(EditParameters.ScaleCenter)) * Matrix.Scaling(EditParameters.ScaleRatio) * Matrix.Translation(EditParameters.ScaleCenter);
+
+            Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key).ToList(), sclMat * rotMat * trsMat));
         }
 
         protected virtual void Dispose(bool disposing)

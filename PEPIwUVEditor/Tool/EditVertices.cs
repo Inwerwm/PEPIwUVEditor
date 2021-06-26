@@ -24,6 +24,7 @@ namespace IwUVEditor.Tool
 
         protected List<IPXVertex> TargetVertices { get; set; }
         protected Material TargetMaterial => Process.Current.Material;
+        protected IEditParameter Parameters { get; }
 
         protected Vector2 StartPos { get; set; }
         protected Vector2 CurrentPos { get; set; }
@@ -44,16 +45,16 @@ namespace IwUVEditor.Tool
         protected abstract Matrix Offset { get; }
         protected Matrix TotalOffset { get; set; }
 
-        protected EditVertices(UVViewDrawProcess process, EditController controller)
+        protected EditVertices(UVViewDrawProcess process, EditController controller, IEditParameter parameters)
         {
             Process = process;
             Controller = controller;
+            Parameters = parameters;
         }
 
         public virtual void Initialize() 
         {
             TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
-            Controller.Center = CenterPos;
         }
 
         public IEditorCommand CreateCommand(Material target)
@@ -94,9 +95,10 @@ namespace IwUVEditor.Tool
             }
             if (input.MouseLeft.IsDragging)
             {
+                CurrentPos = input.MouseLeft.Current;
+                UpdateParameter();
                 // 頂点編集のプレビュー
                 // 直接頂点位置を編集するわけにはいかないので見た目だけ変換する
-                CurrentPos = input.MouseLeft.Current;
                 TargetMaterial.TemporaryTransformMatrices *= Offset;
                 TotalOffset *= Offset;
 
@@ -112,6 +114,8 @@ namespace IwUVEditor.Tool
                 TargetMaterial.TemporaryTransformMatrices = Matrix.Identity;
             }
         }
+
+        protected abstract void UpdateParameter();
 
         protected virtual void Dispose(bool disposing)
         {

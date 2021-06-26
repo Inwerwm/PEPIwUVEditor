@@ -13,20 +13,15 @@ namespace IwUVEditor.Controller
     class ScaleController : EditController
     {
         private bool disposedValue;
-        private Vector3 center;
 
         private ScalingControllerPolygons Controller { get; }
         public override Vector3 Center
         {
-            get => center;
-            set
-            {
-                center = value;
-                Controller.Center = value;
-            }
+            get => Parameters.ScaleCenter;
+            set => Parameters.ScaleCenter = value;
         }
 
-        public ScaleController(UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process)
+        public ScaleController(UVViewDrawProcess process, SlimDX.Direct3D11.Device device, Tool.IEditParameter parameters) : base(process, parameters)
         {
             Controller = new ScalingControllerPolygons(
                 device,
@@ -37,6 +32,12 @@ namespace IwUVEditor.Controller
             );
 
             Process.ScreenSizeChanged += Process_ScreenSizeChanged;
+            Parameters.ScaleCenterChanged += Parameters_ScaleCenterChanged;
+        }
+
+        private void Parameters_ScaleCenterChanged(Vector3 value)
+        {
+            Controller.Center = value;
         }
 
         private void Process_ScreenSizeChanged(Vector2 screenSize)

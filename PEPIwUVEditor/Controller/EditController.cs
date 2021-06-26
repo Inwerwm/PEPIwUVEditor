@@ -1,4 +1,5 @@
 ﻿using IwUVEditor.StateContainer;
+using IwUVEditor.Tool;
 using SlimDX;
 using System;
 
@@ -8,11 +9,13 @@ namespace IwUVEditor.Controller
     {
         public SelectionMode CurrentMode { get; protected set; }
         protected DirectX.UVViewDrawProcess Process { get; }
+        protected IEditParameter Parameters { get; }
         public abstract Vector3 Center { get; set; }
 
-        protected EditController(DirectX.UVViewDrawProcess process)
+        protected EditController(DirectX.UVViewDrawProcess process, IEditParameter parameters)
         {
             Process = process;
+            Parameters = parameters;
         }
 
         /// <summary>

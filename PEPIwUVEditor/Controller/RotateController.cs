@@ -7,18 +7,13 @@ namespace IwUVEditor.Controller
     class RotateController : EditController
     {
         private bool disposedValue;
-        private Vector3 center;
         private float radius = 0.025f;
 
         private DirectX.DrawElement.RotationCenterSign CenterSign { get; set; }
         public override Vector3 Center
         {
-            get => center;
-            set
-            {
-                center = value;
-                CenterSign.Center = value;
-            }
+            get => Parameters.RotationCenter;
+            set => Parameters.RotationCenter = value;
         }
         public float Radius
         {
@@ -29,7 +24,7 @@ namespace IwUVEditor.Controller
                 CenterSign.Radius = value;
             }
         }
-        public RotateController(DirectX.UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process)
+        public RotateController(DirectX.UVViewDrawProcess process, SlimDX.Direct3D11.Device device, Tool.IEditParameter parameters) : base(process, parameters)
         {
             CenterSign = new DirectX.DrawElement.RotationCenterSign(
                 device,
@@ -42,6 +37,12 @@ namespace IwUVEditor.Controller
             );
 
             Process.ScreenSizeChanged += Process_ScreenSizeChanged;
+            Parameters.RotationCenterChanged += Parameters_RotationCenterChanged;
+        }
+
+        private void Parameters_RotationCenterChanged(Vector3 value)
+        {
+            CenterSign.Center = value;
         }
 
         private void Process_ScreenSizeChanged(Vector2 screenSize)
@@ -80,6 +81,7 @@ namespace IwUVEditor.Controller
                 {
                     CenterSign?.Dispose();
                     Process.ScreenSizeChanged -= Process_ScreenSizeChanged;
+                    Parameters.RotationCenterChanged -= Parameters_RotationCenterChanged;
                 }
                 disposedValue = true;
             }

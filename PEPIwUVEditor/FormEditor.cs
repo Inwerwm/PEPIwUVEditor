@@ -46,6 +46,17 @@ namespace IwUVEditor
 
             SelectionSaver = new FormSaveSelection(Current) { CommandInvoker = Editor.Do };
             ColorSettings = new FormColorSettings();
+
+            Editor.EditParameters.RotationCenterChanged += (value) =>
+            {
+                numericRotCenterX.Value = (decimal)value.X;
+                numericRotCenterY.Value = (decimal)value.Y;
+            };
+            Editor.EditParameters.ScaleCenterChanged += (value) =>
+            {
+                numericScaleCenterX.Value = (decimal)value.X;
+                numericScaleCenterY.Value = (decimal)value.Y;
+            };
         }
 
         internal void InitializeWhenStartDrawing()
@@ -163,10 +174,6 @@ namespace IwUVEditor
             DrawProcess.RadiusOfPositionSquare = (float)(sender as NumericUpDown).Value;
         }
 
-        private void buttonReverseV_Click(object sender, EventArgs e)
-        {
-        }
-
         private void 元に戻すToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Editor.Undo();
@@ -255,6 +262,45 @@ namespace IwUVEditor
         private void UVを反映ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Editor.SendModel();
+        }
+
+        private void buttonReverseV_Click(object sender, EventArgs e)
+        {
+            Editor.ReverseVerticesVertical();
+        }
+
+        private void buttonReverseH_Click(object sender, EventArgs e)
+        {
+            Editor.ReverseVerticesHorizontal();
+        }
+
+        private void numericRotCenterX_ValueChanged(object sender, EventArgs e)
+        {
+            Editor.EditParameters.RotationCenter = new Vector3((float)numericRotCenterX.Value, Editor.EditParameters.RotationCenter.Y, 0);
+        }
+
+        private void numericRotCenterY_ValueChanged(object sender, EventArgs e)
+        {
+            Editor.EditParameters.RotationCenter = new Vector3(Editor.EditParameters.RotationCenter.X, (float)numericRotCenterY.Value, 0);
+        }
+
+        private void numericScaleCenterX_ValueChanged(object sender, EventArgs e)
+        {
+            Editor.EditParameters.ScaleCenter = new Vector3((float)numericScaleCenterX.Value, Editor.EditParameters.ScaleCenter.Y, 0);
+        }
+
+        private void numericScaleCenterY_ValueChanged(object sender, EventArgs e)
+        {
+            Editor.EditParameters.ScaleCenter = new Vector3(Editor.EditParameters.ScaleCenter.X, (float)numericScaleCenterY.Value, 0);
+        }
+
+        private void buttonApplyNumericEdit_Click(object sender, EventArgs e)
+        {
+            Editor.EditParameters.MoveOffset = new Vector3((float)numericMoveX.Value, (float)numericMoveY.Value, 0);
+            Editor.EditParameters.RotationAngle = -(float)((double)(numericRotAngle.Value / 180m) * Math.PI);
+            Editor.EditParameters.ScaleRatio = new Vector3((float)numericScaleRatioX.Value, (float)numericScaleRatioY.Value, 1);
+
+            Editor.ApplyEditWithValue();
         }
     }
 }

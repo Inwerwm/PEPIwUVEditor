@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command\CommandApplyVertexEdit.cs" />
+    <Compile Include="Command\CommandReverse.cs" />
     <Compile Include="Command\CommandSelectVertices.cs" />
     <Compile Include="Command\CommandSetPosition.cs" />
     <Compile Include="DirectX\DrawElement\MovingControllerPolygons.cs" />
@@ -97,6 +98,7 @@
       <DependentUpon>FormEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="Manager\DragManager.cs" />
+    <Compile Include="Manager\ObservableEditParameter.cs" />
     <Compile Include="StateContainer\EditorStates.cs" />
     <Compile Include="PluginMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="DirectX\Vertex\InstanceOffset.cs" />
     <Compile Include="DirectX\Vertex\VertexStruct.cs" />
     <Compile Include="Tool\EditVertices.cs" />
+    <Compile Include="Tool\IEditParameter.cs" />
     <Compile Include="Tool\IEditTool.cs" />
     <Compile Include="Tool\MoveVertices.cs" />
     <Compile Include="Tool\RectangleSelection.cs" />

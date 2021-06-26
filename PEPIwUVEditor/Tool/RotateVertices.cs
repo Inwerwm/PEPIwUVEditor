@@ -12,8 +12,19 @@ namespace IwUVEditor.Tool
         /// </summary>
         private static double Step => 0.001;
         protected override Matrix Offset =>
-            Matrix.Translation(Controller.Center * -1) * Matrix.RotationZ((float)(Step * Input.MouseOffset.Y * 2 * Math.PI)) * Matrix.Translation(Controller.Center);
+            Matrix.Translation(Parameters.RotationCenter * -1) * Matrix.RotationZ(Parameters.RotationAngle) * Matrix.Translation(Parameters.RotationCenter);
 
-        public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process) : base(process, new RotateController(process, device)) { }
+        public RotateVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process, IEditParameter parameters) : base(process, new RotateController(process, device, parameters), parameters) { }
+
+        protected override void UpdateParameter()
+        {
+            Parameters.RotationAngle = (float)(Step * Input.MouseOffset.Y * 2 * Math.PI);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            Parameters.RotationCenter = CenterPos;
+        }
     }
 }

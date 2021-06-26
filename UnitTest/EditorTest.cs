@@ -1,4 +1,4 @@
-﻿using IwUVEditor;
+using IwUVEditor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PEPlugin.SDX;
 using System;
@@ -31,7 +31,7 @@ namespace UnitTest
             }
         }
 
-        public void Reset()
+        public void UndoTest()
         {
             Editor.Undo();
 
@@ -53,6 +53,8 @@ namespace UnitTest
 
                 Assert.AreEqual(0, UV[0].X, 1e-6);
                 Assert.AreEqual(0, UV[0].Y, 1e-6);
+                
+                UndoTest();
             }
             finally
             {
@@ -79,6 +81,8 @@ namespace UnitTest
                 Assert.AreEqual(-2, UV[1].Y, 1e-6);
                 Assert.AreEqual(6, UV[2].X, 1e-6);
                 Assert.AreEqual(2, UV[2].Y, 1e-6);
+                
+                UndoTest();
             }
             finally
             {

@@ -90,6 +90,9 @@ namespace IwUVEditor
             this.labelScaleRatio = new System.Windows.Forms.Label();
             this.numericScaleRatioX = new System.Windows.Forms.NumericUpDown();
             this.numericScaleRatioY = new System.Windows.Forms.NumericUpDown();
+            this.buttonApplyNumericEdit = new System.Windows.Forms.Button();
+            this.tableLayoutDrawSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.labelRadiusOfPosSq = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -116,6 +119,7 @@ namespace IwUVEditor
             ((System.ComponentModel.ISupportInitialize)(this.numericScaleCenterY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericScaleRatioX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericScaleRatioY)).BeginInit();
+            this.tableLayoutDrawSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitCtrlView
@@ -138,7 +142,7 @@ namespace IwUVEditor
             this.splitCtrlView.Panel2.Controls.Add(this.splitUVMat);
             this.splitCtrlView.Panel2MinSize = 500;
             this.splitCtrlView.Size = new System.Drawing.Size(1556, 911);
-            this.splitCtrlView.SplitterDistance = 178;
+            this.splitCtrlView.SplitterDistance = 173;
             this.splitCtrlView.SplitterWidth = 6;
             this.splitCtrlView.TabIndex = 0;
             // 
@@ -148,12 +152,11 @@ namespace IwUVEditor
             this.flowEditTools.Controls.Add(this.radioButtonMove);
             this.flowEditTools.Controls.Add(this.radioButtonRotate);
             this.flowEditTools.Controls.Add(this.radioButtonScale);
-            this.flowEditTools.Controls.Add(this.numericRadiusOfPosSq);
             this.flowEditTools.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowEditTools.Location = new System.Drawing.Point(0, 0);
             this.flowEditTools.Margin = new System.Windows.Forms.Padding(0);
             this.flowEditTools.Name = "flowEditTools";
-            this.flowEditTools.Size = new System.Drawing.Size(178, 449);
+            this.flowEditTools.Size = new System.Drawing.Size(173, 403);
             this.flowEditTools.TabIndex = 0;
             // 
             // radioButtonRectangleSelection
@@ -239,19 +242,21 @@ namespace IwUVEditor
             // numericRadiusOfPosSq
             // 
             this.numericRadiusOfPosSq.DecimalPlaces = 4;
+            this.numericRadiusOfPosSq.Dock = System.Windows.Forms.DockStyle.Fill;
             this.numericRadiusOfPosSq.Increment = new decimal(new int[] {
             5,
             0,
             0,
             262144});
-            this.numericRadiusOfPosSq.Location = new System.Drawing.Point(3, 135);
+            this.numericRadiusOfPosSq.Location = new System.Drawing.Point(0, 879);
+            this.numericRadiusOfPosSq.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.numericRadiusOfPosSq.Maximum = new decimal(new int[] {
             1,
             0,
             0,
             65536});
             this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
-            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(120, 32);
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(256, 32);
             this.numericRadiusOfPosSq.TabIndex = 4;
             this.numericRadiusOfPosSq.Value = new decimal(new int[] {
             5,
@@ -276,9 +281,9 @@ namespace IwUVEditor
             // 
             // splitUVMat.Panel2
             // 
-            this.splitUVMat.Panel2.Controls.Add(this.listBoxMaterial);
-            this.splitUVMat.Size = new System.Drawing.Size(1372, 911);
-            this.splitUVMat.SplitterDistance = 972;
+            this.splitUVMat.Panel2.Controls.Add(this.tableLayoutDrawSettings);
+            this.splitUVMat.Size = new System.Drawing.Size(1377, 911);
+            this.splitUVMat.SplitterDistance = 1115;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -290,7 +295,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(394, 911);
+            this.listBoxMaterial.Size = new System.Drawing.Size(256, 859);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -524,8 +529,8 @@ namespace IwUVEditor
             // splitContainerToolAction.Panel2
             // 
             this.splitContainerToolAction.Panel2.Controls.Add(this.tableLayoutPanelActions);
-            this.splitContainerToolAction.Size = new System.Drawing.Size(178, 911);
-            this.splitContainerToolAction.SplitterDistance = 449;
+            this.splitContainerToolAction.Size = new System.Drawing.Size(173, 911);
+            this.splitContainerToolAction.SplitterDistance = 403;
             this.splitContainerToolAction.TabIndex = 1;
             // 
             // tableLayoutPanelActions
@@ -550,11 +555,12 @@ namespace IwUVEditor
             this.tableLayoutPanelActions.Controls.Add(this.LabelMove, 0, 2);
             this.tableLayoutPanelActions.Controls.Add(this.labelX, 0, 1);
             this.tableLayoutPanelActions.Controls.Add(this.numericMoveX, 0, 3);
+            this.tableLayoutPanelActions.Controls.Add(this.buttonApplyNumericEdit, 0, 11);
             this.tableLayoutPanelActions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelActions.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanelActions.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.tableLayoutPanelActions.Name = "tableLayoutPanelActions";
-            this.tableLayoutPanelActions.RowCount = 11;
+            this.tableLayoutPanelActions.RowCount = 12;
             this.tableLayoutPanelActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
@@ -566,7 +572,8 @@ namespace IwUVEditor
             this.tableLayoutPanelActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanelActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutPanelActions.Size = new System.Drawing.Size(178, 458);
+            this.tableLayoutPanelActions.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutPanelActions.Size = new System.Drawing.Size(173, 504);
             this.tableLayoutPanelActions.TabIndex = 0;
             // 
             // flowLayoutPanelActions
@@ -579,7 +586,7 @@ namespace IwUVEditor
             this.flowLayoutPanelActions.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelActions.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.flowLayoutPanelActions.Name = "flowLayoutPanelActions";
-            this.flowLayoutPanelActions.Size = new System.Drawing.Size(178, 198);
+            this.flowLayoutPanelActions.Size = new System.Drawing.Size(173, 212);
             this.flowLayoutPanelActions.TabIndex = 0;
             // 
             // LabelMove
@@ -587,9 +594,9 @@ namespace IwUVEditor
             this.LabelMove.AutoSize = true;
             this.tableLayoutPanelActions.SetColumnSpan(this.LabelMove, 2);
             this.LabelMove.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LabelMove.Location = new System.Drawing.Point(3, 218);
+            this.LabelMove.Location = new System.Drawing.Point(3, 232);
             this.LabelMove.Name = "LabelMove";
-            this.LabelMove.Size = new System.Drawing.Size(172, 20);
+            this.LabelMove.Size = new System.Drawing.Size(167, 20);
             this.LabelMove.TabIndex = 1;
             this.LabelMove.Text = "移動";
             this.LabelMove.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -598,10 +605,10 @@ namespace IwUVEditor
             // 
             this.labelX.AutoSize = true;
             this.labelX.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelX.Location = new System.Drawing.Point(0, 198);
+            this.labelX.Location = new System.Drawing.Point(0, 212);
             this.labelX.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.labelX.Name = "labelX";
-            this.labelX.Size = new System.Drawing.Size(89, 20);
+            this.labelX.Size = new System.Drawing.Size(86, 20);
             this.labelX.TabIndex = 3;
             this.labelX.Text = "X";
             this.labelX.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -610,10 +617,10 @@ namespace IwUVEditor
             // 
             this.labelY.AutoSize = true;
             this.labelY.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelY.Location = new System.Drawing.Point(89, 198);
+            this.labelY.Location = new System.Drawing.Point(86, 212);
             this.labelY.Margin = new System.Windows.Forms.Padding(0);
             this.labelY.Name = "labelY";
-            this.labelY.Size = new System.Drawing.Size(89, 20);
+            this.labelY.Size = new System.Drawing.Size(87, 20);
             this.labelY.TabIndex = 4;
             this.labelY.Text = "Y";
             this.labelY.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -623,9 +630,9 @@ namespace IwUVEditor
             this.labelRotCenter.AutoSize = true;
             this.tableLayoutPanelActions.SetColumnSpan(this.labelRotCenter, 2);
             this.labelRotCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelRotCenter.Location = new System.Drawing.Point(3, 270);
+            this.labelRotCenter.Location = new System.Drawing.Point(3, 284);
             this.labelRotCenter.Name = "labelRotCenter";
-            this.labelRotCenter.Size = new System.Drawing.Size(172, 20);
+            this.labelRotCenter.Size = new System.Drawing.Size(167, 20);
             this.labelRotCenter.TabIndex = 7;
             this.labelRotCenter.Text = "回転中心";
             this.labelRotCenter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -634,10 +641,10 @@ namespace IwUVEditor
             // 
             this.labelRotAngle.AutoSize = true;
             this.labelRotAngle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelRotAngle.Location = new System.Drawing.Point(0, 322);
+            this.labelRotAngle.Location = new System.Drawing.Point(0, 336);
             this.labelRotAngle.Margin = new System.Windows.Forms.Padding(0);
             this.labelRotAngle.Name = "labelRotAngle";
-            this.labelRotAngle.Size = new System.Drawing.Size(89, 32);
+            this.labelRotAngle.Size = new System.Drawing.Size(86, 32);
             this.labelRotAngle.TabIndex = 10;
             this.labelRotAngle.Text = "回転角度";
             this.labelRotAngle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -649,7 +656,7 @@ namespace IwUVEditor
             0,
             0,
             131072});
-            this.numericMoveX.Location = new System.Drawing.Point(0, 238);
+            this.numericMoveX.Location = new System.Drawing.Point(0, 252);
             this.numericMoveX.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.numericMoveX.Minimum = new decimal(new int[] {
             100,
@@ -657,7 +664,7 @@ namespace IwUVEditor
             0,
             -2147483648});
             this.numericMoveX.Name = "numericMoveX";
-            this.numericMoveX.Size = new System.Drawing.Size(89, 32);
+            this.numericMoveX.Size = new System.Drawing.Size(86, 32);
             this.numericMoveX.TabIndex = 11;
             // 
             // numericMoveY
@@ -667,7 +674,7 @@ namespace IwUVEditor
             0,
             0,
             131072});
-            this.numericMoveY.Location = new System.Drawing.Point(89, 238);
+            this.numericMoveY.Location = new System.Drawing.Point(86, 252);
             this.numericMoveY.Margin = new System.Windows.Forms.Padding(0);
             this.numericMoveY.Minimum = new decimal(new int[] {
             100,
@@ -685,7 +692,7 @@ namespace IwUVEditor
             0,
             0,
             131072});
-            this.numericRotCenterX.Location = new System.Drawing.Point(0, 290);
+            this.numericRotCenterX.Location = new System.Drawing.Point(0, 304);
             this.numericRotCenterX.Margin = new System.Windows.Forms.Padding(0);
             this.numericRotCenterX.Minimum = new decimal(new int[] {
             100,
@@ -693,7 +700,7 @@ namespace IwUVEditor
             0,
             -2147483648});
             this.numericRotCenterX.Name = "numericRotCenterX";
-            this.numericRotCenterX.Size = new System.Drawing.Size(87, 32);
+            this.numericRotCenterX.Size = new System.Drawing.Size(86, 32);
             this.numericRotCenterX.TabIndex = 13;
             // 
             // numericRotCenterY
@@ -703,7 +710,7 @@ namespace IwUVEditor
             0,
             0,
             131072});
-            this.numericRotCenterY.Location = new System.Drawing.Point(89, 290);
+            this.numericRotCenterY.Location = new System.Drawing.Point(86, 304);
             this.numericRotCenterY.Margin = new System.Windows.Forms.Padding(0);
             this.numericRotCenterY.Minimum = new decimal(new int[] {
             100,
@@ -716,7 +723,7 @@ namespace IwUVEditor
             // 
             // numericRotAngle
             // 
-            this.numericRotAngle.Location = new System.Drawing.Point(89, 322);
+            this.numericRotAngle.Location = new System.Drawing.Point(86, 336);
             this.numericRotAngle.Margin = new System.Windows.Forms.Padding(0);
             this.numericRotAngle.Maximum = new decimal(new int[] {
             360,
@@ -737,9 +744,9 @@ namespace IwUVEditor
             this.labelScaleCenter.AutoSize = true;
             this.tableLayoutPanelActions.SetColumnSpan(this.labelScaleCenter, 2);
             this.labelScaleCenter.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelScaleCenter.Location = new System.Drawing.Point(3, 354);
+            this.labelScaleCenter.Location = new System.Drawing.Point(3, 368);
             this.labelScaleCenter.Name = "labelScaleCenter";
-            this.labelScaleCenter.Size = new System.Drawing.Size(172, 20);
+            this.labelScaleCenter.Size = new System.Drawing.Size(167, 20);
             this.labelScaleCenter.TabIndex = 16;
             this.labelScaleCenter.Text = "拡縮中心";
             this.labelScaleCenter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -751,7 +758,7 @@ namespace IwUVEditor
             0,
             0,
             131072});
-            this.numericScaleCenterX.Location = new System.Drawing.Point(0, 374);
+            this.numericScaleCenterX.Location = new System.Drawing.Point(0, 388);
             this.numericScaleCenterX.Margin = new System.Windows.Forms.Padding(0);
             this.numericScaleCenterX.Minimum = new decimal(new int[] {
             100,
@@ -759,7 +766,7 @@ namespace IwUVEditor
             0,
             -2147483648});
             this.numericScaleCenterX.Name = "numericScaleCenterX";
-            this.numericScaleCenterX.Size = new System.Drawing.Size(87, 32);
+            this.numericScaleCenterX.Size = new System.Drawing.Size(86, 32);
             this.numericScaleCenterX.TabIndex = 17;
             // 
             // numericScaleCenterY
@@ -769,7 +776,7 @@ namespace IwUVEditor
             0,
             0,
             131072});
-            this.numericScaleCenterY.Location = new System.Drawing.Point(89, 374);
+            this.numericScaleCenterY.Location = new System.Drawing.Point(86, 388);
             this.numericScaleCenterY.Margin = new System.Windows.Forms.Padding(0);
             this.numericScaleCenterY.Minimum = new decimal(new int[] {
             100,
@@ -785,9 +792,9 @@ namespace IwUVEditor
             this.labelScaleRatio.AutoSize = true;
             this.tableLayoutPanelActions.SetColumnSpan(this.labelScaleRatio, 2);
             this.labelScaleRatio.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.labelScaleRatio.Location = new System.Drawing.Point(3, 406);
+            this.labelScaleRatio.Location = new System.Drawing.Point(3, 420);
             this.labelScaleRatio.Name = "labelScaleRatio";
-            this.labelScaleRatio.Size = new System.Drawing.Size(172, 20);
+            this.labelScaleRatio.Size = new System.Drawing.Size(167, 20);
             this.labelScaleRatio.TabIndex = 19;
             this.labelScaleRatio.Text = "拡縮率";
             this.labelScaleRatio.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -799,10 +806,10 @@ namespace IwUVEditor
             0,
             0,
             65536});
-            this.numericScaleRatioX.Location = new System.Drawing.Point(0, 426);
+            this.numericScaleRatioX.Location = new System.Drawing.Point(0, 440);
             this.numericScaleRatioX.Margin = new System.Windows.Forms.Padding(0);
             this.numericScaleRatioX.Name = "numericScaleRatioX";
-            this.numericScaleRatioX.Size = new System.Drawing.Size(87, 32);
+            this.numericScaleRatioX.Size = new System.Drawing.Size(86, 32);
             this.numericScaleRatioX.TabIndex = 20;
             // 
             // numericScaleRatioY
@@ -812,11 +819,52 @@ namespace IwUVEditor
             0,
             0,
             65536});
-            this.numericScaleRatioY.Location = new System.Drawing.Point(89, 426);
+            this.numericScaleRatioY.Location = new System.Drawing.Point(86, 440);
             this.numericScaleRatioY.Margin = new System.Windows.Forms.Padding(0);
             this.numericScaleRatioY.Name = "numericScaleRatioY";
             this.numericScaleRatioY.Size = new System.Drawing.Size(87, 32);
             this.numericScaleRatioY.TabIndex = 21;
+            // 
+            // buttonApplyNumericEdit
+            // 
+            this.tableLayoutPanelActions.SetColumnSpan(this.buttonApplyNumericEdit, 2);
+            this.buttonApplyNumericEdit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonApplyNumericEdit.Location = new System.Drawing.Point(3, 475);
+            this.buttonApplyNumericEdit.Name = "buttonApplyNumericEdit";
+            this.buttonApplyNumericEdit.Size = new System.Drawing.Size(167, 26);
+            this.buttonApplyNumericEdit.TabIndex = 22;
+            this.buttonApplyNumericEdit.Text = "適用";
+            this.buttonApplyNumericEdit.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutDrawSettings
+            // 
+            this.tableLayoutDrawSettings.ColumnCount = 1;
+            this.tableLayoutDrawSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutDrawSettings.Controls.Add(this.labelRadiusOfPosSq, 0, 1);
+            this.tableLayoutDrawSettings.Controls.Add(this.listBoxMaterial, 0, 0);
+            this.tableLayoutDrawSettings.Controls.Add(this.numericRadiusOfPosSq, 0, 2);
+            this.tableLayoutDrawSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutDrawSettings.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutDrawSettings.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.tableLayoutDrawSettings.Name = "tableLayoutDrawSettings";
+            this.tableLayoutDrawSettings.RowCount = 3;
+            this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(256, 911);
+            this.tableLayoutDrawSettings.TabIndex = 1;
+            // 
+            // labelRadiusOfPosSq
+            // 
+            this.labelRadiusOfPosSq.AutoSize = true;
+            this.labelRadiusOfPosSq.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.labelRadiusOfPosSq.Location = new System.Drawing.Point(0, 859);
+            this.labelRadiusOfPosSq.Margin = new System.Windows.Forms.Padding(0);
+            this.labelRadiusOfPosSq.Name = "labelRadiusOfPosSq";
+            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(256, 20);
+            this.labelRadiusOfPosSq.TabIndex = 4;
+            this.labelRadiusOfPosSq.Text = "頂点描画の大きさ";
+            this.labelRadiusOfPosSq.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormEditor
             // 
@@ -860,6 +908,8 @@ namespace IwUVEditor
             ((System.ComponentModel.ISupportInitialize)(this.numericScaleCenterY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericScaleRatioX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericScaleRatioY)).EndInit();
+            this.tableLayoutDrawSettings.ResumeLayout(false);
+            this.tableLayoutDrawSettings.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -924,5 +974,8 @@ namespace IwUVEditor
         private System.Windows.Forms.Label labelRotAngle;
         private System.Windows.Forms.Label labelRotCenter;
         private System.Windows.Forms.NumericUpDown numericMoveX;
+        private System.Windows.Forms.Button buttonApplyNumericEdit;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutDrawSettings;
+        private System.Windows.Forms.Label labelRadiusOfPosSq;
     }
 }

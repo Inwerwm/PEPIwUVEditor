@@ -58,7 +58,7 @@ namespace UnitTest
             }
             finally
             {
-                Reset();
+                Initialize(null);
             }
         }
 
@@ -86,7 +86,7 @@ namespace UnitTest
             }
             finally
             {
-                Reset();
+                Initialize(null);
             }
         }
     }

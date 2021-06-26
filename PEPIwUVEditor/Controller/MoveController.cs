@@ -26,7 +26,7 @@ namespace IwUVEditor.Controller
             }
         }
 
-        public MoveController(UVViewDrawProcess process, SlimDX.Direct3D11.Device device) : base(process)
+        public MoveController(UVViewDrawProcess process, SlimDX.Direct3D11.Device device, Tool.IEditParameter parameters) : base(process, parameters)
         {
             Controller = new MovingControllerPolygons(device, Process.Effect, Process.Rasterize.Solid)
             {

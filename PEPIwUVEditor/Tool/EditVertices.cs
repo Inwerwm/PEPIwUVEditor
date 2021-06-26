@@ -55,7 +55,6 @@ namespace IwUVEditor.Tool
         public virtual void Initialize() 
         {
             TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
-            Controller.Center = CenterPos;
         }
 
         public IEditorCommand CreateCommand(Material target)

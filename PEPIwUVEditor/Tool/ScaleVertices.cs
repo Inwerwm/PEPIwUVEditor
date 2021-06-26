@@ -11,13 +11,13 @@ namespace IwUVEditor.Tool
         {
             get
             {
-                Matrix centerOffset = Matrix.Translation(Controller.Center);
+                Matrix centerOffset = Matrix.Translation(Parameters.ScaleCenter);
 
                 return Matrix.Invert(centerOffset) * Matrix.Scaling(Parameters.ScaleRatio) * centerOffset;
             }
         }
 
-        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process, IEditParameter parameters) : base(process, new ScaleController(process, device), parameters) { }
+        public ScaleVertices(SlimDX.Direct3D11.Device device, UVViewDrawProcess process, IEditParameter parameters) : base(process, new ScaleController(process, device, parameters), parameters) { }
 
         protected override void UpdateParameter()
         {
@@ -27,6 +27,12 @@ namespace IwUVEditor.Tool
             Parameters.ScaleRatio = Controller.CurrentMode == EditController.SelectionMode.X ? new Vector3(xScale, 1, 1)
                                   : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(1, yScale, 1)
                                   : new Vector3(xScale, yScale, 1);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            Parameters.ScaleCenter = CenterPos;
         }
     }
 }

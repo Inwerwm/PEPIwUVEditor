@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor.Tool
 {
+    delegate void Vector3EventHandler(Vector3 value);
+
     interface IEditParameter
     {
+        event Vector3EventHandler RotationCenterChanged;
+        event Vector3EventHandler ScaleCenterChanged;
+
         Vector3 MoveOffset { get; set; }
 
         Vector3 RotationCenter { get; set; }

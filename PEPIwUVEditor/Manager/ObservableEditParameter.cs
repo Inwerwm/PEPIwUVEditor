@@ -1,10 +1,9 @@
-﻿using SlimDX;
+﻿using IwUVEditor.Tool;
+using SlimDX;
 
 namespace IwUVEditor.Manager
 {
-    delegate void Vector3EventHandler(Vector3 value);
-
-    class ObservableEditParameter : Tool.IEditParameter
+    class ObservableEditParameter : IEditParameter
     {
         private Vector3 moveOffset;
 
@@ -14,8 +13,8 @@ namespace IwUVEditor.Manager
         private Vector3 scaleCenter;
         private Vector3 scaleRatio;
 
-        event Vector3EventHandler RotationCenterChanged;
-        event Vector3EventHandler ScaleCenterChanged;
+        public event Vector3EventHandler RotationCenterChanged;
+        public event Vector3EventHandler ScaleCenterChanged;
 
         public bool EnableEvent { get; set; } = true;
 

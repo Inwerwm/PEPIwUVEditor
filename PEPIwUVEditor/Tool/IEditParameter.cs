@@ -9,7 +9,6 @@ namespace IwUVEditor.Tool
 {
     interface IEditParameter
     {
-        Vector3 MoveCenter { get; set; }
         Vector3 MoveOffset { get; set; }
 
         Vector3 RotationCenter { get; set; }

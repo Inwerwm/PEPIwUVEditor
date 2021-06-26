@@ -6,7 +6,6 @@ namespace IwUVEditor.Manager
 
     class ObservableEditParameter : Tool.IEditParameter
     {
-        private Vector3 moveCenter;
         private Vector3 moveOffset;
 
         private Vector3 rotationCenter;
@@ -15,22 +14,11 @@ namespace IwUVEditor.Manager
         private Vector3 scaleCenter;
         private Vector3 scaleRatio;
 
-        event Vector3EventHandler MoveCenterChanged;
         event Vector3EventHandler RotationCenterChanged;
         event Vector3EventHandler ScaleCenterChanged;
 
         public bool EnableEvent { get; set; } = true;
 
-        public Vector3 MoveCenter
-        {
-            get => moveCenter;
-            set
-            {
-                moveCenter = value;
-                if (EnableEvent)
-                    MoveCenterChanged?.Invoke(value);
-            }
-        }
         public Vector3 MoveOffset
         {
             get => moveOffset;

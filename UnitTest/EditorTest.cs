@@ -112,6 +112,30 @@ namespace UnitTest
             {
                 Initialize(null);
             }
+
+            try
+            {
+                Editor.EditParameters.MoveOffset = new SlimDX.Vector3(0, 0, 0);
+                Editor.EditParameters.RotationCenter = new SlimDX.Vector3(0, 0, 0);
+                Editor.EditParameters.RotationAngle = 0;
+                Editor.EditParameters.ScaleCenter = new SlimDX.Vector3(0, 0, 0);
+                Editor.EditParameters.ScaleRatio = new SlimDX.Vector3(0, 0, 1);
+
+                Editor.ApplyEditWithValue();
+
+                Assert.AreEqual(0, UV[0].X, 1e-6);
+                Assert.AreEqual(0, UV[0].Y, 1e-6);
+                Assert.AreEqual(0, UV[1].X, 1e-6);
+                Assert.AreEqual(0, UV[1].Y, 1e-6);
+                Assert.AreEqual(0, UV[2].X, 1e-6);
+                Assert.AreEqual(0, UV[2].Y, 1e-6);
+
+                UndoTest();
+            }
+            finally
+            {
+                Initialize(null);
+            }
         }
     }
 }

@@ -293,5 +293,14 @@ namespace IwUVEditor
         {
             Editor.EditParameters.ScaleCenter = new Vector3(Editor.EditParameters.ScaleCenter.X, (float)numericScaleCenterY.Value, 0);
         }
+
+        private void buttonApplyNumericEdit_Click(object sender, EventArgs e)
+        {
+            Editor.EditParameters.MoveOffset = new Vector3((float)numericMoveX.Value, (float)numericMoveY.Value, 0);
+            Editor.EditParameters.RotationAngle = (float)((double)numericRotAngle.Value * Math.PI / 180);
+            Editor.EditParameters.ScaleRatio = new Vector3((float)numericScaleRatioX.Value, (float)numericScaleRatioY.Value, 0);
+
+            Editor.ApplyEditWithValue();
+        }
     }
 }

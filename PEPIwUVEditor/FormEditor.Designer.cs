@@ -574,6 +574,7 @@ namespace IwUVEditor
             this.buttonApplyNumericEdit.TabIndex = 22;
             this.buttonApplyNumericEdit.Text = "適用";
             this.buttonApplyNumericEdit.UseVisualStyleBackColor = true;
+            this.buttonApplyNumericEdit.Click += new System.EventHandler(this.buttonApplyNumericEdit_Click);
             // 
             // splitUVMat
             // 
@@ -594,7 +595,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.tableLayoutDrawSettings);
             this.splitUVMat.Size = new System.Drawing.Size(1376, 911);
-            this.splitUVMat.SplitterDistance = 1112;
+            this.splitUVMat.SplitterDistance = 1110;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -613,7 +614,7 @@ namespace IwUVEditor
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(256, 909);
+            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(258, 909);
             this.tableLayoutDrawSettings.TabIndex = 1;
             // 
             // labelRadiusOfPosSq
@@ -623,7 +624,7 @@ namespace IwUVEditor
             this.labelRadiusOfPosSq.Location = new System.Drawing.Point(0, 857);
             this.labelRadiusOfPosSq.Margin = new System.Windows.Forms.Padding(0);
             this.labelRadiusOfPosSq.Name = "labelRadiusOfPosSq";
-            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(256, 20);
+            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(258, 20);
             this.labelRadiusOfPosSq.TabIndex = 4;
             this.labelRadiusOfPosSq.Text = "頂点描画の大きさ";
             this.labelRadiusOfPosSq.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -636,7 +637,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(256, 857);
+            this.listBoxMaterial.Size = new System.Drawing.Size(258, 857);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -657,7 +658,7 @@ namespace IwUVEditor
             0,
             65536});
             this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
-            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(256, 32);
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(258, 32);
             this.numericRadiusOfPosSq.TabIndex = 4;
             this.numericRadiusOfPosSq.Value = new decimal(new int[] {
             5,

@@ -65,7 +65,7 @@ namespace IwUVEditor
         {
             PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
             IsEdited = false;
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public bool CanContinueClosing()
@@ -122,7 +122,7 @@ namespace IwUVEditor
             // 破壊的変更を行う命令だった場合、編集済みに変更
             IsEdited |= command.IsDestructive;
 
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public void Undo()
@@ -131,7 +131,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[Current.Material].Undo();
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public void Redo()
@@ -140,7 +140,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[Current.Material].Redo();
-            UpdateDraw();
+            UpdateDraw?.Invoke();
         }
 
         public void CopyPosition()

@@ -1,7 +1,7 @@
 ﻿using PEPlugin.Pmx;
 using PEPlugin.SDX;
 
-namespace UnitTest.PMX
+namespace UnitTest.PEMock
 {
     class MockVertex : IPXVertex
     {

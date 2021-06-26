@@ -6,7 +6,7 @@ using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnitTest.PMX;
+using UnitTest.PEMock;
 
 namespace UnitTest
 {

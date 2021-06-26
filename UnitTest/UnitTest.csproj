@@ -63,7 +63,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandTest.cs" />
-    <Compile Include="PMX\MockVertex.cs" />
+    <Compile Include="PEMockFactory.cs" />
+    <Compile Include="PEMock\MockConnector.cs" />
+    <Compile Include="PEMock\MockMaterial.cs" />
+    <Compile Include="PEMock\MockPluginHost.cs" />
+    <Compile Include="PEMock\MockPmx.cs" />
+    <Compile Include="PEMock\MockPmxConnector.cs" />
+    <Compile Include="PEMock\MockRunArgs.cs" />
+    <Compile Include="PEMock\MockVertex.cs" />
     <Compile Include="StructureTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -14,6 +14,7 @@ namespace IwUVEditor.Command
 
         List<IPXVertex> TargetVertices { get; }
         Matrix Offset { get; }
+        Dictionary<IPXVertex, PEPlugin.SDX.V2> PreviousUV { get; set; }
 
         public CommandApplyVertexEdit(List<IPXVertex> targetVertices, Matrix offset)
         {
@@ -23,12 +24,13 @@ namespace IwUVEditor.Command
 
         public void Do()
         {
+            PreviousUV = TargetVertices.AsParallel().ToDictionary(v => v, v => v.UV.Clone());
             TargetVertices.AsParallel().ForAll(vtx => vtx.UV = Vector2.TransformCoordinate(vtx.UV, Offset));
         }
 
         public void Undo()
         {
-            TargetVertices.AsParallel().ForAll(vtx => vtx.UV = Vector2.TransformCoordinate(vtx.UV, Matrix.Invert(Offset)));
+            TargetVertices.AsParallel().ForAll(vtx => vtx.UV = PreviousUV[vtx]);
         }
     }
 }

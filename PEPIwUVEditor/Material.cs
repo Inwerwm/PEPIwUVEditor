@@ -64,7 +64,8 @@ namespace IwUVEditor
             // カレントディレクトリをもとに戻す
             Environment.CurrentDirectory = cdTmp;
 
-            return fullPath;
+            // ファイルが存在しなければ空文字を返す
+            return File.Exists(fullPath) ? fullPath : "";
         }
 
         public override string ToString()

@@ -297,7 +297,7 @@ namespace IwUVEditor
         private void buttonApplyNumericEdit_Click(object sender, EventArgs e)
         {
             Editor.EditParameters.MoveOffset = new Vector3((float)numericMoveX.Value, (float)numericMoveY.Value, 0);
-            Editor.EditParameters.RotationAngle = (float)((double)(numericRotAngle.Value / 180m) * Math.PI);
+            Editor.EditParameters.RotationAngle = -(float)((double)(numericRotAngle.Value / 180m) * Math.PI);
             Editor.EditParameters.ScaleRatio = new Vector3((float)numericScaleRatioX.Value, (float)numericScaleRatioY.Value, 1);
 
             Editor.ApplyEditWithValue();

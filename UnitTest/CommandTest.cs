@@ -62,9 +62,12 @@ namespace UnitTest
                 new MockVertex(new V2(1, 1)),
             };
 
-            var transCmd = new CommandApplyVertexEdit(vertices, Matrix.Translation(new Vector3(1, 1, 0)));
-            var rotateCmd = new CommandApplyVertexEdit(vertices, Matrix.RotationZ((float)(Math.PI / 2)));
-            var scaleCmd = new CommandApplyVertexEdit(vertices, Matrix.Scaling(new Vector3(2, 2, 1)));
+            Matrix transMat = Matrix.Translation(new Vector3(1, 1, 0));
+            Matrix rotMat = Matrix.RotationZ((float)(Math.PI / 2));
+            Matrix scaleMat = Matrix.Scaling(new Vector3(2, 2, 1));
+
+            // 平行移動
+            var transCmd = new CommandApplyVertexEdit(vertices, transMat);
             
             transCmd.Do();
             Assert.AreEqual(1, vertices[0].UV.X, 1e-6);
@@ -78,6 +81,9 @@ namespace UnitTest
             Assert.AreEqual(1, vertices[3].UV.X, 1e-6);
             Assert.AreEqual(1, vertices[3].UV.Y, 1e-6);
 
+            // 回転
+            var rotateCmd = new CommandApplyVertexEdit(vertices, rotMat);
+
             rotateCmd.Do();
             Assert.AreEqual(0, vertices[2].UV.X, 1e-6);
             Assert.AreEqual(1, vertices[2].UV.Y, 1e-6);
@@ -86,11 +92,38 @@ namespace UnitTest
             Assert.AreEqual(1, vertices[2].UV.X, 1e-6);
             Assert.AreEqual(0, vertices[2].UV.Y, 1e-6);
 
+            // 拡大
+            var scaleCmd = new CommandApplyVertexEdit(vertices, scaleMat);
+
             scaleCmd.Do();
             Assert.AreEqual(2, vertices[3].UV.X, 1e-6);
             Assert.AreEqual(2, vertices[3].UV.Y, 1e-6);
 
             scaleCmd.Undo();
+            Assert.AreEqual(1, vertices[3].UV.X, 1e-6);
+            Assert.AreEqual(1, vertices[3].UV.Y, 1e-6);
+
+            // 複合
+            var compMat = scaleMat * rotMat * transMat;
+            var compCmd = new CommandApplyVertexEdit(vertices, compMat);
+
+            compCmd.Do();
+            Assert.AreEqual(1, vertices[0].UV.X, 1e-6);
+            Assert.AreEqual(1, vertices[0].UV.Y, 1e-6);
+            Assert.AreEqual(-1, vertices[1].UV.X, 1e-6);
+            Assert.AreEqual(1, vertices[1].UV.Y, 1e-6);
+            Assert.AreEqual(1, vertices[2].UV.X, 1e-6);
+            Assert.AreEqual(3, vertices[2].UV.Y, 1e-6);
+            Assert.AreEqual(-1, vertices[3].UV.X, 1e-6);
+            Assert.AreEqual(3, vertices[3].UV.Y, 1e-6);
+
+            compCmd.Undo();
+            Assert.AreEqual(0, vertices[0].UV.X, 1e-6);
+            Assert.AreEqual(0, vertices[0].UV.Y, 1e-6);
+            Assert.AreEqual(0, vertices[1].UV.X, 1e-6);
+            Assert.AreEqual(1, vertices[1].UV.Y, 1e-6);
+            Assert.AreEqual(1, vertices[2].UV.X, 1e-6);
+            Assert.AreEqual(0, vertices[2].UV.Y, 1e-6);
             Assert.AreEqual(1, vertices[3].UV.X, 1e-6);
             Assert.AreEqual(1, vertices[3].UV.Y, 1e-6);
         }

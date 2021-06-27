@@ -5,6 +5,9 @@ namespace UnitTest.PEMock
 {
     class MockVertex : IPXVertex
     {
+        static uint instanceCount = 0;
+
+        public uint ID { get; }
         public V3 Position { get; set; }
         public V3 Normal { get; set; }
         public V2 UV { get; set; }
@@ -27,9 +30,12 @@ namespace UnitTest.PEMock
         public V3 SDEF_R1 { get; set; }
         public float EdgeScale { get; set; }
 
-        public MockVertex() { }
+        public MockVertex()
+        {
+            ID = instanceCount++;
+        }
 
-        public MockVertex(V2 uv)
+        public MockVertex(V2 uv) : this()
         {
             UV = uv;
         }
@@ -58,5 +64,10 @@ namespace UnitTest.PEMock
             SDEF_R1 = this.SDEF_R1,
             EdgeScale = this.EdgeScale
         };
+
+        public override string ToString()
+        {
+            return $"{ID} - UV({UV.X}, {UV.Y})";
+        }
     }
 }

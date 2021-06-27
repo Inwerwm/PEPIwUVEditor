@@ -7,6 +7,7 @@ using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IwUVEditor
 {
@@ -164,7 +165,7 @@ namespace IwUVEditor
             if (PositionClip is null)
                 return;
 
-            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key).ToList();
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key);
             Do(Current.Material, new CommandSetPosition(selectedVertices, PositionClip.Value));
         }
 
@@ -197,7 +198,28 @@ namespace IwUVEditor
             var rotMat = Matrix.Translation(EditParameters.RotationCenter * -1) * Matrix.RotationZ(EditParameters.RotationAngle) * Matrix.Translation(EditParameters.RotationCenter);
             var sclMat = Matrix.Invert(Matrix.Translation(EditParameters.ScaleCenter)) * Matrix.Scaling(EditParameters.ScaleRatio) * Matrix.Translation(EditParameters.ScaleCenter);
 
-            Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key).ToList(), sclMat * rotMat * trsMat));
+            Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key), sclMat * rotMat * trsMat));
+        }
+
+        public async Task SelectContinuousVertices()
+        {
+            Dictionary<IPXVertex, IPXFace[]> vfmap = Current.Material.Vertices.AsParallel().Select(vtx =>
+                    (Substance: vtx, Faces: Current.Material.Faces.Where(face => face.Vertex1 == vtx || face.Vertex2 == vtx || face.Vertex3 == vtx).ToArray())
+                ).ToDictionary(pair => pair.Substance, pair => pair.Faces);
+
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(selected => selected.Key);
+            var selectTarget = new Dictionary<IPXVertex, bool>(Current.Material.IsSelected);
+            await Task.WhenAll(selectedVertices.Select(vtx => Task.Run(() => SelectContinuousVertices(vtx, vfmap, selectTarget))));
+
+            Do(Current.Material, new CommandSelectVertices(Current.Material, selectTarget) { Mode = SelectionMode.Union });
+        }
+
+        private static Task SelectContinuousVertices(IPXVertex vtx, Dictionary<IPXVertex, IPXFace[]> vfmap, Dictionary<IPXVertex, bool> selectTarget)
+        {
+            selectTarget[vtx] = true;
+
+            var nextVertices = vfmap[vtx].SelectMany(f => new[] { f.Vertex1, f.Vertex2, f.Vertex3 }.Where(v => v != vtx && !selectTarget[v]));
+            return nextVertices.Any() ? Task.WhenAll(nextVertices.Select(v => Task.Run(() => SelectContinuousVertices(v, vfmap, selectTarget)))) : Task.CompletedTask;
         }
 
         protected virtual void Dispose(bool disposing)

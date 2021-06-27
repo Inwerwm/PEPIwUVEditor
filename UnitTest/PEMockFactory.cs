@@ -15,6 +15,9 @@ namespace UnitTest
         public static IPERunArgs CreateRunArgs(V2[] uvs, (int A, int B, int C)[] indices) =>
             CreateRunArgs(CreateModel(uvs, indices));
 
+        public static IPERunArgs CreateRunArgs(IEnumerable<IPXVertex> vertices, params (int A, int B, int C)[] indices) =>
+            CreateRunArgs(CreateModel(vertices.ToList(), indices));
+
         public static IPERunArgs CreateRunArgs(IPXPmx model)
         {
             var pmxCon = new MockPmxConnector(model);
@@ -25,9 +28,17 @@ namespace UnitTest
 
         public static IPXPmx CreateModel(V2[] uvs, (int A, int B, int C)[] indices)
         {
-            var vertices = uvs.Select(v => (IPXVertex)new MockVertex(v)).ToList();
+            return CreateModel(CreateVertices(uvs).ToList(), indices);
+        }
+
+        public static IPXPmx CreateModel(IList<IPXVertex> vertices, (int A, int B, int C)[] indices)
+        {
             var material = new[] { new MockMaterial(vertices, indices) };
             return new MockPmx(vertices, material);
+        }
+        public static IEnumerable<IPXVertex> CreateVertices(params V2[] uvs)
+        {
+            return uvs.Select(v => (IPXVertex)new MockVertex(v));
         }
     }
 }

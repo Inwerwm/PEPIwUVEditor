@@ -302,5 +302,10 @@ namespace IwUVEditor
 
             Editor.ApplyEditWithValue();
         }
+
+        private async void buttonSelectContinuousVertices_Click(object sender, EventArgs e)
+        {
+            await Editor.SelectContinuousVertices();
+        }
     }
 }

@@ -286,6 +286,11 @@ namespace IwUVEditor
             this.numericScaleRatioY.Name = "numericScaleRatioY";
             this.numericScaleRatioY.Size = new System.Drawing.Size(86, 32);
             this.numericScaleRatioY.TabIndex = 21;
+            this.numericScaleRatioY.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // numericScaleRatioX
             // 
@@ -300,6 +305,11 @@ namespace IwUVEditor
             this.numericScaleRatioX.Name = "numericScaleRatioX";
             this.numericScaleRatioX.Size = new System.Drawing.Size(86, 32);
             this.numericScaleRatioX.TabIndex = 20;
+            this.numericScaleRatioX.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // labelScaleRatio
             // 
@@ -367,7 +377,7 @@ namespace IwUVEditor
             // 
             // numericRotAngle
             // 
-            this.numericRotAngle.DecimalPlaces = 5;
+            this.numericRotAngle.DecimalPlaces = 3;
             this.numericRotAngle.Location = new System.Drawing.Point(86, 334);
             this.numericRotAngle.Margin = new System.Windows.Forms.Padding(0);
             this.numericRotAngle.Maximum = new decimal(new int[] {
@@ -607,7 +617,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.tableLayoutDrawSettings);
             this.splitUVMat.Size = new System.Drawing.Size(1376, 911);
-            this.splitUVMat.SplitterDistance = 1106;
+            this.splitUVMat.SplitterDistance = 1104;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -626,7 +636,7 @@ namespace IwUVEditor
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(262, 909);
+            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(264, 909);
             this.tableLayoutDrawSettings.TabIndex = 1;
             // 
             // labelRadiusOfPosSq
@@ -636,7 +646,7 @@ namespace IwUVEditor
             this.labelRadiusOfPosSq.Location = new System.Drawing.Point(0, 857);
             this.labelRadiusOfPosSq.Margin = new System.Windows.Forms.Padding(0);
             this.labelRadiusOfPosSq.Name = "labelRadiusOfPosSq";
-            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(262, 20);
+            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(264, 20);
             this.labelRadiusOfPosSq.TabIndex = 4;
             this.labelRadiusOfPosSq.Text = "頂点描画の大きさ";
             this.labelRadiusOfPosSq.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -649,7 +659,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(262, 857);
+            this.listBoxMaterial.Size = new System.Drawing.Size(264, 857);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -670,7 +680,7 @@ namespace IwUVEditor
             0,
             65536});
             this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
-            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(262, 32);
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(264, 32);
             this.numericRadiusOfPosSq.TabIndex = 4;
             this.numericRadiusOfPosSq.Value = new decimal(new int[] {
             5,

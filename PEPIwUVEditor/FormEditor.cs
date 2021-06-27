@@ -5,6 +5,7 @@ using IwUVEditor.Subform;
 using SlimDX;
 using SlimDX.RawInput;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace IwUVEditor
@@ -320,9 +321,16 @@ namespace IwUVEditor
 
         private void 選択材質のテクスチャを変更ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var ofd = new OpenFileDialog()
+            {
+                InitialDirectory = Path.GetDirectoryName(Current.Material.TexFullPath),
+                Filter = "画像ファイル(*.bmp;*.png;*.jpg;*.jpeg;*.dds;*.tga)|*.bmp;*.png;*.jpg;*.jpeg;*.dds;*.tga|すべてのファイル(*.*)|*.*"
+            };
 
-
-            
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Editor.ChangeTexture(ofd.FileName);
+            }
         }
     }
 }

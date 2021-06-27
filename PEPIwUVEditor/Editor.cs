@@ -267,9 +267,12 @@ namespace IwUVEditor
             Args.Host.Connector.View.PmxView.SetSelectedVertexIndices(selectedVertices.AsParallel().Select(v => Pmx.Vertex.IndexOf(v)).ToArray());
         }
 
-        internal void ChangeTexture(string filaPath)
+        internal void ChangeTexture(string filePath)
         {
-            throw new NotImplementedException();
+            var uri = new Uri(Pmx.FilePath.Replace("%", "%25"));
+            var rPath = uri.MakeRelativeUri(new Uri(filePath.Replace("%", "%25")));
+
+            Current.Material.Tex = Uri.UnescapeDataString(rPath.ToString()).Replace("%25", "%");
         }
     }
 }

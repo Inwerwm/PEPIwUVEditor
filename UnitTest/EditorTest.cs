@@ -1,7 +1,9 @@
 ﻿using IwUVEditor;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PEPlugin.Pmx;
 using PEPlugin.SDX;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace UnitTest
@@ -11,6 +13,7 @@ namespace UnitTest
     {
         static Editor Editor { get; set; }
         static V2[] UV => Editor.Current.Material.Vertices.Select(v => v.UV).ToArray();
+        static IList<IPXVertex> Vertices => Editor.Current.Material.Vertices;
 
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
@@ -54,6 +57,48 @@ namespace UnitTest
                 Assert.AreEqual(0, UV[0].Y, 1e-6);
 
                 UndoTest();
+            }
+            finally
+            {
+                Initialize(null);
+            }
+        }
+
+        [TestMethod]
+        public void TestSelectContinuousVertices()
+        {
+            try
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    Assert.IsTrue(Editor.Current.Material.IsSelected[Vertices[i]], "初期状態が意図せぬ状態になっています。");
+                }
+                for (int i = 3; i < 8; i++)
+                {
+                    Assert.IsFalse(Editor.Current.Material.IsSelected[Vertices[i]], "初期状態が意図せぬ状態になっています。");
+                }
+
+                Editor.SelectContinuousVertices();
+
+                for (int i = 0; i < 5; i++)
+                {
+                    Assert.IsTrue(Editor.Current.Material.IsSelected[Vertices[i]], "選択されているべき頂点が選択されていません。");
+                }
+                for (int i = 5; i < 8; i++)
+                {
+                    Assert.IsFalse(Editor.Current.Material.IsSelected[Vertices[i]], "選択されているべからざる頂点が選択されています。");
+                }
+
+                Editor.Undo();
+
+                for (int i = 0; i < 3; i++)
+                {
+                    Assert.IsTrue(Editor.Current.Material.IsSelected[Vertices[i]], "Undo に失敗しています。");
+                }
+                for (int i = 3; i < 8; i++)
+                {
+                    Assert.IsFalse(Editor.Current.Material.IsSelected[Vertices[i]], "Undo に失敗しています。");
+                }
             }
             finally
             {

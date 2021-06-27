@@ -263,7 +263,8 @@ namespace IwUVEditor
 
         internal void SendSelectedVertices()
         {
-            throw new NotImplementedException();
+            var selectedVertices = Current.Material.IsSelected.Where(p => p.Value).Select(p => p.Key);
+            Args.Host.Connector.View.PmxView.SetSelectedVertexIndices(selectedVertices.AsParallel().Select(v => Pmx.Vertex.IndexOf(v)).ToArray());
         }
     }
 }

@@ -5,6 +5,7 @@ using PEPlugin.SDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace UnitTest
 {
@@ -65,7 +66,7 @@ namespace UnitTest
         }
 
         [TestMethod]
-        public void TestSelectContinuousVertices()
+        public async Task TestSelectContinuousVertices()
         {
             try
             {
@@ -78,7 +79,7 @@ namespace UnitTest
                     Assert.IsFalse(Editor.Current.Material.IsSelected[Vertices[i]], "初期状態が意図せぬ状態になっています。");
                 }
 
-                Editor.SelectContinuousVertices();
+                await Editor.SelectContinuousVertices();
 
                 for (int i = 0; i < 5; i++)
                 {

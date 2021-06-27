@@ -7,6 +7,7 @@ using SlimDX;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace IwUVEditor
 {
@@ -200,15 +201,25 @@ namespace IwUVEditor
             Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key), sclMat * rotMat * trsMat));
         }
 
-        public void SelectContinuousVertices()
+        public async Task SelectContinuousVertices()
         {
-            var vfmap = Current.Material.Vertices.AsParallel().Select(vtx =>
+            Dictionary<IPXVertex, IPXFace[]> vfmap = Current.Material.Vertices.AsParallel().Select(vtx =>
                     (Substance: vtx, Faces: Current.Material.Faces.Where(face => face.Vertex1 == vtx || face.Vertex2 == vtx || face.Vertex3 == vtx).ToArray())
                 ).ToDictionary(pair => pair.Substance, pair => pair.Faces);
 
-            // その面が含んでいる頂点を取得
-            // その頂点を含んだ面を取得
-            // 面の頂点がすべて選択頂点に含まれておれば終了
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(selected => selected.Key);
+            var selectTarget = Current.Material.IsSelected.ToDictionary(p => p.Key, p => p.Value);
+            await Task.WhenAll(selectedVertices.Select(vtx => Task.Run(() => SelectContinuousVertices(vtx, vfmap, selectTarget))));
+
+            Do(Current.Material, new CommandSelectVertices(Current.Material, selectTarget) { Mode = SelectionMode.Union });
+        }
+
+        private static Task SelectContinuousVertices(IPXVertex vtx, Dictionary<IPXVertex, IPXFace[]> vfmap, Dictionary<IPXVertex, bool> selectTarget)
+        {
+            selectTarget[vtx] = true;
+
+            var nextVertices = vfmap[vtx].SelectMany(f => new[] { f.Vertex1, f.Vertex2, f.Vertex3 }.Where(v => v != vtx && !selectTarget[v]));
+            return nextVertices.Any() ? Task.WhenAll(nextVertices.Select(v => Task.Run(() => SelectContinuousVertices(v, vfmap, selectTarget)))) : Task.CompletedTask;
         }
 
         protected virtual void Dispose(bool disposing)

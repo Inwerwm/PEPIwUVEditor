@@ -9,10 +9,14 @@ using System.Linq;
 
 namespace IwUVEditor
 {
+    delegate void MaterialTextureChangedEventHandler(string fullPath);
+
     class Material : IPXMaterial
     {
         private static int instanceCount;
         public int InstanceId { get; }
+
+        public event MaterialTextureChangedEventHandler MaterialTextrueChanged;
 
         IPXMaterial Value { get; }
 
@@ -99,6 +103,7 @@ namespace IwUVEditor
             {
                 Value.Tex = value;
                 CreateTexFullPath();
+                MaterialTextrueChanged?.Invoke(TexFullPath);
             }
         }
         public string Sphere { get => Value.Sphere; set => Value.Sphere = value; }

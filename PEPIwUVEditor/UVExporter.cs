@@ -19,5 +19,10 @@ namespace IwUVEditor
             Vertices = vertices;
             Faces = faces;
         }
+
+        public void Export(string path)
+        {
+
+        }
     }
 }

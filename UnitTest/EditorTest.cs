@@ -15,17 +15,16 @@ namespace UnitTest
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
         {
-            var args = PEMockFactory.CreateRunArgs(new[]
-            {
-                new V2(0, 1), new V2(-1, 0), new V2(1, -1)
-            }, new[]
-            {
-                (0, 1, 2)
-            });
+            // 具象型にして値を確定させないと呼ばれるたびにインスタンスを新規生成する
+            var headVertices = PEMockFactory.CreateVertices(new V2(0, 1), new V2(-1, 0), new V2(1, -1)).ToArray();
+            var tailVertices = PEMockFactory.CreateVertices(new V2(0, -2), new V2(-1.5f, -1.5f), new V2(-1.5f, 0), new V2(-2, -1), new V2(-2.5f, 0.5f)).ToArray();
+
+            var args = PEMockFactory.CreateRunArgs(headVertices.Concat(tailVertices), (0, 1, 2), (1, 3, 2), (1, 3, 4), (5, 6, 7));
+
             Editor = new Editor(args, new IwUVEditor.StateContainer.EditorStates(), null);
             Editor.LoadModel();
 
-            foreach (var key in Editor.Current.Material.IsSelected.Keys.ToArray())
+            foreach (var key in headVertices)
             {
                 Editor.Current.Material.IsSelected[key] = true;
             }
@@ -53,7 +52,7 @@ namespace UnitTest
 
                 Assert.AreEqual(0, UV[0].X, 1e-6);
                 Assert.AreEqual(0, UV[0].Y, 1e-6);
-                
+
                 UndoTest();
             }
             finally
@@ -105,7 +104,7 @@ namespace UnitTest
                 Assert.AreEqual(-2, UV[1].Y, 1e-6);
                 Assert.AreEqual(6, UV[2].X, 1e-6);
                 Assert.AreEqual(2, UV[2].Y, 1e-6);
-                
+
                 UndoTest();
             }
             finally

@@ -267,7 +267,7 @@ namespace IwUVEditor
             Args.Host.Connector.View.PmxView.SetSelectedVertexIndices(selectedVertices.AsParallel().Select(v => Pmx.Vertex.IndexOf(v)).ToArray());
         }
 
-        internal void ChangeTexture()
+        internal void ChangeTexture(string filaPath)
         {
             throw new NotImplementedException();
         }

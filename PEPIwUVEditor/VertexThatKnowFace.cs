@@ -26,6 +26,24 @@ namespace IwUVEditor
                 new VertexThatKnowFace(vtx, faces.Where(face => face.Vertex1 == vtx || face.Vertex2 == vtx || face.Vertex3 == vtx).ToArray())
             );
 
+        public override bool Equals(object obj)
+        {
+            return obj is VertexThatKnowFace face &&
+                   EqualityComparer<IPXVertex>.Default.Equals(Substance, face.Substance);
+        }
+
+        public static bool operator ==(VertexThatKnowFace vkf, IPXVertex pxv) =>
+            vkf.Substance == pxv;
+
+        public static bool operator !=(VertexThatKnowFace vkf, IPXVertex pxv) =>
+            vkf.Substance != pxv;
+
+        public static bool operator ==(IPXVertex pxv, VertexThatKnowFace vkf) =>
+            vkf.Substance == pxv;
+
+        public static bool operator !=(IPXVertex pxv, VertexThatKnowFace vkf) =>
+            vkf.Substance != pxv;
+
         #region Interface implement by Substance
         public V3 Position { get => Substance.Position; set => Substance.Position = value; }
         public V3 Normal { get => Substance.Normal; set => Substance.Normal = value; }

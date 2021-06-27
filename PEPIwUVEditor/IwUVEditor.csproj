@@ -139,6 +139,12 @@
     <Compile Include="Log\FormDebugLog.Designer.cs">
       <DependentUpon>FormDebugLog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Subform\FormExportUVMeshConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Subform\FormExportUVMeshConfig.Designer.cs">
+      <DependentUpon>FormExportUVMeshConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Subform\FormSaveSelection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +178,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Log\FormDebugLog.resx">
       <DependentUpon>FormDebugLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Subform\FormExportUVMeshConfig.resx">
+      <DependentUpon>FormExportUVMeshConfig.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Subform\FormSaveSelection.resx">
       <DependentUpon>FormSaveSelection.cs</DependentUpon>

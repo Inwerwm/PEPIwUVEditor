@@ -12,11 +12,11 @@ namespace IwUVEditor.Command
     {
         public bool IsDestructive => true;
 
-        List<IPXVertex> TargetVertices { get; }
+        IEnumerable<IPXVertex> TargetVertices { get; }
         Dictionary<IPXVertex, Vector2> PreviousPosition { get; }
         Vector2 Positon { get; }
 
-        public CommandSetPosition(List<IPXVertex> targetVertices, Vector2 positon)
+        public CommandSetPosition(IEnumerable<IPXVertex> targetVertices, Vector2 positon)
         {
             TargetVertices = targetVertices;
             PreviousPosition = TargetVertices.ToDictionary(vtx => vtx, vtx => (Vector2)vtx.UV);

@@ -12,11 +12,11 @@ namespace IwUVEditor.Command
     {
         public bool IsDestructive => true;
 
-        List<IPXVertex> TargetVertices { get; }
+        IEnumerable<IPXVertex> TargetVertices { get; }
         Matrix Offset { get; }
         Dictionary<IPXVertex, PEPlugin.SDX.V2> PreviousUV { get; set; }
 
-        public CommandApplyVertexEdit(List<IPXVertex> targetVertices, Matrix offset)
+        public CommandApplyVertexEdit(IEnumerable<IPXVertex> targetVertices, Matrix offset)
         {
             TargetVertices = targetVertices;
             Offset = offset;

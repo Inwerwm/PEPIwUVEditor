@@ -274,5 +274,10 @@ namespace IwUVEditor
 
             Current.Material.Tex = Uri.UnescapeDataString(rPath.ToString()).Replace("%25", "%");
         }
+
+        internal void ExportUVImage(int imageSize)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -332,5 +332,14 @@ namespace IwUVEditor
                 Editor.ChangeTexture(ofd.FileName);
             }
         }
+
+        private void UV情報を出力ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var formExUV = new FormExportUVMeshConfig();
+            if (formExUV.ShowDialog() == DialogResult.OK)
+            {
+                Editor.ExportUVImage(formExUV.ExportSize);
+            }
+        }
     }
 }

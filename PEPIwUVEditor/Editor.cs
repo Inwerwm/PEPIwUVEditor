@@ -254,7 +254,11 @@ namespace IwUVEditor
 
         internal void FetchSelectedVertices()
         {
-            throw new NotImplementedException();
+            var selectedVertexIndices = Args.Host.Connector.View.PmxView.GetSelectedVertexIndices();
+            var selectedVertices = selectedVertexIndices.Select(i => Pmx.Vertex[i]);
+            var selectTargetVertices = selectedVertices.Intersect(Current.Material.Vertices);
+
+            Do(Current.Material, new CommandSelectVertices(Current.Material, selectTargetVertices.ToDictionary(vtx => vtx, _ => true)) { Mode = SelectionMode.Union });
         }
 
         internal void SendSelectedVertices()

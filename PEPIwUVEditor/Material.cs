@@ -26,7 +26,7 @@ namespace IwUVEditor
         public uint[] FaceSequence { get; }
 
         string ModelPath { get; }
-        public string TexFullPath { get; }
+        public string TexFullPath { get; private set; }
 
         public string TexExt => Path.GetExtension(Tex);
 
@@ -37,7 +37,7 @@ namespace IwUVEditor
 
             Value = material;
             ModelPath = pmx.FilePath;
-            TexFullPath = CreateTexFullPath();
+            CreateTexFullPath();
 
             IEnumerable<IPXVertex> faceVertices = Faces.SelectMany(face => face.ToVertices());
 
@@ -49,10 +49,13 @@ namespace IwUVEditor
             FaceSequence = faceVertices.Select(vtx => VtxIdDic[vtx]).ToArray();
         }
 
-        private string CreateTexFullPath()
+        private void CreateTexFullPath()
         {
             if (string.IsNullOrWhiteSpace(ModelPath) || string.IsNullOrWhiteSpace(Tex))
-                return "";
+            {
+                TexFullPath = "";
+                return;
+            }
 
             // カレントディレクトリをモデルのディレクトリに変更
             var cdTmp = Environment.CurrentDirectory;
@@ -65,7 +68,7 @@ namespace IwUVEditor
             Environment.CurrentDirectory = cdTmp;
 
             // ファイルが存在しなければ空文字を返す
-            return File.Exists(fullPath) ? fullPath : "";
+            TexFullPath = File.Exists(fullPath) ? fullPath : "";
         }
 
         public override string ToString()
@@ -89,7 +92,15 @@ namespace IwUVEditor
         public bool Edge { get => Value.Edge; set => Value.Edge = value; }
         public V4 EdgeColor { get => Value.EdgeColor; set => Value.EdgeColor = value; }
         public float EdgeSize { get => Value.EdgeSize; set => Value.EdgeSize = value; }
-        public string Tex { get => Value.Tex; set => Value.Tex = value; }
+        public string Tex
+        {
+            get => Value.Tex;
+            set
+            {
+                Value.Tex = value;
+                CreateTexFullPath();
+            }
+        }
         public string Sphere { get => Value.Sphere; set => Value.Sphere = value; }
         public SphereType SphereMode { get => Value.SphereMode; set => Value.SphereMode = value; }
         public string Toon { get => Value.Toon; set => Value.Toon = value; }

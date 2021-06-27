@@ -251,5 +251,15 @@ namespace IwUVEditor
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        internal void FetchSelectedVertices()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SendSelectedVertices()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

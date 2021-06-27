@@ -307,5 +307,15 @@ namespace IwUVEditor
         {
             await Editor.SelectContinuousVertices();
         }
+
+        private void 選択頂点を受信ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.FetchSelectedVertices();
+        }
+
+        private void 選択頂点を送信ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.SendSelectedVertices();
+        }
     }
 }

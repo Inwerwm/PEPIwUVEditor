@@ -200,6 +200,11 @@ namespace IwUVEditor
             Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key).ToList(), sclMat * rotMat * trsMat));
         }
 
+        public void SelectContinuousVertices()
+        {
+
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)

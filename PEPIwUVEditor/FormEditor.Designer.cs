@@ -58,6 +58,7 @@ namespace IwUVEditor
             this.buttonReverseV = new System.Windows.Forms.Button();
             this.buttonReverseH = new System.Windows.Forms.Button();
             this.buttonResetCamera = new System.Windows.Forms.Button();
+            this.buttonSelectContinuousVertices = new System.Windows.Forms.Button();
             this.LabelMove = new System.Windows.Forms.Label();
             this.labelX = new System.Windows.Forms.Label();
             this.numericMoveX = new System.Windows.Forms.NumericUpDown();
@@ -93,7 +94,6 @@ namespace IwUVEditor
             this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.デバッグログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
-            this.buttonSelectContinuousFaces = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -485,7 +485,7 @@ namespace IwUVEditor
             this.flowLayoutPanelActions.Controls.Add(this.buttonReverseV);
             this.flowLayoutPanelActions.Controls.Add(this.buttonReverseH);
             this.flowLayoutPanelActions.Controls.Add(this.buttonResetCamera);
-            this.flowLayoutPanelActions.Controls.Add(this.buttonSelectContinuousFaces);
+            this.flowLayoutPanelActions.Controls.Add(this.buttonSelectContinuousVertices);
             this.flowLayoutPanelActions.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelActions.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelActions.Margin = new System.Windows.Forms.Padding(0);
@@ -522,6 +522,16 @@ namespace IwUVEditor
             this.buttonResetCamera.Text = "カメラ\r\n初期化";
             this.buttonResetCamera.UseVisualStyleBackColor = true;
             this.buttonResetCamera.Click += new System.EventHandler(this.buttonResetCamera_Click);
+            // 
+            // buttonSelectContinuousVertices
+            // 
+            this.buttonSelectContinuousVertices.Location = new System.Drawing.Point(89, 69);
+            this.buttonSelectContinuousVertices.Name = "buttonSelectContinuousVertices";
+            this.buttonSelectContinuousVertices.Size = new System.Drawing.Size(80, 60);
+            this.buttonSelectContinuousVertices.TabIndex = 4;
+            this.buttonSelectContinuousVertices.Text = "連続頂点を選択";
+            this.buttonSelectContinuousVertices.UseVisualStyleBackColor = true;
+            this.buttonSelectContinuousVertices.Click += new System.EventHandler(this.buttonSelectContinuousVertices_Click);
             // 
             // LabelMove
             // 
@@ -597,7 +607,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.tableLayoutDrawSettings);
             this.splitUVMat.Size = new System.Drawing.Size(1376, 911);
-            this.splitUVMat.SplitterDistance = 1108;
+            this.splitUVMat.SplitterDistance = 1106;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -616,7 +626,7 @@ namespace IwUVEditor
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(260, 909);
+            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(262, 909);
             this.tableLayoutDrawSettings.TabIndex = 1;
             // 
             // labelRadiusOfPosSq
@@ -626,7 +636,7 @@ namespace IwUVEditor
             this.labelRadiusOfPosSq.Location = new System.Drawing.Point(0, 857);
             this.labelRadiusOfPosSq.Margin = new System.Windows.Forms.Padding(0);
             this.labelRadiusOfPosSq.Name = "labelRadiusOfPosSq";
-            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(260, 20);
+            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(262, 20);
             this.labelRadiusOfPosSq.TabIndex = 4;
             this.labelRadiusOfPosSq.Text = "頂点描画の大きさ";
             this.labelRadiusOfPosSq.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -639,7 +649,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(260, 857);
+            this.listBoxMaterial.Size = new System.Drawing.Size(262, 857);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -660,7 +670,7 @@ namespace IwUVEditor
             0,
             65536});
             this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
-            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(260, 32);
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(262, 32);
             this.numericRadiusOfPosSq.TabIndex = 4;
             this.numericRadiusOfPosSq.Value = new decimal(new int[] {
             5,
@@ -884,16 +894,6 @@ namespace IwUVEditor
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
             // 
-            // buttonSelectContinuousFaces
-            // 
-            this.buttonSelectContinuousFaces.Location = new System.Drawing.Point(89, 69);
-            this.buttonSelectContinuousFaces.Name = "buttonSelectContinuousFaces";
-            this.buttonSelectContinuousFaces.Size = new System.Drawing.Size(80, 60);
-            this.buttonSelectContinuousFaces.TabIndex = 4;
-            this.buttonSelectContinuousFaces.Text = "連続面を選択";
-            this.buttonSelectContinuousFaces.UseVisualStyleBackColor = true;
-            this.buttonSelectContinuousFaces.Click += new System.EventHandler(this.buttonSelectContinuousFaces_Click);
-            // 
             // FormEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1005,6 +1005,6 @@ namespace IwUVEditor
         private System.Windows.Forms.Button buttonApplyNumericEdit;
         private System.Windows.Forms.TableLayoutPanel tableLayoutDrawSettings;
         private System.Windows.Forms.Label labelRadiusOfPosSq;
-        private System.Windows.Forms.Button buttonSelectContinuousFaces;
+        private System.Windows.Forms.Button buttonSelectContinuousVertices;
     }
 }

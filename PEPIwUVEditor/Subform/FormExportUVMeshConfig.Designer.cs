@@ -83,7 +83,7 @@ namespace IwUVEditor.Subform
             0,
             0});
             this.numericSize.Minimum = new decimal(new int[] {
-            2048,
+            64,
             0,
             0,
             0});

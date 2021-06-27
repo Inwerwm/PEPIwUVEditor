@@ -208,7 +208,7 @@ namespace IwUVEditor
                 ).ToDictionary(pair => pair.Substance, pair => pair.Faces);
 
             var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(selected => selected.Key);
-            var selectTarget = Current.Material.IsSelected.ToDictionary(p => p.Key, p => p.Value);
+            var selectTarget = new Dictionary<IPXVertex, bool>(Current.Material.IsSelected);
             await Task.WhenAll(selectedVertices.Select(vtx => Task.Run(() => SelectContinuousVertices(vtx, vfmap, selectTarget))));
 
             Do(Current.Material, new CommandSelectVertices(Current.Material, selectTarget) { Mode = SelectionMode.Union });

@@ -202,9 +202,10 @@ namespace IwUVEditor
 
         public void SelectContinuousVertices()
         {
-            // 選択頂点を取得
-            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value);
-            // 選択頂点を含んだ面を取得
+            var vfmap = Current.Material.Vertices.AsParallel().Select(vtx =>
+                    (Substance: vtx, Faces: Current.Material.Faces.Where(face => face.Vertex1 == vtx || face.Vertex2 == vtx || face.Vertex3 == vtx).ToArray())
+                ).ToDictionary(pair => pair.Substance, pair => pair.Faces);
+
             // その面が含んでいる頂点を取得
             // その頂点を含んだ面を取得
             // 面の頂点がすべて選択頂点に含まれておれば終了

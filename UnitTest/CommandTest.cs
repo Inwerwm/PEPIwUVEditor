@@ -54,7 +54,7 @@ namespace UnitTest
         [TestMethod]
         public void TestVertexEdit()
         {
-            var vertices = new List<IPXVertex>
+            var vertices = new[]
             {
                 new MockVertex(new V2(0, 0)),
                 new MockVertex(new V2(0, 1)),

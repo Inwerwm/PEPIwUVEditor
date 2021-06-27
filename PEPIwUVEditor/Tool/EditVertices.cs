@@ -22,7 +22,7 @@ namespace IwUVEditor.Tool
         protected InputStates Input { get; set; }
         protected EditController Controller { get; }
 
-        protected List<IPXVertex> TargetVertices { get; set; }
+        protected IEnumerable<IPXVertex> TargetVertices { get; set; }
         protected Material TargetMaterial => Process.Current.Material;
         protected IEditParameter Parameters { get; }
 
@@ -54,7 +54,7 @@ namespace IwUVEditor.Tool
 
         public virtual void Initialize() 
         {
-            TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
+            TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key);
         }
 
         public IEditorCommand CreateCommand(Material target)
@@ -89,7 +89,7 @@ namespace IwUVEditor.Tool
 
             if (input.MouseLeft.IsStartingJust)
             {
-                TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key).ToList();
+                TargetVertices = TargetMaterial.IsSelected.Where(p => p.Value).Select(p => p.Key);
                 TotalOffset = Matrix.Identity;
                 StartPos = input.MouseLeft.Start;
             }

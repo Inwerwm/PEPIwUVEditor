@@ -1,4 +1,4 @@
-using IwUVEditor.Command;
+﻿using IwUVEditor.Command;
 using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
 using PEPlugin;
@@ -202,7 +202,12 @@ namespace IwUVEditor
 
         public void SelectContinuousVertices()
         {
-
+            // 選択頂点を取得
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value);
+            // 選択頂点を含んだ面を取得
+            // その面が含んでいる頂点を取得
+            // その頂点を含んだ面を取得
+            // 面の頂点がすべて選択頂点に含まれておれば終了
         }
 
         protected virtual void Dispose(bool disposing)

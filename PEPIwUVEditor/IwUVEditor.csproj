@@ -164,7 +164,7 @@
     <Compile Include="Manager\ToolBox.cs" />
     <Compile Include="Tool\RotateVertices.cs" />
     <Compile Include="Tool\ScaleVertices.cs" />
-    <Compile Include="UVExporter.cs" />
+    <Compile Include="Drawer\UVExporter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

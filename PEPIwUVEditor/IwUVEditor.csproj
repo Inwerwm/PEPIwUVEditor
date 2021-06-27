@@ -86,7 +86,6 @@
     <Compile Include="Controller\RotateController.cs" />
     <Compile Include="Controller\ScaleController.cs" />
     <Compile Include="Drawer\UVEdge.cs" />
-    <Compile Include="Drawer\UVMesh.cs" />
     <Compile Include="Log\DebugLog.cs" />
     <Compile Include="DirectX\DrawElement\DrawElement.cs" />
     <Compile Include="DirectX\DrawElement\DrawElementInstanced.cs" />

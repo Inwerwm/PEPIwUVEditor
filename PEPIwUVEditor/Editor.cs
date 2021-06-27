@@ -1,4 +1,4 @@
-﻿using IwUVEditor.Command;
+using IwUVEditor.Command;
 using IwUVEditor.Manager;
 using IwUVEditor.StateContainer;
 using PEPlugin;
@@ -164,7 +164,7 @@ namespace IwUVEditor
             if (PositionClip is null)
                 return;
 
-            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key).ToList();
+            var selectedVertices = Current.Material.IsSelected.Where(isSelected => isSelected.Value).Select(v => v.Key);
             Do(Current.Material, new CommandSetPosition(selectedVertices, PositionClip.Value));
         }
 
@@ -197,7 +197,7 @@ namespace IwUVEditor
             var rotMat = Matrix.Translation(EditParameters.RotationCenter * -1) * Matrix.RotationZ(EditParameters.RotationAngle) * Matrix.Translation(EditParameters.RotationCenter);
             var sclMat = Matrix.Invert(Matrix.Translation(EditParameters.ScaleCenter)) * Matrix.Scaling(EditParameters.ScaleRatio) * Matrix.Translation(EditParameters.ScaleCenter);
 
-            Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key).ToList(), sclMat * rotMat * trsMat));
+            Do(Current.Material, new CommandApplyVertexEdit(selectedVertices.Select(selected => selected.Key), sclMat * rotMat * trsMat));
         }
 
         public void SelectContinuousVertices()

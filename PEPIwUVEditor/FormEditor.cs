@@ -317,5 +317,10 @@ namespace IwUVEditor
         {
             Editor.SendSelectedVertices();
         }
+
+        private void 選択材質のテクスチャを変更ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.ChangeTexture();
+        }
     }
 }

@@ -887,6 +887,7 @@ namespace IwUVEditor
             this.選択材質のテクスチャを変更ToolStripMenuItem.Name = "選択材質のテクスチャを変更ToolStripMenuItem";
             this.選択材質のテクスチャを変更ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
             this.選択材質のテクスチャを変更ToolStripMenuItem.Text = "選択材質のテクスチャを変更";
+            this.選択材質のテクスチャを変更ToolStripMenuItem.Click += new System.EventHandler(this.選択材質のテクスチャを変更ToolStripMenuItem_Click);
             // 
             // uV情報を合成して保存ToolStripMenuItem
             // 

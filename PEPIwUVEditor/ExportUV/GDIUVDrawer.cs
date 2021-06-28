@@ -4,8 +4,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.ExportUV
 {
@@ -15,40 +13,36 @@ namespace IwUVEditor.ExportUV
         {
             using (var texture = !File.Exists(texturePath) ? null : IsTGA(texturePath) ? new TGASharpLib.TGA(texturePath).ToBitmap() : new Bitmap(texturePath))
             {
-                decimal textureWidth = texture?.Width ?? imageSize;
-                decimal textureHeight = texture?.Height ?? imageSize;
-                var hRatio = textureHeight / textureWidth;
-                var outputWidth = imageSize;
-                var outputHeight = (int)Math.Round(imageSize * hRatio, MidpointRounding.AwayFromZero);
-
-                var uvDrawOffset = (X: -mesh.MinBound.X, Y: -mesh.MinBound.Y);
-                var imagePosMesh = mesh.Mesh.Select(e => e.Add(uvDrawOffset.X, uvDrawOffset.Y).Mul(outputWidth - 1, outputHeight - 1));
-
                 var textureRepeatCount = (X: mesh.MaxBound.X - mesh.MinBound.X, Y: mesh.MaxBound.Y - mesh.MinBound.Y);
                 var background = texture != null && enableDrawBackground ? CreateBackgroundImage(texture, textureRepeatCount) : null;
-                using (var bmp = new Bitmap(outputWidth * textureRepeatCount.X, outputHeight * textureRepeatCount.Y))
+
+                var unitSize = CalcUnitSize(imageSize, texture);
+
+                using (var bmp = new Bitmap(unitSize.X * textureRepeatCount.X, unitSize.Y * textureRepeatCount.Y))
                 {
-                    using (var graph = Graphics.FromImage(bmp))
-                    using (var pen = new Pen(Color.Black) { Width = 1 })
-                    {
-                        graph.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-
-                        if (background != null)
-                        {
-                            graph.DrawImage(background, 0, 0, bmp.Width, bmp.Height);
-                        }
-
-                        foreach (var edge in imagePosMesh)
-                        {
-                            graph.DrawLine(pen, edge.UV[0], edge.UV[1]);
-                        }
-                    }
+                    DrawMesh(bmp, background, mesh, unitSize);
                     bmp.Save(exportPath, ImageFormat.Png);
                 }
             }
         }
 
-        private Bitmap CreateBackgroundImage(Bitmap texture, (int X, int Y) repeatCount)
+        private static bool IsTGA(string texturePath) =>
+            Path.GetExtension(texturePath).ToLower() == ".tga";
+
+        private static Point CalcUnitSize(int imageSize, Bitmap texture)
+        {
+            decimal textureWidth = texture?.Width ?? imageSize;
+            decimal textureHeight = texture?.Height ?? imageSize;
+
+            var unitWidth = imageSize;
+
+            var hRatio = textureHeight / textureWidth;
+            var unitHeight = (int)Math.Round(imageSize * hRatio, MidpointRounding.AwayFromZero);
+
+            return new Point(unitWidth, unitHeight);
+        }
+
+        private static Bitmap CreateBackgroundImage(Bitmap texture, (int X, int Y) repeatCount)
         {
             if (repeatCount.X > 1 || repeatCount.Y > 1)
                 using (var repeatedTexture = CreateRepeatBitMap(texture, repeatCount.X, repeatCount.Y))
@@ -57,7 +51,7 @@ namespace IwUVEditor.ExportUV
                 return texture;
         }
 
-        private Bitmap CreateRepeatBitMap(Bitmap texture, int xCount, int yCount)
+        private static Bitmap CreateRepeatBitMap(Bitmap texture, int xCount, int yCount)
         {
             var result = new Bitmap(texture.Width * xCount, texture.Height * yCount);
             using (var g = Graphics.FromImage(result))
@@ -73,9 +67,24 @@ namespace IwUVEditor.ExportUV
             return result;
         }
 
-        private static bool IsTGA(string texturePath)
+        private static void DrawMesh(Bitmap drawTartget, Bitmap background, UVMesh mesh, Point unitSize)
         {
-            return Path.GetExtension(texturePath).ToLower() == ".tga";
+            var uvDrawOffset = (X: -mesh.MinBound.X, Y: -mesh.MinBound.Y);
+            var imagePosMesh = mesh.Mesh.Select(e => e.Add(uvDrawOffset.X, uvDrawOffset.Y).Mul(unitSize.X - 1, unitSize.Y - 1));
+
+            using (var graph = Graphics.FromImage(drawTartget))
+            using (var pen = new Pen(Color.Black) { Width = 1 })
+            {
+                graph.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+
+                if (background != null)
+                    graph.DrawImage(background, 0, 0, drawTartget.Width, drawTartget.Height);
+
+                foreach (var edge in imagePosMesh)
+                {
+                    graph.DrawLine(pen, edge.UV[0], edge.UV[1]);
+                }
+            }
         }
     }
 }

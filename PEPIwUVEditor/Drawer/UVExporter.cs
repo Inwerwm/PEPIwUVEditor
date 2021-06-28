@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 
 namespace IwUVEditor.Drawer
@@ -20,24 +21,40 @@ namespace IwUVEditor.Drawer
             Faces = faces;
         }
 
-        public void Export(string path, int textureWidth, int textureHeight)
+        public void Export(string texturePath, string exportPath, bool drawTexture)
         {
-            var hRatio = (int)Math.Round((decimal)textureHeight / textureWidth, MidpointRounding.AwayFromZero);
-            int width = ImageSize;
-            int height = ImageSize * hRatio;
-            var mesh = Faces.AsParallel().SelectMany(UVEdge.FromFace).Select(e => e.Mul(width, height));
-
-            using (var bmp = new Bitmap(width, height))
-            using (var graph = Graphics.FromImage(bmp))
-            using (var pen = new Pen(Color.Black) { Width = 1 })
+            using (var texture = !File.Exists(texturePath) ? null : IsTGA(texturePath) ? new TGASharpLib.TGA(texturePath).ToBitmap() : new Bitmap(texturePath))
             {
-                foreach (var edge in mesh)
-                {
-                    graph.DrawLine(pen, edge.UV[0], edge.UV[1]);
-                }
+                decimal textureWidth = texture?.Width ?? ImageSize;
+                decimal textureHeight = texture?.Height ?? ImageSize;
 
-                bmp.Save(path, ImageFormat.Png);
+                var hRatio = (int)Math.Round(textureHeight / textureWidth, MidpointRounding.AwayFromZero);
+                int width = ImageSize;
+                int height = ImageSize * hRatio;
+                var mesh = Faces.AsParallel().SelectMany(UVEdge.FromFace).Select(e => e.Mul(width, height));
+
+                using (var bmp = new Bitmap(width, height))
+                using (var graph = Graphics.FromImage(bmp))
+                using (var pen = new Pen(Color.Black) { Width = 1 })
+                {
+                    graph.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+
+                    if (drawTexture)
+                        graph.DrawImage(texture, 0, 0, width, height);
+
+                    foreach (var edge in mesh)
+                    {
+                        graph.DrawLine(pen, edge.UV[0], edge.UV[1]);
+                    }
+
+                    bmp.Save(exportPath, ImageFormat.Png);
+                }
             }
+        }
+
+        private static bool IsTGA(string texturePath)
+        {
+            return Path.GetExtension(texturePath).ToLower() == ".tga";
         }
     }
 }

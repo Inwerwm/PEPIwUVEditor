@@ -355,9 +355,7 @@ namespace IwUVEditor
                 exDir = ofd.FileName;
             }
             else
-            {
-                Path.Combine(exDir, $"{Current.Material.Name}_UV.png");
-            }
+                exDir = Path.Combine(exDir, $"{Current.Material.Name}_UV.png");
 
             Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
         }

@@ -278,8 +278,8 @@ namespace IwUVEditor
 
         internal void ExportUVImage(int imageSize, string exportPath, bool drawTexture)
         {
-            var uvEx = new ExportUV.UVExporter(imageSize, Current.Material.Vertices, Current.Material.Faces);
-            uvEx.Export(Current.Material.TexFullPath, exportPath, drawTexture);
+            var uvMesh = new ExportUV.UVMesh(Current.Material.Vertices, Current.Material.Faces);
+            new ExportUV.GDIUVDrawer().Draw(uvMesh, imageSize, Current.Material.TexFullPath, exportPath, drawTexture);
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using PEPlugin.Pmx;
-using SlimDX.Direct2D;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IwUVEditor.Drawer
 {
@@ -21,9 +20,24 @@ namespace IwUVEditor.Drawer
             Faces = faces;
         }
 
-        public void Export(string path)
+        public void Export(string path, int textureWidth, int textureHeight)
         {
+            var hRatio = (int)Math.Round((decimal)textureHeight / textureWidth, MidpointRounding.AwayFromZero);
+            int width = ImageSize;
+            int height = ImageSize * hRatio;
+            var mesh = Faces.AsParallel().SelectMany(UVEdge.FromFace).Select(e => e.Mul(width, height));
 
+            using (var bmp = new Bitmap(width, height))
+            using (var graph = Graphics.FromImage(bmp))
+            using (var pen = new Pen(Color.Black) { Width = 1 })
+            {
+                foreach (var edge in mesh)
+                {
+                    graph.DrawLine(pen, edge.UV[0], edge.UV[1]);
+                }
+
+                bmp.Save(path, ImageFormat.Png);
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace IwUVEditor.Drawer
+namespace IwUVEditor.ExportUV
 {
     class UVEdge
     {

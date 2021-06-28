@@ -6,7 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 
-namespace IwUVEditor.Drawer
+namespace IwUVEditor.ExportUV
 {
     class UVExporter
     {
@@ -59,7 +59,6 @@ namespace IwUVEditor.Drawer
                     bmp.Save(exportPath, ImageFormat.Png);
                 }
             }
-
         }
         private Bitmap CreateBackgroundImage(Bitmap texture, (int X, int Y) uvLengthRatio)
         {

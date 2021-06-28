@@ -28,10 +28,10 @@ namespace IwUVEditor.ExportUV
         private static bool IsTGA(string texturePath) =>
             Path.GetExtension(texturePath).ToLower() == ".tga";
 
-        public static Point CalcTextureRepeatCount(UVMesh mesh) =>
+        public Point CalcTextureRepeatCount(UVMesh mesh) =>
             new Point(mesh.MaxBound.X - mesh.MinBound.X, mesh.MaxBound.Y - mesh.MinBound.Y);
 
-        public static Point CalcUnitSize(int imageSize, int textureWidth, int textureHeight)
+        public Point CalcUnitSize(int imageSize, int textureWidth, int textureHeight)
         {
             var unitWidth = imageSize;
 

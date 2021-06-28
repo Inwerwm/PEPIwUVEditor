@@ -8,36 +8,27 @@ using System.Linq;
 
 namespace IwUVEditor.ExportUV
 {
-    class UVExporter
+    class UVMesh
     {
-        public int ImageSize { get; }
-        public IList<IPXVertex> Vertices { get; }
-        public IList<IPXFace> Faces { get; }
+        IEnumerable<UVEdge> Mesh { get; }
+        Point MinBound { get; }
+        Point MaxBound { get; }
 
-        public UVExporter(int imageSize, IList<IPXVertex> vertices, IList<IPXFace> faces)
+        public UVMesh(IList<IPXVertex> vertices, IList<IPXFace> faces)
         {
-            ImageSize = imageSize;
-            Vertices = vertices;
-            Faces = faces;
+            Mesh = faces.AsParallel().SelectMany(UVEdge.FromFace);
+            (MinBound, MaxBound) = CalcUVRange(Mesh);
         }
 
-        public void Export(string texturePath, string exportPath, bool enableDrawBackground)
-        {
-            var mesh = Faces.AsParallel().SelectMany(UVEdge.FromFace);
-            var uvRange = CalcUVRange(mesh);
-
-            DrawUV(texturePath, exportPath, enableDrawBackground, mesh, uvRange);
-        }
-
-        private void DrawUV(string texturePath, string exportPath, bool enableDrawBackground, ParallelQuery<UVEdge> mesh, (Point Min, Point Max) uvRange)
+        private void DrawUV(int imageSize, string texturePath, string exportPath, bool enableDrawBackground, ParallelQuery<UVEdge> mesh, (Point Min, Point Max) uvRange)
         {
             using (var texture = !File.Exists(texturePath) ? null : IsTGA(texturePath) ? new TGASharpLib.TGA(texturePath).ToBitmap() : new Bitmap(texturePath))
             {
-                decimal textureWidth = texture?.Width ?? ImageSize;
-                decimal textureHeight = texture?.Height ?? ImageSize;
+                decimal textureWidth = texture?.Width ?? imageSize;
+                decimal textureHeight = texture?.Height ?? imageSize;
                 var hRatio = textureHeight / textureWidth;
-                var outputWidth = ImageSize;
-                var outputHeight = (int)Math.Round(ImageSize * hRatio, MidpointRounding.AwayFromZero);
+                var outputWidth = imageSize;
+                var outputHeight = (int)Math.Round(imageSize * hRatio, MidpointRounding.AwayFromZero);
 
                 var uvDrawOffset = (X: -uvRange.Min.X, Y: -uvRange.Min.Y);
                 var imagePosMesh = mesh.Select(e => e.Add(uvDrawOffset.X, uvDrawOffset.Y).Mul(outputWidth - 1, outputHeight - 1));

@@ -25,9 +25,16 @@ namespace IwUVEditor.ExportUV
                     new PointF(Math.Max(elm.UV.Max(p => p.X), acm.Max.X), Math.Max(elm.UV.Max(p => p.Y), acm.Max.Y))
                 ));
 
-            int Round(float value) => (int)(value < 0 ? Math.Floor(value) : Math.Ceiling(value));
-            var uvRange = (new Point(Round(uvBound.Min.X), Round(uvBound.Min.Y)), new Point(Round(uvBound.Max.X), Round(uvBound.Max.Y)));
-            return uvRange;
+            return (
+                new Point(
+                    (int)Math.Floor(uvBound.Min.X),
+                    (int)Math.Floor(uvBound.Min.Y)
+                ),
+                new Point(
+                    (int)Math.Ceiling(uvBound.Max.X),
+                    (int)Math.Ceiling(uvBound.Max.Y)
+                )
+            );
         }
     }
 }

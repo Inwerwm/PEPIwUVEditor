@@ -48,10 +48,10 @@ namespace IwUVEditor.ExportUV
             }
         }
 
-        private Bitmap CreateBackgroundImage(Bitmap texture, (int X, int Y) uvLengthRatio)
+        private Bitmap CreateBackgroundImage(Bitmap texture, (int X, int Y) repeatCount)
         {
-            if (uvLengthRatio.X > 1 || uvLengthRatio.Y > 1)
-                using (var repeatedTexture = CreateRepeatBitMap(texture, uvLengthRatio.X, uvLengthRatio.Y))
+            if (repeatCount.X > 1 || repeatCount.Y > 1)
+                using (var repeatedTexture = CreateRepeatBitMap(texture, repeatCount.X, repeatCount.Y))
                     return repeatedTexture;
             else
                 return texture;

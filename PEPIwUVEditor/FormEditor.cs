@@ -359,7 +359,7 @@ namespace IwUVEditor
                 Path.Combine(exDir, $"{Current.Material.Name}_UV.png");
             }
 
-            Editor.ExportUVImage(formExUV.ExportSize, exDir, false);
+            Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
         }
     }
 }

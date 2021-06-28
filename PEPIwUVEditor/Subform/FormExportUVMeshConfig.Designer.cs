@@ -34,6 +34,7 @@ namespace IwUVEditor.Subform
             this.numericSize = new System.Windows.Forms.NumericUpDown();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.checkBoxDrawTexture = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericSize)).BeginInit();
             this.SuspendLayout();
@@ -45,17 +46,19 @@ namespace IwUVEditor.Subform
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.labelSize, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.numericSize, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.buttonOK, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.buttonCancel, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.buttonOK, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.buttonCancel, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.checkBoxDrawTexture, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
+            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(474, 118);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(474, 143);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // labelSize
@@ -99,9 +102,9 @@ namespace IwUVEditor.Subform
             // buttonOK
             // 
             this.buttonOK.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonOK.Location = new System.Drawing.Point(3, 67);
+            this.buttonOK.Location = new System.Drawing.Point(3, 99);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(231, 48);
+            this.buttonOK.Size = new System.Drawing.Size(231, 41);
             this.buttonOK.TabIndex = 2;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -110,19 +113,31 @@ namespace IwUVEditor.Subform
             // buttonCancel
             // 
             this.buttonCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonCancel.Location = new System.Drawing.Point(240, 67);
+            this.buttonCancel.Location = new System.Drawing.Point(240, 99);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(231, 48);
+            this.buttonCancel.Size = new System.Drawing.Size(231, 41);
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "キャンセル";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // checkBoxDrawTexture
+            // 
+            this.checkBoxDrawTexture.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.checkBoxDrawTexture, 2);
+            this.checkBoxDrawTexture.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxDrawTexture.Location = new System.Drawing.Point(3, 67);
+            this.checkBoxDrawTexture.Name = "checkBoxDrawTexture";
+            this.checkBoxDrawTexture.Size = new System.Drawing.Size(468, 26);
+            this.checkBoxDrawTexture.TabIndex = 4;
+            this.checkBoxDrawTexture.Text = "テクスチャを背景に描画";
+            this.checkBoxDrawTexture.UseVisualStyleBackColor = true;
+            // 
             // FormExportUVMeshConfig
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 118);
+            this.ClientSize = new System.Drawing.Size(474, 143);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Font = new System.Drawing.Font("游ゴシック", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -143,5 +158,6 @@ namespace IwUVEditor.Subform
         private System.Windows.Forms.NumericUpDown numericSize;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.CheckBox checkBoxDrawTexture;
     }
 }

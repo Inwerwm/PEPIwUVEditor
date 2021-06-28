@@ -13,6 +13,7 @@ namespace IwUVEditor.Subform
     public partial class FormExportUVMeshConfig : Form
     {
         public int ExportSize => (int)numericSize.Value;
+        public bool EnableBackTexture => checkBoxDrawTexture.Checked;
 
         public FormExportUVMeshConfig()
         {

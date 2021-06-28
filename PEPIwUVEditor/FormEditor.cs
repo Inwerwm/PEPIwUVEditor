@@ -2,6 +2,7 @@
 using IwUVEditor.DirectX;
 using IwUVEditor.StateContainer;
 using IwUVEditor.Subform;
+using PEPExtensions;
 using SlimDX;
 using SlimDX.RawInput;
 using System;
@@ -338,29 +339,35 @@ namespace IwUVEditor
             var formExUV = new FormExportUVMeshConfig();
             if (formExUV.ShowDialog() != DialogResult.OK)
                 return;
-
-            string exDir = string.IsNullOrEmpty(Current.Material.TexFullPath) ? GetModelPath() : Path.GetDirectoryName(Current.Material.TexFullPath);
-
-            if (string.IsNullOrEmpty(exDir))
+            try
             {
-                var ofd = new SaveFileDialog()
+                string exDir = string.IsNullOrEmpty(Current.Material.TexFullPath) ? GetModelPath() : Path.GetDirectoryName(Current.Material.TexFullPath);
+
+                if (string.IsNullOrEmpty(exDir))
                 {
-                    Title = "UV画像の保存位置を指定してください",
-                    Filter = "PNGファイル(*.png)|*.png"
-                };
+                    var ofd = new SaveFileDialog()
+                    {
+                        Title = "UV画像の保存位置を指定してください",
+                        Filter = "PNGファイル(*.png)|*.png"
+                    };
 
-                if (ofd.ShowDialog() != DialogResult.OK)
-                    return;
+                    if (ofd.ShowDialog() != DialogResult.OK)
+                        return;
 
-                exDir = ofd.FileName;
+                    exDir = ofd.FileName;
+                }
+                else
+                    exDir = Path.Combine(exDir, $"{Current.Material.Name}_UV.png");
+
+                Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
+
+                string GetModelPath() =>
+                    string.IsNullOrEmpty(Current.Material.ModelPath) ? "" : Path.GetDirectoryName(Current.Material.ModelPath);
             }
-            else
-                exDir = Path.Combine(exDir, $"{Current.Material.Name}_UV.png");
-
-            Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
-
-            string GetModelPath() =>
-                string.IsNullOrEmpty(Current.Material.ModelPath) ? "" : Path.GetDirectoryName(Current.Material.ModelPath);
+            catch (Exception ex)
+            {
+                Utility.ShowException(ex);
+            }
         }
     }
 }

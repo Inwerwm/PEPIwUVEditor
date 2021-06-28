@@ -15,10 +15,10 @@ namespace UnitTest
         {
             var model = PEMockFactory.CreateModel(
                 new[] {
-                    new V2(0, 0),
-                    new V2(0, 1),
-                    new V2(1, 0),
-                    new V2(1, 1),
+                    new V2(0.1f, 0.1f),
+                    new V2(0.1f, 0.9f),
+                    new V2(0.9f, 0.1f),
+                    new V2(0.9f, 0.9f),
                 },
                 new[] {
                     (0, 1, 2),
@@ -41,10 +41,10 @@ namespace UnitTest
         {
             var model = PEMockFactory.CreateModel(
                 new[] {
-                    new V2(0, 0),
-                    new V2(0, 1),
-                    new V2(2, 0),
-                    new V2(2, 1),
+                    new V2(0.3f, 0.3f),
+                    new V2(0.3f, 0.9f),
+                    new V2(1.9f, 0.3f),
+                    new V2(1.9f, 0.9f),
                 },
                 new[] {
                     (0, 1, 2),
@@ -67,10 +67,10 @@ namespace UnitTest
         {
             var model = PEMockFactory.CreateModel(
                 new[] {
-                    new V2(0, 0),
-                    new V2(0, 2),
-                    new V2(1, 0),
-                    new V2(1, 2),
+                    new V2(0.3f, 0.3f),
+                    new V2(0.3f, 1.9f),
+                    new V2(0.9f, 0.3f),
+                    new V2(0.9f, 1.9f),
                 },
                 new[] {
                     (0, 1, 2),
@@ -93,10 +93,10 @@ namespace UnitTest
         {
             var model = PEMockFactory.CreateModel(
                 new[] {
-                    new V2(0, 0),
-                    new V2(0, 2),
-                    new V2(2, 0),
-                    new V2(2, 2),
+                    new V2(0.3f, 0.3f),
+                    new V2(0.3f, 1.9f),
+                    new V2(1.9f, 0.3f),
+                    new V2(1.9f, 1.9f),
                 },
                 new[] {
                     (0, 1, 2),
@@ -119,10 +119,10 @@ namespace UnitTest
         {
             var model = PEMockFactory.CreateModel(
                 new[] {
-                    new V2(-1, 0),
-                    new V2(-1, 1),
-                    new V2(1, 0),
-                    new V2(1, 1),
+                    new V2(-0.9f, 0.3f),
+                    new V2(-0.9f, 0.9f),
+                    new V2(0.9f, 0.3f),
+                    new V2(0.9f, 0.9f),
                 },
                 new[] {
                     (0, 1, 2),
@@ -145,10 +145,10 @@ namespace UnitTest
         {
             var model = PEMockFactory.CreateModel(
                 new[] {
-                    new V2(0, -1),
-                    new V2(0, 1),
-                    new V2(1, -1),
-                    new V2(1, 1),
+                    new V2(0.3f, -0.9f),
+                    new V2(0.3f, 0.9f),
+                    new V2(0.9f, -0.9f),
+                    new V2(0.9f, 0.9f),
                 },
                 new[] {
                     (0, 1, 2),
@@ -171,10 +171,10 @@ namespace UnitTest
         {
             var model = PEMockFactory.CreateModel(
                 new[] {
-                    new V2(-1, -1),
-                    new V2(-1, 1),
-                    new V2(1, -1),
-                    new V2(1, 1),
+                    new V2(-0.9f, -0.9f),
+                    new V2(-0.9f, 0.9f),
+                    new V2(0.9f, -0.9f),
+                    new V2(0.9f, 0.9f),
                 },
                 new[] {
                     (0, 1, 2),

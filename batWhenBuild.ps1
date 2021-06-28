@@ -7,4 +7,4 @@ Copy-Item ../../../ThirdPartyLicenses/* ../IwUVEditor/Licenses/
 
 Get-ChildItem * -Include *.dll -Exclude PEPlugin*, SlimDX* | Copy-Item -Destination ../IwUVEditor/
 
-Compress-Archive -Path ../IwUVEditor/ -DestinationPath ../IwUVEditor.zip
+Compress-Archive -Path ../IwUVEditor/ -DestinationPath ../IwUVEditor.zip -Force

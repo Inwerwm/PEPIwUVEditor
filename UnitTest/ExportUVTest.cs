@@ -6,29 +6,8 @@ using System.Linq;
 namespace UnitTest
 {
     [TestClass]
-    public class UVMeshTest
+    public class ExportUVTest
     {
-        /*
-         * コピペ用テンプレート
-         var model = PEMockFactory.CreateModel(
-                new[] {
-                    new V2(0, 0.1f),
-                    new V2(-0.1f, 0),
-                    new V2(0.1f, -0.1f),
-                    new V2(0, -0.2f),
-                    new V2(-0.15f, -0.15f),
-                    new V2(-0.15f, 0),
-                    new V2(-0.2f, -0.1f),
-                    new V2(-0.25f, 0.05f),
-                },
-                new[] {
-                    (0, 1, 2),
-                    (1, 3, 2),
-                    (1, 3, 4),
-                    (5, 6, 7),
-                });
-         */
-
         [TestMethod]
         public void TestUVMesh_SingleRange()
         {

@@ -76,7 +76,7 @@
     <Compile Include="PEMock\MockVertex.cs" />
     <Compile Include="StructureTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UVMeshTest.cs" />
+    <Compile Include="ExportUVTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

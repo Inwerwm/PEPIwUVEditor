@@ -8,6 +8,8 @@ namespace UnitTest
     [TestClass]
     public class ExportUVTest
     {
+        IUVDrawer Drawer { get; } = new GDIUVDrawer();
+
         [TestMethod]
         public void TestUVMesh_SingleRange()
         {
@@ -28,6 +30,10 @@ namespace UnitTest
             Assert.AreEqual(0, mesh.MinBound.Y);
             Assert.AreEqual(1, mesh.MaxBound.X);
             Assert.AreEqual(1, mesh.MaxBound.Y);
+
+            var repeatCount = Drawer.CalcTextureRepeatCount(mesh);
+            Assert.AreEqual(1, repeatCount.X);
+            Assert.AreEqual(1, repeatCount.Y);
         }
 
         [TestMethod]
@@ -50,6 +56,10 @@ namespace UnitTest
             Assert.AreEqual(0, mesh.MinBound.Y);
             Assert.AreEqual(2, mesh.MaxBound.X);
             Assert.AreEqual(1, mesh.MaxBound.Y);
+
+            var repeatCount = Drawer.CalcTextureRepeatCount(mesh);
+            Assert.AreEqual(2, repeatCount.X);
+            Assert.AreEqual(1, repeatCount.Y);
         }
 
         [TestMethod]
@@ -72,6 +82,10 @@ namespace UnitTest
             Assert.AreEqual(0, mesh.MinBound.Y);
             Assert.AreEqual(1, mesh.MaxBound.X);
             Assert.AreEqual(2, mesh.MaxBound.Y);
+
+            var repeatCount = Drawer.CalcTextureRepeatCount(mesh);
+            Assert.AreEqual(1, repeatCount.X);
+            Assert.AreEqual(2, repeatCount.Y);
         }
 
         [TestMethod]
@@ -94,6 +108,10 @@ namespace UnitTest
             Assert.AreEqual(0, mesh.MinBound.Y);
             Assert.AreEqual(2, mesh.MaxBound.X);
             Assert.AreEqual(2, mesh.MaxBound.Y);
+
+            var repeatCount = Drawer.CalcTextureRepeatCount(mesh);
+            Assert.AreEqual(2, repeatCount.X);
+            Assert.AreEqual(2, repeatCount.Y);
         }
 
         [TestMethod]
@@ -116,6 +134,10 @@ namespace UnitTest
             Assert.AreEqual(0, mesh.MinBound.Y);
             Assert.AreEqual(1, mesh.MaxBound.X);
             Assert.AreEqual(1, mesh.MaxBound.Y);
+
+            var repeatCount = Drawer.CalcTextureRepeatCount(mesh);
+            Assert.AreEqual(2, repeatCount.X);
+            Assert.AreEqual(1, repeatCount.Y);
         }
 
         [TestMethod]
@@ -138,6 +160,10 @@ namespace UnitTest
             Assert.AreEqual(-1, mesh.MinBound.Y);
             Assert.AreEqual(1, mesh.MaxBound.X);
             Assert.AreEqual(1, mesh.MaxBound.Y);
+
+            var repeatCount = Drawer.CalcTextureRepeatCount(mesh);
+            Assert.AreEqual(1, repeatCount.X);
+            Assert.AreEqual(2, repeatCount.Y);
         }
 
         [TestMethod]
@@ -160,6 +186,10 @@ namespace UnitTest
             Assert.AreEqual(-1, mesh.MinBound.Y);
             Assert.AreEqual(1, mesh.MaxBound.X);
             Assert.AreEqual(1, mesh.MaxBound.Y);
+
+            var repeatCount = Drawer.CalcTextureRepeatCount(mesh);
+            Assert.AreEqual(2, repeatCount.X);
+            Assert.AreEqual(2, repeatCount.Y);
         }
     }
 }

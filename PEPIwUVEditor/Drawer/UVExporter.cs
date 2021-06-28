@@ -31,7 +31,7 @@ namespace IwUVEditor.Drawer
                 var hRatio = textureHeight / textureWidth;
                 int width = ImageSize;
                 int height = (int)Math.Round(ImageSize * hRatio, MidpointRounding.AwayFromZero);
-                var mesh = Faces.AsParallel().SelectMany(UVEdge.FromFace).Select(e => e.Mul(width, height));
+                var mesh = Faces.AsParallel().SelectMany(UVEdge.FromFace).Select(e => e.Mul(width - 1, height - 1));
 
                 using (var bmp = new Bitmap(width, height))
                 using (var graph = Graphics.FromImage(bmp))

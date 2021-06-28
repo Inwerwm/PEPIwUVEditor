@@ -39,7 +39,7 @@ namespace IwUVEditor.Drawer
                 {
                     graph.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
-                    if (drawTexture)
+                    if (drawTexture && texture != null)
                         graph.DrawImage(texture, 0, 0, width, height);
 
                     foreach (var edge in mesh)

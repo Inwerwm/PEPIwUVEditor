@@ -85,6 +85,8 @@
     <Compile Include="Controller\MoveController.cs" />
     <Compile Include="Controller\RotateController.cs" />
     <Compile Include="Controller\ScaleController.cs" />
+    <Compile Include="ExportUV\GDIUVDrawer.cs" />
+    <Compile Include="ExportUV\IUVDrawer.cs" />
     <Compile Include="ExportUV\UVEdge.cs" />
     <Compile Include="Log\DebugLog.cs" />
     <Compile Include="DirectX\DrawElement\DrawElement.cs" />
@@ -165,7 +167,7 @@
     <Compile Include="Manager\ToolBox.cs" />
     <Compile Include="Tool\RotateVertices.cs" />
     <Compile Include="Tool\ScaleVertices.cs" />
-    <Compile Include="ExportUV\UVExporter.cs" />
+    <Compile Include="ExportUV\UVMesh.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

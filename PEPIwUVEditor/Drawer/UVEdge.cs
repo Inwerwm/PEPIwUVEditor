@@ -25,10 +25,13 @@ namespace IwUVEditor.Drawer
             new UVEdge(face.Vertex3, face.Vertex1)
         };
 
-        public static UVEdge operator *(UVEdge edge, float ratio) =>
+        public UVEdge Mul(float width, float height) =>
             new UVEdge(
-                new PointF(edge.UV[0].X * ratio, edge.UV[0].Y * ratio),
-                new PointF(edge.UV[1].X * ratio, edge.UV[1].Y * ratio)
+                new PointF(UV[0].X * width, UV[0].Y * height),
+                new PointF(UV[1].X * width, UV[1].Y * height)
             );
+
+        public static UVEdge operator *(UVEdge edge, float ratio) =>
+            edge.Mul(ratio, ratio);
     }
 }

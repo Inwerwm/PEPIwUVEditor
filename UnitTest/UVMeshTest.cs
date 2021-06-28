@@ -1,12 +1,7 @@
 ﻿using IwUVEditor.ExportUV;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PEPlugin.Pmx;
 using PEPlugin.SDX;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTest
 {

@@ -128,7 +128,15 @@ namespace IwUVEditor.DirectX
             TexturePlate = new TexturePlate(Context.Device, Effect, Rasterize.Solid) { InstanceParams = (10, 0.5f) };
             SignTexture = new ShaderResourceView(Context.Device, TextureFromBitmap(Properties.Resources.CenterSign));
 
-            Textures = new GenerableMap<Material, ShaderResourceView>(LoadTexture);
+            Textures = new GenerableMap<Material, ShaderResourceView>((material) =>
+            {
+                material.MaterialTextrueChanged += (_) =>
+                {
+                    Textures[material]?.Dispose();
+                    Textures[material] = LoadTexture(material);
+                };
+                return LoadTexture(material);
+            });
             UVMeshes = new GenerableMap<Material, UVMesh>((material) => new UVMesh(Context.Device, Effect, Rasterize.Wireframe, material, ColorInDefault));
             PositionSquares = new GenerableMap<Material, PositionSquares>((material) => new PositionSquares(Context.Device, Effect, Rasterize.Solid, material, RadiusOfPositionSquare, ColorInDefault, colorInSelected));
         }

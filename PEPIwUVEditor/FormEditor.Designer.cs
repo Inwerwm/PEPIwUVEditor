@@ -77,8 +77,8 @@ namespace IwUVEditor
             this.再読込ToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.uVを反映ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.選択頂点を受信ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択頂点を送信ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.選択頂点を受信ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.編集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.元に戻すToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.やり直しToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +91,7 @@ namespace IwUVEditor
             this.座標のペーストToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.テクスチャToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.選択材質のテクスチャを変更ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.uV情報を合成して保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UV情報を出力ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.デバッグログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
@@ -617,7 +617,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.tableLayoutDrawSettings);
             this.splitUVMat.Size = new System.Drawing.Size(1376, 911);
-            this.splitUVMat.SplitterDistance = 1104;
+            this.splitUVMat.SplitterDistance = 1094;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -636,7 +636,7 @@ namespace IwUVEditor
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(264, 909);
+            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(274, 909);
             this.tableLayoutDrawSettings.TabIndex = 1;
             // 
             // labelRadiusOfPosSq
@@ -646,7 +646,7 @@ namespace IwUVEditor
             this.labelRadiusOfPosSq.Location = new System.Drawing.Point(0, 857);
             this.labelRadiusOfPosSq.Margin = new System.Windows.Forms.Padding(0);
             this.labelRadiusOfPosSq.Name = "labelRadiusOfPosSq";
-            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(264, 20);
+            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(274, 20);
             this.labelRadiusOfPosSq.TabIndex = 4;
             this.labelRadiusOfPosSq.Text = "頂点描画の大きさ";
             this.labelRadiusOfPosSq.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -659,7 +659,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(264, 857);
+            this.listBoxMaterial.Size = new System.Drawing.Size(274, 857);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -680,7 +680,7 @@ namespace IwUVEditor
             0,
             65536});
             this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
-            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(264, 32);
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(274, 32);
             this.numericRadiusOfPosSq.TabIndex = 4;
             this.numericRadiusOfPosSq.Value = new decimal(new int[] {
             5,
@@ -742,8 +742,8 @@ namespace IwUVEditor
             this.再読込ToolStripMenuItem1,
             this.uVを反映ToolStripMenuItem,
             this.toolStripSeparator1,
-            this.選択頂点を受信ToolStripMenuItem,
-            this.選択頂点を送信ToolStripMenuItem});
+            this.選択頂点を送信ToolStripMenuItem,
+            this.選択頂点を受信ToolStripMenuItem});
             this.再読込ToolStripMenuItem.Name = "再読込ToolStripMenuItem";
             this.再読込ToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
             this.再読込ToolStripMenuItem.Text = "モデル";
@@ -771,22 +771,24 @@ namespace IwUVEditor
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(277, 6);
             // 
-            // 選択頂点を受信ToolStripMenuItem
-            // 
-            this.選択頂点を受信ToolStripMenuItem.Name = "選択頂点を受信ToolStripMenuItem";
-            this.選択頂点を受信ToolStripMenuItem.ShortcutKeyDisplayString = "";
-            this.選択頂点を受信ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.選択頂点を受信ToolStripMenuItem.Size = new System.Drawing.Size(280, 24);
-            this.選択頂点を受信ToolStripMenuItem.Text = "選択頂点を送信";
-            // 
             // 選択頂点を送信ToolStripMenuItem
             // 
             this.選択頂点を送信ToolStripMenuItem.Name = "選択頂点を送信ToolStripMenuItem";
             this.選択頂点を送信ToolStripMenuItem.ShortcutKeyDisplayString = "";
-            this.選択頂点を送信ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.X)));
+            this.選択頂点を送信ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.選択頂点を送信ToolStripMenuItem.Size = new System.Drawing.Size(280, 24);
-            this.選択頂点を送信ToolStripMenuItem.Text = "選択頂点を受信";
+            this.選択頂点を送信ToolStripMenuItem.Text = "選択頂点を送信";
+            this.選択頂点を送信ToolStripMenuItem.Click += new System.EventHandler(this.選択頂点を送信ToolStripMenuItem_Click);
+            // 
+            // 選択頂点を受信ToolStripMenuItem
+            // 
+            this.選択頂点を受信ToolStripMenuItem.Name = "選択頂点を受信ToolStripMenuItem";
+            this.選択頂点を受信ToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.選択頂点を受信ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.X)));
+            this.選択頂点を受信ToolStripMenuItem.Size = new System.Drawing.Size(280, 24);
+            this.選択頂点を受信ToolStripMenuItem.Text = "選択頂点を受信";
+            this.選択頂点を受信ToolStripMenuItem.Click += new System.EventHandler(this.選択頂点を受信ToolStripMenuItem_Click);
             // 
             // 編集ToolStripMenuItem
             // 
@@ -875,7 +877,7 @@ namespace IwUVEditor
             // 
             this.テクスチャToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.選択材質のテクスチャを変更ToolStripMenuItem,
-            this.uV情報を合成して保存ToolStripMenuItem});
+            this.UV情報を出力ToolStripMenuItem});
             this.テクスチャToolStripMenuItem.Name = "テクスチャToolStripMenuItem";
             this.テクスチャToolStripMenuItem.Size = new System.Drawing.Size(96, 24);
             this.テクスチャToolStripMenuItem.Text = "テクスチャ";
@@ -885,18 +887,21 @@ namespace IwUVEditor
             this.選択材質のテクスチャを変更ToolStripMenuItem.Name = "選択材質のテクスチャを変更ToolStripMenuItem";
             this.選択材質のテクスチャを変更ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
             this.選択材質のテクスチャを変更ToolStripMenuItem.Text = "選択材質のテクスチャを変更";
+            this.選択材質のテクスチャを変更ToolStripMenuItem.Click += new System.EventHandler(this.選択材質のテクスチャを変更ToolStripMenuItem_Click);
             // 
-            // uV情報を合成して保存ToolStripMenuItem
+            // UV情報を出力ToolStripMenuItem
             // 
-            this.uV情報を合成して保存ToolStripMenuItem.Name = "uV情報を合成して保存ToolStripMenuItem";
-            this.uV情報を合成して保存ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
-            this.uV情報を合成して保存ToolStripMenuItem.Text = "UV情報を合成して保存";
+            this.UV情報を出力ToolStripMenuItem.Name = "UV情報を出力ToolStripMenuItem";
+            this.UV情報を出力ToolStripMenuItem.Size = new System.Drawing.Size(273, 24);
+            this.UV情報を出力ToolStripMenuItem.Text = "UV情報を出力";
+            this.UV情報を出力ToolStripMenuItem.Click += new System.EventHandler(this.UV情報を出力ToolStripMenuItem_Click);
             // 
             // デバッグログToolStripMenuItem
             // 
             this.デバッグログToolStripMenuItem.Name = "デバッグログToolStripMenuItem";
             this.デバッグログToolStripMenuItem.Size = new System.Drawing.Size(111, 24);
             this.デバッグログToolStripMenuItem.Text = "デバッグログ";
+            this.デバッグログToolStripMenuItem.Visible = false;
             this.デバッグログToolStripMenuItem.Click += new System.EventHandler(this.デバッグログToolStripMenuItem_Click);
             // 
             // timerEvery
@@ -978,7 +983,7 @@ namespace IwUVEditor
         private System.Windows.Forms.ToolStripMenuItem 選択頂点を送信ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem テクスチャToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 選択材質のテクスチャを変更ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem uV情報を合成して保存ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem UV情報を出力ToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBarState;
         private System.Windows.Forms.Button buttonResetCamera;
         private System.Windows.Forms.Timer timerEvery;

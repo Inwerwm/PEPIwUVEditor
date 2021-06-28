@@ -251,5 +251,34 @@ namespace IwUVEditor
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
+
+        internal void FetchSelectedVertices()
+        {
+            var selectedVertexIndices = Args.Host.Connector.View.PmxView.GetSelectedVertexIndices();
+            var selectedVertices = selectedVertexIndices.Select(i => Pmx.Vertex[i]);
+            var selectTargetVertices = selectedVertices.Intersect(Current.Material.Vertices);
+
+            Do(Current.Material, new CommandSelectVertices(Current.Material, selectTargetVertices.ToDictionary(vtx => vtx, _ => true)) { Mode = SelectionMode.Union });
+        }
+
+        internal void SendSelectedVertices()
+        {
+            var selectedVertices = Current.Material.IsSelected.Where(p => p.Value).Select(p => p.Key);
+            Args.Host.Connector.View.PmxView.SetSelectedVertexIndices(selectedVertices.AsParallel().Select(v => Pmx.Vertex.IndexOf(v)).ToArray());
+        }
+
+        internal void ChangeTexture(string filePath)
+        {
+            var uri = new Uri(Pmx.FilePath.Replace("%", "%25"));
+            var rPath = uri.MakeRelativeUri(new Uri(filePath.Replace("%", "%25")));
+
+            Current.Material.Tex = Uri.UnescapeDataString(rPath.ToString()).Replace("%25", "%");
+        }
+
+        internal void ExportUVImage(int imageSize, string exportPath, bool drawTexture)
+        {
+            var uvMesh = new ExportUV.UVMesh(Current.Material.Vertices, Current.Material.Faces);
+            new ExportUV.GDIUVDrawer().Draw(uvMesh, imageSize, Current.Material.TexFullPath, exportPath, drawTexture);
+        }
     }
 }

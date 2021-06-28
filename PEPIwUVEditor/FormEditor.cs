@@ -5,6 +5,7 @@ using IwUVEditor.Subform;
 using SlimDX;
 using SlimDX.RawInput;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace IwUVEditor
@@ -306,6 +307,60 @@ namespace IwUVEditor
         private async void buttonSelectContinuousVertices_Click(object sender, EventArgs e)
         {
             await Editor.SelectContinuousVertices();
+        }
+
+        private void 選択頂点を受信ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.FetchSelectedVertices();
+        }
+
+        private void 選択頂点を送信ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Editor.SendSelectedVertices();
+        }
+
+        private void 選択材質のテクスチャを変更ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog()
+            {
+                InitialDirectory = string.IsNullOrEmpty(Current.Material.TexFullPath) ? "" : Path.GetDirectoryName(Current.Material.TexFullPath),
+                Filter = "画像ファイル(*.bmp;*.png;*.jpg;*.jpeg;*.dds;*.tga)|*.bmp;*.png;*.jpg;*.jpeg;*.dds;*.tga|すべてのファイル(*.*)|*.*"
+            };
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Editor.ChangeTexture(ofd.FileName);
+            }
+        }
+
+        private void UV情報を出力ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var formExUV = new FormExportUVMeshConfig();
+            if (formExUV.ShowDialog() != DialogResult.OK)
+                return;
+
+            string exDir = string.IsNullOrEmpty(Current.Material.TexFullPath) ? GetModelPath() : Path.GetDirectoryName(Current.Material.TexFullPath);
+
+            if (string.IsNullOrEmpty(exDir))
+            {
+                var ofd = new SaveFileDialog()
+                {
+                    Title = "UV画像の保存位置を指定してください",
+                    Filter = "PNGファイル(*.png)|*.png"
+                };
+
+                if (ofd.ShowDialog() != DialogResult.OK)
+                    return;
+
+                exDir = ofd.FileName;
+            }
+            else
+                exDir = Path.Combine(exDir, $"{Current.Material.Name}_UV.png");
+
+            Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
+
+            string GetModelPath() =>
+                string.IsNullOrEmpty(Current.Material.ModelPath) ? "" : Path.GetDirectoryName(Current.Material.ModelPath);
         }
     }
 }

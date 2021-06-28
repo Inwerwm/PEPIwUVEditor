@@ -21,11 +21,16 @@ namespace IwUVEditor.ExportUV
             Faces = faces;
         }
 
-        public void Export(string texturePath, string exportPath, bool drawTexture)
+        public void Export(string texturePath, string exportPath, bool enableDrawBackground)
         {
             var mesh = Faces.AsParallel().SelectMany(UVEdge.FromFace);
             var uvRange = CalcUVRange(mesh);
 
+            DrawUV(texturePath, exportPath, enableDrawBackground, mesh, uvRange);
+        }
+
+        private void DrawUV(string texturePath, string exportPath, bool enableDrawBackground, ParallelQuery<UVEdge> mesh, (Point Min, Point Max) uvRange)
+        {
             using (var texture = !File.Exists(texturePath) ? null : IsTGA(texturePath) ? new TGASharpLib.TGA(texturePath).ToBitmap() : new Bitmap(texturePath))
             {
                 decimal textureWidth = texture?.Width ?? ImageSize;
@@ -38,7 +43,7 @@ namespace IwUVEditor.ExportUV
                 var imagePosMesh = mesh.Select(e => e.Add(uvDrawOffset.X, uvDrawOffset.Y).Mul(outputWidth - 1, outputHeight - 1));
 
                 var textureRepeatCount = (X: uvRange.Max.X - uvRange.Min.X, Y: uvRange.Max.Y - uvRange.Min.Y);
-                var background = texture != null && drawTexture ? CreateBackgroundImage(texture, textureRepeatCount) : null;
+                var background = texture != null && enableDrawBackground ? CreateBackgroundImage(texture, textureRepeatCount) : null;
                 using (var bmp = new Bitmap(outputWidth * textureRepeatCount.X, outputHeight * textureRepeatCount.Y))
                 {
                     using (var graph = Graphics.FromImage(bmp))
@@ -60,6 +65,7 @@ namespace IwUVEditor.ExportUV
                 }
             }
         }
+
         private Bitmap CreateBackgroundImage(Bitmap texture, (int X, int Y) uvLengthRatio)
         {
             if (uvLengthRatio.X > 1 || uvLengthRatio.Y > 1)

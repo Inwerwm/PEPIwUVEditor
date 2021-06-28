@@ -29,8 +29,8 @@ namespace IwUVEditor.ExportUV
         private static bool IsTGA(string texturePath) =>
             Path.GetExtension(texturePath).ToLower() == ".tga";
 
-        public static (int X, int Y) CalcTextureRepeatCount(UVMesh mesh) =>
-            (X: mesh.MaxBound.X - mesh.MinBound.X, Y: mesh.MaxBound.Y - mesh.MinBound.Y);
+        public static Point CalcTextureRepeatCount(UVMesh mesh) =>
+            new Point(mesh.MaxBound.X - mesh.MinBound.X, mesh.MaxBound.Y - mesh.MinBound.Y);
 
         public static Point CalcUnitSize(int imageSize, int textureWidth, int textureHeight)
         {
@@ -42,7 +42,7 @@ namespace IwUVEditor.ExportUV
             return new Point(unitWidth, unitHeight);
         }
 
-        private static Bitmap CreateBackgroundImage(Bitmap texture, (int X, int Y) repeatCount)
+        private static Bitmap CreateBackgroundImage(Bitmap texture, Point repeatCount)
         {
             if (repeatCount.X > 1 || repeatCount.Y > 1)
                 using (var repeatedTexture = CreateRepeatBitMap(texture, repeatCount.X, repeatCount.Y))
@@ -69,7 +69,7 @@ namespace IwUVEditor.ExportUV
 
         private static void DrawMesh(Bitmap drawTartget, Bitmap background, UVMesh mesh, Point unitSize)
         {
-            var uvDrawOffset = (X: -mesh.MinBound.X, Y: -mesh.MinBound.Y);
+            var uvDrawOffset = new Point(-mesh.MinBound.X, -mesh.MinBound.Y);
             var imagePosMesh = mesh.Mesh.Select(e => e.Add(uvDrawOffset.X, uvDrawOffset.Y).Mul(unitSize.X - 1, unitSize.Y - 1));
 
             using (var graph = Graphics.FromImage(drawTartget))

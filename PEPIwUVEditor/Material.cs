@@ -29,7 +29,7 @@ namespace IwUVEditor
         /// </summary>
         public uint[] FaceSequence { get; }
 
-        string ModelPath { get; }
+        public string ModelPath { get; }
         public string TexFullPath { get; private set; }
 
         public string TexExt => Path.GetExtension(Tex);

@@ -13,11 +13,10 @@ namespace IwUVEditor.ExportUV
             using (var texture = !File.Exists(texturePath) ? null : IsTGA(texturePath) ? new TGASharpLib.TGA(texturePath).ToBitmap() : new Bitmap(texturePath))
             {
                 var textureRepeatCount = CalcTextureRepeatCount(mesh);
-                var background = texture != null && enableDrawBackground ? CreateBackgroundImage(texture, textureRepeatCount) : null;
-
                 var unitSize = CalcUnitSize(imageSize, texture?.Width ?? imageSize, texture?.Height ?? imageSize);
 
                 using (var bmp = new Bitmap(unitSize.X * textureRepeatCount.X, unitSize.Y * textureRepeatCount.Y))
+                using (var background = texture != null && enableDrawBackground ? CreateBackgroundImage(texture, textureRepeatCount) : null)
                 {
                     DrawMesh(bmp, background, mesh, unitSize);
                     bmp.Save(exportPath, ImageFormat.Png);
@@ -43,11 +42,7 @@ namespace IwUVEditor.ExportUV
 
         private static Bitmap CreateBackgroundImage(Bitmap texture, Point repeatCount)
         {
-            if (repeatCount.X > 1 || repeatCount.Y > 1)
-                using (var repeatedTexture = CreateRepeatBitMap(texture, repeatCount.X, repeatCount.Y))
-                    return repeatedTexture;
-            else
-                return texture;
+            return repeatCount.X > 1 || repeatCount.Y > 1 ? CreateRepeatBitMap(texture, repeatCount.X, repeatCount.Y) : texture;
         }
 
         private static Bitmap CreateRepeatBitMap(Bitmap texture, int xCount, int yCount)

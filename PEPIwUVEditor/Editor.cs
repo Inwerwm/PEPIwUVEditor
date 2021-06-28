@@ -277,7 +277,8 @@ namespace IwUVEditor
 
         internal void ExportUVImage(int imageSize)
         {
-            var uvEx = new UVExporter(imageSize, Current.Material.Vertices, Current.Material.Faces);
+            var uvEx = new Drawer.UVExporter(imageSize, Current.Material.Vertices, Current.Material.Faces);
+            
         }
     }
 }

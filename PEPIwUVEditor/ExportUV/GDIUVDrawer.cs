@@ -13,10 +13,10 @@ namespace IwUVEditor.ExportUV
         {
             using (var texture = !File.Exists(texturePath) ? null : IsTGA(texturePath) ? new TGASharpLib.TGA(texturePath).ToBitmap() : new Bitmap(texturePath))
             {
-                var textureRepeatCount = (X: mesh.MaxBound.X - mesh.MinBound.X, Y: mesh.MaxBound.Y - mesh.MinBound.Y);
+                var textureRepeatCount = CalcTextureRepeatCount(mesh);
                 var background = texture != null && enableDrawBackground ? CreateBackgroundImage(texture, textureRepeatCount) : null;
 
-                var unitSize = CalcUnitSize(imageSize, texture);
+                var unitSize = CalcUnitSize(imageSize, texture?.Width ?? imageSize, texture?.Height ?? imageSize);
 
                 using (var bmp = new Bitmap(unitSize.X * textureRepeatCount.X, unitSize.Y * textureRepeatCount.Y))
                 {
@@ -29,14 +29,14 @@ namespace IwUVEditor.ExportUV
         private static bool IsTGA(string texturePath) =>
             Path.GetExtension(texturePath).ToLower() == ".tga";
 
-        private static Point CalcUnitSize(int imageSize, Bitmap texture)
-        {
-            decimal textureWidth = texture?.Width ?? imageSize;
-            decimal textureHeight = texture?.Height ?? imageSize;
+        public static (int X, int Y) CalcTextureRepeatCount(UVMesh mesh) =>
+            (X: mesh.MaxBound.X - mesh.MinBound.X, Y: mesh.MaxBound.Y - mesh.MinBound.Y);
 
+        public static Point CalcUnitSize(int imageSize, int textureWidth, int textureHeight)
+        {
             var unitWidth = imageSize;
 
-            var hRatio = textureHeight / textureWidth;
+            var hRatio = (decimal)textureHeight / textureWidth;
             var unitHeight = (int)Math.Round(imageSize * hRatio, MidpointRounding.AwayFromZero);
 
             return new Point(unitWidth, unitHeight);

@@ -339,7 +339,7 @@ namespace IwUVEditor
             if (formExUV.ShowDialog() != DialogResult.OK)
                 return;
 
-            string exDir = string.IsNullOrEmpty(Current.Material.TexFullPath) ? Path.GetDirectoryName(Current.Material.ModelPath) : Path.GetDirectoryName(Current.Material.TexFullPath);
+            string exDir = string.IsNullOrEmpty(Current.Material.TexFullPath) ? GetModelPath() : Path.GetDirectoryName(Current.Material.TexFullPath);
 
             if (string.IsNullOrEmpty(exDir))
             {
@@ -358,6 +358,9 @@ namespace IwUVEditor
                 exDir = Path.Combine(exDir, $"{Current.Material.Name}_UV.png");
 
             Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
+
+            string GetModelPath() =>
+                string.IsNullOrEmpty(Current.Material.ModelPath) ? "" : Path.GetDirectoryName(Current.Material.ModelPath);
         }
     }
 }

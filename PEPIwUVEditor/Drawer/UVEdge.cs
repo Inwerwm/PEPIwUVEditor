@@ -36,8 +36,5 @@ namespace IwUVEditor.Drawer
                 new PointF(UV[0].X + width, UV[0].Y + height),
                 new PointF(UV[1].X + width, UV[1].Y + height)
             );
-
-        public static UVEdge operator *(UVEdge edge, float ratio) =>
-            edge.Mul(ratio, ratio);
     }
 }

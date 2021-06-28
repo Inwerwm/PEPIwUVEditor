@@ -6,6 +6,7 @@ using PEPlugin.Pmx;
 using SlimDX;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -275,10 +276,10 @@ namespace IwUVEditor
             Current.Material.Tex = Uri.UnescapeDataString(rPath.ToString()).Replace("%25", "%");
         }
 
-        internal void ExportUVImage(int imageSize)
+        internal void ExportUVImage(int imageSize, string exportPath, bool drawTexture)
         {
             var uvEx = new Drawer.UVExporter(imageSize, Current.Material.Vertices, Current.Material.Faces);
-            
+            uvEx.Export(Current.Material.TexFullPath, exportPath, drawTexture);
         }
     }
 }

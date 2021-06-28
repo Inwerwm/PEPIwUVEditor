@@ -323,7 +323,7 @@ namespace IwUVEditor
         {
             var ofd = new OpenFileDialog()
             {
-                InitialDirectory = Path.GetDirectoryName(Current.Material.TexFullPath),
+                InitialDirectory = string.IsNullOrEmpty(Current.Material.TexFullPath) ? "" : Path.GetDirectoryName(Current.Material.TexFullPath),
                 Filter = "画像ファイル(*.bmp;*.png;*.jpg;*.jpeg;*.dds;*.tga)|*.bmp;*.png;*.jpg;*.jpeg;*.dds;*.tga|すべてのファイル(*.*)|*.*"
             };
 

@@ -10,9 +10,9 @@ namespace IwUVEditor.ExportUV
 {
     class UVMesh
     {
-        IEnumerable<UVEdge> Mesh { get; }
-        Point MinBound { get; }
-        Point MaxBound { get; }
+        public IEnumerable<UVEdge> Mesh { get; }
+        public Point MinBound { get; }
+        public Point MaxBound { get; }
 
         public UVMesh(IList<IPXVertex> vertices, IList<IPXFace> faces)
         {
@@ -20,7 +20,7 @@ namespace IwUVEditor.ExportUV
             (MinBound, MaxBound) = CalcUVRange(Mesh);
         }
 
-        private void DrawUV(int imageSize, string texturePath, string exportPath, bool enableDrawBackground, ParallelQuery<UVEdge> mesh, (Point Min, Point Max) uvRange)
+        public void DrawUV(int imageSize, string texturePath, string exportPath, bool enableDrawBackground, UVMesh mesh)
         {
             using (var texture = !File.Exists(texturePath) ? null : IsTGA(texturePath) ? new TGASharpLib.TGA(texturePath).ToBitmap() : new Bitmap(texturePath))
             {
@@ -30,10 +30,10 @@ namespace IwUVEditor.ExportUV
                 var outputWidth = imageSize;
                 var outputHeight = (int)Math.Round(imageSize * hRatio, MidpointRounding.AwayFromZero);
 
-                var uvDrawOffset = (X: -uvRange.Min.X, Y: -uvRange.Min.Y);
-                var imagePosMesh = mesh.Select(e => e.Add(uvDrawOffset.X, uvDrawOffset.Y).Mul(outputWidth - 1, outputHeight - 1));
+                var uvDrawOffset = (X: -mesh.MinBound.X, Y: -mesh.MinBound.Y);
+                var imagePosMesh = mesh.Mesh.Select(e => e.Add(uvDrawOffset.X, uvDrawOffset.Y).Mul(outputWidth - 1, outputHeight - 1));
 
-                var textureRepeatCount = (X: uvRange.Max.X - uvRange.Min.X, Y: uvRange.Max.Y - uvRange.Min.Y);
+                var textureRepeatCount = (X: mesh.MaxBound.X - mesh.MinBound.X, Y: mesh.MaxBound.Y - mesh.MinBound.Y);
                 var background = texture != null && enableDrawBackground ? CreateBackgroundImage(texture, textureRepeatCount) : null;
                 using (var bmp = new Bitmap(outputWidth * textureRepeatCount.X, outputHeight * textureRepeatCount.Y))
                 {

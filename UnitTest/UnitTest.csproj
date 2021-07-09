@@ -69,11 +69,13 @@
     <Compile Include="PEMock\MockConnector.cs" />
     <Compile Include="PEMock\MockFace.cs" />
     <Compile Include="PEMock\MockMaterial.cs" />
+    <Compile Include="PEMock\MockMorph.cs" />
     <Compile Include="PEMock\MockPluginHost.cs" />
     <Compile Include="PEMock\MockPmx.cs" />
     <Compile Include="PEMock\MockPMXBuilder.cs" />
     <Compile Include="PEMock\MockPmxConnector.cs" />
     <Compile Include="PEMock\MockRunArgs.cs" />
+    <Compile Include="PEMock\MockUVMorphOffset.cs" />
     <Compile Include="PEMock\MockVertex.cs" />
     <Compile Include="StructureTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

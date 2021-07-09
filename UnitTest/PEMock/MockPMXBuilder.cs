@@ -98,7 +98,7 @@ namespace UnitTest.PEMock
 
         public IPXMorph Morph()
         {
-            throw new NotImplementedException();
+            return new MockMorph();
         }
 
         public IPXMorphNodeItem MorphNodeItem()
@@ -118,7 +118,7 @@ namespace UnitTest.PEMock
 
         public IPXPmx Pmx()
         {
-            throw new NotImplementedException();
+            return new MockPmx();
         }
 
         public IPXSoftBody SoftBody()
@@ -138,7 +138,7 @@ namespace UnitTest.PEMock
 
         public IPXUVMorphOffset UVMorphOffset(IPXVertex vertex, V4 offset)
         {
-            throw new NotImplementedException();
+            return new MockUVMorphOffset(vertex, offset);
         }
 
         public IPXVertex Vertex()

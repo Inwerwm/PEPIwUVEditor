@@ -11,12 +11,14 @@ namespace IwUVEditor
 {
     class UVMorphCreator
     {
+        public static float Delta { get; set; } = 1e-6f;
+
         internal static void AddUVMorph(string morphName, int panel, IPXPmx baseModel, IPXPmx targetModel)
         {
             if (baseModel.Vertex.Count != targetModel.Vertex.Count)
                 throw new InvalidOperationException("頂点数が異なるため移動量を計算できません。");
 
-            var diff = baseModel.Vertex.Zip(targetModel.Vertex, (b, t) => (Vertex: t, Offset: t.UV - b.UV));
+            var diff = baseModel.Vertex.Zip(targetModel.Vertex, (b, t) => (Vertex: t, Offset: t.UV - b.UV)).Where(d => d.Offset.X > Delta || d.Offset.Y > Delta);
             var morph = CreateUVMorph(morphName, panel, diff);
             targetModel.Morph.Add(morph);
         }

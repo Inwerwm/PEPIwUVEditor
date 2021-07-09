@@ -32,6 +32,7 @@ namespace UnitTest
                 }).ToList();
             IPXPmx targetModel = PEMockFactory.CreateModel(targetVertices, new[] { (0, 1, 2) });
 
+            UVMorphCreator.Builder = PEMockFactory.Builder;
             const string morphName = "created";
             UVMorphCreator.AddUVMorph(morphName, 4, baseModel, targetModel);
 

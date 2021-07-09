@@ -280,7 +280,9 @@ namespace IwUVEditor
         {
             try
             {
-                UVMorphCreator.AddUVMorph(morphName, panel, Args.Host.Connector.Pmx.GetCurrentState(), Pmx);
+                IPXPmx baseModel = Args.Host.Connector.Pmx.GetCurrentState();
+                UVMorphCreator.AddUVMorph(morphName, panel, baseModel, Pmx);
+                PEPExtensions.Utility.Update(Args.Host.Connector, baseModel, PmxUpdateObject.Morph);
             }
             catch (Exception)
             {

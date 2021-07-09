@@ -369,5 +369,12 @@ namespace IwUVEditor
                 Utility.ShowException(ex);
             }
         }
+
+        private void buttonCreateUVMorph_Click(object sender, EventArgs e)
+        {
+            using (var config = new FormUVMorphCreationConfig())
+                if(config.ShowDialog() == DialogResult.OK)
+                    Editor.CreateUVMorph(config.MorphName, config.Panel);
+        }
     }
 }

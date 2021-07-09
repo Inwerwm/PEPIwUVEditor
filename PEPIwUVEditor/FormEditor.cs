@@ -7,6 +7,7 @@ using SlimDX;
 using SlimDX.RawInput;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace IwUVEditor
@@ -391,7 +392,16 @@ namespace IwUVEditor
 
         private void buttonLoadUVMorph_Click(object sender, EventArgs e)
         {
+            var uvMorphs = Editor.Pmx.Morph.Where(m => m.IsUV);
+            if (!uvMorphs.Any())
+            {
+                MessageBox.Show("UVモーフが見つかりませんでした。");
+                return;
+            }
 
+            var selectionForm = new FormSelectMorph(uvMorphs);
+            if (selectionForm.ShowDialog() == DialogResult.OK)
+                Editor.LoadUVMorph(selectionForm.SelectedMorph);
         }
     }
 }

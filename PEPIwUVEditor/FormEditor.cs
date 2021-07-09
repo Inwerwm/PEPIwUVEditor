@@ -361,6 +361,8 @@ namespace IwUVEditor
 
                 Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
 
+                MessageBox.Show("UV画像の出力が完了しました。");
+
                 string GetModelPath() =>
                     string.IsNullOrEmpty(Current.Material.ModelPath) ? "" : Path.GetDirectoryName(Current.Material.ModelPath);
             }

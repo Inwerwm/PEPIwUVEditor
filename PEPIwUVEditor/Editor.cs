@@ -5,6 +5,7 @@ using PEPlugin;
 using PEPlugin.Pmx;
 using SlimDX;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -287,6 +288,24 @@ namespace IwUVEditor
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        internal void LoadUVMorph(IPXMorph morph)
+        {
+            if (!morph.IsUV) throw new ArgumentException("UVモーフ以外のモーフが指定されました。");
+
+            var materialMap = new ConcurrentDictionary<IPXUVMorphOffset, Material>(morph.Offsets.ToDictionary(o => (IPXUVMorphOffset)o, _ => (Material)null));
+            materialMap.Keys.AsParallel().ForAll(offset =>
+            {
+                materialMap[offset] = Materials.First(m => m.Vertices.Contains(offset.Vertex));
+            });
+
+            var offsetsGroupByMaterial = materialMap.GroupBy(p => p.Value, p => p.Key);
+
+            foreach (var offsetGroup in offsetsGroupByMaterial)
+            {
+                Do(offsetGroup.Key, new CommandMoveVerticesByMorph(offsetGroup));
             }
         }
     }

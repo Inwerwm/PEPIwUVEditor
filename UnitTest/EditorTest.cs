@@ -35,7 +35,7 @@ namespace UnitTest
         }
 
         [TestCleanup]
-        public static void TestCleanup()
+        public void TestCleanup()
         {
             Initialize(null);
         }
@@ -219,7 +219,24 @@ namespace UnitTest
         [TestMethod]
         public void TestLoadMorph()
         {
-            
+            var offsets = Vertices.Select(v => PEMockFactory.Builder.UVMorphOffset(v, new V4(1, 1, 0, 0)));
+            var morph = PEMockFactory.Builder.Morph();
+            morph.Kind = MorphKind.UV;
+            foreach (var item in offsets)
+            {
+                morph.Offsets.Add(item);
+            }
+
+            Editor.LoadUVMorph(morph);
+
+            Assert.AreEqual(1, UV[0].X, 1e-6);
+            Assert.AreEqual(2, UV[0].Y, 1e-6);
+            Assert.AreEqual(0, UV[1].X, 1e-6);
+            Assert.AreEqual(1, UV[1].Y, 1e-6);
+            Assert.AreEqual(2, UV[2].X, 1e-6);
+            Assert.AreEqual(0, UV[2].Y, 1e-6);
+
+            UndoTest();
         }
     }
 }

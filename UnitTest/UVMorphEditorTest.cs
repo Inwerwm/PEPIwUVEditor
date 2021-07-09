@@ -11,10 +11,10 @@ using System.Threading.Tasks;
 namespace UnitTest
 {
     [TestClass]
-    public class UVCreationTest
+    public class UVMorphEditorTest
     {
         [TestMethod]
-        public void TestUVCreation()
+        public void TestCreateUVMorph()
         {
             var baseVertices = PEMockFactory.CreateVertices(new[]
                 {
@@ -32,9 +32,9 @@ namespace UnitTest
                 }).ToList();
             IPXPmx targetModel = PEMockFactory.CreateModel(targetVertices, new[] { (0, 1, 2) });
 
-            UVMorphCreator.Builder = PEMockFactory.Builder;
+            UVMorphEditor.Builder = PEMockFactory.Builder;
             const string morphName = "created";
-            UVMorphCreator.AddUVMorph(morphName, 4, baseModel, targetModel);
+            UVMorphEditor.AddUVMorph(morphName, 4, baseModel, targetModel);
 
             var m = baseModel.Morph.First();
             var v = baseVertices.ElementAt(1);

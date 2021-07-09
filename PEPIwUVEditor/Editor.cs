@@ -281,7 +281,7 @@ namespace IwUVEditor
             try
             {
                 IPXPmx baseModel = Args.Host.Connector.Pmx.GetCurrentState();
-                UVMorphCreator.AddUVMorph(morphName, panel, baseModel, Pmx);
+                UVMorphEditor.AddUVMorph(morphName, panel, baseModel, Pmx);
                 PEPExtensions.Utility.Update(Args.Host.Connector, baseModel, PmxUpdateObject.Morph);
             }
             catch (Exception)

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IwUVEditor
 {
-    class UVMorphCreator
+    class UVMorphEditor
     {
         public static float Delta { get; set; } = 1e-6f;
         public static IPXPmxBuilder Builder { get; set; } = PEStaticBuilder.Pmx;

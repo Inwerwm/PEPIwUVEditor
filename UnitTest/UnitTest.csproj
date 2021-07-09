@@ -80,7 +80,7 @@
     <Compile Include="StructureTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExportUVTest.cs" />
-    <Compile Include="UVCreationTest.cs" />
+    <Compile Include="UVMorphEditorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

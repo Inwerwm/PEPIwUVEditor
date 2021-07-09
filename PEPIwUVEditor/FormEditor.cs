@@ -372,9 +372,19 @@ namespace IwUVEditor
 
         private void buttonCreateUVMorph_Click(object sender, EventArgs e)
         {
-            using (var config = new FormUVMorphCreationConfig())
-                if(config.ShowDialog() == DialogResult.OK)
-                    Editor.CreateUVMorph(config.MorphName, config.Panel);
+            try
+            {
+                using (var config = new FormUVMorphCreationConfig())
+                    if(config.ShowDialog() == DialogResult.OK)
+                        Editor.CreateUVMorph(config.MorphName, config.Panel);
+
+                MessageBox.Show("UVモーフの作成が完了しました。");
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show($"元モデルと頂点数が異なるため UV モーフの作成に失敗しました。{Environment.NewLine}" +
+                                $"モデルを再読み込みしてください。");
+            }
         }
     }
 }

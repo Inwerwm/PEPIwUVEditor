@@ -278,7 +278,14 @@ namespace IwUVEditor
 
         internal void CreateUVMorph(string morphName, int panel)
         {
-            UVMorphCreator.AddUVMorph(morphName, panel, Args.Host.Connector.Pmx.GetCurrentState(), Pmx);
+            try
+            {
+                UVMorphCreator.AddUVMorph(morphName, panel, Args.Host.Connector.Pmx.GetCurrentState(), Pmx);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

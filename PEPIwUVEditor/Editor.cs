@@ -21,7 +21,7 @@ namespace IwUVEditor
 
         // モデル
         IPERunArgs Args { get; }
-        IPXPmx Pmx { get; set; }
+        public IPXPmx Pmx { get; private set; }
         public List<Material> Materials { get; private set; }
 
         // 現在の状態

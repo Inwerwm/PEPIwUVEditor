@@ -12,7 +12,7 @@ namespace UnitTest.PEMock
 
         public bool IsVertex { get; }
 
-        public bool IsUV { get; }
+        public bool IsUV => Kind == MorphKind.UV;
 
         public bool IsBone { get; }
 

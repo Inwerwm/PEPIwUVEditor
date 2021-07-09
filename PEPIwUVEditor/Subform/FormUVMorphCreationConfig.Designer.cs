@@ -34,7 +34,7 @@ namespace IwUVEditor.Subform
             this.labelPanel = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBoxMorphName = new System.Windows.Forms.TextBox();
             this.radioButtonBrow = new System.Windows.Forms.RadioButton();
             this.radioButtonEye = new System.Windows.Forms.RadioButton();
             this.radioButtonLip = new System.Windows.Forms.RadioButton();
@@ -56,7 +56,7 @@ namespace IwUVEditor.Subform
             this.tableLayoutPanel1.Controls.Add(this.labelPanel, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.buttonOK, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.buttonCancel, 2, 4);
-            this.tableLayoutPanel1.Controls.Add(this.textBox1, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.textBoxMorphName, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.radioButtonBrow, 0, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -108,6 +108,7 @@ namespace IwUVEditor.Subform
             this.buttonOK.TabIndex = 2;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
+            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
             // buttonCancel
             // 
@@ -120,16 +121,17 @@ namespace IwUVEditor.Subform
             this.buttonCancel.TabIndex = 3;
             this.buttonCancel.Text = "キャンセル";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
-            // textBox1
+            // textBoxMorphName
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel1.SetColumnSpan(this.textBox1, 4);
-            this.textBox1.Location = new System.Drawing.Point(4, 32);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(376, 32);
-            this.textBox1.TabIndex = 4;
+            this.textBoxMorphName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.SetColumnSpan(this.textBoxMorphName, 4);
+            this.textBoxMorphName.Location = new System.Drawing.Point(4, 32);
+            this.textBoxMorphName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxMorphName.Name = "textBoxMorphName";
+            this.textBoxMorphName.Size = new System.Drawing.Size(376, 32);
+            this.textBoxMorphName.TabIndex = 4;
             // 
             // radioButtonBrow
             // 
@@ -213,7 +215,7 @@ namespace IwUVEditor.Subform
         private System.Windows.Forms.Label labelPanel;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBoxMorphName;
         private System.Windows.Forms.RadioButton radioButtonBrow;
         private System.Windows.Forms.RadioButton radioButtonOther;
         private System.Windows.Forms.RadioButton radioButtonLip;

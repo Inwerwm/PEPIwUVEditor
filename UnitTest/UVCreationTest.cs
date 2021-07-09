@@ -42,8 +42,8 @@ namespace UnitTest
             Assert.AreEqual(morphName, m.Name);
             Assert.AreEqual(1, m.Offsets.Count);
             Assert.AreEqual(v, o.Vertex);
-            Assert.AreEqual(0.1f, o.Offset.X);
-            Assert.AreEqual(0.3f, o.Offset.Y);
+            Assert.AreEqual(0.1f, o.Offset.X, 1e-6);
+            Assert.AreEqual(0.3f, o.Offset.Y, 1e-6);
         }
     }
 }

@@ -8,6 +8,9 @@ namespace IwUVEditor.Command
         private Stack<IEditorCommand> UndoStack { get; }
         private Stack<IEditorCommand> RedoStack { get; }
 
+        private uint EditCount { get; set; }
+        public bool IsEdited => EditCount > 0;
+
         public CommandManager()
         {
             UndoStack = new Stack<IEditorCommand>();
@@ -19,6 +22,9 @@ namespace IwUVEditor.Command
             cmd.Do();
             UndoStack.Push(cmd);
             RedoStack.Clear();
+
+            if (cmd.IsDestructive)
+                EditCount++;
         }
 
         /// <summary>
@@ -29,9 +35,12 @@ namespace IwUVEditor.Command
             if (!UndoStack.Any())
                 return;
 
-            var com = UndoStack.Pop();
-            com.Undo();
-            RedoStack.Push(com);
+            var cmd = UndoStack.Pop();
+            cmd.Undo();
+            RedoStack.Push(cmd);
+
+            if (cmd.IsDestructive)
+                EditCount--;
         }
 
         /// <summary>
@@ -42,9 +51,12 @@ namespace IwUVEditor.Command
             if (!RedoStack.Any())
                 return;
 
-            var com = RedoStack.Pop();
-            com.Do();
-            UndoStack.Push(com);
+            var cmd = RedoStack.Pop();
+            cmd.Do();
+            UndoStack.Push(cmd);
+
+            if (cmd.IsDestructive)
+                EditCount++;
         }
     }
 }

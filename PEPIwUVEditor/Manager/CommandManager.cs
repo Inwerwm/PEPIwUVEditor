@@ -31,10 +31,11 @@ namespace IwUVEditor.Manager
         /// <summary>
         /// 元に戻す
         /// </summary>
-        public void Undo()
+        /// <returns>破壊的命令をUndoしたか</returns>
+        public bool Undo()
         {
             if (!UndoStack.Any())
-                return;
+                return false;
 
             var cmd = UndoStack.Pop();
             cmd.Undo();
@@ -42,6 +43,8 @@ namespace IwUVEditor.Manager
 
             if (cmd.IsDestructive)
                 EditCount--;
+
+            return cmd.IsDestructive;
         }
 
         /// <summary>

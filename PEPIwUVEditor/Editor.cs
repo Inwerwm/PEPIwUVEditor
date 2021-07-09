@@ -26,7 +26,8 @@ namespace IwUVEditor
 
         // 現在の状態
         public EditorStates Current { get; }
-        public bool IsEdited => Commanders.Any(cm => cm.Value.IsEdited);
+        private bool IsSended { get; set; }
+        public bool IsEdited => !IsSended && Commanders.Any(cm => cm.Value.IsEdited);
 
         // エディタ機能
         public Tool.ToolBox ToolBox { get; }
@@ -64,6 +65,7 @@ namespace IwUVEditor
         public void SendModel()
         {
             PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
+            IsSended = true;
             UpdateDraw?.Invoke();
         }
 
@@ -118,6 +120,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[targetMaterial].Do(command);
+            if (command.IsDestructive) IsSended = false;
 
             UpdateDraw?.Invoke();
         }
@@ -127,7 +130,9 @@ namespace IwUVEditor
             if (Current.Material is null)
                 return;
 
-            Commanders[Current.Material].Undo();
+            var isDestructive = Commanders[Current.Material].Undo();
+            if (isDestructive) IsSended = false;
+
             UpdateDraw?.Invoke();
         }
 

@@ -276,10 +276,9 @@ namespace IwUVEditor
             new ExportUV.GDIUVDrawer().Draw(uvMesh, imageSize, Current.Material.TexFullPath, exportPath, drawTexture);
         }
 
-        internal void CreateUVMorph(string morphName)
+        internal void CreateUVMorph(string morphName, int panel)
         {
-            IPXMorph uvMorph = UVMorphCreator.CreateUVMorph(morphName, Args.Host.Connector.Pmx.GetCurrentState(), Pmx);
-            Pmx.Morph.Add(uvMorph);
+            UVMorphCreator.AddUVMorph(morphName, panel, Args.Host.Connector.Pmx.GetCurrentState(), Pmx);
         }
     }
 }

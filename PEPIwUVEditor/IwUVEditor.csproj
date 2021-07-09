@@ -81,6 +81,7 @@
     <Compile Include="Command\CommandReverse.cs" />
     <Compile Include="Command\CommandSelectVertices.cs" />
     <Compile Include="Command\CommandSetPosition.cs" />
+    <Compile Include="Command\CommandTransaction.cs" />
     <Compile Include="DirectX\DrawElement\MovingControllerPolygons.cs" />
     <Compile Include="Controller\EditController.cs" />
     <Compile Include="Controller\MoveController.cs" />

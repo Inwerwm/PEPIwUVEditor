@@ -37,14 +37,14 @@ namespace UnitTest
             UVMorphCreator.AddUVMorph(morphName, 4, baseModel, targetModel);
 
             var m = targetModel.Morph.First();
-            var v = targetVertices.ElementAt(2);
+            var v = targetVertices.ElementAt(1);
             var o = ((IPXUVMorphOffset)m.Offsets.First());
             
             Assert.AreEqual(morphName, m.Name);
             Assert.AreEqual(1, m.Offsets.Count);
             Assert.AreEqual(v, o.Vertex);
             Assert.AreEqual(0.1f, o.Offset.X, 1e-6);
-            Assert.AreEqual(0.3f, o.Offset.Y, 1e-6);
+            Assert.AreEqual(0.2f, o.Offset.Y, 1e-6);
         }
     }
 }

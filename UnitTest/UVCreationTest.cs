@@ -36,8 +36,8 @@ namespace UnitTest
             const string morphName = "created";
             UVMorphCreator.AddUVMorph(morphName, 4, baseModel, targetModel);
 
-            var m = targetModel.Morph.First();
-            var v = targetVertices.ElementAt(1);
+            var m = baseModel.Morph.First();
+            var v = baseVertices.ElementAt(1);
             var o = ((IPXUVMorphOffset)m.Offsets.First());
             
             Assert.AreEqual(morphName, m.Name);

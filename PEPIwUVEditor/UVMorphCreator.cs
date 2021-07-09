@@ -19,9 +19,9 @@ namespace IwUVEditor
             if (baseModel.Vertex.Count != targetModel.Vertex.Count)
                 throw new InvalidOperationException("頂点数が異なるため移動量を計算できません。");
 
-            var diff = baseModel.Vertex.Zip(targetModel.Vertex, (b, t) => (Vertex: t, Offset: t.UV - b.UV)).Where(d => d.Offset.X > Delta || d.Offset.Y > Delta);
+            var diff = baseModel.Vertex.Zip(targetModel.Vertex, (b, t) => (Vertex: b, Offset: t.UV - b.UV)).Where(d => d.Offset.X > Delta || d.Offset.Y > Delta);
             var morph = CreateUVMorph(morphName, panel, diff);
-            targetModel.Morph.Add(morph);
+            baseModel.Morph.Add(morph);
         }
 
         private static IPXMorph CreateUVMorph(string morphName, int panel, IEnumerable<(IPXVertex Vertex, V2 Offset)> diff)

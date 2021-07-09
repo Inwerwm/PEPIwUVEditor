@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using IwUVEditor.Command;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace IwUVEditor.Command
+namespace IwUVEditor.Manager
 {
     class CommandManager
     {

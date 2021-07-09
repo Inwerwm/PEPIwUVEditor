@@ -100,7 +100,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="GenerableMap.cs" />
     <Compile Include="Command\CommandRectangleSelection.cs" />
-    <Compile Include="Command\CommandManager.cs" />
+    <Compile Include="Manager\CommandManager.cs" />
     <Compile Include="Command\IEditorCommand.cs" />
     <Compile Include="Command\SelectionMode.cs" />
     <Compile Include="DirectX\DrawElement\IDrawElement.cs" />

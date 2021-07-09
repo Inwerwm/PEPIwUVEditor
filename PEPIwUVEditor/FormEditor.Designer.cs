@@ -57,8 +57,9 @@ namespace IwUVEditor
             this.flowLayoutPanelActions = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonReverseV = new System.Windows.Forms.Button();
             this.buttonReverseH = new System.Windows.Forms.Button();
-            this.buttonSelectContinuousVertices = new System.Windows.Forms.Button();
+            this.buttonLoadUVMorph = new System.Windows.Forms.Button();
             this.buttonCreateUVMorph = new System.Windows.Forms.Button();
+            this.buttonSelectContinuousVertices = new System.Windows.Forms.Button();
             this.buttonResetCamera = new System.Windows.Forms.Button();
             this.LabelMove = new System.Windows.Forms.Label();
             this.labelX = new System.Windows.Forms.Label();
@@ -95,7 +96,6 @@ namespace IwUVEditor
             this.UV情報を出力ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.デバッグログToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerEvery = new System.Windows.Forms.Timer(this.components);
-            this.buttonLoadUVMorph = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitCtrlView)).BeginInit();
             this.splitCtrlView.Panel1.SuspendLayout();
             this.splitCtrlView.Panel2.SuspendLayout();
@@ -527,15 +527,16 @@ namespace IwUVEditor
             this.buttonReverseH.UseVisualStyleBackColor = true;
             this.buttonReverseH.Click += new System.EventHandler(this.buttonReverseH_Click);
             // 
-            // buttonSelectContinuousVertices
+            // buttonLoadUVMorph
             // 
-            this.buttonSelectContinuousVertices.Location = new System.Drawing.Point(3, 135);
-            this.buttonSelectContinuousVertices.Name = "buttonSelectContinuousVertices";
-            this.buttonSelectContinuousVertices.Size = new System.Drawing.Size(80, 60);
-            this.buttonSelectContinuousVertices.TabIndex = 4;
-            this.buttonSelectContinuousVertices.Text = "連続頂点を選択";
-            this.buttonSelectContinuousVertices.UseVisualStyleBackColor = true;
-            this.buttonSelectContinuousVertices.Click += new System.EventHandler(this.buttonSelectContinuousVertices_Click);
+            this.buttonLoadUVMorph.Font = new System.Drawing.Font("游ゴシック", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.buttonLoadUVMorph.Location = new System.Drawing.Point(3, 69);
+            this.buttonLoadUVMorph.Name = "buttonLoadUVMorph";
+            this.buttonLoadUVMorph.Size = new System.Drawing.Size(80, 60);
+            this.buttonLoadUVMorph.TabIndex = 6;
+            this.buttonLoadUVMorph.Text = "UVモーフを適用";
+            this.buttonLoadUVMorph.UseVisualStyleBackColor = true;
+            this.buttonLoadUVMorph.Click += new System.EventHandler(this.buttonLoadUVMorph_Click);
             // 
             // buttonCreateUVMorph
             // 
@@ -547,6 +548,16 @@ namespace IwUVEditor
             this.buttonCreateUVMorph.Text = "UVモーフを作成";
             this.buttonCreateUVMorph.UseVisualStyleBackColor = true;
             this.buttonCreateUVMorph.Click += new System.EventHandler(this.buttonCreateUVMorph_Click);
+            // 
+            // buttonSelectContinuousVertices
+            // 
+            this.buttonSelectContinuousVertices.Location = new System.Drawing.Point(3, 135);
+            this.buttonSelectContinuousVertices.Name = "buttonSelectContinuousVertices";
+            this.buttonSelectContinuousVertices.Size = new System.Drawing.Size(80, 60);
+            this.buttonSelectContinuousVertices.TabIndex = 4;
+            this.buttonSelectContinuousVertices.Text = "連続頂点を選択";
+            this.buttonSelectContinuousVertices.UseVisualStyleBackColor = true;
+            this.buttonSelectContinuousVertices.Click += new System.EventHandler(this.buttonSelectContinuousVertices_Click);
             // 
             // buttonResetCamera
             // 
@@ -632,7 +643,7 @@ namespace IwUVEditor
             // 
             this.splitUVMat.Panel2.Controls.Add(this.tableLayoutDrawSettings);
             this.splitUVMat.Size = new System.Drawing.Size(1376, 911);
-            this.splitUVMat.SplitterDistance = 1088;
+            this.splitUVMat.SplitterDistance = 1086;
             this.splitUVMat.SplitterWidth = 6;
             this.splitUVMat.TabIndex = 0;
             // 
@@ -651,7 +662,7 @@ namespace IwUVEditor
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutDrawSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(280, 909);
+            this.tableLayoutDrawSettings.Size = new System.Drawing.Size(282, 909);
             this.tableLayoutDrawSettings.TabIndex = 1;
             // 
             // labelRadiusOfPosSq
@@ -661,7 +672,7 @@ namespace IwUVEditor
             this.labelRadiusOfPosSq.Location = new System.Drawing.Point(0, 857);
             this.labelRadiusOfPosSq.Margin = new System.Windows.Forms.Padding(0);
             this.labelRadiusOfPosSq.Name = "labelRadiusOfPosSq";
-            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(280, 20);
+            this.labelRadiusOfPosSq.Size = new System.Drawing.Size(282, 20);
             this.labelRadiusOfPosSq.TabIndex = 4;
             this.labelRadiusOfPosSq.Text = "頂点描画の大きさ";
             this.labelRadiusOfPosSq.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -674,7 +685,7 @@ namespace IwUVEditor
             this.listBoxMaterial.Location = new System.Drawing.Point(0, 0);
             this.listBoxMaterial.Margin = new System.Windows.Forms.Padding(0);
             this.listBoxMaterial.Name = "listBoxMaterial";
-            this.listBoxMaterial.Size = new System.Drawing.Size(280, 857);
+            this.listBoxMaterial.Size = new System.Drawing.Size(282, 857);
             this.listBoxMaterial.TabIndex = 0;
             this.listBoxMaterial.SelectedIndexChanged += new System.EventHandler(this.listBoxMaterial_SelectedIndexChanged);
             // 
@@ -695,7 +706,7 @@ namespace IwUVEditor
             0,
             65536});
             this.numericRadiusOfPosSq.Name = "numericRadiusOfPosSq";
-            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(280, 32);
+            this.numericRadiusOfPosSq.Size = new System.Drawing.Size(282, 32);
             this.numericRadiusOfPosSq.TabIndex = 4;
             this.numericRadiusOfPosSq.Value = new decimal(new int[] {
             5,
@@ -923,17 +934,6 @@ namespace IwUVEditor
             // 
             this.timerEvery.Interval = 5;
             this.timerEvery.Tick += new System.EventHandler(this.timerEvery_Tick);
-            // 
-            // buttonLoadUVMorph
-            // 
-            this.buttonLoadUVMorph.Font = new System.Drawing.Font("游ゴシック", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-            this.buttonLoadUVMorph.Location = new System.Drawing.Point(3, 69);
-            this.buttonLoadUVMorph.Name = "buttonLoadUVMorph";
-            this.buttonLoadUVMorph.Size = new System.Drawing.Size(80, 60);
-            this.buttonLoadUVMorph.TabIndex = 6;
-            this.buttonLoadUVMorph.Text = "UVモーフを読込";
-            this.buttonLoadUVMorph.UseVisualStyleBackColor = true;
-            this.buttonLoadUVMorph.Click += new System.EventHandler(this.buttonLoadUVMorph_Click);
             // 
             // FormEditor
             // 

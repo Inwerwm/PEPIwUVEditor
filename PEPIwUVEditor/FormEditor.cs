@@ -388,5 +388,10 @@ namespace IwUVEditor
                                 $"モデルを再読み込みしてください。");
             }
         }
+
+        private void buttonLoadUVMorph_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

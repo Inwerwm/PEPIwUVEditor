@@ -223,5 +223,11 @@ namespace UnitTest
                 Initialize(null);
             }
         }
+
+        [TestMethod]
+        public void TestLoadMorph()
+        {
+
+        }
     }
 }

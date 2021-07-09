@@ -275,5 +275,11 @@ namespace IwUVEditor
             var uvMesh = new ExportUV.UVMesh(Current.Material.Vertices, Current.Material.Faces);
             new ExportUV.GDIUVDrawer().Draw(uvMesh, imageSize, Current.Material.TexFullPath, exportPath, drawTexture);
         }
+
+        internal void CreateUVMorph(string morphName)
+        {
+            IPXMorph uvMorph = UVMorphCreator.CreateUVMorph(morphName, Args.Host.Connector.Pmx.GetCurrentState(), Pmx);
+            Pmx.Morph.Add(uvMorph);
+        }
     }
 }

@@ -168,6 +168,7 @@
     <Compile Include="Tool\RotateVertices.cs" />
     <Compile Include="Tool\ScaleVertices.cs" />
     <Compile Include="ExportUV\UVMesh.cs" />
+    <Compile Include="UVMorphCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEditor.resx">

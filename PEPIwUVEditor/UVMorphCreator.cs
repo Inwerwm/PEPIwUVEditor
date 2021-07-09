@@ -12,6 +12,7 @@ namespace IwUVEditor
     class UVMorphCreator
     {
         public static float Delta { get; set; } = 1e-6f;
+        public static IPXPmxBuilder Builder { get; set; } = PEStaticBuilder.Pmx;
 
         internal static void AddUVMorph(string morphName, int panel, IPXPmx baseModel, IPXPmx targetModel)
         {
@@ -25,13 +26,13 @@ namespace IwUVEditor
 
         private static IPXMorph CreateUVMorph(string morphName, int panel, IEnumerable<(IPXVertex Vertex, V2 Offset)> diff)
         {
-            var morph = PEStaticBuilder.Pmx.Morph();
+            var morph = Builder.Morph();
             morph.Kind = MorphKind.UV;
             morph.Name = morphName;
             morph.Panel = panel;
             foreach (var d in diff)
             {
-                morph.Offsets.Add(PEStaticBuilder.Pmx.UVMorphOffset(d.Vertex, new PEPlugin.SDX.V4(d.Offset.X, d.Offset.Y, 0, 0)));
+                morph.Offsets.Add(Builder.UVMorphOffset(d.Vertex, new V4(d.Offset.X, d.Offset.Y, 0, 0)));
             }
 
             return morph;

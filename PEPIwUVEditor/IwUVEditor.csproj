@@ -156,6 +156,12 @@
     <Compile Include="Subform\FormSaveSelection.Designer.cs">
       <DependentUpon>FormSaveSelection.cs</DependentUpon>
     </Compile>
+    <Compile Include="Subform\FormSelectMorph.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Subform\FormSelectMorph.Designer.cs">
+      <DependentUpon>FormSelectMorph.cs</DependentUpon>
+    </Compile>
     <Compile Include="Subform\FormUVMorphCreationConfig.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -197,6 +203,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Subform\FormSaveSelection.resx">
       <DependentUpon>FormSaveSelection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Subform\FormSelectMorph.resx">
+      <DependentUpon>FormSelectMorph.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Subform\FormUVMorphCreationConfig.resx">
       <DependentUpon>FormUVMorphCreationConfig.cs</DependentUpon>

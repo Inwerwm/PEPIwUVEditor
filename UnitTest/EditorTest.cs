@@ -13,8 +13,8 @@ namespace UnitTest
     public class EditorTest
     {
         static Editor Editor { get; set; }
-        static V2[] UV => Editor.Current.Material.Vertices.Select(v => v.UV).ToArray();
         static IList<IPXVertex> Vertices => Editor.Current.Material.Vertices;
+        static V2[] UV => Vertices.Select(v => v.UV).ToArray();
 
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
@@ -34,6 +34,12 @@ namespace UnitTest
             }
         }
 
+        [TestCleanup]
+        public static void TestCleanup()
+        {
+            Initialize(null);
+        }
+
         public void UndoTest()
         {
             Editor.Undo();
@@ -49,8 +55,6 @@ namespace UnitTest
         [TestMethod]
         public void TestCopyAndPaste()
         {
-            try
-            {
                 Editor.CopyPosition();
                 Editor.PastePosition();
 
@@ -58,18 +62,11 @@ namespace UnitTest
                 Assert.AreEqual(0, UV[0].Y, 1e-6);
 
                 UndoTest();
-            }
-            finally
-            {
-                Initialize(null);
-            }
         }
 
         [TestMethod]
         public async Task TestSelectContinuousVertices()
         {
-            try
-            {
                 for (int i = 0; i < 3; i++)
                 {
                     Assert.IsTrue(Editor.Current.Material.IsSelected[Vertices[i]], "初期状態が意図せぬ状態になっています。");
@@ -100,11 +97,6 @@ namespace UnitTest
                 {
                     Assert.IsFalse(Editor.Current.Material.IsSelected[Vertices[i]], "Undo に失敗しています。");
                 }
-            }
-            finally
-            {
-                Initialize(null);
-            }
         }
 
         [TestMethod]
@@ -227,7 +219,7 @@ namespace UnitTest
         [TestMethod]
         public void TestLoadMorph()
         {
-
+            
         }
     }
 }

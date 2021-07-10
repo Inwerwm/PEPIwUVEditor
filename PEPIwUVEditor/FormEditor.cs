@@ -395,7 +395,8 @@ namespace IwUVEditor
             var uvMorphs = Editor.Pmx.Morph.Where(m => m.IsUV);
             if (!uvMorphs.Any())
             {
-                MessageBox.Show("UVモーフが見つかりませんでした。");
+                MessageBox.Show($"UVモーフが見つかりませんでした。{Environment.NewLine}" +
+                                $"元モデルにUVモーフが存在する場合はモデルを再読込してください。");
                 return;
             }
 

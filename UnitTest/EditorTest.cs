@@ -13,8 +13,8 @@ namespace UnitTest
     public class EditorTest
     {
         static Editor Editor { get; set; }
-        static V2[] UV => Editor.Current.Material.Vertices.Select(v => v.UV).ToArray();
         static IList<IPXVertex> Vertices => Editor.Current.Material.Vertices;
+        static V2[] UV => Vertices.Select(v => v.UV).ToArray();
 
         [ClassInitialize]
         public static void Initialize(TestContext testContext)
@@ -34,6 +34,12 @@ namespace UnitTest
             }
         }
 
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            Initialize(null);
+        }
+
         public void UndoTest()
         {
             Editor.Undo();
@@ -49,8 +55,6 @@ namespace UnitTest
         [TestMethod]
         public void TestCopyAndPaste()
         {
-            try
-            {
                 Editor.CopyPosition();
                 Editor.PastePosition();
 
@@ -58,18 +62,11 @@ namespace UnitTest
                 Assert.AreEqual(0, UV[0].Y, 1e-6);
 
                 UndoTest();
-            }
-            finally
-            {
-                Initialize(null);
-            }
         }
 
         [TestMethod]
         public async Task TestSelectContinuousVertices()
         {
-            try
-            {
                 for (int i = 0; i < 3; i++)
                 {
                     Assert.IsTrue(Editor.Current.Material.IsSelected[Vertices[i]], "初期状態が意図せぬ状態になっています。");
@@ -100,11 +97,6 @@ namespace UnitTest
                 {
                     Assert.IsFalse(Editor.Current.Material.IsSelected[Vertices[i]], "Undo に失敗しています。");
                 }
-            }
-            finally
-            {
-                Initialize(null);
-            }
         }
 
         [TestMethod]
@@ -222,6 +214,29 @@ namespace UnitTest
             {
                 Initialize(null);
             }
+        }
+
+        [TestMethod]
+        public void TestLoadMorph()
+        {
+            var offsets = Vertices.Select(v => PEMockFactory.Builder.UVMorphOffset(v, new V4(1, 1, 0, 0)));
+            var morph = PEMockFactory.Builder.Morph();
+            morph.Kind = MorphKind.UV;
+            foreach (var item in offsets)
+            {
+                morph.Offsets.Add(item);
+            }
+
+            Editor.LoadUVMorph(morph);
+
+            Assert.AreEqual(1, UV[0].X, 1e-6);
+            Assert.AreEqual(2, UV[0].Y, 1e-6);
+            Assert.AreEqual(0, UV[1].X, 1e-6);
+            Assert.AreEqual(1, UV[1].Y, 1e-6);
+            Assert.AreEqual(2, UV[2].X, 1e-6);
+            Assert.AreEqual(0, UV[2].Y, 1e-6);
+
+            UndoTest();
         }
     }
 }

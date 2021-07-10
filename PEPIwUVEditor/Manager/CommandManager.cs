@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using IwUVEditor.Command;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace IwUVEditor.Command
+namespace IwUVEditor.Manager
 {
     class CommandManager
     {
         private Stack<IEditorCommand> UndoStack { get; }
         private Stack<IEditorCommand> RedoStack { get; }
+
+        private ulong EditCount { get; set; }
+        public bool IsEdited => EditCount > 0;
 
         public CommandManager()
         {
@@ -19,19 +23,28 @@ namespace IwUVEditor.Command
             cmd.Do();
             UndoStack.Push(cmd);
             RedoStack.Clear();
+
+            if (cmd.IsDestructive)
+                EditCount++;
         }
 
         /// <summary>
         /// 元に戻す
         /// </summary>
-        public void Undo()
+        /// <returns>破壊的命令をUndoしたか</returns>
+        public bool Undo()
         {
             if (!UndoStack.Any())
-                return;
+                return false;
 
-            var com = UndoStack.Pop();
-            com.Undo();
-            RedoStack.Push(com);
+            var cmd = UndoStack.Pop();
+            cmd.Undo();
+            RedoStack.Push(cmd);
+
+            if (cmd.IsDestructive)
+                EditCount--;
+
+            return cmd.IsDestructive;
         }
 
         /// <summary>
@@ -42,9 +55,12 @@ namespace IwUVEditor.Command
             if (!RedoStack.Any())
                 return;
 
-            var com = RedoStack.Pop();
-            com.Do();
-            UndoStack.Push(com);
+            var cmd = RedoStack.Pop();
+            cmd.Do();
+            UndoStack.Push(cmd);
+
+            if (cmd.IsDestructive)
+                EditCount++;
         }
     }
 }

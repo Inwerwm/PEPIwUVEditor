@@ -7,6 +7,7 @@ using SlimDX;
 using SlimDX.RawInput;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace IwUVEditor
@@ -361,6 +362,8 @@ namespace IwUVEditor
 
                 Editor.ExportUVImage(formExUV.ExportSize, exDir, formExUV.EnableBackTexture);
 
+                MessageBox.Show("UV画像の出力が完了しました。");
+
                 string GetModelPath() =>
                     string.IsNullOrEmpty(Current.Material.ModelPath) ? "" : Path.GetDirectoryName(Current.Material.ModelPath);
             }
@@ -368,6 +371,38 @@ namespace IwUVEditor
             {
                 Utility.ShowException(ex);
             }
+        }
+
+        private void buttonCreateUVMorph_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (var config = new FormUVMorphCreationConfig())
+                    if(config.ShowDialog() == DialogResult.OK)
+                        Editor.CreateUVMorph(config.MorphName, config.Panel);
+
+                MessageBox.Show("UVモーフの作成が完了しました。");
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show($"元モデルと頂点数が異なるため UV モーフの作成に失敗しました。{Environment.NewLine}" +
+                                $"モデルを再読み込みしてください。");
+            }
+        }
+
+        private void buttonLoadUVMorph_Click(object sender, EventArgs e)
+        {
+            var uvMorphs = Editor.Pmx.Morph.Where(m => m.IsUV);
+            if (!uvMorphs.Any())
+            {
+                MessageBox.Show($"UVモーフが見つかりませんでした。{Environment.NewLine}" +
+                                $"元モデルにUVモーフが存在する場合はモデルを再読込してください。");
+                return;
+            }
+
+            var selectionForm = new FormSelectMorph(uvMorphs);
+            if (selectionForm.ShowDialog() == DialogResult.OK)
+                Editor.LoadUVMorph(selectionForm.SelectedMorph);
         }
     }
 }

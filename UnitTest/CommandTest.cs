@@ -127,5 +127,67 @@ namespace UnitTest
             Assert.AreEqual(1, vertices[3].UV.X, 1e-6);
             Assert.AreEqual(1, vertices[3].UV.Y, 1e-6);
         }
+
+        [TestMethod]
+        public void TestMoveByMorph()
+        {
+            var vertices = PEMockFactory.CreateVertices(new V2(0, 0), new V2(1, 0), new V2(0, 1), new V2(1, 1)).ToArray();
+            var offsets = vertices.Select(v => PEMockFactory.Builder.UVMorphOffset(v, new V4(1, 1, 0, 0)));
+
+            var cmd = new CommandMoveVerticesByMorph(offsets);
+
+            cmd.Do();
+            Assert.AreEqual(1, vertices[0].UV.X);
+            Assert.AreEqual(1, vertices[0].UV.Y);
+            Assert.AreEqual(2, vertices[1].UV.X);
+            Assert.AreEqual(1, vertices[1].UV.Y);
+            Assert.AreEqual(1, vertices[2].UV.X);
+            Assert.AreEqual(2, vertices[2].UV.Y);
+            Assert.AreEqual(2, vertices[3].UV.X);
+            Assert.AreEqual(2, vertices[3].UV.Y);
+
+            cmd.Undo();
+            Assert.AreEqual(0, vertices[0].UV.X);
+            Assert.AreEqual(0, vertices[0].UV.Y);
+            Assert.AreEqual(1, vertices[1].UV.X);
+            Assert.AreEqual(0, vertices[1].UV.Y);
+            Assert.AreEqual(0, vertices[2].UV.X);
+            Assert.AreEqual(1, vertices[2].UV.Y);
+            Assert.AreEqual(1, vertices[3].UV.X);
+            Assert.AreEqual(1, vertices[3].UV.Y);
+        }
+
+        [TestMethod]
+        public void TestTransaction()
+        {
+            var vertices = PEMockFactory.CreateVertices(new V2(0, 0), new V2(1, 0), new V2(0, 1), new V2(1, 1)).ToArray();
+
+            var transaction = new CommandTransaction(new[]
+            {
+                new CommandApplyVertexEdit(vertices, Matrix.Translation(1, 0, 0)),
+                new CommandApplyVertexEdit(vertices, Matrix.Translation(0, 1, 0)),
+                new CommandApplyVertexEdit(vertices, Matrix.Translation(1, 1, 0))
+            });
+
+            transaction.Do();
+            Assert.AreEqual(2, vertices[0].UV.X);
+            Assert.AreEqual(2, vertices[0].UV.Y);
+            Assert.AreEqual(3, vertices[1].UV.X);
+            Assert.AreEqual(2, vertices[1].UV.Y);
+            Assert.AreEqual(2, vertices[2].UV.X);
+            Assert.AreEqual(3, vertices[2].UV.Y);
+            Assert.AreEqual(3, vertices[3].UV.X);
+            Assert.AreEqual(3, vertices[3].UV.Y);
+
+            transaction.Undo();
+            Assert.AreEqual(0, vertices[0].UV.X);
+            Assert.AreEqual(0, vertices[0].UV.Y);
+            Assert.AreEqual(1, vertices[1].UV.X);
+            Assert.AreEqual(0, vertices[1].UV.Y);
+            Assert.AreEqual(0, vertices[2].UV.X);
+            Assert.AreEqual(1, vertices[2].UV.Y);
+            Assert.AreEqual(1, vertices[3].UV.X);
+            Assert.AreEqual(1, vertices[3].UV.Y);
+        }
     }
 }

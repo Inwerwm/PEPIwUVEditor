@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTest.PEMock
 {
@@ -12,33 +9,38 @@ namespace UnitTest.PEMock
     {
         public IPXHeader Header { get; }
 
-        public IPXModelInfo ModelInfo{get;}
+        public IPXModelInfo ModelInfo { get; }
 
-        public IList<IPXVertex> Vertex{get;}
+        public IList<IPXVertex> Vertex { get; }
 
-        public IList<IPXMaterial> Material{get;}
+        public IList<IPXMaterial> Material { get; }
 
-        public IList<IPXBone> Bone{get;}
+        public IList<IPXBone> Bone { get; }
 
-        public IList<IPXMorph> Morph{get;}
+        public IList<IPXMorph> Morph { get; }
 
-        public IPXNode RootNode{get;}
+        public IPXNode RootNode { get; }
 
-        public IPXNode ExpressionNode{get;}
+        public IPXNode ExpressionNode { get; }
 
-        public IList<IPXNode> Node{get;}
+        public IList<IPXNode> Node { get; }
 
-        public IList<IPXBody> Body{get;}
+        public IList<IPXBody> Body { get; }
 
-        public IList<IPXJoint> Joint{get;}
+        public IList<IPXJoint> Joint { get; }
 
-        public IList<IPXSoftBody> SoftBody{get;}
+        public IList<IPXSoftBody> SoftBody { get; }
 
-        public IPXPrimitiveBuilder Primitive{get;}
+        public IPXPrimitiveBuilder Primitive { get; }
 
         public string FilePath { get; set; }
 
-        public MockPmx(IList<IPXVertex> vertex)
+        public MockPmx()
+        {
+            Morph = new List<IPXMorph>();
+        }
+
+        public MockPmx(IList<IPXVertex> vertex) : this()
         {
             Vertex = vertex;
         }

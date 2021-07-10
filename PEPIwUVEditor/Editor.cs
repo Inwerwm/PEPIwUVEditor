@@ -5,6 +5,7 @@ using PEPlugin;
 using PEPlugin.Pmx;
 using SlimDX;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,12 +21,13 @@ namespace IwUVEditor
 
         // モデル
         IPERunArgs Args { get; }
-        IPXPmx Pmx { get; set; }
+        public IPXPmx Pmx { get; private set; }
         public List<Material> Materials { get; private set; }
 
         // 現在の状態
         public EditorStates Current { get; }
-        public bool IsEdited { get; private set; }
+        private bool IsSended { get; set; }
+        public bool IsEdited => !IsSended && Commanders.Any(cm => cm.Value.IsEdited);
 
         // エディタ機能
         public Tool.ToolBox ToolBox { get; }
@@ -45,7 +47,6 @@ namespace IwUVEditor
             EditParameters = new ObservableEditParameter();
             ToolBox = new Tool.ToolBox(EditParameters);
             Resetter = resetter;
-            IsEdited = false;
         }
 
         public void LoadModel()
@@ -59,13 +60,12 @@ namespace IwUVEditor
             Materials = Pmx.Material.Select((material, i) => new Material(material, Pmx)).ToList();
             Commanders = Materials.ToDictionary(m => m, _ => new CommandManager());
             Current.Material = Materials.First();
-            IsEdited = false;
         }
 
         public void SendModel()
         {
             PEPExtensions.Utility.Update(Args.Host.Connector, Pmx);
-            IsEdited = false;
+            IsSended = true;
             UpdateDraw?.Invoke();
         }
 
@@ -120,8 +120,7 @@ namespace IwUVEditor
                 return;
 
             Commanders[targetMaterial].Do(command);
-            // 破壊的変更を行う命令だった場合、編集済みに変更
-            IsEdited |= command.IsDestructive;
+            if (command.IsDestructive) IsSended = false;
 
             UpdateDraw?.Invoke();
         }
@@ -131,7 +130,9 @@ namespace IwUVEditor
             if (Current.Material is null)
                 return;
 
-            Commanders[Current.Material].Undo();
+            var isDestructive = Commanders[Current.Material].Undo();
+            if (isDestructive) IsSended = false;
+
             UpdateDraw?.Invoke();
         }
 
@@ -279,6 +280,38 @@ namespace IwUVEditor
         {
             var uvMesh = new ExportUV.UVMesh(Current.Material.Vertices, Current.Material.Faces);
             new ExportUV.GDIUVDrawer().Draw(uvMesh, imageSize, Current.Material.TexFullPath, exportPath, drawTexture);
+        }
+
+        internal void CreateUVMorph(string morphName, int panel)
+        {
+            try
+            {
+                IPXPmx baseModel = Args.Host.Connector.Pmx.GetCurrentState();
+                UVMorphEditor.AddUVMorph(morphName, panel, baseModel, Pmx);
+                PEPExtensions.Utility.Update(Args.Host.Connector, baseModel, PmxUpdateObject.Morph);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        internal void LoadUVMorph(IPXMorph morph)
+        {
+            if (!morph.IsUV) throw new ArgumentException("UVモーフ以外のモーフが指定されました。");
+
+            var materialMap = new ConcurrentDictionary<IPXUVMorphOffset, Material>(morph.Offsets.ToDictionary(o => (IPXUVMorphOffset)o, _ => (Material)null));
+            materialMap.Keys.AsParallel().ForAll(offset =>
+            {
+                materialMap[offset] = Materials.First(m => m.Vertices.Contains(offset.Vertex));
+            });
+
+            var offsetsGroupByMaterial = materialMap.GroupBy(p => p.Value, p => p.Key);
+
+            foreach (var offsetGroup in offsetsGroupByMaterial)
+            {
+                Do(offsetGroup.Key, new CommandMoveVerticesByMorph(offsetGroup));
+            }
         }
     }
 }

@@ -40,5 +40,7 @@ namespace UnitTest
         {
             return uvs.Select(v => (IPXVertex)new MockVertex(v));
         }
+
+        public static IPXPmxBuilder Builder { get; } = new MockPMXBuilder();
     }
 }

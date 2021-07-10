@@ -9,7 +9,7 @@ namespace IwUVEditor.Manager
         private Stack<IEditorCommand> UndoStack { get; }
         private Stack<IEditorCommand> RedoStack { get; }
 
-        private uint EditCount { get; set; }
+        private ulong EditCount { get; set; }
         public bool IsEdited => EditCount > 0;
 
         public CommandManager()

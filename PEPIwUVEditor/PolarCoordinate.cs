@@ -30,7 +30,17 @@ namespace IwUVEditor
 
         public static PolarCoordinate FromOrthogonal(Vector2 vector) => FromOrthogonal(vector.X, vector.Y);
 
-        public float DifferenceOfAngle(PolarCoordinate other) => Angle - other.Angle;
+        public float DifferenceOfAngle(PolarCoordinate other)
+        {
+            float dif = Angle - other.Angle;
+
+            // 普通に第2象限と第3象限の間で差をとると、長いほうの弧で値が出てしまうので分岐させて短いほうを計算して出す
+            return IsTransLeftOrthant() ? (float)(-Math.Sign(dif) * (2 * Math.PI - Math.Abs(dif))) : dif;
+
+            bool IsTransLeftOrthant() => (Math.Abs(Angle) > Math.PI / 2 && Math.Abs(other.Angle) > Math.PI / 2) && (Math.Sign(Angle) != Math.Sign(other.Angle));
+        }
+
+
         public float DifferenceOfRadius(PolarCoordinate other) => Radius - other.Radius;
     }
 }

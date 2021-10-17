@@ -114,12 +114,10 @@ namespace IwUVEditor
 
                 Input.ReadMouseInput(e, DrawProcess.ScreenPosToWorldPos);
 
-                float modifier = (Input.IsPress[Keys.ShiftKey] ? 4f : 1f) / (Input.IsPress[Keys.ControlKey] ? 4f : 1f);
-
                 if(Input.Wheel.IsScrolling)
-                    DrawProcess.Scale.WheelDelta += Input.Wheel.Delta * modifier;
+                    DrawProcess.Scale.WheelDelta += Input.Wheel.Delta * Input.ModifierRatio;
                 if (Input.IsClicking[MouseButtons.Middle])
-                    DrawProcess.ShiftOffset += modifier * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
+                    DrawProcess.ShiftOffset += Input.ModifierRatio * new Vector3(1f * e.X / DrawTargetControl.Width, -1f * e.Y / DrawTargetControl.Height, 0) / DrawProcess.Scale.Scale;
 
                 Editor.DriveTool(Input);
             }

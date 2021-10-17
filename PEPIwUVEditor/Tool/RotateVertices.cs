@@ -20,7 +20,7 @@ namespace IwUVEditor.Tool
         {
             var posOfPrevious = PolarCoordinate.FromOrthogonal(Input.MouseLeft.Previous - Parameters.RotationCenter.ToVector2());
             var posOfCurrent = PolarCoordinate.FromOrthogonal(Input.MouseLeft.Current - Parameters.RotationCenter.ToVector2());
-            Parameters.RotationAngle = posOfCurrent.DifferenceOfAngle(posOfPrevious);
+            Parameters.RotationAngle = posOfCurrent.DifferenceOfAngle(posOfPrevious) * Input.ModifierRatio;
         }
 
         public override void Initialize()

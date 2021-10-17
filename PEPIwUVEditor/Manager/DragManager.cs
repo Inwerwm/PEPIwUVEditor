@@ -5,6 +5,7 @@ namespace IwUVEditor.Manager
     class DragManager
     {
         bool state;
+        private Vector2 previous;
 
         /// <summary>
         /// ちょうどドラッグが開始した時点であるか
@@ -34,7 +35,11 @@ namespace IwUVEditor.Manager
         /// <summary>
         /// 直前のマウス座標
         /// </summary>
-        public Vector2 Previous { get; set; }
+        public Vector2 Previous
+        {
+            get => IsStartingJust ? Start : previous;
+            set => previous = value;
+        }
         /// <summary>
         /// 直前時点からの移動量
         /// </summary>

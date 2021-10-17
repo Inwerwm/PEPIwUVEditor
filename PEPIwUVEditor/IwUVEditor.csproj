@@ -120,6 +120,7 @@
     </Compile>
     <Compile Include="Manager\DragManager.cs" />
     <Compile Include="Manager\ObservableEditParameter.cs" />
+    <Compile Include="PolarCoordinate.cs" />
     <Compile Include="StateContainer\EditorStates.cs" />
     <Compile Include="PluginMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

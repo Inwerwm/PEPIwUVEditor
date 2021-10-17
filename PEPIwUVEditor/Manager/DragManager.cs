@@ -31,8 +31,10 @@ namespace IwUVEditor.Manager
         /// ドラッグ終了座標
         /// </summary>
         public Vector2 End { get; private set; }
-
-        private Vector2 Previous { get; set; }
+        /// <summary>
+        /// 直前のマウス座標
+        /// </summary>
+        public Vector2 Previous { get; set; }
         /// <summary>
         /// 直前時点からの移動量
         /// </summary>

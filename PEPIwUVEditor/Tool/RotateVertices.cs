@@ -18,7 +18,9 @@ namespace IwUVEditor.Tool
 
         protected override void UpdateParameter()
         {
-            Parameters.RotationAngle = (float)(Step * Input.MouseOffset.Y * 2 * Math.PI);
+            var posOfPrevious = PolarCoordinate.FromOrthogonal(Input.MouseLeft.Previous - Parameters.RotationCenter.ToVector2());
+            var posOfCurrent = PolarCoordinate.FromOrthogonal(Input.MouseLeft.Current - Parameters.RotationCenter.ToVector2());
+            Parameters.RotationAngle = posOfCurrent.DifferenceOfAngle(posOfPrevious);
         }
 
         public override void Initialize()

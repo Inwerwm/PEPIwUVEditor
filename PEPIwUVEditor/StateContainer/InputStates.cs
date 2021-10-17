@@ -41,6 +41,8 @@ namespace IwUVEditor.StateContainer
             { Keys.ControlKey, false }
         };
 
+        public float ModifierRatio => (IsPress[Keys.ShiftKey] ? 4f : 1f) / (IsPress[Keys.ControlKey] ? 4f : 1f);
+
         public void ReadMouseInput(MouseInputEventArgs e, Func<Vector2, Vector2> ScreenPosToWorldPos)
         {
             // 移動量の読取り

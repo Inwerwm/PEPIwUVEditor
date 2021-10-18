@@ -25,16 +25,13 @@ namespace IwUVEditor.Tool
         {
             PreviousScaleRatio = Input.MouseLeft.IsStartingJust ? new Vector3(1, 1, 1) : Parameters.ScaleRatio;
 
-            float xScale = 1 + Input.MouseOffset.X * Step;
-            float yScale = 1 - Input.MouseOffset.Y * Step;
-
             var currentDistanceFromCenter = Input.MouseLeft.Current - Parameters.ScaleCenter.ToVector2();
             var startDistanceFromCenter = Input.MouseLeft.Start - Parameters.ScaleCenter.ToVector2();
 
             var offset = currentDistanceFromCenter.ElementDivision(startDistanceFromCenter);
 
-            Parameters.ScaleRatio = Controller.CurrentMode == EditController.SelectionMode.X ? new Vector3(xScale, 1, 1)
-                                  : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(1, yScale, 1)
+            Parameters.ScaleRatio = Controller.CurrentMode == EditController.SelectionMode.X ? new Vector3(offset.X, 1, 1)
+                                  : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(1, offset.Y, 1)
                                   : new Vector3(offset.X, offset.Y, 1);
         }
 

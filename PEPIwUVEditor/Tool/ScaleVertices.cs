@@ -29,7 +29,6 @@ namespace IwUVEditor.Tool
             var startDistanceFromCenter = Input.MouseLeft.Start - Parameters.ScaleCenter.ToVector2();
 
             var offset = currentDistanceFromCenter.ElementDivision(startDistanceFromCenter);
-            offset = offset.Map((source) => (source - 1) * Input.ModifierRatio + 1);
 
             Parameters.ScaleRatio = Controller.CurrentMode == EditController.SelectionMode.X ? new Vector3(offset.X, 1, 1)
                                   : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(1, offset.Y, 1)

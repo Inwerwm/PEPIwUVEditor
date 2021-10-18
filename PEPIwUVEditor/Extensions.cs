@@ -44,6 +44,15 @@ namespace IwUVEditor
         public static Vector3 ElementDivision(this Vector3 dividend, Vector3 divisor) =>
             new Vector3(dividend.X / divisor.X, dividend.Y / divisor.Y, dividend.Z / divisor.Z);
 
+        /// <summary>
+        /// 各要素に関数を適用する
+        /// </summary>
+        public static Vector2 Map(this Vector2 vector, Func<float, float> mapper) => new Vector2(mapper(vector.X), mapper(vector.Y));
+        /// <summary>
+        /// 各要素に関数を適用する
+        /// </summary>
+        public static Vector3 Map(this Vector3 vector, Func<float, float> mapper) => new Vector3(mapper(vector.X), mapper(vector.Y), mapper(vector.Z));
+
         public static (Vector2 Min, Vector2 Max) MinMax(this IEnumerable<Vector2> source) =>
             source.Aggregate(
                 (

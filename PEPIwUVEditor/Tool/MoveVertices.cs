@@ -16,6 +16,7 @@ namespace IwUVEditor.Tool
             Parameters.MoveOffset = Controller.CurrentMode == EditController.SelectionMode.X ? new Vector3(CurrentPos.X - StartPos.X, 0, 0)
                                   : Controller.CurrentMode == EditController.SelectionMode.Y ? new Vector3(0, CurrentPos.Y - StartPos.Y, 0)
                                   : new Vector3(CurrentPos - StartPos, 0);
+            Parameters.MoveOffset *= Input.ModifierRatio;
         }
 
         public override void Initialize()

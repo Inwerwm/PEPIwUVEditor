@@ -51,7 +51,7 @@ namespace IwUVEditor.Controller
 
         protected override void MoveCenter(InputStates input)
         {
-            Vector2 offset = input.MouseLeft.Offset;
+            Vector2 offset = input.MouseLeft.Offset * input.ModifierRatio;
             Center += new Vector3(CurrentMode == SelectionMode.Y ? 0 : offset.X, CurrentMode == SelectionMode.X ? 0 : offset.Y, 0);
         }
 

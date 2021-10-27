@@ -20,6 +20,7 @@ namespace IwUVEditor.Subform
             InitializeComponent();
 
             listBoxMorphs.Items.AddRange(morphs.ToArray());
+            listBoxMorphs.DisplayMember = "Name";
             DialogResult = DialogResult.Cancel;
         }
 

@@ -76,7 +76,7 @@ namespace IwUVEditor.Subform
             this.buttonOk.UseVisualStyleBackColor = true;
             this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
-            // FormSelectUVMorph
+            // FormSelectMorph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -85,8 +85,8 @@ namespace IwUVEditor.Subform
             this.Font = new System.Drawing.Font("游ゴシック", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "FormSelectUVMorph";
-            this.Text = "FormSelectUVMorph";
+            this.Name = "FormSelectMorph";
+            this.Text = "UVモーフ読込";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
